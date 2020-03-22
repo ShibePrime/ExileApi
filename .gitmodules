@@ -1,12 +1,12 @@
 [submodule "Plugins/HealthBars"]
 	path = Plugins/HealthBars
 	url = https://github.com/Queuete/HealthBars
-[submodule "Plugins/IconsBuilder"]
-	path = Plugins/IconsBuilder
-	url = https://github.com/Queuete/IconsBuilder
 [submodule "Plugins/MinimapIcons"]
 	path = Plugins/MinimapIcons
 	url = https://github.com/Queuete/MinimapIcons
+[submodule "Plugins/IconsBuilder"]
+	path = Plugins/IconsBuilder
+	url = https://github.com/Queuete/IconsBuilder
 [submodule "Plugins/DeliriumSpawnerHighlight"]
 	path = Plugins/DeliriumSpawnerHighlight
 	url = https://github.com/Queuete/DeliriumSpawnerHighlight
