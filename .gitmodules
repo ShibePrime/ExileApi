@@ -10,3 +10,9 @@
 [submodule "Plugins/DeliriumSpawnerHighlight"]
 	path = Plugins/DeliriumSpawnerHighlight
 	url = https://github.com/Queuete/DeliriumSpawnerHighlight
+[submodule "Plugins/Pickit"]
+	path = Plugins/Pickit
+	url = https://github.com/Queuete/Pickit
+[submodule "Plugins/Stashie"]
+	path = Plugins/Stashie
+	url = https://github.com/Queuete/Stashie
