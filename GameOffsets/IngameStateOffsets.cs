@@ -12,9 +12,9 @@ namespace GameOffsets
         [FieldOffset(0x4F0)] public long UIHover;
         [FieldOffset(0x524)] public float UIHoverX;
         [FieldOffset(0x528)] public float UIHoverY;
-        [FieldOffset(0x4E8)] public long UIHoverTooltip;
-        [FieldOffset(0x4E0)] public float CurentUElementPosX;
-        [FieldOffset(0x4E4)] public float CurentUElementPosY;
+        [FieldOffset(0x4F0)] public long UIHoverTooltip;
+        [FieldOffset(0x4E8)] public float CurentUElementPosX;
+        [FieldOffset(0x4EC)] public float CurentUElementPosY;
         [FieldOffset(0x98)] public long EntityLabelMap;
         [FieldOffset(0x570)] public int DiagnosticInfoType;
         [FieldOffset(0x7A0)] public long LatencyRectangle;
