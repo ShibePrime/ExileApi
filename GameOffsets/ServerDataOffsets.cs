@@ -27,7 +27,7 @@ namespace GameOffsets
         public const int Skip = 0x5000;
         public const int ATLAS_REGION_UPGRADES = 0x7782;
         [FieldOffset(0x6E98 - Skip)] public NativeStringU League;
-        [FieldOffset(0x6B70 - Skip)] public NativePtrArray PassiveSkillIds;
+        [FieldOffset(0x6E20 - Skip)] public NativePtrArray PassiveSkillIds;
         [FieldOffset(0x6BC0 - Skip)] public byte PlayerClass;
         [FieldOffset(0x6BC4 - Skip)] public int CharacterLevel;
         [FieldOffset(0x6BC8 - Skip)] public int PassiveRefundPointsLeft;
@@ -44,7 +44,7 @@ namespace GameOffsets
         [FieldOffset(0x6CB0 - Skip)] public NativePtrArray PlayerStashTabs;
         [FieldOffset(0x73E0 - Skip)] public NativePtrArray GuildStashTabs;
         [FieldOffset(0x71C0 - Skip)] public NativePtrArray NearestPlayers;
-        [FieldOffset(0x72C0 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x7548 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x7390 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x7460 - Skip)] public NativePtrArray GuildInventories;
         [FieldOffset(0x7270 - Skip)] public ushort TradeChatChannel;

@@ -1,5 +1,10 @@
 # ExileApi private fork of PoeHud
 
+# Current Status
+Basic version with all important(my vision) plugins in release tab.
+Current version can lags and crash because i didn't test that a lot time. Maybe on next week found time for test and publish source code.
+
+
 Dirty copy of my private fork.
 Difference with main fork:
 * Read memory  like structs (better for CPU, but used more memory)
@@ -33,8 +38,16 @@ Known build errors:
 
 ## Troubleshooting
 
+* Download problems:
+
 When download your `7z` from releases maybe this comes with screwed permissions.
 
 > For those who can't launch (Close as soon as it's opened) :
 > Right click on the Zip of the HUD (The one you get from the link in the first post) and Right click > Properties > Unlock, then you can unzip it where you want. Otherwise all the files extracted will be security locked...
 > Worked for a friend, it's a security from Windows that deny access to files from another PC, once done everything was good for him
+
+* Rendering problems
+
+Big visual offsets in rendering minion dots and everything other:
+
+Windows Display options-> Scale and layout -> set to 100%
