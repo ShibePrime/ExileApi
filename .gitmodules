@@ -19,3 +19,9 @@
 [submodule "Plugins/BuffUtil"]
 	path = Plugins/BuffUtil
 	url = https://github.com/Queuete/BuffUtil
+[submodule "Plugins/BaseTreeRoutine"]
+	path = Plugins/BaseTreeRoutine
+	url = https://github.com/Queuete/BaseTreeRoutine
+[submodule "Plugins/BasicFlaskRoutine"]
+	path = Plugins/BasicFlaskRoutine
+	url = https://github.com/Queuete/BasicFlaskRoutine
