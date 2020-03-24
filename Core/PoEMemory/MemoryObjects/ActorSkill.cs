@@ -7,15 +7,14 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorSkill : RemoteMemoryObject
     {
+        // Cooldown and Cost updated for 3.10
         public ushort Id => M.Read<ushort>(Address + 0x10);
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x20);
         public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x46) > 0;
         public bool CanBeUsed => M.Read<byte>(Address + 0x47) == 0;
         public int Cost => M.Read<byte>(Address + 0x4C);
-
-        //public int Unknown_Old_MaxUses => M.Read<int>(Address + 0x4c);
-        public int TotalUses => M.Read<int>(Address + 0x50);
-        public float Cooldown => M.Read<int>(Address + 0x58) / 100f; //Converted milliseconds to seconds
+        public int TotalUses => M.Read<int>(Address + 0x54);
+        public float Cooldown => M.Read<int>(Address + 0x60) / 100f; //Converted milliseconds to seconds 
         public int SoulsPerUse => M.Read<int>(Address + 0x68);
         public int TotalVaalUses => M.Read<int>(Address + 0x6c);
         public bool IsOnSkillBar => SkillSlotIndex != -1;
