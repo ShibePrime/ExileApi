@@ -358,7 +358,7 @@ namespace ExileCore
 
             bool CompareData(IPattern pattern, IReadOnlyList<byte> data, int offset)
             {
-                if (pattern.Bytes[0] != data[offset] || pattern.Bytes[pattern.Bytes.Length - 1] != data[offset + pattern.Bytes.Length - 1])
+                if (pattern.Bytes[0] != data[offset])
                     return false;
 
                 for (var i = 0; i < pattern.Bytes.Length; i++)
