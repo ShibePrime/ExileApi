@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickIt", "Plugins\Pickit\Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffUtil", "Plugins\BuffUtil\BuffUtil.csproj", "{D0344191-0958-4D1B-8A24-9A518F6E2636}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicFlaskRoutine", "Plugins\BasicFlaskRoutine\src\BasicFlaskRoutine.csproj", "{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,14 @@ Global
 		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|x64.ActiveCfg = Release|Any CPU
 		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|x64.Build.0 = Release|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Debug|x64.Build.0 = Debug|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Release|x64.ActiveCfg = Release|Any CPU
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +155,7 @@ Global
 		{A6E253C4-18C7-4766-9A9A-2BCF2B43B97F} = {CC061825-B447-4124-8467-9B830EB88F4C}
 		{286EB4C6-31A1-4B8E-BF5A-83F9591AE322} = {CC061825-B447-4124-8467-9B830EB88F4C}
 		{D0344191-0958-4D1B-8A24-9A518F6E2636} = {CC061825-B447-4124-8467-9B830EB88F4C}
+		{4EBA974C-AC8C-42A5-B8EE-5AD318B6D961} = {CC061825-B447-4124-8467-9B830EB88F4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5AD7BE45-2243-42A2-9D8F-2C212D20F7E9}
