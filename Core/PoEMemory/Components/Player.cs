@@ -4,29 +4,39 @@ using System.Collections.Generic;
 using ExileCore.PoEMemory.FilesInMemory;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Attributes;
+using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
+using GameOffsets;
 using SharpDX;
 
 namespace ExileCore.PoEMemory.Components
 {
     public class Player : Component
     {
+        private readonly CachedValue<PlayerComponentOffsets> _player;
+
+        public Player()
+        {
+            _player = new FrameCache<PlayerComponentOffsets>(() => Address == 0 ? default : M.Read<PlayerComponentOffsets>(Address));
+        }
+
         public string PlayerName => NativeStringReader.ReadString(Address + 0x158, M);
-        public uint XP => Address != 0 ? M.Read<uint>(Address + 0x17C) : 0;
-        public int Strength => Address != 0 ? M.Read<int>(Address + 0x180) : 0;
-        public int Dexterity => Address != 0 ? M.Read<int>(Address + 0x184) : 0;
-        public int Intelligence => Address != 0 ? M.Read<int>(Address + 0x188) : 0;
-        public int Level => Address != 0 ? M.Read<byte>(Address + 0x1A8) : 1;
-        public int AllocatedLootId => Address != 0 ? M.Read<byte>(Address + 0x17C) : 1;
-        public int HideoutLevel => M.Read<byte>(Address + 0x38E);
-        public byte PropheciesCount => M.Read<byte>(Address + 0x212);
+        public uint XP => Address != 0 ? _player.Value.XP : 0;
+        public int Strength => Address != 0 ? _player.Value.Strength : 0;
+        public int Dexterity => Address != 0 ? _player.Value.Dexterity : 0;
+        public int Intelligence => Address != 0 ? _player.Value.Intelligence : 0;
+        public int Level => Address != 0 ? _player.Value.Level : 1;
+        public int AllocatedLootId => Address != 0 ? _player.Value.AllocatedLootId : 1;
+        [ObsoleteAttribute("Hideoutproperties are obsolete.", true)]
+        public int HideoutLevel => Address != 0 ? _player.Value.HideoutLevel : 0;
+        public int PropheciesCount => Address != 0 ? _player.Value.PropheciesCount : 0;
 
         public IList<ProphecyDat> Prophecies
         {
             get
             {
                 var result = new List<ProphecyDat>();
-                var readAddr = Address + 0x214;
+                var readAddr = Address + _player.Value.PropheciesOffset;
 
                 for (var i = 0; i < 7; i++)
                 {
@@ -40,16 +50,17 @@ namespace ExileCore.PoEMemory.Components
                         result.Add(prophecy);
                     }
 
-                    readAddr += 4; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
+                    readAddr += _player.Value.ProphecyLength; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
                 }
 
                 return result;
             }
         }
 
-        public HideoutWrapper Hideout => ReadObject<HideoutWrapper>(Address + 0x368);
-        public PantheonGod PantheonMinor => (PantheonGod) M.Read<byte>(Address + 0x193);
-        public PantheonGod PantheonMajor => (PantheonGod) M.Read<byte>(Address + 0x194);
+        [ObsoleteAttribute("Hideoutproperties are obsolete.", true)]
+        public HideoutWrapper Hideout => ReadObject<HideoutWrapper>(Address + _player.Value.HideoutWrapperOffset);
+        public PantheonGod PantheonMinor => (PantheonGod) _player.Value.PantheonMinor;
+        public PantheonGod PantheonMajor => (PantheonGod) _player.Value.PantheonMajor;
 
         private IList<PassiveSkill> AllocatedPassivesM()
         {
@@ -113,7 +124,9 @@ namespace ExileCore.PoEMemory.Components
         {
             get
             {
-                var stateBuff = M.ReadBytes(Address + 0x2B4, 36); // (286+) bytes of info.
+                var stateBuff = M.ReadBytes(
+                    Address + _player.Value.TrialPassStatesOffset, 
+                    _player.Value.TrialPassStatesLength); // (286+) bytes of info.
                 return new BitArray(stateBuff);
             }
         }
