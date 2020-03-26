@@ -22,3 +22,7 @@ To use this version you need git, the plugins are handled as submodules. https:/
 6. Open the solution file in Visual Studio
 (7.) This should compile already, there could be some reference errors, those are mostly fixed by removing the reference (solution exlporer-plugin_project->references) the ones with warnings need to be readded
 8. There are some static files (yet) not included in the source. Therefore you need to once download the latest release and unpack it in the PoeHUD folder. After that you got an PoeHelper folder which has the release inside. Your new builds from visual studio will overwrite this release state.
+
+Tools used for reverse engineering are mostly: ReClass.NET, CheatEngine, Ghidra
+When you want to learn something about it, get comfortable with at least the first tool or second tool and try to comprehend already updated offsets. (For 3.10 I advise you to start with the LifeComponent)
+
