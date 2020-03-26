@@ -7,16 +7,18 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorSkill : RemoteMemoryObject
     {
-        // Cooldown and Cost updated for 3.10
+        /*
+         * Stats are not updated yet. There are pointers in x80 and x88, most likely the stat offsets changed aswell
+        */
         public ushort Id => M.Read<ushort>(Address + 0x10);
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x20);
-        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x46) > 0;
-        public bool CanBeUsed => M.Read<byte>(Address + 0x47) == 0;
+        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x52) > 0;
+        public bool CanBeUsed => M.Read<byte>(Address + 0x50) == 0;
         public int Cost => M.Read<byte>(Address + 0x4C);
-        public int TotalUses => M.Read<int>(Address + 0x54);
+        public int TotalUses => M.Read<int>(Address + 0x54); // not updated for 3.10
         public float Cooldown => M.Read<int>(Address + 0x60) / 100f; //Converted milliseconds to seconds 
-        public int SoulsPerUse => M.Read<int>(Address + 0x68);
-        public int TotalVaalUses => M.Read<int>(Address + 0x6c);
+        public int SoulsPerUse => M.Read<int>(Address + 0x70);
+        public int TotalVaalUses => M.Read<int>(Address + 0x74);
         public bool IsOnSkillBar => SkillSlotIndex != -1;
         public int SkillSlotIndex => TheGame.IngameState.ServerData.SkillBarIds.IndexOf(Id);
 
