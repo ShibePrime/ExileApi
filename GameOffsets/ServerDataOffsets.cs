@@ -36,7 +36,7 @@ namespace GameOffsets
         [FieldOffset(0x6BD4 - Skip)] public int TotalAscendencyPoints;
         [FieldOffset(0x6BD8 - Skip)] public int SpentAscendencyPoints;
         [FieldOffset(0x6DD8 - Skip)] public byte PartyStatusType;
-        [FieldOffset(0x6F00 - Skip)] public byte NetworkState;
+        [FieldOffset(0x7188 - Skip)] public byte NetworkState;
         [FieldOffset(0x6DF8 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x6C98 - Skip)] public float TimeInGame;
         [FieldOffset(0x6CA0 - Skip)] public int Latency;
