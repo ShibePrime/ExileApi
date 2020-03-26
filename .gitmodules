@@ -28,3 +28,9 @@
 [submodule "Plugins/AutoQuit"]
 	path = Plugins/AutoQuit
 	url = https://github.com/Queuete/AutoQuit
+[submodule "Plugins/PreloadAlert"]
+	path = Plugins/PreloadAlert
+	url = https://github.com/Queuete/PreloadAlert
+[submodule "Plugins/DevTree"]
+	path = Plugins/DevTree
+	url = https://github.com/Queuete/DevTree
