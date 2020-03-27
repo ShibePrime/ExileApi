@@ -29,12 +29,12 @@ namespace GameOffsets
         [FieldOffset(0x6E98 - Skip)] public NativeStringU League;
         [FieldOffset(0x6E20 - Skip)] public NativePtrArray PassiveSkillIds;
         [FieldOffset(0x6BC0 - Skip)] public byte PlayerClass;
-        [FieldOffset(0x6BC4 - Skip)] public int CharacterLevel;
-        [FieldOffset(0x6BC8 - Skip)] public int PassiveRefundPointsLeft;
-        [FieldOffset(0x6BCC - Skip)] public int QuestPassiveSkillPoints;
+        [FieldOffset(0x710C - Skip)] public int CharacterLevel; // updated for 3.10
+        [FieldOffset(0x7110 - Skip)] public int PassiveRefundPointsLeft; // updated for 3.10
+        [FieldOffset(0x7114 - Skip)] public int QuestPassiveSkillPoints; // updated for 3.10
         [FieldOffset(0x63D0 - Skip)] public int FreePassiveSkillPointsLeft;//TODO: 3.8.1 fix me
-        [FieldOffset(0x6BD4 - Skip)] public int TotalAscendencyPoints;
-        [FieldOffset(0x6BD8 - Skip)] public int SpentAscendencyPoints;
+        [FieldOffset(0x711C - Skip)] public int TotalAscendencyPoints; // updated for 3.10
+        [FieldOffset(0x7120 - Skip)] public int SpentAscendencyPoints; // updated for 3.10
         [FieldOffset(0x6DD8 - Skip)] public byte PartyStatusType;
         [FieldOffset(0x7188 - Skip)] public byte NetworkState;
         [FieldOffset(0x6DF8 - Skip)] public byte PartyAllocationType;
