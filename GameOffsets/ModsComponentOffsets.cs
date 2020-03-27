@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using GameOffsets.Native;
 
 namespace GameOffsets
@@ -12,13 +12,14 @@ namespace GameOffsets
         [FieldOffset(0xAC)] public int ItemRarity;
         [FieldOffset(0xB0)] public NativePtrArray implicitMods;
         [FieldOffset(0xC8)] public NativePtrArray explicitMods;
+		[FieldOffset(0xE0)] public NativePtrArray enchantMods;
         [FieldOffset(0x190)] public NativePtrArray GetImplicitStats;
-        [FieldOffset(0x1D0)] public NativePtrArray GetStats;
-        [FieldOffset(0x1E8)] public NativePtrArray GetCraftedStats;
-        [FieldOffset(0x200)] public NativePtrArray GetFracturedStats;
+        [FieldOffset(0x1C0)] public NativePtrArray GetStats;
+        [FieldOffset(0x1D8)] public NativePtrArray GetCraftedStats;
+        [FieldOffset(0x1F0)] public NativePtrArray GetFracturedStats;
         [FieldOffset(0x46C)] public int ItemLevel;
         [FieldOffset(0x470)] public int RequiredLevel;
-        [FieldOffset(0x390)] public byte IsUsable;
-        [FieldOffset(0x391)] public byte IsMirrored;
+        [FieldOffset(0x474)] public byte IsUsable;
+        [FieldOffset(0x475)] public byte IsMirrored;
     }
 }

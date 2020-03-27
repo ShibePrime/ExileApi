@@ -17,6 +17,7 @@ namespace GameOffsets
 		[FieldOffset(0x520)] public long StashElement;
 		[FieldOffset(0x548)] public long TreePanel;
 		[FieldOffset(0x550)] public long AtlasPanel;
+		[FieldOffset(0x580)] public long WorldMap;
 		[FieldOffset(0x5A0)] public long Map;
 		[FieldOffset(0x5A8)] public long itemsOnGroundLabelRoot;
 		[FieldOffset(0x640)] public long PurchaseWindow;
@@ -34,7 +35,6 @@ namespace GameOffsets
 		[FieldOffset(0x8f8)] public long GemLvlUpPanel;
 		[FieldOffset(0x8A0)] public long InvitesPanel;
 		[FieldOffset(0x990)] public long ItemOnGroundTooltip;
-		[FieldOffset(0x0/*0xCC0*/)] public long WorldMap;//TOFO: Fixme. Cause reading errors
 		[FieldOffset(0x0/*0xF18*/)] public long MapTabWindowStartPtr;//TOFO: Fixme. Cause reading errors
 	}
 }

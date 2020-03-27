@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using GameOffsets.Native;
 
 namespace GameOffsets
@@ -30,6 +30,11 @@ namespace GameOffsets
         [FieldOffset(0xA0)] public long ta;
         [FieldOffset(0xA8)] public int TagChances;
         [FieldOffset(0xB0)] public long tc;
+		[FieldOffset(0xB8)] public long BuffDefinitionsPtr;
+		[FieldOffset(0xC0)] public long BuffDefinitions;
+		[FieldOffset(0xC8)] public int BuffValue;
+		[FieldOffset(0xCC)] public long tgcCount;
+		[FieldOffset(0xC4)] public long tgcPtr;
         [FieldOffset(0x1AC)] public byte IsEssence;
         [FieldOffset(0x1C5)] public long Tier;
     }

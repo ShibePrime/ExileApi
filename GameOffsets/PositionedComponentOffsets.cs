@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using SharpDX;
 
 namespace GameOffsets
@@ -7,7 +7,10 @@ namespace GameOffsets
     public struct PositionedComponentOffsets
     {
         [FieldOffset(0x8)] public long OwnerAddress;
-        [FieldOffset(0x1E0)] public Vector2 GridPosition;
+		[FieldOffset(0x158)] public byte Reaction;
+		[FieldOffset(0x1AC)] public Vector2 PrevPosition;
+		[FieldOffset(0x1C4)] public Vector2 RelativeCoord;
+		[FieldOffset(0x1E0)] public Vector2 GridPosition;
         [FieldOffset(0x1E0)] public int GridX;
         [FieldOffset(0x1E4)] public int GridY;
         [FieldOffset(0x210)] public Vector2 WorldPosition;
@@ -15,8 +18,5 @@ namespace GameOffsets
         [FieldOffset(0x214)] public float WorldY;
         [FieldOffset(0x164)] public int Size;
         [FieldOffset(0x1E8)] public float Rotation;
-
-        //[FieldOffset(0x138)] public byte  Reaction;
-        [FieldOffset(0x158)] public byte Reaction;
     }
 }
