@@ -7,15 +7,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorSkill : RemoteMemoryObject
     {
-        /*
-         * Stats are not updated yet. There are pointers in x80 and x88, most likely the stat offsets changed aswell
-        */
         public ushort Id => M.Read<ushort>(Address + 0x10);
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x20);
-        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x52) > 0;
-        public bool CanBeUsed => M.Read<byte>(Address + 0x50) == 0;
-        public int Cost => M.Read<byte>(Address + 0x4C);
-        public int TotalUses => M.Read<int>(Address + 0x54); // not updated for 3.10
+        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x52) > 0; // might be 0x50
+        public bool CanBeUsed => M.Read<byte>(Address + 0x50) == 0; // might be 0x51
+        public int Cost => M.Read<byte>(Address + 0x4C); // might be 0x54
+        public int TotalUses => M.Read<int>(Address + 0x58);
         public float Cooldown => M.Read<int>(Address + 0x60) / 100f; //Converted milliseconds to seconds 
         public int SoulsPerUse => M.Read<int>(Address + 0x70);
         public int TotalVaalUses => M.Read<int>(Address + 0x74);
