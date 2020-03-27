@@ -34,3 +34,6 @@
 [submodule "Plugins/DevTree"]
 	path = Plugins/DevTree
 	url = https://github.com/Queuete/DevTree
+[submodule "Plugins/SithylisQoL"]
+	path = Plugins/SithylisQoL
+	url = https://github.com/Queuete/SithylisQoL
