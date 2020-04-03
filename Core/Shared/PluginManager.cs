@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 using ExileCore.PoEMemory.MemoryObjects;
@@ -31,6 +32,11 @@ namespace ExileCore.Shared
         private bool parallelLoading = false;
 
         object locker = new object();
+        public bool AllPluginsLoaded { get; }
+        public string RootDirectory { get; }
+        public List<PluginWrapper> Plugins { get; } = new List<PluginWrapper>();
+        private PluginUpdater PluginUpdater { get; }
+
         public PluginManager(GameController gameController, Graphics graphics, MultiThreadManager multiThreadManager)
         {
             _gameController = gameController;
@@ -63,25 +69,29 @@ namespace ExileCore.Shared
                 }
             }
 
-            UpdatePlugins();
-
-            var (compiledPlugins, sourcePlugins) = SearchPlugins();
-            List<(Assembly asm, DirectoryInfo directoryInfo)> assemblies = new List<(Assembly, DirectoryInfo)>();
+            var PluginUpdater = new PluginUpdater(
+                Directories[PluginsDirectory],
+                Directories[CompiledPluginsDirectory],
+                Directories[SourcePluginsDirectory]
+                );
+            PluginUpdater.DownloadSource();
+            var pluginsToCompile = PluginUpdater.GetSourcePluginsToCompile();
+            PluginUpdater.CopySettings(pluginsToCompile);
 
             Task task = null;
-            if (sourcePlugins.Length > 0)
+            if (pluginsToCompile.Count > 0)
             {
                 task = Task.Run(() =>
                 {
-                    var compilePluginsFromSource = CompilePluginsFromSource(sourcePlugins);
+                    var compilePluginsFromSource = CompilePluginsFromSource(pluginsToCompile.ToArray());
                 });
             }
-            
-
+            task?.Wait();
+            //List<(Assembly asm, DirectoryInfo directoryInfo)> assemblies = new List<(Assembly, DirectoryInfo)>();
+            var (compiledPlugins, sourcePlugins) = SearchPlugins();
             var compiledAssemblies = GetCompiledAssemblies(compiledPlugins, parallelLoading);
            
             var devTree = Plugins.FirstOrDefault(x=>x.Name.Equals("DevTree"));
-            task?.Wait();
             Plugins = Plugins.OrderBy(x => x.Order).ThenByDescending(x => x.CanBeMultiThreading).ThenBy(x => x.Name)
                 .ToList();
 
@@ -114,29 +124,6 @@ namespace ExileCore.Shared
             Plugins.ForEach(x=> x.SubscrideOnFile(HotReloadDll));
             AllPluginsLoaded = true;
         }
-
-        public bool AllPluginsLoaded { get; }
-        public string RootDirectory { get; }
-        public List<PluginWrapper> Plugins { get; } = new List<PluginWrapper>();
-
-        private void UpdatePlugins()
-        {
-            var pluginUpdateSettingsPath = Path.Combine(Directories[PluginsDirectory], "updateSettings.json");
-            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsSettings>(pluginUpdateSettingsPath);
-            if (pluginUpdateSettings == null)
-            {
-                DebugWindow.LogMsg($"{pluginUpdateSettingsPath} doesn't exists. Plugins wont be updated!");
-                return;
-            }
-            if (!pluginUpdateSettings.Enable)
-            {
-                DebugWindow.LogMsg($"Plugin Auto Update is deactivated!");
-                return;
-            }
-            var pluginSourceDownloader = new PluginSourceDownloader(Directories[SourcePluginsDirectory], pluginUpdateSettings);
-            pluginSourceDownloader.UpdateAll();
-        }
-
         private List<(Assembly loadedAssembly, DirectoryInfo directoryInfoinfo)> GetCompiledAssemblies(DirectoryInfo[] compiledPlugins, bool parallel)
         {
              object lockerLoadAsm = new object();
@@ -197,22 +184,24 @@ namespace ExileCore.Shared
             }
         }
 
-
         private Assembly CompilePlugin(DirectoryInfo info, CodeDomProvider provider, string[] dllFiles)
         {
             var csFiles = info.GetFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName)
                 .ToArray();
 
+            var outputDirectory = PluginUpdater.GetOutputDirectory(info);
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
+            }
             var parameters = new CompilerParameters
             {
                 GenerateExecutable = false, 
-                GenerateInMemory = true,
                 CompilerOptions = "/optimize /unsafe",
-                OutputAssembly = info.Name
+                OutputAssembly = Path.Combine(outputDirectory, $"{info.Name}.dll")
             };
 
             parameters.ReferencedAssemblies.AddRange(dllFiles);
-            var csprojPath2 = Path.Combine(info.FullName, $"{info.Name}.csproj");
             var csprojPath = info.GetFiles($"{info.Name}.csproj", SearchOption.AllDirectories).Select(x => x.FullName).FirstOrDefault();
 
             if (File.Exists(csprojPath))
@@ -302,6 +291,7 @@ namespace ExileCore.Shared
             }
             else
             {
+                var path = result.PathToAssembly;
                 return result.CompiledAssembly;
             }
 
@@ -312,7 +302,7 @@ namespace ExileCore.Shared
         {
             using (CodeDomProvider provider =
                 new CSharpCodeProvider())
-            using (new PerformanceTimer("Compile and load source plugins"))
+            using (new PerformanceTimer("Compile source plugins"))
             {
                 var _compilerSettings = provider.GetType()
                     .GetField("_compilerSettings", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -339,17 +329,9 @@ namespace ExileCore.Shared
 
                     Parallel.ForEach(sourcePlugins, info =>
                     {
-                        using (new PerformanceTimer($"Compile and load source plugin: {info.Name}"))
+                        using (new PerformanceTimer($"Compile source plugin: {info.Name}"))
                         {
-                            /*lock (innerLocker)
-                            {
-                                results.Add((CompilePlugin(info,provider,dllFiles),info));
-                            }*/
                             (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info,provider,dllFiles),info);
-                            if (valueTuple.ass != null)
-                            {
-                                TryLoadPlugin(valueTuple);
-                            }
                         }
                     });
                 }
@@ -357,12 +339,7 @@ namespace ExileCore.Shared
                 {
                     foreach (var info in sourcePlugins)
                     {
-                        /*results.Add((CompilePlugin(info,provider,dllFiles),info));*/
-                        (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info,provider,dllFiles),info);
-                        if (valueTuple.ass != null)
-                        {
-                            TryLoadPlugin(valueTuple);
-                        }
+                       (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info,provider,dllFiles),info);
                     }
                 }
 
@@ -492,6 +469,7 @@ namespace ExileCore.Shared
                 DebugWindow.LogError($"HotRealod error: {e}");
             }
         }
+
         //By default priority - Compiled 
         private (DirectoryInfo[] CompiledDirectories, DirectoryInfo[] SourceDirectories) SearchPlugins()
         {

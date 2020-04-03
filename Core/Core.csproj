@@ -451,8 +451,11 @@
     <Compile Include="Shared\PInvoke\ClientID.cs" />
     <Compile Include="Shared\PInvoke\DynamicImport.cs" />
     <Compile Include="Shared\PInvoke\ObjectAttributes.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\PluginCopyFiles.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\PluginFilter.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginSourceDownloader.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginsSettings.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\PluginUpdater.cs" />
     <Compile Include="Shared\PluginManager.cs" />
     <Compile Include="Shared\PluginWrapper.cs" />
     <Compile Include="Shared\Runner.cs" />
