@@ -95,7 +95,7 @@ namespace ExileCore.Shared
                 } 
                 catch (Exception e)
                 {
-                    LogError(e.ToString());
+                    DebugWindow.LogError(e.ToString());
                 }
                 
             }
@@ -169,7 +169,7 @@ namespace ExileCore.Shared
                 var directoryInfo = new DirectoryInfo(dir.FullName);
                 if (!directoryInfo.Exists)
                 {
-                    LogError($"Directory - {dir} not found.");
+                    DebugWindow.LogError($"Directory - {dir} not found.");
                     return null;
                 }
 
@@ -178,7 +178,7 @@ namespace ExileCore.Shared
 
                 if (dll == null)
                 {
-                    LogError($"Not found plugin dll in {dir.FullName}. (Dll should be like folder)");
+                    DebugWindow.LogError($"Not found plugin dll in {dir.FullName}. (Dll should be like folder)");
                     return null;
                 }
 
@@ -192,7 +192,7 @@ namespace ExileCore.Shared
             }
             catch (Exception e)
             {
-                LogError($"{nameof(LoadAssembly)} -> {e}");
+                DebugWindow.LogError($"{nameof(LoadAssembly)} -> {e}");
                 return null;
             }
         }
@@ -295,12 +295,10 @@ namespace ExileCore.Shared
                 foreach (CompilerError compilerError in result.Errors)
                 {
                     AllErrors += compilerError + Environment.NewLine;
-                    Logger.Log.Error($"{info.Name} -> {compilerError}");
+                    DebugWindow.LogError($"{info.Name} -> {compilerError}");
                 }
 
-                File.WriteAllText(Path.Combine(info.FullName, "Errors.txt"), AllErrors);
-
-                // throw new Exception("Offsets file corrupted");
+                //File.WriteAllText(Path.Combine(info.FullName, "Errors.txt"), AllErrors);
             }
             else
             {
@@ -383,7 +381,7 @@ namespace ExileCore.Shared
                 var types = tuple.asm.GetTypes();
                 if (types.Length == 0)
                 {
-                    LogError($"Not found any types in plugin {fullPath}");
+                    DebugWindow.LogError($"Not found any types in plugin {fullPath}");
                     return;
                 }
 
@@ -392,7 +390,7 @@ namespace ExileCore.Shared
 
                 if (settings == null)
                 {
-                    LogError("Not found setting class");
+                    DebugWindow.LogError("Not found setting class");
                     return;
                 }
 
@@ -423,7 +421,7 @@ namespace ExileCore.Shared
             }
             catch (Exception e)
             {
-                LogError($"Error when load plugin ({tuple.asm.ManifestModule.ScopeName}): {e})");
+                DebugWindow.LogError($"Error when load plugin ({tuple.asm.ManifestModule.ScopeName}): {e})");
             }
         }
         
@@ -455,14 +453,14 @@ namespace ExileCore.Shared
                     var asm = LoadAssembly(directoryInfo);
                     if (asm == null)
                     {
-                        LogError($"{firstF} cant load assembly for reloading.");
+                        DebugWindow.LogError($"{firstF} cant load assembly for reloading.");
                         return;
                     }
 
                     var types = asm.GetTypes();
                     if (types.Length == 0)
                     {
-                        LogError($"Not found any types in plugin {fullPath}");
+                        DebugWindow.LogError($"Not found any types in plugin {fullPath}");
                         return;
                     }
 
@@ -471,7 +469,7 @@ namespace ExileCore.Shared
 
                     if (settings == null)
                     {
-                        LogError($"Not found setting class in plugin {fullPath}");
+                        DebugWindow.LogError($"Not found setting class in plugin {fullPath}");
                         return;
                     }
 
