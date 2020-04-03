@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
+using ExileCore.Shared.PluginAutoUpdate;
 using JM.LinqFaster;
 using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using MoreLinq.Extensions;
@@ -25,7 +26,7 @@ namespace ExileCore.Shared
         private readonly GameController _gameController;
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
-        private readonly Dictionary<string, string> Directories = new Dictionary<string, string>();
+        private Dictionary<string, string> Directories { get; }
         private  Dictionary<string, Stopwatch> PluginLoadTime { get; } = new Dictionary<string, Stopwatch>();
         private bool parallelLoading = false;
 
@@ -35,6 +36,7 @@ namespace ExileCore.Shared
             _gameController = gameController;
             _graphics = graphics;
             _multiThreadManager = multiThreadManager;
+            Directories = new Dictionary<string, string>();
             RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             Directories["Temp"] = Path.Combine(RootDirectory, PluginsDirectory, "Temp");
             Directories[PluginsDirectory] = Path.Combine(RootDirectory, PluginsDirectory);
@@ -51,6 +53,7 @@ namespace ExileCore.Shared
 
             parallelLoading = _gameController.Settings.CoreSettings.MultiThreadLoadPlugins;
 
+
             foreach (var directory in Directories)
             {
                 if (!Directory.Exists(directory.Value))
@@ -59,6 +62,8 @@ namespace ExileCore.Shared
                     Directory.CreateDirectory(directory.Value);
                 }
             }
+
+            UpdatePlugins();
 
             var (compiledPlugins, sourcePlugins) = SearchPlugins();
             List<(Assembly asm, DirectoryInfo directoryInfo)> assemblies = new List<(Assembly, DirectoryInfo)>();
@@ -113,6 +118,24 @@ namespace ExileCore.Shared
         public bool AllPluginsLoaded { get; }
         public string RootDirectory { get; }
         public List<PluginWrapper> Plugins { get; } = new List<PluginWrapper>();
+
+        private void UpdatePlugins()
+        {
+            var pluginUpdateSettingsPath = Path.Combine(Directories[PluginsDirectory], "updateSettings.json");
+            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsSettings>(pluginUpdateSettingsPath);
+            if (pluginUpdateSettings == null)
+            {
+                DebugWindow.LogMsg($"{pluginUpdateSettingsPath} doesn't exists. Plugins wont be updated!");
+                return;
+            }
+            if (!pluginUpdateSettings.Enable)
+            {
+                DebugWindow.LogMsg($"Plugin Auto Update is deactivated!");
+                return;
+            }
+            var pluginSourceDownloader = new PluginSourceDownloader(Directories[SourcePluginsDirectory], pluginUpdateSettings);
+            pluginSourceDownloader.UpdateAll();
+        }
 
         private List<(Assembly loadedAssembly, DirectoryInfo directoryInfoinfo)> GetCompiledAssemblies(DirectoryInfo[] compiledPlugins, bool parallel)
         {
@@ -182,12 +205,15 @@ namespace ExileCore.Shared
 
             var parameters = new CompilerParameters
             {
-                GenerateExecutable = false, GenerateInMemory = true,
-                CompilerOptions = "/optimize /unsafe"
+                GenerateExecutable = false, 
+                GenerateInMemory = true,
+                CompilerOptions = "/optimize /unsafe",
+                OutputAssembly = info.Name
             };
 
             parameters.ReferencedAssemblies.AddRange(dllFiles);
-            var csprojPath = Path.Combine(info.FullName, $"{info.Name}.csproj");
+            var csprojPath2 = Path.Combine(info.FullName, $"{info.Name}.csproj");
+            var csprojPath = info.GetFiles($"{info.Name}.csproj", SearchOption.AllDirectories).Select(x => x.FullName).FirstOrDefault();
 
             if (File.Exists(csprojPath))
             {
