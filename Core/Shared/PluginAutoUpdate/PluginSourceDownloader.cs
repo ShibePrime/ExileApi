@@ -22,10 +22,18 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         public void UpdateAll()
         {
+            var sw = Stopwatch.StartNew();
+            var tasks = new List<Task>();
             foreach (var plugin in PluginsSettings.Plugins)
             {
-                Update(plugin);                
+                var task = new Task(() => Update(plugin));
+                tasks.Add(task);
+                task.Start();
             }
+            Task.WaitAll(tasks.ToArray());
+
+            sw.Stop();
+            DebugWindow.LogMsg($"All Plugin Updates finished in {sw.ElapsedMilliseconds} ms.");
         }
 
         public void Update(string pluginName)
@@ -64,7 +72,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
                 catch
                 {
-                    DebugWindow.LogMsg($"{plugin.Name}: Clone failed. Skipped!");
+                    DebugWindow.LogError($"{plugin.Name}: Clone failed. Skipped!");
                     return;
                 }
             }
@@ -75,9 +83,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 sw.Stop();
                 DebugWindow.LogMsg($"{plugin.Name}: Update successful in {sw.ElapsedMilliseconds} ms.");
             }
-            catch
+            catch (Exception e)
             {
-                DebugWindow.LogMsg($"{plugin.Name}: Update failed. Skipped!");
+                DebugWindow.LogError($"{plugin.Name}: Update failed. Skipped!");
             }
         }
 
@@ -90,7 +98,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         {
             var options = new PullOptions();
             options.FetchOptions = new FetchOptions();
-            var signature = new Signature(new Identity("ExileApi", ""), DateTimeOffset.Now);
+            var signature = new Signature(new Identity("ExileApi", "nomail"), DateTimeOffset.Now);
             Commands.Pull(repository, signature, options);
         }
     }
