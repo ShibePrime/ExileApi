@@ -9,29 +9,20 @@ namespace ExileCore.Shared.PluginAutoUpdate
 {
     public class PluginFilter
     {
-        public List<DirectoryInfo> GetSourcePluginsToCompile(string sourceDirectoryName, string compiledDirectoryName)
+        public bool ShouldCompilePlugin(DirectoryInfo SourceDirectory, DirectoryInfo CompiledDirectory)
         {
-            var sourceDirectories = new DirectoryInfo(sourceDirectoryName).GetDirectories();
-            var compiledDirectories = new DirectoryInfo(compiledDirectoryName).GetDirectories();
-            List<DirectoryInfo> toCompile = new List<DirectoryInfo>();
-            foreach (var sourceDirectory in sourceDirectories)
+            if (!SourceDirectory.Exists) return false;
+            if (!CompiledDirectory.Exists) return true;
+
+            var compileSettingsDirectory = PluginCopyFiles.GetSettingsDirectory(CompiledDirectory);
+            var latestCompileChange = LatestChangeInDirectory(CompiledDirectory, compileSettingsDirectory);
+            var latestSourceChange = LatestChangeInDirectory(SourceDirectory);
+
+            if (latestSourceChange > latestCompileChange)
             {
-                var compiledDirectory = compiledDirectories.Where(c => c.Name == sourceDirectory.Name).FirstOrDefault();
-                if (compiledDirectory == null)
-                {
-                    toCompile.Add(sourceDirectory);
-                    continue;
-                }
-                var compileSettingsDirectory = PluginCopyFiles.GetSettingsDirectory(compiledDirectory);
-                var latestCompileChange = LatestChangeInDirectory(compiledDirectory, compileSettingsDirectory);
-                var latestSourceChange = LatestChangeInDirectory(sourceDirectory);
-                if (latestSourceChange > latestCompileChange)
-                {
-                    toCompile.Add(sourceDirectory);
-                    continue;
-                }
+                return true;
             }
-            return toCompile;
+            return false;
         }
 
         private DateTime LatestChangeInDirectory(DirectoryInfo directory, DirectoryInfo exclude = null)

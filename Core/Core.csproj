@@ -450,6 +450,7 @@
     <Compile Include="Shared\PInvoke\ClientID.cs" />
     <Compile Include="Shared\PInvoke\DynamicImport.cs" />
     <Compile Include="Shared\PInvoke\ObjectAttributes.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\PluginCompile.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCopyFiles.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginFilter.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginSourceDownloader.cs" />

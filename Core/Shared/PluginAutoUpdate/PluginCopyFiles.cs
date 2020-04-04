@@ -15,6 +15,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         {
             var sourceSettings = GetSettingsDirectory(sourceDirectory);
             if (sourceSettings == null) return;
+            compiledDirectory.Create();
             var compiledSettings = GetSettingsDirectory(compiledDirectory);
             string targetName = sourceSettings.Name;
             if (compiledSettings != null)

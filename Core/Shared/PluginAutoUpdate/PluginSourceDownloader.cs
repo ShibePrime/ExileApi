@@ -12,38 +12,13 @@ namespace ExileCore.Shared.PluginAutoUpdate
     public class PluginSourceDownloader
     {
         private string SourceDirectory { get; }
-        private PluginsSettings PluginsSettings { get; }
 
-        public PluginSourceDownloader(string sourceDirectory, PluginsSettings pluginsSettings)
+        public PluginSourceDownloader(string sourceDirectory)
         {
             SourceDirectory = sourceDirectory ?? throw new ArgumentNullException(nameof(sourceDirectory));
-            PluginsSettings = pluginsSettings ?? throw new ArgumentNullException(nameof(pluginsSettings));
         }
 
-        public void UpdateAll()
-        {
-            var sw = Stopwatch.StartNew();
-            var tasks = new List<Task>();
-            foreach (var plugin in PluginsSettings.Plugins)
-            {
-                var task = new Task(() => Update(plugin));
-                tasks.Add(task);
-                task.Start();
-            }
-            Task.WaitAll(tasks.ToArray());
-
-            sw.Stop();
-            DebugWindow.LogMsg($"All Plugin Updates finished in {sw.ElapsedMilliseconds} ms.");
-        }
-
-        public void Update(string pluginName)
-        {
-            var plugin = PluginsSettings.Plugins.FirstOrDefault(p => p.Name.Equals(pluginName, StringComparison.InvariantCultureIgnoreCase));
-            if (plugin == null) return;
-            Update(plugin);
-        }
-
-        private void Update(PluginSettings plugin)
+        public void Update(PluginSettings plugin)
         {
             if (!plugin.Enable)
             {

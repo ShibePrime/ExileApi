@@ -69,23 +69,15 @@ namespace ExileCore.Shared
             }
 
             var PluginUpdater = new PluginUpdater(
+                RootDirectory,
                 Directories[PluginsDirectory],
                 Directories[CompiledPluginsDirectory],
                 Directories[SourcePluginsDirectory]
                 );
-            PluginUpdater.DownloadSource();
-            var pluginsToCompile = PluginUpdater.GetSourcePluginsToCompile();
-            PluginUpdater.CopySettings(pluginsToCompile);
 
-            Task task = null;
-            if (pluginsToCompile.Count > 0)
-            {
-                task = Task.Run(() =>
-                {
-                    var compilePluginsFromSource = CompilePluginsFromSource(pluginsToCompile.ToArray(), PluginUpdater);
-                });
-            }
-            task?.Wait();
+            var updateTasks = PluginUpdater.UpdateAllAsync();
+            Task.WaitAll(updateTasks?.ToArray());
+
             //List<(Assembly asm, DirectoryInfo directoryInfo)> assemblies = new List<(Assembly, DirectoryInfo)>();
             var (compiledPlugins, sourcePlugins) = SearchPlugins();
             var compiledAssemblies = GetCompiledAssemblies(compiledPlugins, parallelLoading);
@@ -180,170 +172,6 @@ namespace ExileCore.Shared
             {
                 DebugWindow.LogError($"{nameof(LoadAssembly)} -> {e}");
                 return null;
-            }
-        }
-
-        private Assembly CompilePlugin(DirectoryInfo info, CodeDomProvider provider, string[] dllFiles, string outputDirectory)
-        {
-            var csFiles = info.GetFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName)
-                .ToArray();
-
-            if (!Directory.Exists(outputDirectory))
-            {
-                Directory.CreateDirectory(outputDirectory);
-            }
-            var parameters = new CompilerParameters
-            {
-                GenerateExecutable = false, 
-                CompilerOptions = "/optimize /unsafe",
-                OutputAssembly = Path.Combine(outputDirectory, $"{info.Name}.dll")
-            };
-
-            parameters.ReferencedAssemblies.AddRange(dllFiles);
-            var csprojPath = info.GetFiles($"{info.Name}.csproj", SearchOption.AllDirectories).Select(x => x.FullName).FirstOrDefault();
-
-            if (File.Exists(csprojPath))
-            {
-                var readAllLines = File.ReadAllLines(csprojPath);
-
-                var refer = readAllLines
-                    .WhereF(x =>
-                        x.TrimStart().StartsWith("<Reference Include=") && x.TrimEnd().EndsWith("/>"));
-
-                var refer2 = readAllLines.Where(x =>
-                    x.TrimStart().StartsWith("<Reference Include=") && x.TrimEnd().EndsWith("\">") &&
-                    x.Contains(","));
-
-                foreach (var r in refer)
-                {
-                    var arr = new int[2] {0, 0};
-                    var j = 0;
-
-                    for (var i = 0; i < r.Length; i++)
-                        if (r[i] == '"')
-                        {
-                            arr[j] = i;
-                            j++;
-                        }
-
-                    if (arr[1] != 0)
-                    {
-                        var dll = $"{r.Substring(arr[0] + 1, arr[1] - arr[0] - 1)}.dll";
-                        parameters.ReferencedAssemblies.Add(dll);
-                    }
-                }
-
-                foreach (var r in refer2)
-                {
-                    var arr = new int[2] {0, 0};
-                    var j = 0;
-
-                    for (var i = 0; i < r.Length; i++)
-                    {
-                        if (r[i] == '"' && j == 0)
-                        {
-                            arr[0] = i;
-                            j++;
-                        }
-                        else if (r[i] == ',')
-                        {
-                            arr[1] = i;
-                            j++;
-                        }
-
-                        if (j == 2)
-                            break;
-                    }
-
-                    if (arr[1] != 0)
-                    {
-                        var dll = $"{r.Substring(arr[0] + 1, arr[1] - arr[0] - 1)}.dll";
-                        parameters.ReferencedAssemblies.Add(dll);
-                    }
-                }
-            }
-
-            var libsFolder = Path.Combine(info.FullName, "libs");
-
-            if (Directory.Exists(libsFolder))
-            {
-                var libsDll = Directory.GetFiles(libsFolder, "*.dll");
-                parameters.ReferencedAssemblies.AddRange(libsDll);
-            }
-
-            //   parameters.TempFiles = new TempFileCollection($"{MainDir}\\{PluginsDirectory}\\Temp");
-            //  parameters.CoreAssemblyFileName = info.Name;
-            var result = provider.CompileAssemblyFromFile(parameters, csFiles);
-
-            if (result.Errors.HasErrors)
-            {
-                var AllErrors = "";
-
-                foreach (CompilerError compilerError in result.Errors)
-                {
-                    AllErrors += compilerError + Environment.NewLine;
-                    DebugWindow.LogError($"{info.Name} -> {compilerError}");
-                }
-
-                //File.WriteAllText(Path.Combine(info.FullName, "Errors.txt"), AllErrors);
-            }
-            else
-            {
-                var path = result.PathToAssembly;
-                return result.CompiledAssembly;
-            }
-
-            return null;
-        }
-        
-        private List<(Assembly CompiledAssembly, DirectoryInfo directoryInfoinfo)> CompilePluginsFromSource(DirectoryInfo[] sourcePlugins, PluginUpdater pluginUpdater)
-        {
-            using (CodeDomProvider provider =
-                new CSharpCodeProvider())
-            using (new PerformanceTimer("Compile source plugins"))
-            {
-                var _compilerSettings = provider.GetType()
-                    .GetField("_compilerSettings", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(provider);
-
-                var _compilerFullPath = _compilerSettings
-                    .GetType().GetField("_compilerFullPath", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                _compilerFullPath.SetValue(_compilerSettings,
-                    ((string) _compilerFullPath.GetValue(_compilerSettings)).Replace(@"bin\roslyn\", @"roslyn\"));
-
-                var rootDirInfo = new DirectoryInfo(RootDirectory);
-
-                var dllFiles = rootDirInfo.GetFiles("*.dll", SearchOption.TopDirectoryOnly)
-                    .WhereF(x => !x.Name.Equals("cimgui.dll") && x.Name.Count(c => c == '-' || c == '_') != 5)
-                    .SelectF(x => x.FullName).ToArray();
-
-                var results = new List<(Assembly CompiledAssembly, DirectoryInfo info)>(sourcePlugins.Length);
-
-                if (parallelLoading)
-                {
-                    var innerLocker = new object();
-              
-
-                    Parallel.ForEach(sourcePlugins, info =>
-                    {
-                        using (new PerformanceTimer($"Compile source plugin: {info.Name}"))
-                        {
-                            var outputDirectory = pluginUpdater.GetOutputDirectory(info);
-                            (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info, provider, dllFiles, outputDirectory), info);
-                        }
-                    });
-                }
-                else
-                {
-                    foreach (var info in sourcePlugins)
-                    {
-                        var outputDirectory = pluginUpdater.GetOutputDirectory(info);
-                        (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info, provider, dllFiles, outputDirectory), info);
-                    }
-                }
-
-                return results;
             }
         }
 
