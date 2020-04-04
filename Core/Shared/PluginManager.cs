@@ -82,7 +82,7 @@ namespace ExileCore.Shared
             {
                 task = Task.Run(() =>
                 {
-                    var compilePluginsFromSource = CompilePluginsFromSource(pluginsToCompile.ToArray());
+                    var compilePluginsFromSource = CompilePluginsFromSource(pluginsToCompile.ToArray(), PluginUpdater);
                 });
             }
             task?.Wait();
@@ -183,12 +183,11 @@ namespace ExileCore.Shared
             }
         }
 
-        private Assembly CompilePlugin(DirectoryInfo info, CodeDomProvider provider, string[] dllFiles)
+        private Assembly CompilePlugin(DirectoryInfo info, CodeDomProvider provider, string[] dllFiles, string outputDirectory)
         {
             var csFiles = info.GetFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName)
                 .ToArray();
 
-            var outputDirectory = PluginUpdater.GetOutputDirectory(info);
             if (!Directory.Exists(outputDirectory))
             {
                 Directory.CreateDirectory(outputDirectory);
@@ -297,7 +296,7 @@ namespace ExileCore.Shared
             return null;
         }
         
-        private List<(Assembly CompiledAssembly, DirectoryInfo directoryInfoinfo)> CompilePluginsFromSource(DirectoryInfo[] sourcePlugins)
+        private List<(Assembly CompiledAssembly, DirectoryInfo directoryInfoinfo)> CompilePluginsFromSource(DirectoryInfo[] sourcePlugins, PluginUpdater pluginUpdater)
         {
             using (CodeDomProvider provider =
                 new CSharpCodeProvider())
@@ -330,7 +329,8 @@ namespace ExileCore.Shared
                     {
                         using (new PerformanceTimer($"Compile source plugin: {info.Name}"))
                         {
-                            (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info,provider,dllFiles),info);
+                            var outputDirectory = pluginUpdater.GetOutputDirectory(info);
+                            (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info, provider, dllFiles, outputDirectory), info);
                         }
                     });
                 }
@@ -338,7 +338,8 @@ namespace ExileCore.Shared
                 {
                     foreach (var info in sourcePlugins)
                     {
-                       (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info,provider,dllFiles),info);
+                        var outputDirectory = pluginUpdater.GetOutputDirectory(info);
+                        (Assembly ass, DirectoryInfo info) valueTuple = (CompilePlugin(info, provider, dllFiles, outputDirectory), info);
                     }
                 }
 
