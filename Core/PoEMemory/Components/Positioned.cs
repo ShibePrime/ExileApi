@@ -15,7 +15,7 @@ namespace ExileCore.PoEMemory.Components
         }
 
         public PositionedComponentOffsets PositionedStruct => _cachedValue.Value;
-        public long OwnerAddress => PositionedStruct.OwnerAddress;
+        public new long OwnerAddress => PositionedStruct.OwnerAddress;
         public int GridX => PositionedStruct.GridX;
         public int GridY => PositionedStruct.GridY;
         public Vector2 GridPos => new Vector2(GridX, GridY);

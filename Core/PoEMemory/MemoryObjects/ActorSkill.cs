@@ -128,25 +128,17 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (effects != null)
                     return effects.SkillGemWrapper.ActiveSkill.InternalName;
 
-                string name;
-
                 switch (Id)
                 {
                     case 0x266:
                         return "Interaction";
-                        break;
-
                     case 0x2909:
                         return "Move";
-                        break;
-
                     default:
                         if (Id != 0x37d9)
                             return Id.ToString(CultureInfo.InvariantCulture);
                         else
                             return "WashedUp";
-
-                        break;
                 }
             }
         }

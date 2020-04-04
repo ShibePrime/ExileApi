@@ -33,8 +33,6 @@ namespace ExileCore
         private readonly int PluginNameWidth = 200;
         private List<PluginWrapper> plugins;
         private List<DebugInformation> PluginsDebug = new List<DebugInformation>();
-        private bool refresh;
-        private int selected = 0;
         private Action Selected = () => { };
         private string selectedName = "";
         private readonly Stopwatch sw = Stopwatch.StartNew();
@@ -276,7 +274,6 @@ namespace ExileCore
             if (sw.ElapsedMilliseconds > 1000)
             {
                 sw.Restart();
-                refresh = true;
             }
 
             //Tabs before 1.67
@@ -560,7 +557,6 @@ namespace ExileCore
 
             MoreInformation?.Invoke();
             ImGui.End();
-            refresh = false;
         }
 
         private void DrawInfoForNotMainDebugInformation(DebugInformation deb)

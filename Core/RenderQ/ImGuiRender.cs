@@ -46,11 +46,9 @@ namespace ExileCore.RenderQ
         private DepthStencilState depthStencilState;
         private readonly string LastFontName = "";
         private Matrix4x4 mvp2;
-        private RawColor4 outputMergerBlendFactor;
         private SamplerState samplerState;
         private RasterizerState SolidState;
         private VertexBufferBinding vertexBuffer;
-        private Viewport Viewport;
 
         public ImGuiRender(DX11 dx11, RenderForm form, CoreSettings coreSettings)
         {
@@ -370,6 +368,7 @@ namespace ExileCore.RenderQ
             }
             catch (DllNotFoundException ex)
             {
+                Core.Logger.Error($"Cant load cimgui.dll -> {ex.Message}");
                 throw new DllNotFoundException("Need put in directory cimgui.dll");
             }
         }
@@ -679,9 +678,17 @@ namespace ExileCore.RenderQ
             return position;
         }
 
-        private unsafe Vector2N DrawClrText2(ref ReadOnlySpan<char> span, ref Vector2N position, float xStart, FontAlign align,
-            int start, int len,
-            uint clr, int index, int spanIndex, bool noColor = false)
+        private unsafe Vector2N DrawClrText2(
+            ref ReadOnlySpan<char> span, 
+            ref Vector2N position, 
+            float xStart, 
+            FontAlign align,
+            int start, 
+            int len,
+            uint clr, 
+            int index, 
+            int spanIndex, 
+            bool noColor = false)
         {
             var onlySpan = span.Slice(start, len);
             var textBegin = onlySpan.ToString();

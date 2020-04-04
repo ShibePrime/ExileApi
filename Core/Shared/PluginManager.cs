@@ -44,7 +44,6 @@ namespace ExileCore.Shared
             _multiThreadManager = multiThreadManager;
             Directories = new Dictionary<string, string>();
             RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            Directories["Temp"] = Path.Combine(RootDirectory, PluginsDirectory, "Temp");
             Directories[PluginsDirectory] = Path.Combine(RootDirectory, PluginsDirectory);
 
             Directories[CompiledPluginsDirectory] =

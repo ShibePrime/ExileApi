@@ -8,10 +8,7 @@ namespace ExileCore.PoEMemory.Components
         private string _name;
         private string _icon;
         private string _iconFileName;
-        private long? _datInfo;
         private long DatInfo => M.Read<long>(Address + 0x28);
-
-
         public string Id => _id = _id ?? M.ReadStringU(M.Read<long>(DatInfo));
         public string Name => _name = _name ?? M.ReadStringU(M.Read<long>(DatInfo + 0x8));
         public string Icon => _icon = _icon ?? M.ReadStringU(M.Read<long>(DatInfo + 0x18));

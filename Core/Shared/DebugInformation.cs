@@ -8,7 +8,6 @@ namespace ExileCore.Shared
     {
         public static readonly int SizeArray = 512;
         private readonly Stopwatch sw = Stopwatch.StartNew();
-        private bool show;
         private double tick;
 
         public DebugInformation(string name, bool main = true)

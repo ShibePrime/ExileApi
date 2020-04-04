@@ -8,8 +8,6 @@ namespace ExileCore.PoEMemory.FilesInMemory
 {
     public class BaseItemTypes : FileInMemory
     {
-        private int tries = 0;
-
         public BaseItemTypes(IMemory m, Func<long> address) : base(m, address)
         {
             LoadItemTypes();

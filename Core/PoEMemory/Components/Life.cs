@@ -21,7 +21,7 @@ namespace ExileCore.PoEMemory.Components
             _cachedValueBuffs = new FrameCache<List<Buff>>(ParseBuffs);
         }
 
-        public long OwnerAddress => LifeComponentOffsetsStruct.Owner;
+        public new long OwnerAddress => LifeComponentOffsetsStruct.Owner;
         private LifeComponentOffsets LifeComponentOffsetsStruct => _life.Value;
         public int MaxHP => Address != 0 ? LifeComponentOffsetsStruct.MaxHP : 1;
         public int CurHP => Address != 0 ? LifeComponentOffsetsStruct.CurHP : 0;

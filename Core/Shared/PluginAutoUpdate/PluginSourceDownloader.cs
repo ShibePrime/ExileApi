@@ -83,7 +83,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 sw.Stop();
                 DebugWindow.LogMsg($"{plugin.Name}: Update successful in {sw.ElapsedMilliseconds} ms.");
             }
-            catch (Exception e)
+            catch
             {
                 DebugWindow.LogError($"{plugin.Name}: Update failed. Skipped!");
             }
@@ -96,8 +96,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         private void Pull(Repository repository)
         {
-            var options = new PullOptions();
-            options.FetchOptions = new FetchOptions();
+            var options = new PullOptions
+            {
+                FetchOptions = new FetchOptions()
+            };
             var signature = new Signature(new Identity("ExileApi", "nomail"), DateTimeOffset.Now);
             Commands.Pull(repository, signature, options);
         }
