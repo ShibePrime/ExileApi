@@ -16,7 +16,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        public IList<ProphecyDat> EntriesList => base.EntriesList.ToList();
+        public new IList<ProphecyDat> EntriesList => base.EntriesList.ToList();
 
         public ProphecyDat GetProphecyById(int index)
         {
@@ -36,13 +36,13 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return prophecy;
         }
 
-        protected void EntryAdded(long addr, ProphecyDat entry)
+        protected new void EntryAdded(long addr, ProphecyDat entry)
         {
             entry.Index = IndexCounter++;
             ProphecyIndexDictionary.Add(entry.ProphecyId, entry);
         }
 
-        public ProphecyDat GetByAddress(long address)
+        public new ProphecyDat GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }

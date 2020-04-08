@@ -340,8 +340,6 @@ namespace ExileCore.RenderQ
 
         private static ThemeConfig LoadTheme(string fileName, bool nullIfNotFound)
         {
-            ThemeConfig result;
-
             try
             {
                 var fullPath = Path.Combine(ThemesFolder, fileName + ThemeExtension);

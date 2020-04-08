@@ -7,8 +7,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class Camera : RemoteMemoryObject
     {
-        private static Vector2 oldplayerCord;
-        private readonly CameraOffsets? _cameraOffsets;
         private readonly CachedValue<CameraOffsets> _cachedValue;
 
         public Camera()

@@ -12,7 +12,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        protected void EntryAdded(long addr, BestiaryCapturableMonster entry)
+        protected new void EntryAdded(long addr, BestiaryCapturableMonster entry)
         {
             entry.Id = IdCounter++;
         }

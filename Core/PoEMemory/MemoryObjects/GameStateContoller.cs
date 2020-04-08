@@ -24,7 +24,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public readonly Dictionary<string, GameState> AllGameStates;
         private readonly int CurrentAreaHashOff;
         private readonly int DataOff;
-        private bool initialized = false;
 
         public TheGame(IMemory m, Cache cache)
         {

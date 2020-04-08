@@ -138,10 +138,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             private struct ItemMinMaxLocation
             {
-                private int XMin;
-                private int YMin;
-                private int XMax;
-                private int YMax;
+                private int XMin { get; set; }
+                private int YMin { get; set; }
+                private int XMax { get; set; }
+                private int YMax { get; set; }
 
                 public RectangleF GetItemRect(float invStartX, float invStartY, float cellsize)
                 {

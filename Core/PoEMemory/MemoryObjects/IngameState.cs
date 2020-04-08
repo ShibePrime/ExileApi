@@ -19,7 +19,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<IngameStateOffsets> _ingameState;
         private readonly CachedValue<IngameUIElements> _ingameUi;
         private readonly CachedValue<DiagnosticElement> _LatencyRectangle;
-        private CachedValue<Element> _mouseActions;
         private readonly CachedValue<ServerData> _serverData;
         private readonly CachedValue<float> _TimeInGameF;
         private readonly CachedValue<Element> _UIHover;

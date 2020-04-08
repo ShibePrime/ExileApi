@@ -7,7 +7,6 @@ namespace ExileCore.PoEMemory.Elements
 {
     public class StashElement : Element
     {
-        private int _indexVisibleStash;
         public long TotalStashes => StashInventoryPanel != null ? StashInventoryPanel.ChildCount : 0;
         public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2B8)) : null;
 
@@ -69,7 +68,7 @@ namespace ExileCore.PoEMemory.Elements
             {
                 stashInventoryByIndex = StashInventoryPanel.Children[index].Children[0].Children[0].AsObject<Inventory>();
             }
-            catch (Exception e)
+            catch
             {
                 DebugWindow.LogError($"Not found inventory stash for index: {index}");
             }

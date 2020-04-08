@@ -27,17 +27,14 @@ namespace ExileCore.RenderQ
         private readonly SwapChain _swapChain;
         private readonly object _sync = new object();
         private Color4 ClearColor = new Color4(0, 0, 0, 0);
-        private Buffer ConstantBuffer;
         private double debugTime;
         private double endFrameTime;
         private readonly Factory factory;
         private readonly DebugInformation ImGuiDebug;
-        private Buffer IndexBuffer;
         private readonly DebugInformation SpritesDebug;
         private double startFrameTime;
         private readonly Stopwatch sw;
         private readonly DebugInformation SwapchainDebug;
-        private Buffer VertexBuffer;
         private Viewport Viewport;
 
         public DX11(RenderForm form, CoreSettings coreSettings)

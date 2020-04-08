@@ -35,7 +35,6 @@ namespace ExileCore
         //Used for debug, maybe now can be delete
         private object _objectInitWork;
         private readonly List<ThreadUnit> BrokenThreads = new List<ThreadUnit>();
-        private bool Closed;
         private readonly ConcurrentQueue<ThreadUnit> FreeThreads = new ConcurrentQueue<ThreadUnit>();
         private readonly ConcurrentQueue<Job> Jobs = new ConcurrentQueue<Job>();
         private readonly Queue<Job> processJobs = new Queue<Job>();
@@ -254,51 +253,7 @@ namespace ExileCore
 
             Interlocked.CompareExchange(ref _lock, 0, 1);
             ProcessWorking = false;
-        }
-
-        /*public void Wait() {
-            spinWait.Reset();
-            bool AnyBusy = true;
-            while (AnyBusy && !Closed)
-            {
-                AnyBusy = false;
-                for (int i = 0; i < threads.Length; i++)
-                {
-                    var threadItem = threads[i];
-                    if (!threadItem.Free)
-                    {
-                        if (threadItem.WorkingTime >= CriticalWorkTimeMs)
-                        {
-                            threadItem.Abort(true);
-                            
-
-                            var newThread = new ThreadUnit($"Repair critical time {threadItem.Number}", threadItem.Number);
-                            threads[threadItem.Number] = newThread;
-                            FailedThreadsCount++;
-                        }
-                        AnyBusy = true;
-                        spinWait.SpinOnce();
-                        break;
-                    }
-                }
-            }
-
-            for (int i = 0; i < threads.Length; i++)
-            {
-                var th = threads[i];
-                FreeThreads.Enqueue(th);
-            }            
-        }*/
-
-        public void Close()
-        {
-            foreach (var thread in threads)
-            {
-                thread.Abort();
-            }
-
-            Closed = true;
-        }
+        }     
     }
 
     public class ThreadUnit
@@ -307,7 +262,6 @@ namespace ExileCore
         private readonly Stopwatch sw;
         private readonly Thread thread;
         private bool _wait = true;
-        private volatile bool abort;
         private bool running = true;
 
         public ThreadUnit(string name, int number)
@@ -427,19 +381,15 @@ namespace ExileCore
             SecondJob.IsCompleted = true;
             Job.IsFailed = true;
             Job.IsFailed = true;
-            abort = true;
 
             if (_wait)
                 _event.Set();
 
             running = false;
-
-            //thread.Abort();
         }
 
         public void ForceAbort()
         {
-            abort = true;
             thread.Abort();
         }
     }

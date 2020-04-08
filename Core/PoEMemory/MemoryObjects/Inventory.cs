@@ -26,8 +26,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public long TotalBoxesInInventoryRow => InventoryStruct.TotalBoxesInInventoryRow; // M.Read<int>(Address + TotalBoxesInInventoryRowOff);
         private InventoryOffsets InventoryStruct => _cachedValue.Value;
         public NormalInventoryItem HoverItem => InventoryStruct.HoverItem == 0 ? null : GetObject<NormalInventoryItem>(InventoryStruct.HoverItem);
-        public int X => InventoryStruct.XReal;
-        public int Y => InventoryStruct.YReal;
+        public new int X => InventoryStruct.XReal;
+        public new int Y => InventoryStruct.YReal;
         public int XFake => InventoryStruct.XFake;
         public int YFake => InventoryStruct.YFake;
         public bool CursorHoverInventory => InventoryStruct.CursorInInventory == 1;

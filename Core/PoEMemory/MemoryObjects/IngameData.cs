@@ -16,7 +16,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<long> _EntitiesCount;
         private EntityList _EntityList;
         private readonly CachedValue<Entity> _localPlayer;
-        private NativePtrArray cacheMapStats;
         private NativePtrArray cacheStats;
         private readonly Dictionary<GameStat, int> mapStats = new Dictionary<GameStat, int>();
 
