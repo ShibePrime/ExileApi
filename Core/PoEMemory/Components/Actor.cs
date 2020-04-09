@@ -91,7 +91,7 @@ namespace ExileCore.PoEMemory.Components
                     addr < skillsEndPointer;
                     addr += 16) //16 because we are reading each second pointer (pointer vectors)
                 {
-                    result.Add(GetObject<ActorSkill>(addr));
+                    result.Add(ReadObject<ActorSkill>(addr));
                 }
 
                 return result;
