@@ -7,6 +7,7 @@ using ExileCore.RenderQ;
 using ExileCore.Shared;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
+using ExileCore.Shared.PluginAutoUpdate;
 using ImGuiNET;
 using JM.LinqFaster;
 using SharpDX;
@@ -21,7 +22,7 @@ namespace ExileCore
         private readonly Core core;
         private int _index = -1;
         private DebugInformation AllPlugins;
-        private readonly Action CoreSettings = () => { };
+        private readonly Action CoreSettingsAction = () => { };
         private readonly DebugInformation debugInformation;
         private bool demo_window;
         private bool firstTime = true;
@@ -41,6 +42,13 @@ namespace ExileCore
 
         public static bool IsOpened;
 
+        public CoreSettings _CoreSettings { get; }
+        public Dictionary<string, FontContainer> Fonts { get; }
+        public List<ISettingsHolder> CoreSettingsDrawers { get; }
+
+        public PluginsUpdateSettings PluginsUpdateSettings { get; }
+        public List<ISettingsHolder> PluginsUpdateSettingsDrawers { get; }
+
         public MenuWindow(Core core, SettingsContainer settingsContainer, Dictionary<string, FontContainer> fonts)
         {
             this.core = core;
@@ -48,21 +56,16 @@ namespace ExileCore
             _CoreSettings = settingsContainer.CoreSettings;
             Fonts = fonts;
             themeEditor = new ThemeEditor(_CoreSettings);
-            /*Input.RegisterKey(Keys.F12);
-            Input.ReleaseKey += (sender, keys) =>
-            {
-                if (keys== SettingsCoreSettings.MainMenuKeyToggle.Value)
-                {
-                    Enable = !Enable;
-                }
-            };*/
-
             CoreSettingsDrawers = new List<ISettingsHolder>();
-
             SettingsParser.Parse(_CoreSettings, CoreSettingsDrawers);
-            Selected = CoreSettings;
 
-            CoreSettings = () =>
+            PluginsUpdateSettings = settingsContainer.PluginsUpdateSettings;
+            PluginsUpdateSettingsDrawers = new List<ISettingsHolder>();
+            SettingsParser.Parse(PluginsUpdateSettings, PluginsUpdateSettingsDrawers);
+
+            Selected = CoreSettingsAction;
+
+            CoreSettingsAction = () =>
             {
                 foreach (var drawer in CoreSettingsDrawers)
                 {
@@ -71,7 +74,7 @@ namespace ExileCore
             };
 
             _index = -1;
-            Selected = CoreSettings;
+            Selected = CoreSettingsAction;
 
             Core.DebugInformations.CollectionChanged += OnDebugInformationsOnCollectionChanged;
             debugInformation = new DebugInformation("DebugWindow", false);
@@ -114,10 +117,6 @@ namespace ExileCore
                 }
             };
         }
-
-        public CoreSettings _CoreSettings { get; }
-        public Dictionary<string, FontContainer> Fonts { get; }
-        public List<ISettingsHolder> CoreSettingsDrawers { get; }
 
         private Windows OpenWindow
         {
@@ -227,7 +226,7 @@ namespace ExileCore
             if (ImGui.Selectable("Core", _index == -1))
             {
                 _index = -1;
-                Selected = CoreSettings;
+                Selected = CoreSettingsAction;
             }
 
             ImGui.Separator();
@@ -236,6 +235,20 @@ namespace ExileCore
             {
                 _index = -2;
                 Selected = () => { themeEditor.DrawSettingsMenu(); };
+            }
+
+            ImGui.Separator();
+
+            if (ImGui.Selectable("PluginAutoUpdate", _index == -3))
+            {
+                _index = -3;
+                Selected = () => 
+                {
+                    foreach (var drawer in PluginsUpdateSettingsDrawers)
+                    {
+                        drawer.Draw();
+                    }
+                };
             }
 
             if (_gameController != null && core.pluginManager != null)

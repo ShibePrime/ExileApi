@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
+using ExileCore.Shared.PluginAutoUpdate;
 using Newtonsoft.Json;
 
 namespace ExileCore
@@ -12,9 +13,11 @@ namespace ExileCore
         private const string SETTINGS_FILE_NAME = "config/settings.json";
         private const string DEFAULT_PROFILE_NAME = "global";
         private const string CFG_DIR = "config";
+        private const string PLUGIN_AUTO_UPDATE_SETTINGS_FILE = "Plugins/updateSettings.json";
         public static readonly JsonSerializerSettings jsonSettings;
         private string _currentProfileName = "";
-        public CoreSettings CoreSettings;
+        public CoreSettings CoreSettings { get; set; }
+        public PluginsUpdateSettings PluginsUpdateSettings { get; set; }
 
         static SettingsContainer()
         {
@@ -32,6 +35,7 @@ namespace ExileCore
             if (!Directory.Exists($"{CFG_DIR}\\{DEFAULT_PROFILE_NAME}")) Directory.CreateDirectory($"{CFG_DIR}\\{DEFAULT_PROFILE_NAME}");
 
             LoadCoreSettings();
+            LoadPluginAutoUpdateSettings();
         }
 
         private static ReaderWriterLockSlim rwLock { get; } = new ReaderWriterLockSlim();
@@ -71,6 +75,27 @@ namespace ExileCore
             }
         }
 
+        public void LoadPluginAutoUpdateSettings()
+        {
+            try
+            {
+                if (!File.Exists(PLUGIN_AUTO_UPDATE_SETTINGS_FILE))
+                {
+                    var pluginsUpdateSettings = new PluginsUpdateSettings();
+                    File.AppendAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, JsonConvert.SerializeObject(pluginsUpdateSettings, Formatting.Indented));
+                }
+                else
+                {
+                    var readAllText = File.ReadAllText(SETTINGS_FILE_NAME);
+                    PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
         public void SaveCoreSettings()
         {
             try
@@ -80,6 +105,21 @@ namespace ExileCore
                 var info = new FileInfo(SETTINGS_FILE_NAME);
                 if (info.Length > 1) File.Copy(SETTINGS_FILE_NAME, $"{CFG_DIR}\\dumpSettings.json", true);
                 File.WriteAllText(SETTINGS_FILE_NAME, serializeObject);
+                rwLock.ExitWriteLock();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public void SavePluginAutoUpdateSettings()
+        {
+            try
+            {
+                rwLock.EnterWriteLock();
+                var serializeObject = JsonConvert.SerializeObject(PluginsUpdateSettings, Formatting.Indented);
+                File.WriteAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, serializeObject);
                 rwLock.ExitWriteLock();
             }
             catch (Exception e)
