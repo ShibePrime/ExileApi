@@ -1,4 +1,5 @@
-﻿using ExileCore.Shared.Interfaces;
+﻿using ExileCore.Shared.Attributes;
+using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,17 @@ using System.Threading.Tasks;
 
 namespace ExileCore.Shared.PluginAutoUpdate
 {
-    public class PluginsSettings : ISettings
+    public class PluginsUpdateSettings : ISettings
     {
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
-        public List<PluginSettings> Plugins { get; set; }
+
+        [Menu("Github credentials, optional!")]
+        public string Username { get; set; } = new TextNode();
+        public string Password { get; set; } = new TextNode();
+        public List<PluginUpdateSettings> Plugins { get; set; }
     }
 
-    public class PluginSettings : ISettings
+    public class PluginUpdateSettings : ISettings
     {
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
         public string Name { get; set; }

@@ -10,63 +10,67 @@ namespace ExileCore.Shared.PluginAutoUpdate
     public class PluginUpdater
     {
         private string RootDirectory { get; }
-        private string PluginsDirectory { get; }
         private string CompiledPluginsDirectory { get; }
         private string SourcePluginsDirectory { get; }
-        private string PluginUpdateSettingsPath => Path.Combine(PluginsDirectory, "updateSettings.json");
 
+        private PluginsUpdateSettings PluginsUpdateSettings { get; }
         private PluginFilter PluginFilter { get; }
         private PluginSourceDownloader PluginSourceDownloader { get; }
+        private PluginLoader PluginLoader { get; }
 
 
-        public PluginUpdater(string rootDirectory, string pluginsDirectory, string compiledPluginsDirectory, string sourcePluginsDirectory)
+        public PluginUpdater(
+            PluginsUpdateSettings pluginUpdateSettings,
+            string rootDirectory, 
+            string compiledPluginsDirectory, 
+            string sourcePluginsDirectory, 
+            PluginLoader pluginLoader)
         {
+            PluginsUpdateSettings = pluginUpdateSettings ?? throw new ArgumentNullException(nameof(pluginUpdateSettings));
             RootDirectory = rootDirectory ?? throw new ArgumentNullException(nameof(rootDirectory));
-            PluginsDirectory = pluginsDirectory ?? throw new ArgumentNullException(nameof(pluginsDirectory));
             CompiledPluginsDirectory = compiledPluginsDirectory ?? throw new ArgumentNullException(nameof(compiledPluginsDirectory));
             SourcePluginsDirectory = sourcePluginsDirectory ?? throw new ArgumentNullException(nameof(sourcePluginsDirectory));
 
             PluginFilter = new PluginFilter();
-            PluginSourceDownloader = new PluginSourceDownloader(SourcePluginsDirectory);
+            PluginSourceDownloader = new PluginSourceDownloader(SourcePluginsDirectory, pluginUpdateSettings);
+            PluginLoader = pluginLoader;
         }
 
-        public List<Task> UpdateAllAsync()
+        public List<Task<List<PluginWrapper>>> UpdateAndLoadAllAsync()
         {
-            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsSettings>(PluginUpdateSettingsPath);
-            if (pluginUpdateSettings == null)
-            {
-                DebugWindow.LogMsg($"{PluginUpdateSettingsPath} doesn't exists. Plugins wont be updated!");
-                return null;
-            }
-            if (!pluginUpdateSettings.Enable)
+            if (!PluginsUpdateSettings.Enable)
             {
                 DebugWindow.LogMsg($"Plugin Auto Update is deactivated!");
                 return null;
             }
 
             var pluginCompiler = new PluginCompiler(new DirectoryInfo(RootDirectory));
-            List<Task> tasks = new List<Task>();
-            foreach (var plugin in pluginUpdateSettings.Plugins)
+            var tasks = new List<Task<List<PluginWrapper>>>();
+            foreach (var plugin in PluginsUpdateSettings.Plugins)
             {
-                tasks.Add(Task.Run(() => UpdateSinglePlugin(plugin, PluginSourceDownloader, PluginFilter, pluginCompiler)));
+                tasks.Add(Task.Run(() => UpdateSinglePlugin(plugin, PluginSourceDownloader, PluginFilter, pluginCompiler, PluginLoader)));
             }
             return tasks;
         }
 
-        private void UpdateSinglePlugin(
-            PluginSettings plugin, 
+        private List<PluginWrapper> UpdateSinglePlugin(
+            PluginUpdateSettings plugin, 
             PluginSourceDownloader pluginSourceDownloader, 
             PluginFilter pluginFilter, 
-            PluginCompiler pluginCompiler
+            PluginCompiler pluginCompiler,
+            PluginLoader pluginLoader
             )
         {
             pluginSourceDownloader.Update(plugin);
             var sourcePluginDirectory = new DirectoryInfo(Path.Combine(SourcePluginsDirectory, plugin.Name));
             var compiledPluginDirectory = new DirectoryInfo(Path.Combine(CompiledPluginsDirectory, plugin.Name));
-            if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return;
+            if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return null;
 
             PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
-            pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
+            PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
+            var assembly = pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
+            var pluginWrapper = pluginLoader.Load(compiledPluginDirectory, assembly);
+            return pluginWrapper;
         }
 
         public string GetOutputDirectory(DirectoryInfo source)

@@ -124,6 +124,7 @@ namespace ExileCore.PoEMemory.Components
         {
             get
             {
+                // TODO FIX ME
                 var stateBuff = M.ReadBytes(
                     Address + _player.Value.TrialPassStatesOffset, 
                     _player.Value.TrialPassStatesLength); // (286+) bytes of info.

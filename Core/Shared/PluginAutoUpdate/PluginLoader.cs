@@ -1,0 +1,137 @@
+﻿using ExileCore.Shared.Interfaces;
+using JM.LinqFaster;
+using SharpDX;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ExileCore.Shared.PluginAutoUpdate
+{
+    public class PluginLoader
+    {
+        private GameController GameController { get; }
+        private Graphics Graphics { get; }
+        private PluginManager PluginManager { get; }
+        private Dictionary<string, Stopwatch> PluginLoadTime { get; } = new Dictionary<string, Stopwatch>();
+
+        public PluginLoader(GameController gameController, Graphics graphics, PluginManager pluginManager)
+        {
+            GameController = gameController ?? throw new ArgumentNullException(nameof(gameController));
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            PluginManager = pluginManager ?? throw new ArgumentNullException(nameof(pluginManager));
+        }
+
+
+        public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly)
+        {
+            if (info == null) return null;
+            if (assembly == null) return null;
+            PluginLoadTime[info.FullName] = Stopwatch.StartNew();
+
+            return TryLoadPlugin(assembly, info);
+
+        }
+
+        public List<PluginWrapper> Load(DirectoryInfo info)
+        {
+            var loadedAssembly = LoadAssembly(info);
+            return Load(info, loadedAssembly);
+        }
+
+        private Assembly LoadAssembly(DirectoryInfo dir)
+        {
+            try
+            {
+                var directoryInfo = new DirectoryInfo(dir.FullName);
+                if (!directoryInfo.Exists)
+                {
+                    DebugWindow.LogError($"Directory - {dir} not found.");
+                    return null;
+                }
+
+                var dll = directoryInfo.GetFiles($"{directoryInfo.Name}*.dll", SearchOption.TopDirectoryOnly)
+                    .FirstOrDefault();
+
+                if (dll == null)
+                {
+                    DebugWindow.LogError($"Not found plugin dll in {dir.FullName}. (Dll should be like folder)");
+                    return null;
+                }
+
+                var pdbPath = dll.FullName.Replace(".dll", ".pdb");
+                var pdbExists = File.Exists(pdbPath);
+
+                var dllBytes = File.ReadAllBytes(dll.FullName);
+                var asm = pdbExists ? Assembly.Load(dllBytes, File.ReadAllBytes(pdbPath)) : Assembly.Load(dllBytes);
+
+                return asm;
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"{nameof(LoadAssembly)} -> {e}");
+                return null;
+            }
+        }
+
+        private List<PluginWrapper> TryLoadPlugin(Assembly assembly, DirectoryInfo directoryInfo)
+        {
+            var pluginWrappers = new List<PluginWrapper>();
+            try
+            {
+                var dir = assembly.ManifestModule.ScopeName.Replace(".dll", "");
+
+                var fullPath = directoryInfo.FullName;
+
+                var types = assembly.GetTypes();
+                if (types.Length == 0)
+                {
+                    DebugWindow.LogError($"Not found any types in plugin {fullPath}");
+                    return null;
+                }
+
+                var classesWithIPlugin = types.WhereF(type => typeof(IPlugin).IsAssignableFrom(type));
+                var settings = types.FirstOrDefaultF(type => typeof(ISettings).IsAssignableFrom(type));
+
+                if (settings == null)
+                {
+                    DebugWindow.LogError("Not found setting class");
+                    return null;
+                }
+
+
+                foreach (var type in classesWithIPlugin)
+                {
+                    if (type.IsAbstract) continue;
+
+                    if (Activator.CreateInstance(type) is IPlugin instance)
+                    {
+                        instance.DirectoryName = dir;
+                        instance.DirectoryFullName = fullPath;
+                        var pluginWrapper = new PluginWrapper(instance);
+                        pluginWrapper.SetApi(GameController, Graphics, PluginManager);
+                        pluginWrapper.LoadSettings();
+                        pluginWrapper.Onload();
+                        var sw = PluginLoadTime[directoryInfo.FullName];
+                        sw.Stop();
+                        var elapsedTotalMilliseconds = sw.Elapsed.TotalMilliseconds;
+                        pluginWrapper.LoadedTime = elapsedTotalMilliseconds;
+                        DebugWindow.LogMsg($"{pluginWrapper.Name} loaded in {elapsedTotalMilliseconds} ms.", 1, Color.Orange);
+
+                        pluginWrappers.Add(pluginWrapper);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"Error when load plugin ({assembly.ManifestModule.ScopeName}): {e})");
+                return null;
+            }
+            return pluginWrappers;
+        }
+    }
+}

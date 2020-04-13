@@ -28,7 +28,7 @@ namespace ExileCore
         public const int MOUSEEVENTF_RIGHTUP = 0x0010;
         public const int MOUSE_EVENT_WHEEL = 0x800;
         private static readonly Dictionary<Keys, bool> Keys = new Dictionary<Keys, bool>();
-        private static readonly HashSet<Keys> RegisteredKeys = new HashSet<Keys>();
+        public static readonly HashSet<Keys> RegisteredKeys = new HashSet<Keys>();
         private static readonly object locker = new object();
         private static readonly WaitTime cursorPositionSmooth = new WaitTime(1);
         private static readonly WaitTime keyPress = new WaitTime(ACTION_DELAY);

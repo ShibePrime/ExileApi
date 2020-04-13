@@ -10,35 +10,55 @@ namespace ExileCore.Shared.PluginAutoUpdate
     public class PluginCopyFiles
     {
         public static List<string> SettingsDirectoryNames => new List<string> { "settings", "Settings", "config", "Config" };     
+        public static List<string> DependenciesDirectoryNames => new List<string> { "libs", "Libs", "lib", "Lib" };
 
         public static void CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
-            var sourceSettings = GetSettingsDirectory(sourceDirectory);
+            CopyFolder(
+                sourceDirectory,
+                compiledDirectory,
+                SettingsDirectoryNames,
+                "_new"
+            );
+        }
+
+        public static void CopyDependencies(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        {
+            CopyFolder(
+                sourceDirectory,
+                compiledDirectory,
+                DependenciesDirectoryNames
+            );
+        }
+
+        private static void CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "")
+        {
+            var sourceSettings = GetDirectoryByNames(sourceDirectory, possibleFolderName);
             if (sourceSettings == null) return;
             compiledDirectory.Create();
-            var compiledSettings = GetSettingsDirectory(compiledDirectory);
+            var compiledSettings = GetDirectoryByNames(compiledDirectory, possibleFolderName);
             string targetName = sourceSettings.Name;
-            if (compiledSettings != null)
+            if (compiledSettings != null && suffixIfExists != "")
             {
-                targetName = targetName + "_new";
+                targetName = targetName + suffixIfExists;
             }
 
             var target = new DirectoryInfo(Path.Combine(compiledDirectory.FullName, targetName));
             CopyAll(sourceSettings, target);
         }
 
-        public static DirectoryInfo GetSettingsDirectory(DirectoryInfo directory)
+        public static DirectoryInfo GetDirectoryByNames(DirectoryInfo directory, List<string> names)
         {
             var csprojPath = directory.GetFiles($"{directory.Name}.csproj", SearchOption.AllDirectories).FirstOrDefault();
             if (csprojPath == null) return null;
 
             var result = csprojPath.Directory
                 .GetDirectories()
-                .FirstOrDefault(d => SettingsDirectoryNames.Contains(d.Name));
+                .FirstOrDefault(d => names.Contains(d.Name));
             return result;
         }
 
-        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
         {
             Directory.CreateDirectory(target.FullName);
 

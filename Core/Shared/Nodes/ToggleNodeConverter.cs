@@ -16,7 +16,14 @@ namespace ExileCore.Shared.Nodes
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return new ToggleNode(serializer.Deserialize<bool>(reader));
+            try
+            {
+                return new ToggleNode(serializer.Deserialize<bool>(reader));
+            }
+            catch
+            {
+                return new ToggleNode(false);
+            }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

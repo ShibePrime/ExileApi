@@ -128,7 +128,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
             }
 
-            var libsFolder = Path.Combine(source.FullName, "libs");
+            var libsFolder = Path.Combine(outputDirectory, "libs");
 
             if (Directory.Exists(libsFolder))
             {

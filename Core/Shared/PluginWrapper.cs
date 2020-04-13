@@ -140,19 +140,7 @@ namespace ExileCore.Shared
             return initialise;
 
         }
-        public void SubscrideOnFile(Action<PluginWrapper,FileSystemEventArgs> action)
-        {
-            var fileSystemWatcher = new FileSystemWatcher()
-            {
-                NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite,
-                Path = Plugin.DirectoryFullName,
-                EnableRaisingEvents = true,
-            };
-            fileSystemWatcher.Changed += (sender, args) =>
-            {
-                action?.Invoke(this,args);
-            };
-        }
+        
         public void TurnOnOffPlugin(bool state)
         {
             Plugin._Settings.Enable.Value = state;
