@@ -27,20 +27,14 @@ namespace ExileCore.Shared.PluginAutoUpdate
         }
 
 
-        public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly)
+        public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly = null)
         {
             if (info == null) return null;
+            assembly = (assembly == null) ? LoadAssembly(info) : assembly;
             if (assembly == null) return null;
             PluginLoadTime[info.FullName] = Stopwatch.StartNew();
 
             return TryLoadPlugin(assembly, info);
-
-        }
-
-        public List<PluginWrapper> Load(DirectoryInfo info)
-        {
-            var loadedAssembly = LoadAssembly(info);
-            return Load(info, loadedAssembly);
         }
 
         private Assembly LoadAssembly(DirectoryInfo dir)
@@ -125,13 +119,13 @@ namespace ExileCore.Shared.PluginAutoUpdate
                         pluginWrappers.Add(pluginWrapper);
                     }
                 }
+                return pluginWrappers;
             }
             catch (Exception e)
             {
                 DebugWindow.LogError($"Error when load plugin ({assembly.ManifestModule.ScopeName}): {e})");
                 return null;
             }
-            return pluginWrappers;
         }
     }
 }

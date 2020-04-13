@@ -28,7 +28,6 @@ namespace ExileCore.Shared
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
         private Dictionary<string, string> Directories { get; }
-        private  Dictionary<string, Stopwatch> PluginLoadTime { get; } = new Dictionary<string, Stopwatch>();
 
         public bool AllPluginsLoaded { get; }
         public string RootDirectory { get; }
@@ -68,7 +67,7 @@ namespace ExileCore.Shared
             var pluginUpdateSettingsPath = Path.Combine(PluginsDirectory, "updateSettings.json");
             var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(pluginUpdateSettingsPath);
 
-            List<Task> loadPluginTasks = new List<Task>();
+            var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
             if (pluginUpdateSettings != null)
             {
                 loadPluginTasks.AddRange(RunPluginAutoUpdate(pluginLoader, pluginUpdateSettings));
@@ -77,11 +76,13 @@ namespace ExileCore.Shared
 
             Task.WaitAll(loadPluginTasks?.ToArray());
 
-            Plugins = Plugins
+            Plugins = loadPluginTasks
+                .SelectManyF(t => t.Result)
                 .OrderBy(x => x.Order)
                 .ThenByDescending(x => x.CanBeMultiThreading)
                 .ThenBy(x => x.Name)
                 .ToList();
+
             AddPluginInfoToDevTree();
 
             InitialisePlugins(gameController);
@@ -90,31 +91,21 @@ namespace ExileCore.Shared
             AllPluginsLoaded = true;
         }
 
-        private List<Task> RunPluginAutoUpdate(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
+        private List<Task<List<PluginWrapper>>> RunPluginAutoUpdate(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
         {
             var pluginUpdater = new PluginUpdater(
                 pluginsUpdateSettings,
-                Directories[PluginsDirectory],
+                RootDirectory,
                 Directories[CompiledPluginsDirectory],
                 Directories[SourcePluginsDirectory],
                 pluginLoader
                 );
 
             var pluginTasks = pluginUpdater.UpdateAndLoadAllAsync();
-            var pluginFullyLoadedTasks = new List<Task>();
-            foreach (var pluginTask in pluginTasks)
-            {
-                var task = pluginTask.ContinueWith(delegate (Task<List<PluginWrapper>> pluginWrappers)
-                {
-                    Plugins.AddRange(pluginWrappers.Result);
-                });
-                pluginFullyLoadedTasks.Add(task);
-            }
-
-            return pluginFullyLoadedTasks;
+            return pluginTasks;
         }
 
-        private List<Task> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
+        private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
         {
             List<string> excludedNames = new List<string>();
             if (pluginsUpdateSettings != null)
@@ -125,7 +116,7 @@ namespace ExileCore.Shared
                 .GetDirectories()
                 .Where(di => !excludedNames.Any(excludedName => excludedName.Equals(di.Name, StringComparison.InvariantCultureIgnoreCase)));
 
-            List<Task> loadTasks = new List<Task>();
+            var loadTasks = new List<Task<List<PluginWrapper>>>();
             foreach (var compiledDirectory in compiledDirectories)
             {
                 loadTasks.Add(Task.Run(() => pluginLoader.Load(compiledDirectory)));
