@@ -181,7 +181,7 @@ namespace ExileCore
 
         public unsafe void Render(GameController _gameController, List<PluginWrapper> plugins)
         {
-            if (plugins != null) plugins = plugins.OrderBy(x => x.Order).ThenBy(x => x.Name).ToList();
+            if (plugins != null) plugins = plugins.OrderBy(x => x.Name).ToList();
 
             if (CoreSettings.ShowDemoWindow)
             {
