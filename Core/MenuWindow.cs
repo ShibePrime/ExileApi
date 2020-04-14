@@ -19,7 +19,7 @@ namespace ExileCore
     {
         private static readonly Stopwatch swStartedProgram = Stopwatch.StartNew();
         private readonly SettingsContainer _settingsContainer;
-        private readonly Core core;
+        private readonly Core Core;
         private int _index = -1;
         private DebugInformation AllPlugins;
         private readonly Action CoreSettingsAction = () => { };
@@ -42,7 +42,7 @@ namespace ExileCore
 
         public static bool IsOpened;
 
-        public CoreSettings _CoreSettings { get; }
+        public CoreSettings CoreSettings { get; }
         public Dictionary<string, FontContainer> Fonts { get; }
         public List<ISettingsHolder> CoreSettingsDrawers { get; }
 
@@ -51,13 +51,13 @@ namespace ExileCore
 
         public MenuWindow(Core core, SettingsContainer settingsContainer, Dictionary<string, FontContainer> fonts)
         {
-            this.core = core;
+            this.Core = core;
             _settingsContainer = settingsContainer;
-            _CoreSettings = settingsContainer.CoreSettings;
+            CoreSettings = settingsContainer.CoreSettings;
             Fonts = fonts;
-            themeEditor = new ThemeEditor(_CoreSettings);
+            themeEditor = new ThemeEditor(CoreSettings);
             CoreSettingsDrawers = new List<ISettingsHolder>();
-            SettingsParser.Parse(_CoreSettings, CoreSettingsDrawers);
+            SettingsParser.Parse(CoreSettings, CoreSettingsDrawers);
 
             PluginsUpdateSettings = settingsContainer.PluginsUpdateSettings;
             PluginsUpdateSettingsDrawers = new List<ISettingsHolder>();
@@ -87,12 +87,12 @@ namespace ExileCore
                 selectedName = "";
             };
 
-            Input.RegisterKey(_CoreSettings.MainMenuKeyToggle);
-            _CoreSettings.MainMenuKeyToggle.OnValueChanged += () => { Input.RegisterKey(_CoreSettings.MainMenuKeyToggle); };
+            Input.RegisterKey(CoreSettings.MainMenuKeyToggle);
+            CoreSettings.MainMenuKeyToggle.OnValueChanged += () => { Input.RegisterKey(CoreSettings.MainMenuKeyToggle); };
 
-            _CoreSettings.Enable.OnValueChanged += (sender, b) =>
+            CoreSettings.Enable.OnValueChanged += (sender, b) =>
             {
-                if (!_CoreSettings.Enable)
+                if (!CoreSettings.Enable)
                 {
                     try
                     {
@@ -179,28 +179,26 @@ namespace ExileCore
             }
         }
 
-        public unsafe void Render(GameController _gameController)
+        public unsafe void Render(GameController _gameController, List<PluginWrapper> plugins)
         {
-            if (plugins == null)
-                plugins = core.pluginManager.Plugins.OrderBy(x => x.Name).ToList();
+            if (plugins != null) plugins = plugins.OrderBy(x => x.Order).ThenBy(x => x.Name).ToList();
 
-            if (_CoreSettings.ShowDemoWindow)
+            if (CoreSettings.ShowDemoWindow)
             {
                 demo_window = true;
                 ImGui.ShowDemoWindow(ref demo_window);
-                _CoreSettings.ShowDemoWindow.Value = demo_window;
+                CoreSettings.ShowDemoWindow.Value = demo_window;
             }
 
-            if (_CoreSettings.ShowDebugWindow) debugInformation.TickAction(DebugWindowRender);
+            if (CoreSettings.ShowDebugWindow) debugInformation.TickAction(DebugWindowRender);
 
-            if (_CoreSettings.MainMenuKeyToggle.PressedOnce())
+            if (CoreSettings.MainMenuKeyToggle.PressedOnce())
             {
-                _CoreSettings.Enable.Value = !_CoreSettings.Enable;
+                CoreSettings.Enable.Value = !CoreSettings.Enable;
 
-                if (_CoreSettings.Enable)
+                if (CoreSettings.Enable)
                 {
-                    core.Graphics.LowLevel.ImGuiRender.TransparentState = false;
-                    plugins = core.pluginManager.Plugins.OrderBy(x => x.Name).ToList();
+                    Core.Graphics.LowLevel.ImGuiRender.TransparentState = false;
                 }
                 else
                 {
@@ -209,25 +207,25 @@ namespace ExileCore
 
                     if (_gameController != null)
                     {
-                        foreach (var plugin in core.pluginManager.Plugins)
+                        foreach (var plugin in plugins)
                         {
                             _settingsContainer.SaveSettings(plugin.Plugin);
                         }
                     }
 
-                    core.Graphics.LowLevel.ImGuiRender.TransparentState = true;
+                    Core.Graphics.LowLevel.ImGuiRender.TransparentState = true;
                 }
             }
 
 
-            IsOpened = _CoreSettings.Enable;
-            if (!_CoreSettings.Enable) return;
+            IsOpened = CoreSettings.Enable;
+            if (!CoreSettings.Enable) return;
 
-            ImGui.PushFont(core.Graphics.Font.Atlas);
+            ImGui.PushFont(Core.Graphics.Font.Atlas);
             ImGui.SetNextWindowSize(new Vector2(800, 600), ImGuiCond.FirstUseEver);
-            var pOpen = _CoreSettings.Enable.Value;
+            var pOpen = CoreSettings.Enable.Value;
             ImGui.Begin("HUD S3ttings", ref pOpen);
-            _CoreSettings.Enable.Value = pOpen;
+            CoreSettings.Enable.Value = pOpen;
 
             ImGui.BeginChild("Left menu window", new Vector2(PluginNameWidth, ImGui.GetContentRegionAvail().Y), true,
                 ImGuiWindowFlags.None);
@@ -263,7 +261,7 @@ namespace ExileCore
             ImGui.Separator();
 
 
-            if (_gameController != null && core.pluginManager != null)
+            if (_gameController != null && Core.pluginManager != null)
             {
                 for (var index = 0; index < plugins.Count; index++)
                 {
@@ -292,9 +290,9 @@ namespace ExileCore
         private void DebugWindowRender()
         {
             // MoreInformation?.Invoke();
-            var debOpen = _CoreSettings.ShowDebugWindow.Value;
+            var debOpen = CoreSettings.ShowDebugWindow.Value;
             ImGui.Begin("Debug window", ref debOpen);
-            _CoreSettings.ShowDebugWindow.Value = debOpen;
+            CoreSettings.ShowDebugWindow.Value = debOpen;
 
             if (sw.ElapsedMilliseconds > 1000)
             {
@@ -342,13 +340,13 @@ namespace ExileCore
                     if (ImGui.IsItemHovered(ImGuiHoveredFlags.None))
                     {
                         ImGui.SetTooltip(
-                            $"Update every {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - Core.DebugInformations[0].Index) / (float) _CoreSettings.TargetFps:0.00} sec.");
+                            $"Update every {DebugInformation.SizeArray / CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - Core.DebugInformations[0].Index) / (float) CoreSettings.TargetFps:0.00} sec.");
                     }
 
                     ImGui.NextColumn();
                     ImGui.Text("Total %%");
                     ImGui.NextColumn();
-                    ImGui.Text($"Data for {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec.");
+                    ImGui.Text($"Data for {DebugInformation.SizeArray / CoreSettings.TargetFps} sec.");
                     ImGui.NextColumn();
 
                     foreach (var deb in MainDebugs)
@@ -377,12 +375,12 @@ namespace ExileCore
                     if (ImGui.IsItemHovered(ImGuiHoveredFlags.None))
                     {
                         ImGui.SetTooltip(
-                            $"Update every {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - Core.DebugInformations[0].Index) / (float) _CoreSettings.TargetFps:0.00} sec.");
+                            $"Update every {DebugInformation.SizeArray / CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - Core.DebugInformations[0].Index) / (float) CoreSettings.TargetFps:0.00} sec.");
                     }
 
                     ImGui.NextColumn();
 
-                    ImGui.Text($"Data for {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec.");
+                    ImGui.Text($"Data for {DebugInformation.SizeArray / CoreSettings.TargetFps} sec.");
                     ImGui.NextColumn();
 
                     foreach (var deb in NotMainDebugs)
@@ -418,13 +416,13 @@ namespace ExileCore
                     if (ImGui.IsItemHovered(ImGuiHoveredFlags.None))
                     {
                         ImGui.SetTooltip(
-                            $"Update every {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - AllPlugins.Index) / (float) _CoreSettings.TargetFps:0.00} sec.");
+                            $"Update every {DebugInformation.SizeArray / CoreSettings.TargetFps} sec. Time to next update: {(DebugInformation.SizeArray - AllPlugins.Index) / (float) CoreSettings.TargetFps:0.00} sec.");
                     }
 
                     ImGui.NextColumn();
                     ImGui.Text("Total %%");
                     ImGui.NextColumn();
-                    ImGui.Text($"Data for {DebugInformation.SizeArray / _CoreSettings.TargetFps} sec.");
+                    ImGui.Text($"Data for {DebugInformation.SizeArray / CoreSettings.TargetFps} sec.");
                     ImGui.NextColumn();
                     DrawInfoForDebugInformation(AllPlugins, Core.DebugInformations[0], MainDebugs.Count);
 
@@ -438,8 +436,8 @@ namespace ExileCore
                 }
 
                 case Windows.Coroutines:
-                    DrawCoroutineRunnerInfo(core.CoroutineRunner);
-                    DrawCoroutineRunnerInfo(core.CoroutineRunnerParallel);
+                    DrawCoroutineRunnerInfo(Core.CoroutineRunner);
+                    DrawCoroutineRunnerInfo(Core.CoroutineRunnerParallel);
 
                     if (ImGui.CollapsingHeader("Finished coroutines"))
                     {
@@ -471,7 +469,7 @@ namespace ExileCore
                     ImGui.Text("%% Read from memory");
                     ImGui.NextColumn();
 
-                    var cache = core.GameController.Cache;
+                    var cache = Core.GameController.Cache;
 
                     //Elements
                     ImGui.Text("Elements");
@@ -605,7 +603,7 @@ namespace ExileCore
 
             ImGui.Text($"Min: {min:0.000} Max: {deb.Ticks.MaxF():00.000} Avg: {averageF:0.000} TAMax: {deb.TotalMaxAverage:00.000}");
 
-            if (averageF >= _CoreSettings.LimitDrawPlot)
+            if (averageF >= CoreSettings.LimitDrawPlot)
             {
                 ImGui.SameLine();
                 ImGui.PlotLines($"##Plot{deb.Name}", ref deb.Ticks[0], DebugInformation.SizeArray);
@@ -627,7 +625,7 @@ namespace ExileCore
             if (!deb.AtLeastOneFullTick)
             {
                 ImGui.Text(
-                    $"Info {deb.Name} - {DebugInformation.SizeArray / _CoreSettings.TargetFps / 60f:0.00} sec. Index: {deb.Index}/{DebugInformation.SizeArray}");
+                    $"Info {deb.Name} - {DebugInformation.SizeArray / CoreSettings.TargetFps / 60f:0.00} sec. Index: {deb.Index}/{DebugInformation.SizeArray}");
 
                 var scaleMin = deb.Ticks.Min();
                 var scaleMax = deb.Ticks.Max();
@@ -642,7 +640,7 @@ namespace ExileCore
             else
             {
                 ImGui.Text(
-                    $"Info {deb.Name} - {DebugInformation.SizeArray * DebugInformation.SizeArray / _CoreSettings.TargetFps / 60f:0.00} sec. Index: {deb.Index}/{DebugInformation.SizeArray}");
+                    $"Info {deb.Name} - {DebugInformation.SizeArray * DebugInformation.SizeArray / CoreSettings.TargetFps / 60f:0.00} sec. Index: {deb.Index}/{DebugInformation.SizeArray}");
 
                 var scaleMin = deb.TicksAverage.MinF();
                 var scaleMax = deb.TicksAverage.MaxF();
@@ -709,7 +707,7 @@ namespace ExileCore
             ImGui.Text(
                 $"Min: {deb.Ticks.Min():0.000} Max: {deb.Ticks.MaxF():00.000} Avg: {averageF:0.000} TAMax: {deb.TotalMaxAverage:00.000}");
 
-            if (averageF >= _CoreSettings.LimitDrawPlot)
+            if (averageF >= CoreSettings.LimitDrawPlot)
             {
                 ImGui.SameLine();
                 ImGui.PlotLines($"##Plot{deb.Name}", ref deb.Ticks[0], DebugInformation.SizeArray);

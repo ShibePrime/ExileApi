@@ -326,7 +326,7 @@ namespace ExileCore
 
                     try
                     {
-                        _mainMenu.Render(GameController);
+                        _mainMenu.Render(GameController, pluginManager.Plugins);
                     }
                     catch (Exception e)
                     {
