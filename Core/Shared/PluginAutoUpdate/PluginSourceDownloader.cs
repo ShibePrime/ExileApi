@@ -25,12 +25,12 @@ namespace ExileCore.Shared.PluginAutoUpdate
         {
             if (!plugin.Enable)
             {
-                DebugWindow.LogMsg($"{plugin.Name}: Update disabled in settings!");
+                DebugWindow.LogMsg($"{plugin.Name?.Value}: Update disabled in settings!");
                 return;
             }
             var sw = Stopwatch.StartNew();
-            DebugWindow.LogMsg($"{plugin.Name}: Start update.");
-            var repositoryPath = Path.Combine(SourceDirectory, plugin.Name);
+            DebugWindow.LogMsg($"{plugin.Name?.Value}: Start update.");
+            var repositoryPath = Path.Combine(SourceDirectory, plugin.Name?.Value);
             Repository repository = null;
 
             try
@@ -40,17 +40,17 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
             catch
             {
-                DebugWindow.LogMsg($"{plugin.Name}: No valid repository at: {repositoryPath}. Starting to clone...");
+                DebugWindow.LogMsg($"{plugin.Name?.Value}: No valid repository at: {repositoryPath}. Starting to clone...");
                 try
                 {
-                    Clone(plugin.SourceUrl, repositoryPath);
+                    Clone(plugin.SourceUrl?.Value, repositoryPath);
                     sw.Stop();
-                    DebugWindow.LogMsg($"{plugin.Name}: Clone successful in {sw.ElapsedMilliseconds} ms.");
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms.");
                     return;
                 }
                 catch
                 {
-                    DebugWindow.LogError($"{plugin.Name}: Clone failed. Skipped!");
+                    DebugWindow.LogError($"{plugin.Name?.Value}: Clone failed. Skipped!");
                     return;
                 }
             }
@@ -59,11 +59,11 @@ namespace ExileCore.Shared.PluginAutoUpdate
             {
                 Pull(repository);
                 sw.Stop();
-                DebugWindow.LogMsg($"{plugin.Name}: Update successful in {sw.ElapsedMilliseconds} ms.");
+                DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.");
             }
             catch
             {
-                DebugWindow.LogError($"{plugin.Name}: Update failed. Skipped!");
+                DebugWindow.LogError($"{plugin.Name?.Value}: Update failed. Skipped!");
             }
         }
 
@@ -95,8 +95,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 (url, usernameFromUrl, types) =>
                     new UsernamePasswordCredentials()
                     {
-                        Username = PluginsUpdateSettings.Username,
-                        Password = PluginsUpdateSettings.Password,
+                        Username = PluginsUpdateSettings.Username?.Value,
+                        Password = PluginsUpdateSettings.Password?.Value,
                     }
                 )
             };

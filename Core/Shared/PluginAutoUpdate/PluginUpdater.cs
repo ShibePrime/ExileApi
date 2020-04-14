@@ -62,8 +62,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
             )
         {
             pluginSourceDownloader.Update(plugin);
-            var sourcePluginDirectory = new DirectoryInfo(Path.Combine(SourcePluginsDirectory, plugin.Name));
-            var compiledPluginDirectory = new DirectoryInfo(Path.Combine(CompiledPluginsDirectory, plugin.Name));
+            var sourcePluginDirectory = new DirectoryInfo(Path.Combine(SourcePluginsDirectory, plugin.Name?.Value));
+            var compiledPluginDirectory = new DirectoryInfo(Path.Combine(CompiledPluginsDirectory, plugin.Name?.Value));
             if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return null;
 
             PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);

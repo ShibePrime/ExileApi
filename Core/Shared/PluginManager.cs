@@ -116,7 +116,7 @@ namespace ExileCore.Shared
             List<string> excludedNames = new List<string>();
             if (pluginsUpdateSettings != null)
             {
-                excludedNames.AddRange(pluginsUpdateSettings.Plugins?.Select(p => p.Name.Value));
+                excludedNames.AddRange(pluginsUpdateSettings.Plugins?.Select(p => p.Name?.Value));
             }
             var compiledDirectories = new DirectoryInfo(Directories[CompiledPluginsDirectory])
                 .GetDirectories()
