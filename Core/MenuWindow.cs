@@ -97,7 +97,14 @@ namespace ExileCore
                     try
                     {
                         _settingsContainer.SaveCoreSettings();
-
+                        try
+                        {
+                            _settingsContainer.SavePluginAutoUpdateSettings();
+                        }
+                        catch (Exception e)
+                        {
+                            DebugWindow.LogError($"SaveSettings for PluginAutoUpdate error: {e}");
+                        }
                         foreach (var plugin in core.pluginManager.Plugins)
                         {
                             try
@@ -114,6 +121,7 @@ namespace ExileCore
                     {
                         DebugWindow.LogError($"SaveSettings error: {e}");
                     }
+
                 }
             };
         }
@@ -197,6 +205,7 @@ namespace ExileCore
                 else
                 {
                     _settingsContainer.SaveCoreSettings();
+                    _settingsContainer.SavePluginAutoUpdateSettings();
 
                     if (_gameController != null)
                     {
@@ -251,6 +260,9 @@ namespace ExileCore
                 };
             }
 
+            ImGui.Separator();
+
+
             if (_gameController != null && core.pluginManager != null)
             {
                 for (var index = 0; index < plugins.Count; index++)
@@ -288,26 +300,6 @@ namespace ExileCore
             {
                 sw.Restart();
             }
-
-            //Tabs before 1.67
-/*            for (var index = 0; index < ((Windows[]) WindowsName).Length; index++)
-            {
-                var s = ((Windows[]) WindowsName)[index];
-                if(index>0)
-                { ImGui.SameLine();}
-
-                if (!Equals(OpenWindow, s))
-                {
-                    if (ImGui.Button($"{s}##WindowName"))
-                    {
-                        OpenWindow = s;
-                    }
-                }
-                else
-                {
-                    ImGui.TextColored(Color.OrangeRed.ToImguiV4(),$"{s}");
-                }
-            }*/
 
             ImGui.Text("Program work: ");
             ImGui.SameLine();

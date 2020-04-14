@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
@@ -9,6 +10,7 @@ using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
+using ExileCore.Shared.PluginAutoUpdate;
 using ImGuiNET;
 using JM.LinqFaster;
 using MoreLinq;
@@ -17,6 +19,17 @@ namespace ExileCore
 {
     public static class SettingsParser
     {
+        public static Type ListOfWhat(Object list)
+        {
+            if (!(list is IList)) return null;
+            return ListOfWhat2((dynamic)list);
+        }
+
+        private static Type ListOfWhat2<T>(IList<T> list)
+        {
+            return typeof(T);
+        }
+
         public static void Parse(ISettings settings, List<ISettingsHolder> draws, int id = -1)
         {
             if (settings == null)
@@ -45,25 +58,22 @@ namespace ExileCore
                     ID = menuAttribute.index == -1 ? MathHepler.Randomizer.Next(int.MaxValue) : menuAttribute.index
                 };
 
+
                 if (isSettings)
                 {
-                    var innerSettings = (ISettings) property.GetValue(settings);
-
-                    if (menuAttribute.index != -1)
-                    {
-                        holder.Type = HolderChildType.Tab;
-                        draws.Add(holder);
-                        Parse(innerSettings, draws, menuAttribute.index);
-                        var parent = GetAllDrawers(draws).Find(x => x.ID == menuAttribute.parentIndex);
-                        parent?.Children.Add(holder);
-                    }
-                    else
-                        Parse(innerSettings, draws);
-
+                    HandleSubSettings(settings, draws, property, menuAttribute, holder);
                     continue;
                 }
 
-                var type = property.GetValue(settings);
+                if (IsISettingsList(property, settings))
+                {
+                    IList list = property.GetValue(settings) as IList;
+                    foreach (var item in list)
+                    {
+                        Parse(item as ISettings, draws);
+                    }
+                    continue;
+                }
 
                 if (menuAttribute.parentIndex != -1)
                 {
@@ -76,169 +86,220 @@ namespace ExileCore
                     parent?.Children.Add(holder);
                 }
                 else
-                    draws.Add(holder);
-
-                switch (type)
                 {
-                    case ButtonNode n:
-                        holder.DrawDelegate = () =>
+                    draws.Add(holder);
+                }
+
+
+
+                var type = property.GetValue(settings);
+                HandleType(menuAttribute, holder, type);
+            }
+        }
+
+        private static void HandleSubSettings(ISettings settings, List<ISettingsHolder> draws, PropertyInfo property, MenuAttribute menuAttribute, SettingsHolder holder)
+        {
+            var innerSettings = (ISettings)property.GetValue(settings);
+
+            if (menuAttribute.index != -1)
+            {
+                holder.Type = HolderChildType.Tab;
+                draws.Add(holder);
+                Parse(innerSettings, draws, menuAttribute.index);
+                var parent = GetAllDrawers(draws).Find(x => x.ID == menuAttribute.parentIndex);
+                parent?.Children.Add(holder);
+            }
+            else
+                Parse(innerSettings, draws);
+        }
+
+        private static bool IsISettingsList(PropertyInfo propertyInfo, ISettings settings)
+        {
+            try
+            {
+                IList list = propertyInfo.GetValue(settings) as IList;
+                foreach (var item in list)
+                {
+                    return item.GetType().GetInterfaces().ContainsF(typeof(ISettings));
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
+        private static void HandleType(MenuAttribute menuAttribute, SettingsHolder holder, object type)
+        {
+            switch (type)
+            {
+                case ButtonNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        if (ImGui.Button(holder.Unique)) n.OnPressed();
+                    };
+
+                    break;
+                case EmptyNode n:
+
+                    break;
+                case HotkeyNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var holderName = $"{holder.Name} {n.Value}##{n.Value}";
+                        var open = true;
+
+                        if (ImGui.Button(holderName))
                         {
-                            if (ImGui.Button(holder.Unique)) n.OnPressed();
-                        };
+                            ImGui.OpenPopup(holderName);
+                            open = true;
+                        }
 
-                        break;
-                    case EmptyNode n:
-
-                        break;
-                    case HotkeyNode n:
-                        holder.DrawDelegate = () =>
+                        if (ImGui.BeginPopupModal(holderName, ref open, (ImGuiWindowFlags)35))
                         {
-                            var holderName = $"{holder.Name} {n.Value}##{n.Value}";
-                            var open = true;
-
-                            if (ImGui.Button(holderName))
+                            if (Input.GetKeyState(Keys.Escape))
                             {
-                                ImGui.OpenPopup(holderName);
-                                open = true;
+                                ImGui.CloseCurrentPopup();
+                                ImGui.EndPopup();
+                                return;
                             }
 
-                            if (ImGui.BeginPopupModal(holderName, ref open, (ImGuiWindowFlags) 35))
+                            foreach (var key in Enum.GetValues(typeof(Keys)))
                             {
-                                if (Input.GetKeyState(Keys.Escape))
+                                var keyState = Input.GetKeyState((Keys)key);
+
+                                if (keyState)
                                 {
+                                    n.Value = (Keys)key;
                                     ImGui.CloseCurrentPopup();
-                                    ImGui.EndPopup();
+                                    break;
+                                }
+                            }
+
+                            ImGui.Text($" Press new key to change '{n.Value}' or Esc for exit.");
+
+                            ImGui.EndPopup();
+                        }
+                    };
+
+                    break;
+                case ToggleNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var value = n.Value;
+                        ImGui.Checkbox(holder.Unique, ref value);
+                        n.Value = value;
+                    };
+
+                    break;
+                case ColorNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var vector4 = n.Value.ToVector4().ToVector4Num();
+
+                        if (ImGui.ColorEdit4(holder.Unique, ref vector4,
+                            ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.NoInputs |
+                            ImGuiColorEditFlags.AlphaPreviewHalf)) n.Value = vector4.ToSharpColor();
+                    };
+
+                    break;
+                case ListNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        if (ImGui.BeginCombo(holder.Unique, n.Value))
+                        {
+                            foreach (var t in n.Values)
+                            {
+                                if (ImGui.Selectable(t))
+                                {
+                                    n.Value = t;
+                                    ImGui.EndCombo();
                                     return;
                                 }
-
-                                foreach (var key in Enum.GetValues(typeof(Keys)))
-                                {
-                                    var keyState = Input.GetKeyState((Keys) key);
-
-                                    if (keyState)
-                                    {
-                                        n.Value = (Keys) key;
-                                        ImGui.CloseCurrentPopup();
-                                        break;
-                                    }
-                                }
-
-                                ImGui.Text($" Press new key to change '{n.Value}' or Esc for exit.");
-
-                                ImGui.EndPopup();
                             }
-                        };
 
-                        break;
-                    case ToggleNode n:
-                        holder.DrawDelegate = () =>
+                            ImGui.EndCombo();
+                        }
+                    };
+
+                    break;
+                case FileNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        if (ImGui.TreeNode(holder.Unique))
                         {
-                            var value = n.Value;
-                            ImGui.Checkbox(holder.Unique, ref value);
-                            n.Value = value;
-                        };
+                            var selected = n.Value;
 
-                        break;
-                    case ColorNode n:
-                        holder.DrawDelegate = () =>
-                        {
-                            var vector4 = n.Value.ToVector4().ToVector4Num();
-
-                            if (ImGui.ColorEdit4(holder.Unique, ref vector4,
-                                ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.NoInputs |
-                                ImGuiColorEditFlags.AlphaPreviewHalf)) n.Value = vector4.ToSharpColor();
-                        };
-
-                        break;
-                    case ListNode n:
-                        holder.DrawDelegate = () =>
-                        {
-                            if (ImGui.BeginCombo(holder.Unique, n.Value))
+                            if (ImGui.BeginChildFrame(1, new Vector2(0, 300)))
                             {
-                                foreach (var t in n.Values)
+                                var di = new DirectoryInfo("config");
+
+                                if (di.Exists)
                                 {
-                                    if (ImGui.Selectable(t))
+                                    foreach (var file in di.GetFiles())
                                     {
-                                        n.Value = t;
-                                        ImGui.EndCombo();
-                                        return;
+                                        if (ImGui.Selectable(file.Name, selected == file.FullName))
+                                            n.Value = file.FullName;
                                     }
                                 }
 
-                                ImGui.EndCombo();
+                                ImGui.EndChildFrame();
                             }
-                        };
 
-                        break;
-                    case FileNode n:
-                        holder.DrawDelegate = () =>
-                        {
-                            if (ImGui.TreeNode(holder.Unique))
-                            {
-                                var selected = n.Value;
+                            ImGui.TreePop();
+                        }
+                    };
 
-                                if (ImGui.BeginChildFrame(1, new Vector2(0, 300)))
-                                {
-                                    var di = new DirectoryInfo("config");
+                    break;
+                case RangeNode<int> n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var r = n.Value;
+                        ImGui.SliderInt(holder.Unique, ref r, n.Min, n.Max);
+                        n.Value = r;
+                    };
 
-                                    if (di.Exists)
-                                    {
-                                        foreach (var file in di.GetFiles())
-                                        {
-                                            if (ImGui.Selectable(file.Name, selected == file.FullName))
-                                                n.Value = file.FullName;
-                                        }
-                                    }
+                    break;
+                case RangeNode<float> n:
 
-                                    ImGui.EndChildFrame();
-                                }
+                    holder.DrawDelegate = () =>
+                    {
+                        var r = n.Value;
+                        ImGui.SliderFloat(holder.Unique, ref r, n.Min, n.Max);
+                        n.Value = r;
+                    };
 
-                                ImGui.TreePop();
-                            }
-                        };
+                    break;
+                case RangeNode<long> n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var r = (int)n.Value;
+                        ImGui.SliderInt(holder.Unique, ref r, (int)n.Min, (int)n.Max);
+                        n.Value = r;
+                    };
 
-                        break;
-                    case RangeNode<int> n:
-                        holder.DrawDelegate = () =>
-                        {
-                            var r = n.Value;
-                            ImGui.SliderInt(holder.Unique, ref r, n.Min, n.Max);
-                            n.Value = r;
-                        };
+                    break;
+                case RangeNode<Vector2> n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var vect = n.Value;
+                        ImGui.SliderFloat2(holder.Unique, ref vect, n.Min.X, n.Max.X);
+                        n.Value = vect;
+                    };
 
-                        break;
-                    case RangeNode<float> n:
-
-                        holder.DrawDelegate = () =>
-                        {
-                            var r = n.Value;
-                            ImGui.SliderFloat(holder.Unique, ref r, n.Min, n.Max);
-                            n.Value = r;
-                        };
-
-                        break;
-                    case RangeNode<long> n:
-                        holder.DrawDelegate = () =>
-                        {
-                            var r = (int) n.Value;
-                            ImGui.SliderInt(holder.Unique, ref r, (int) n.Min, (int) n.Max);
-                            n.Value = r;
-                        };
-
-                        break;
-                    case RangeNode<Vector2> n:
-                        holder.DrawDelegate = () =>
-                        {
-                            var vect = n.Value;
-                            ImGui.SliderFloat2(holder.Unique, ref vect, n.Min.X, n.Max.X);
-                            n.Value = vect;
-                        };
-
-                        break;
-                    default:
-                        Core.Logger.Warning($"{type} not supported for menu now. Ask developers to add this type.");
-                        break;
-                }
+                    break;
+                case TextNode n:
+                    holder.DrawDelegate = () =>
+                    {
+                        var input = n.Value;
+                        ImGui.InputText(holder.Unique, ref input, 200);
+                        n.Value = input;
+                    };
+                    break;
+                default:
+                    Core.Logger.Warning($"{type} not supported for menu now. Ask developers to add this type.");
+                    break;
             }
         }
 

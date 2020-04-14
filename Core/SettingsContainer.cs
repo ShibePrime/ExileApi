@@ -86,8 +86,10 @@ namespace ExileCore
                 }
                 else
                 {
-                    var readAllText = File.ReadAllText(SETTINGS_FILE_NAME);
+                    var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE);
                     PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
+                    PluginsUpdateSettings.Username = PluginsUpdateSettings.Username == null ? new TextNode("") : PluginsUpdateSettings.Username;
+                    PluginsUpdateSettings.Password = PluginsUpdateSettings.Password == null ? new TextNode("") : PluginsUpdateSettings.Password;
                 }
             }
             catch (Exception e)

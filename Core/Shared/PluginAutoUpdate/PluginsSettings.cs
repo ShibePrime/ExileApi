@@ -11,18 +11,20 @@ namespace ExileCore.Shared.PluginAutoUpdate
 {
     public class PluginsUpdateSettings : ISettings
     {
+        [Menu("Enable", Tooltip = "(De)activate the whole PluginAutoUpdate mechanismn")]
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
-
-        [Menu("Github credentials, optional!")]
-        public string Username { get; set; } = new TextNode();
-        public string Password { get; set; } = new TextNode();
-        public List<PluginUpdateSettings> Plugins { get; set; }
+        [Menu("Github Username", Tooltip = "optional")]
+        public TextNode Username { get; set; } = new TextNode("username");
+        [Menu("Github Password", Tooltip = "optional")]
+        public TextNode Password { get; set; } = new TextNode("password");
+        public List<PluginUpdateSettings> Plugins { get; set; } = new List<PluginUpdateSettings>();
     }
 
     public class PluginUpdateSettings : ISettings
     {
+        [Menu("Enable Plugin", Tooltip = "(De)activate AutoUpdate for this Plugin")]
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
-        public string Name { get; set; }
-        public string SourceUrl { get; set; }
+        public TextNode Name { get; set; } = new TextNode();
+        public TextNode SourceUrl { get; set; } = new TextNode();
     }
 }

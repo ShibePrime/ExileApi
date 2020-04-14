@@ -24,6 +24,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             GameController = gameController ?? throw new ArgumentNullException(nameof(gameController));
             Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             PluginManager = pluginManager ?? throw new ArgumentNullException(nameof(pluginManager));
+            PluginLoadTime = new Dictionary<string, Stopwatch>();
         }
 
 

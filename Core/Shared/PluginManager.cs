@@ -27,17 +27,18 @@ namespace ExileCore.Shared
         private readonly GameController _gameController;
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
-        private Dictionary<string, string> Directories { get; }
 
-        public bool AllPluginsLoaded { get; }
+        private Dictionary<string, string> Directories { get; }
+        public bool AllPluginsLoaded { get; private set; }
         public string RootDirectory { get; }
-        public List<PluginWrapper> Plugins { get; } = new List<PluginWrapper>();
+        public List<PluginWrapper> Plugins { get; private set; }
 
         public PluginManager(GameController gameController, Graphics graphics, MultiThreadManager multiThreadManager)
         {
             _gameController = gameController;
             _graphics = graphics;
             _multiThreadManager = multiThreadManager;
+            Plugins = new List<PluginWrapper>();
             Directories = new Dictionary<string, string>();
             RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             Directories[PluginsDirectory] = Path.Combine(RootDirectory, PluginsDirectory);
@@ -62,6 +63,11 @@ namespace ExileCore.Shared
                 }
             }
 
+            Task.Run(() => LoadPlugins(gameController));
+        }
+
+        private void LoadPlugins(GameController gameController)
+        {
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
 
             var pluginUpdateSettingsPath = Path.Combine(PluginsDirectory, "updateSettings.json");
@@ -110,7 +116,7 @@ namespace ExileCore.Shared
             List<string> excludedNames = new List<string>();
             if (pluginsUpdateSettings != null)
             {
-                excludedNames.AddRange(pluginsUpdateSettings.Plugins?.Select(p => p.Name));
+                excludedNames.AddRange(pluginsUpdateSettings.Plugins?.Select(p => p.Name.Value));
             }
             var compiledDirectories = new DirectoryInfo(Directories[CompiledPluginsDirectory])
                 .GetDirectories()
