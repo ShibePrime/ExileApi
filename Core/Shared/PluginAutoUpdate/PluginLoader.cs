@@ -33,7 +33,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             if (info == null) return null;
             assembly = (assembly == null) ? LoadAssembly(info) : assembly;
             if (assembly == null) return null;
-            PluginLoadTime[info.FullName] = Stopwatch.StartNew();
+            PluginLoadTime.Add(info.FullName, Stopwatch.StartNew());
 
             return TryLoadPlugin(assembly, info);
         }

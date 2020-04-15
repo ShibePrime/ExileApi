@@ -38,14 +38,14 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         public List<Task<List<PluginWrapper>>> UpdateAndLoadAllAsync()
         {
+            var tasks = new List<Task<List<PluginWrapper>>>();
             if (!PluginsUpdateSettings.Enable)
             {
                 DebugWindow.LogMsg($"Plugin Auto Update is deactivated!");
-                return null;
+                return tasks;
             }
 
             var pluginCompiler = new PluginCompiler(new DirectoryInfo(RootDirectory));
-            var tasks = new List<Task<List<PluginWrapper>>>();
             foreach (var plugin in PluginsUpdateSettings.Plugins)
             {
                 tasks.Add(Task.Run(() => UpdateSinglePlugin(plugin, PluginSourceDownloader, PluginFilter, pluginCompiler, PluginLoader)));

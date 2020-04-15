@@ -159,7 +159,7 @@ namespace ExileCore
                 CoroutineRunnerParallel.Run(coroutine);
                 NextCoroutineTime = Time.TotalMilliseconds;
                 NextRender = Time.TotalMilliseconds;
-                if (pluginManager.Plugins.Count == 0)
+                if (pluginManager?.Plugins.Count == 0)
                 {
                     _coreSettings.Enable.Value = true;
                 }

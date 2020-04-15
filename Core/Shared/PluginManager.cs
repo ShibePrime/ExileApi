@@ -83,7 +83,8 @@ namespace ExileCore.Shared
             Task.WaitAll(loadPluginTasks?.ToArray());
 
             Plugins = loadPluginTasks
-                .SelectManyF(t => t.Result)
+                .Where(t => t.Result != null)
+                .SelectMany(t => t.Result)
                 .OrderBy(x => x.Order)
                 .ThenByDescending(x => x.CanBeMultiThreading)
                 .ThenBy(x => x.Name)
@@ -114,9 +115,12 @@ namespace ExileCore.Shared
         private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
         {
             List<string> excludedNames = new List<string>();
-            if (pluginsUpdateSettings != null)
+            if (pluginsUpdateSettings != null && pluginsUpdateSettings.Enable)
             {
-                excludedNames.AddRange(pluginsUpdateSettings.Plugins?.Select(p => p.Name?.Value));
+                var excluded = pluginsUpdateSettings.Plugins?
+                    .Where(p => p.Enable)
+                    .Select(p => p.Name?.Value);
+                excludedNames.AddRange(excluded);
             }
             var compiledDirectories = new DirectoryInfo(Directories[CompiledPluginsDirectory])
                 .GetDirectories()
