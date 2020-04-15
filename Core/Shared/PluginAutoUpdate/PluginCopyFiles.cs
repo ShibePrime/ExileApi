@@ -11,6 +11,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
     {
         public static List<string> SettingsDirectoryNames => new List<string> { "settings", "Settings", "config", "Config" };     
         public static List<string> DependenciesDirectoryNames => new List<string> { "libs", "Libs", "lib", "Lib" };
+        public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static" };
 
         public static void CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
@@ -28,6 +29,15 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 sourceDirectory,
                 compiledDirectory,
                 DependenciesDirectoryNames
+            );
+        }
+
+        public static void CopyStaticFiles(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        {
+            CopyFolder(
+                sourceDirectory,
+                compiledDirectory,
+                StaticFilesNames
             );
         }
 
