@@ -2,6 +2,7 @@
 using JM.LinqFaster;
 using SharpDX;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,14 +18,14 @@ namespace ExileCore.Shared.PluginAutoUpdate
         private GameController GameController { get; }
         private Graphics Graphics { get; }
         private PluginManager PluginManager { get; }
-        private Dictionary<string, Stopwatch> PluginLoadTime { get; } = new Dictionary<string, Stopwatch>();
+        private ConcurrentDictionary<string, Stopwatch> PluginLoadTime { get; }
 
         public PluginLoader(GameController gameController, Graphics graphics, PluginManager pluginManager)
         {
             GameController = gameController ?? throw new ArgumentNullException(nameof(gameController));
             Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             PluginManager = pluginManager ?? throw new ArgumentNullException(nameof(pluginManager));
-            PluginLoadTime = new Dictionary<string, Stopwatch>();
+            PluginLoadTime = new ConcurrentDictionary<string, Stopwatch>();
         }
 
 
@@ -33,7 +34,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             if (info == null) return null;
             assembly = (assembly == null) ? LoadAssembly(info) : assembly;
             if (assembly == null) return null;
-            PluginLoadTime.Add(info.FullName, Stopwatch.StartNew());
+            PluginLoadTime.TryAdd(info.FullName, Stopwatch.StartNew());
 
             return TryLoadPlugin(assembly, info);
         }

@@ -45,7 +45,7 @@ namespace ExileCore.PoEMemory.Elements
                 {
                     var labelOnGround = GetObject<LabelOnGround>(nextAddress);
 
-                    if (labelOnGround.Label.IsValid)
+                    if (labelOnGround?.Label?.IsValid ?? false)
                         result.Add(labelOnGround);
 
                     limit++;
