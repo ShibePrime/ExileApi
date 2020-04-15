@@ -50,16 +50,29 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
                 catch
                 {
-                    DebugWindow.LogError($"{plugin.Name?.Value}: Clone failed. Skipped!");
+                    DebugWindow.LogError($"{plugin.Name?.Value}: Clone failed. Make sure the folder Plugins/Source/{plugin.Name?.Value} does not exist. Skipped!");
                     return;
                 }
             }
 
             try
             {
-                Pull(repository);
+                var status = Pull(repository);
                 sw.Stop();
-                DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.");
+                if (status == MergeStatus.UpToDate)
+                {
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Already up to date, checked in {sw.ElapsedMilliseconds} ms.");
+                    return;
+                }
+                else if (status == MergeStatus.FastForward || status == MergeStatus.NonFastForward)
+                {
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.");
+                    return;
+                }
+                else
+                {
+                    throw new Exception(status.ToString());
+                }
             }
             catch
             {
@@ -77,14 +90,15 @@ namespace ExileCore.Shared.PluginAutoUpdate
             Repository.Clone(url, path, cloneOptions);
         }
 
-        private void Pull(Repository repository)
+        private MergeStatus Pull(Repository repository)
         {
             var options = new PullOptions
             {
                 FetchOptions = GetFetchOptions()
             };
             var signature = new Signature(new Identity("ExileApi", "nomail"), DateTimeOffset.Now);
-            Commands.Pull(repository, signature, options);
+            var result = Commands.Pull(repository, signature, options);
+            return result.Status;
         }
 
         private FetchOptions GetFetchOptions()
