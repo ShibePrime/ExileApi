@@ -26,5 +26,6 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
         public TextNode Name { get; set; } = new TextNode();
         public TextNode SourceUrl { get; set; } = new TextNode();
+        public DateTime LastUpdated { get; set; } = DateTime.MinValue;
     }
 }
