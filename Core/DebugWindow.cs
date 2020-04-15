@@ -15,7 +15,6 @@ namespace ExileCore
         private static readonly Dictionary<string, DebugMsgDescription> Messages;
         private static readonly List<DebugMsgDescription> MessagesList;
         private static readonly Queue<string> toDelete;
-        private static readonly Queue<DebugMsgDescription> LogHistory;
         private static readonly CircularBuffer<DebugMsgDescription> History;
         private readonly Graphics graphics;
         private readonly CoreSettings settingsCoreSettings;
@@ -26,8 +25,7 @@ namespace ExileCore
             Messages = new Dictionary<string, DebugMsgDescription>(24);
             MessagesList = new List<DebugMsgDescription>(24);
             toDelete = new Queue<string>(24);
-            LogHistory = new Queue<DebugMsgDescription>(1024);
-            History = new CircularBuffer<DebugMsgDescription>(1024);
+            History = new CircularBuffer<DebugMsgDescription>(4096);
         }
 
         public DebugWindow(Graphics graphics, CoreSettings settingsCoreSettings)
@@ -98,8 +96,6 @@ namespace ExileCore
                     if (Messages.TryGetValue(delete, out var debugMsgDescription))
                     {
                         MessagesList.Remove(debugMsgDescription);
-                        LogHistory.Enqueue(debugMsgDescription);
-                        History.PushBack(debugMsgDescription);
 
                         if (debugMsgDescription.Color == Color.Red)
                             Core.Logger.Error($"{debugMsgDescription.Msg}");
@@ -108,12 +104,6 @@ namespace ExileCore
                     }
 
                     Messages.Remove(delete);
-
-                    if (LogHistory.Count >= 1024)
-                        for (var i = 0; i < 24; i++)
-                        {
-                            LogHistory.Dequeue();
-                        }
                 }
             }
             catch (Exception e)
@@ -146,6 +136,7 @@ namespace ExileCore
                     result.Time = DateTime.UtcNow.AddSeconds(time);
                     result.Color = color;
                     result.Count++;
+                    History.PushBack(result);
                 }
                 else
                 {
@@ -162,6 +153,7 @@ namespace ExileCore
                     {
                         Messages[msg] = result;
                         MessagesList.Add(result);
+                        History.PushBack(result);
                     }
                 }
             }
