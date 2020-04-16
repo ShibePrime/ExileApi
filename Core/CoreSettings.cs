@@ -74,6 +74,8 @@ namespace ExileCore
         public RangeNode<int> FontSize { get; set; } = new RangeNode<int>(13, 7, 36);
         [Menu("Debug log")]
         public ToggleNode ShowDebugLog { get; set; } = new ToggleNode(false);
+        [Menu("Show Debug Messages")]
+        public ToggleNode ShowDebugMessages { get; set; } = new ToggleNode(false);
         public ToggleNode ShowDemoWindow { get; set; } = new ToggleNode(false);
         public RangeNode<int> Volume { get; set; } = new RangeNode<int>(100, 0, 100);
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
