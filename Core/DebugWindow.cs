@@ -79,7 +79,7 @@ namespace ExileCore
                         continue;
                     }
 
-                    if (msg.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages) continue;
+                    if (message.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages) continue;
                     var draw = message.Msg;
                     if (message.Count > 1) draw = $"({message.Count}){draw}";
 
@@ -119,14 +119,19 @@ namespace ExileCore
             LogMsg(msg, 1f);
         }
 
+        public static void LogMsg(string msg, float time)
+        {
+            LogMsg(msg, time, Color.White);
+        }
+
+        public static void LogMsg(string msg, float time, Color color)
+        {
+            LogMsg(msg, time, color, MsgType.Message);
+        }
+
         public static void LogError(string msg, float time = 2f)
         {
             LogMsg(msg, time, Color.Red, MsgType.Error);
-        }
-
-        public static void LogMsg(string msg, float time)
-        {
-            LogMsg(msg, time, Color.White, MsgType.Message);
         }
 
         public static void LogDebug(string msg, float time = 2f)
