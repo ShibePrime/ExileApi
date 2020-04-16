@@ -97,38 +97,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
                         parameters.ReferencedAssemblies.Add(dll);
                     }
                 }
-
-                foreach (var r in refer2)
-                {
-                    var arr = new int[2] { 0, 0 };
-                    var j = 0;
-
-                    for (var i = 0; i < r.Length; i++)
-                    {
-                        if (r[i] == '"' && j == 0)
-                        {
-                            arr[0] = i;
-                            j++;
-                        }
-                        else if (r[i] == ',')
-                        {
-                            arr[1] = i;
-                            j++;
-                        }
-
-                        if (j == 2)
-                            break;
-                    }
-
-                    if (arr[1] != 0)
-                    {
-                        var dll = $"{r.Substring(arr[0] + 1, arr[1] - arr[0] - 1)}.dll";
-                        parameters.ReferencedAssemblies.Add(dll);
-                    }
-                }
             }
 
-            var libsFolder = Path.Combine(outputDirectory, "libs");
+            var libsFolder = Path.Combine(source.FullName, "libs");
 
             if (Directory.Exists(libsFolder))
             {

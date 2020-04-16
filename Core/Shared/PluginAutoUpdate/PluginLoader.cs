@@ -32,7 +32,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly = null)
         {
             if (info == null) return null;
-            assembly = (assembly == null) ? LoadAssembly(info) : assembly;
+            assembly =  LoadAssembly(info);
             if (assembly == null) return null;
             PluginLoadTime.TryAdd(info.FullName, Stopwatch.StartNew());
 
@@ -58,13 +58,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
                     DebugWindow.LogError($"Not found plugin dll in {dir.FullName}. (Dll should be like folder)");
                     return null;
                 }
-
-                var pdbPath = dll.FullName.Replace(".dll", ".pdb");
-                var pdbExists = File.Exists(pdbPath);
-
-                var dllBytes = File.ReadAllBytes(dll.FullName);
-                var asm = pdbExists ? Assembly.Load(dllBytes, File.ReadAllBytes(pdbPath)) : Assembly.Load(dllBytes);
-
+                
+                var asm = Assembly.LoadFrom(dll.FullName);
                 return asm;
             }
             catch (Exception e)

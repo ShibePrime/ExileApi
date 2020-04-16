@@ -28,7 +28,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
             CopyFolder(
                 sourceDirectory,
                 compiledDirectory,
-                DependenciesDirectoryNames
+                DependenciesDirectoryNames,
+                "",
+                true
             );
         }
 
@@ -41,23 +43,42 @@ namespace ExileCore.Shared.PluginAutoUpdate
             );
         }
 
-        private static void CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "")
+        private static void CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "", bool putFilesIntoRoot = false)
         {
-            var sourceSettings = GetDirectoryByNames(sourceDirectory, possibleFolderName);
+            var sourceSettings = GetDirectoryByNamesSource(sourceDirectory, possibleFolderName);
             if (sourceSettings == null) return;
             compiledDirectory.Create();
-            var compiledSettings = GetDirectoryByNames(compiledDirectory, possibleFolderName);
+            var compiledSettings = GetDirectoryByNamesCompiled(compiledDirectory, possibleFolderName);
             string targetName = sourceSettings.Name;
             if (compiledSettings != null && suffixIfExists != "")
             {
                 targetName = targetName + suffixIfExists;
             }
 
-            var target = new DirectoryInfo(Path.Combine(compiledDirectory.FullName, targetName));
+            string targetPath;
+            if (!putFilesIntoRoot)
+            {
+                targetPath = Path.Combine(compiledDirectory.FullName, targetName);
+            }
+            else
+            {
+                targetPath = compiledDirectory.FullName;
+            }
+            var target = new DirectoryInfo(targetPath);
+
             CopyAll(sourceSettings, target);
         }
 
-        public static DirectoryInfo GetDirectoryByNames(DirectoryInfo directory, List<string> names)
+        public static DirectoryInfo GetDirectoryByNamesCompiled(DirectoryInfo directory, List<string> names)
+        {
+            var result = directory
+                .GetDirectories()
+                .FirstOrDefault(d => names.Contains(d.Name));
+            return result;
+        }
+
+
+        public static DirectoryInfo GetDirectoryByNamesSource(DirectoryInfo directory, List<string> names)
         {
             var csprojPath = directory.GetFiles($"{directory.Name}.csproj", SearchOption.AllDirectories).FirstOrDefault();
             if (csprojPath == null) return null;

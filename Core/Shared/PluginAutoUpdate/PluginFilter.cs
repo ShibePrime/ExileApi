@@ -14,7 +14,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             if (!SourceDirectory.Exists) return false;
             if (!CompiledDirectory.Exists) return true;
 
-            var compileSettingsDirectory = PluginCopyFiles.GetDirectoryByNames(CompiledDirectory, PluginCopyFiles.SettingsDirectoryNames);
+            var compileSettingsDirectory = PluginCopyFiles.GetDirectoryByNamesCompiled(CompiledDirectory, PluginCopyFiles.SettingsDirectoryNames);
             var latestCompileChange = LatestChangeInDirectory(CompiledDirectory, compileSettingsDirectory);
             var latestSourceChange = LatestChangeInDirectory(SourceDirectory);
 
