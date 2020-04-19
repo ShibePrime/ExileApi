@@ -21,9 +21,8 @@ namespace ExileCore
             InternalName = GetType().Namespace;
             if (string.IsNullOrWhiteSpace(Name)) Name = InternalName;
             Drawers = new List<ISettingsHolder>();
-            DebugObjects = new Dictionary<string, object>();
         }
-        public static Dictionary<string, object> DebugObjects { get; set; }
+        public static IDebugObjects DebugObjects { get; } = new DebugObjects();
         public List<ISettingsHolder> Drawers { get; }
         public GameController GameController { get; private set; }
         public Graphics Graphics { get; private set; }
@@ -60,11 +59,6 @@ namespace ExileCore
                 throw new NullReferenceException("Plugin settings is null");
 
             GameController.Settings.SaveSettings(this);
-        }
-
-        public static void AddDebugObject(string key, object obj)
-        {
-            DebugObjects[key] = obj;
         }
 
         public virtual void AreaChange(AreaInstance area)
