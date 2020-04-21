@@ -37,7 +37,6 @@ namespace ExileCore
         private Action Selected = () => { };
         private string selectedName = "";
         private readonly Stopwatch sw = Stopwatch.StartNew();
-        private readonly ThemeEditor themeEditor;
         private readonly Array WindowsName;
 
         public static bool IsOpened;
@@ -55,7 +54,6 @@ namespace ExileCore
             _settingsContainer = settingsContainer;
             CoreSettings = settingsContainer.CoreSettings;
             Fonts = fonts;
-            themeEditor = new ThemeEditor(CoreSettings);
             CoreSettingsDrawers = new List<ISettingsHolder>();
             SettingsParser.Parse(CoreSettings, CoreSettingsDrawers);
 
@@ -238,17 +236,11 @@ namespace ExileCore
 
             ImGui.Separator();
 
-            if (ImGui.Selectable("ThemeEditor", _index == -2))
-            {
-                _index = -2;
-                Selected = () => { themeEditor.DrawSettingsMenu(); };
-            }
-
             ImGui.Separator();
 
-            if (ImGui.Selectable("PluginAutoUpdate", _index == -3))
+            if (ImGui.Selectable("PluginAutoUpdate", _index == -2))
             {
-                _index = -3;
+                _index = -2;
                 Selected = () => 
                 {
                     foreach (var drawer in PluginsUpdateSettingsDrawers)

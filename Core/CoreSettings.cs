@@ -15,20 +15,12 @@ namespace ExileCore
         public ToggleNode ShowDebugWindow { get; set; } = new ToggleNode(false);
         [Menu("List profiles", "Currently not works. Soon.")]
         public ListNode Profiles { get; set; } = new ListNode {Values = new List<string> {"global"}, Value = "global"};
-        [Menu("Current Menu Theme")]
-        public ListNode Theme { get; set; } = new ListNode {Value = ThemeEditor.DefaultThemeName};
-        [Menu("Key Settings", "Tooltip", 0)]
-        public EmptyNode KeyMenuRoot { get; set; } = new EmptyNode();
         [Menu("Main Menu Key Toggle", 10, 0)]
         public HotkeyNode MainMenuKeyToggle { get; set; } = Keys.F12;
         [Menu("Load plugins in multithread",
             "When you use a lot plugins that option can help hud faster start. Currently not recommend use it because can be unstable start.", 15, 0)]
         public ToggleNode MultiThreadLoadPlugins { get; set; } = new ToggleNode(false);
 
-        //Now not using
-        [Menu("Area change multi-threading", "", 20, 0)]
-        [IgnoreMenu]
-        public ToggleNode AreaChangeMultiThread { get; set; } = new ToggleNode(true);
         [Menu("Added entities multi-threading", "Just for test, most of plugin dont have expensive logic for turn on that option.", 31, 0)]
         public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(false);
         [Menu("Coroutine Multi Thread", "", 32, 0)]
