@@ -18,7 +18,7 @@ namespace ExileCore
         public AreaInstance CurrentArea { get; private set; }
         public event Action<AreaInstance> OnAreaChange;
 
-        public void ForceRefreshArea(bool areaChangeMultiThread)
+        public void ForceRefreshArea()
         {
             var ingameData = TheGameState.IngameState.Data;
             var clientsArea = ingameData.CurrentArea;

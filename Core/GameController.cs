@@ -110,7 +110,7 @@ namespace ExileCore
                 // DebugWindow.LogMsg($"Foreground: {b}");
             };
 
-            _settings.RefreshArea.OnPressed += () => { Area.ForceRefreshArea(_settings.AreaChangeMultiThread); };
+            _settings.RefreshArea.OnPressed += () => { Area.ForceRefreshArea(); };
             Area.RefreshState();
             EntityListWrapper.StartWork();
             Initialized = true;
