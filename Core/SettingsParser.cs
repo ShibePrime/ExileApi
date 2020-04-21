@@ -117,7 +117,9 @@ namespace ExileCore
         {
             try
             {
-                IList list = propertyInfo.GetValue(settings) as IList;
+                var value = propertyInfo.GetValue(settings);
+                if (!(value is IList)) return false;
+                IList list = value as IList;
                 foreach (var item in list)
                 {
                     return item.GetType().GetInterfaces().ContainsF(typeof(ISettings));

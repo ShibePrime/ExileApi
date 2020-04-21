@@ -415,6 +415,17 @@ namespace ExileCore.RenderQ
             if (fonts.Count > 0) lastFontContainer = fonts.First().Value;
 
             CoreSettings.Font.Values = new List<string>(fonts.Keys);
+            if (CoreSettings.Font.Value == null) 
+            {
+                try
+                {
+                    CoreSettings.Font.Value = CoreSettings.Font.Values.First();
+                } 
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"ImGuiRender -> fonts not found, Exception: {e}");
+                }
+            }
         }
 
         private void SetTexture(ShaderResourceView fontTexture)
@@ -512,7 +523,7 @@ namespace ExileCore.RenderQ
 
                 if (fontName == null)
                 {
-                    if (fonts.TryGetValue(CoreSettings.Font.Value, out var fontN))
+                    if (fonts.TryGetValue(CoreSettings.Font?.Value, out var fontN))
                     {
                         fontContainer = fontN;
                         fontName = CoreSettings.Font.Value;

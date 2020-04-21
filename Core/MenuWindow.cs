@@ -168,12 +168,6 @@ namespace ExileCore
                             NotMainDebugs.Add(x);
                     }
                 }
-
-                /*foreach (DebugInformation argsNewItem in args.NewItems)
-                {
-
-                DebugWindow.LogMsg($"{argsNewItem.Name}",15,Color.Aqua);
-                }*/
             }
         }
 
@@ -233,8 +227,6 @@ namespace ExileCore
                 _index = -1;
                 Selected = CoreSettingsAction;
             }
-
-            ImGui.Separator();
 
             ImGui.Separator();
 

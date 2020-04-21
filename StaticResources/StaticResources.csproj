@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{909B1D89-AC80-45AA-8AC0-A1C343A041F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StaticResources</RootNamespace>
+    <AssemblyName>StaticResources</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\PoeHelper\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\PoeHelper\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fonts\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="textures\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Sounds\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Shaders\ImGuiPixelShader.hlsl" />
+    <Content Include="Shaders\ImGuiVertexShader.hlsl" />
+    <Content Include="Shaders\PixelShader.hlsl" />
+    <Content Include="Shaders\VertexShader.hlsl" />
+    <Content Include="Sounds\alert.wav" />
+    <Content Include="Sounds\attention.wav" />
+    <Content Include="Sounds\beast.wav" />
+    <Content Include="Sounds\bomb.wav" />
+    <Content Include="Sounds\corrupted.wav" />
+    <Content Include="Sounds\danger.wav" />
+    <Content Include="Sounds\elemental.wav" />
+    <Content Include="Sounds\inception.wav" />
+    <Content Include="Sounds\physical.wav" />
+    <Content Include="Sounds\treasure.wav" />
+    <Content Include="Sounds\volatile.wav" />
+    <Content Include="textures\bgQ.png" />
+    <Content Include="textures\cell.png" />
+    <Content Include="textures\chest.png" />
+    <Content Include="textures\circlebg.png" />
+    <Content Include="textures\css_sprites%285%29.png" />
+    <Content Include="textures\currency.png" />
+    <Content Include="textures\debuff_panel.png" />
+    <Content Include="textures\directions.png" />
+    <Content Include="textures\esbar.png" />
+    <Content Include="textures\esMonster.png" />
+    <Content Include="textures\esQ.png" />
+    <Content Include="textures\gemcutter.png" />
+    <Content Include="textures\healthbar.png" />
+    <Content Include="textures\healthbar_bg.png" />
+    <Content Include="textures\healthbar_increment.png" />
+    <Content Include="textures\hpMonsterSprite.png" />
+    <Content Include="textures\hpMonsterSpriteMagic.png" />
+    <Content Include="textures\hpMonsterSpriteRare.png" />
+    <Content Include="textures\hpMonsterSpriteUnique.png" />
+    <Content Include="textures\hpQ.png" />
+    <Content Include="textures\icon.ico" />
+    <Content Include="textures\Icons.png" />
+    <Content Include="textures\item_icons.png" />
+    <Content Include="textures\manaQ.png" />
+    <Content Include="textures\menu-background.png" />
+    <Content Include="textures\menu-colors.png" />
+    <Content Include="textures\missing_texture.png" />
+    <Content Include="textures\openFile.png" />
+    <Content Include="textures\preload-end.png" />
+    <Content Include="textures\preload-new.png" />
+    <Content Include="textures\preload-start.png" />
+    <Content Include="textures\sprites.png" />
+    <Content Include="textures\tooltip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fonts\agave-r.ttf" />
+    <None Include="fonts\Anonymous Pro.ttf" />
+    <None Include="fonts\calibri.ttf" />
+    <None Include="fonts\calibrib.ttf" />
+    <None Include="fonts\calibrii.ttf" />
+    <None Include="fonts\calibril.ttf" />
+    <None Include="fonts\calibrili.ttf" />
+    <None Include="fonts\calibriz.ttf" />
+    <None Include="fonts\cmunit.ttf" />
+    <None Include="fonts\cmuntb.ttf" />
+    <None Include="fonts\config.ini" />
+    <None Include="fonts\consola.ttf" />
+    <None Include="fonts\consolab.ttf" />
+    <None Include="fonts\consolai.ttf" />
+    <None Include="fonts\ConsolaMono-Bold.ttf" />
+    <None Include="fonts\ConsolaMono.ttf" />
+    <None Include="fonts\consolaz.ttf" />
+    <None Include="fonts\Constantine.ttf" />
+    <None Include="fonts\DFPT_B5_POE.ttf" />
+    <None Include="fonts\DroidSans.ttf" />
+    <None Include="fonts\FantasqueSansMono-Bold.ttf" />
+    <None Include="fonts\FantasqueSansMono-Regular.ttf" />
+    <None Include="fonts\Fontin-Bold.ttf" />
+    <None Include="fonts\Fontin-Italic.ttf" />
+    <None Include="fonts\Fontin-Regular.ttf" />
+    <None Include="fonts\Fontin-SmallCaps.ttf" />
+    <None Include="fonts\FrizQuadrataITC.ttf" />
+    <None Include="fonts\hkyt.ttf" />
+    <None Include="fonts\JetBrainsMono-Regular.ttf" />
+    <None Include="fonts\MesloLGL-Bold.ttf" />
+    <None Include="fonts\MesloLGL-Regular.ttf" />
+    <None Include="fonts\MesloLGM-Bold.ttf" />
+    <None Include="fonts\MesloLGS-Bold.ttf" />
+    <None Include="fonts\MesloLGSDZ-Regular.ttf" />
+    <None Include="fonts\NotoMono-Regular.ttf" />
+    <None Include="fonts\NotoSans-Regular.ttf" />
+    <None Include="fonts\OptimusPrincepsSemiBold.ttf" />
+    <None Include="fonts\Orkney Medium.ttf" />
+    <None Include="fonts\Quikhand.ttf" />
+    <None Include="fonts\Roboto-Medium.ttf" />
+    <None Include="fonts\scientifica.ttf" />
+    <None Include="fonts\scientificaCAPS.ttf" />
+    <None Include="Shaders\ImGuiPixelShader.bin" />
+    <None Include="Shaders\ImGuiVertexShader.bin" />
+    <None Include="Shaders\PixelShader.bin" />
+    <None Include="Shaders\VertexShader.bin" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
