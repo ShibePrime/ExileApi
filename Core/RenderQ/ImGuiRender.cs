@@ -353,7 +353,7 @@ namespace ExileCore.RenderQ
                     }
                     catch (Exception e)
                     {
-                        Core.Logger.Error($"Cant load fonts -> {e}");
+                        DebugWindow.LogError($"Cant load fonts -> {e}");
                     }
                 }
 
@@ -368,7 +368,7 @@ namespace ExileCore.RenderQ
             }
             catch (DllNotFoundException ex)
             {
-                Core.Logger.Error($"Cant load cimgui.dll -> {ex.Message}");
+                DebugWindow.LogError($"Cant load cimgui.dll -> {ex.Message}");
                 throw new DllNotFoundException("Need put in directory cimgui.dll");
             }
         }

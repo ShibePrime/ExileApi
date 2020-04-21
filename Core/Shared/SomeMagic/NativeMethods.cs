@@ -91,7 +91,7 @@ namespace ExileCore.Shared.SomeMagic
                         }
                     }
 
-                    Core.Logger.Error(finalError.ToString());
+                    DebugWindow.LogError(finalError.ToString());
                 }
             }
 
@@ -121,7 +121,7 @@ namespace ExileCore.Shared.SomeMagic
                             $"{stackFrame.GetFileName()} -> {stackFrame.GetMethod().Name}, line: {stackFrame.GetFileLineNumber()}");
                     }
 
-                    Core.Logger.Error(finalError.ToString());
+                    DebugWindow.LogError(finalError.ToString());
                 }
             }
 

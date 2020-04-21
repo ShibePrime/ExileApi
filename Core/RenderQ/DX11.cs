@@ -281,7 +281,7 @@ namespace ExileCore.RenderQ
             }
             catch (Exception e)
             {
-                Core.Logger.Error($"DX11.Render -> {e}");
+                DebugWindow.LogError($"DX11.Render -> {e}");
             }
         }
     }

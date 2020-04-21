@@ -32,7 +32,7 @@ namespace ExileCore.PoEMemory.Elements
                 }
                 catch (Exception e)
                 {
-                    Core.Logger.Error($"{e.Message} {e.StackTrace}");
+                    DebugWindow.LogError($"{e.Message} {e.StackTrace}");
                     return ToolTipType.None;
                 }
             }
@@ -113,7 +113,7 @@ namespace ExileCore.PoEMemory.Elements
             }
             catch (Exception e)
             {
-                Core.Logger.Error($"HoverItemIcon.cs -> {e}");
+                DebugWindow.LogError($"HoverItemIcon.cs -> {e}");
             }
 
             return ToolTipType.None;

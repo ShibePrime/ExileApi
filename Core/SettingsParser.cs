@@ -298,7 +298,7 @@ namespace ExileCore
                     };
                     break;
                 default:
-                    Core.Logger.Warning($"{type} not supported for menu now. Ask developers to add this type.");
+                    DebugWindow.LogMsg($"{type} not supported for menu now. Ask developers to add this type.");
                     break;
             }
         }
@@ -318,7 +318,7 @@ namespace ExileCore
                     result.Add(drawer);
                 else
                 {
-                    Core.Logger.Error(
+                    DebugWindow.LogError(
                         $" Possible stashoverflow or duplicating drawers detected while generating menu. Drawer SettingName: {drawer.Name}, Id: {drawer.ID}",
                         5);
                 }

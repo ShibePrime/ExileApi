@@ -49,7 +49,7 @@ namespace ExileCore.PoEMemory.Components
 
             if (max_stats > 9000)
             {
-                Core.Logger.Error(
+                DebugWindow.LogError(
                     $"Stats over capped: {StatsComponent.Stats} Total Stats: {total_stats} Max Stats: {max_stats}");
 
                 return testStatDictionary;

@@ -101,7 +101,7 @@ namespace ExileCore
 
                 if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
                 {
-                    Logger.Information($"SoundController init skipped because win7 issue.");
+                    DebugWindow.LogMsg($"SoundController init skipped because win7 issue.");
                 }
                 else
                 {
@@ -168,7 +168,7 @@ namespace ExileCore
             }
             catch (Exception e)
             {
-                Logger.Error($"Core constructor -> {e}");
+                DebugWindow.LogMsg($"Core constructor -> {e}");
                 MessageBox.Show($"Error in Core constructor -> {e}", "Oops... Program fail to launch");
             }
         }

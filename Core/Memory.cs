@@ -289,7 +289,7 @@ namespace ExileCore
             {
                 if (sw.ElapsedMilliseconds > 2000)
                 {
-                    Core.Logger.Error($"ReadDoublePointerIntList error result count: {result.Count}");
+                    DebugWindow.LogError($"ReadDoublePointerIntList error result count: {result.Count}");
                     return new List<Tuple<long, int>>();
                 }
 
@@ -316,7 +316,7 @@ namespace ExileCore
             {
                 if (sw.ElapsedMilliseconds > 2000)
                 {
-                    Core.Logger.Error($"Readlist error result count: {result.Count}");
+                    DebugWindow.LogError($"Readlist error result count: {result.Count}");
                     return new List<T>();
                 }
 
@@ -340,7 +340,7 @@ namespace ExileCore
             {
                 if (sw.ElapsedMilliseconds > 2000)
                 {
-                    Core.Logger.Error($"ReadListPointer error result count: {result.Count}");
+                    DebugWindow.LogError($"ReadListPointer error result count: {result.Count}");
                     return new List<long>();
                 }
 

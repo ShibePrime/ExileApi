@@ -99,10 +99,21 @@ namespace ExileCore
                     {
                         MessagesList.Remove(debugMsgDescription);
 
-                        if (debugMsgDescription.Color == Color.Red)
-                            Core.Logger.Error($"{debugMsgDescription.Msg}");
-                        else
-                            Core.Logger.Information($"{debugMsgDescription.Msg}");
+                        switch (debugMsgDescription.MsgType)
+                        {
+                            case MsgType.Message:
+                                Core.Logger.Information($"{debugMsgDescription.Msg}");
+                                break;
+                            case MsgType.Error:
+                                Core.Logger.Error($"{debugMsgDescription.Msg}");
+                                break;
+                            case MsgType.Debug:
+                                Core.Logger.Verbose($"{debugMsgDescription.Msg}");
+                                break;
+                            default:
+                                Core.Logger.Verbose($"THIS SHOULD NOT BE LOGGED! {debugMsgDescription.Msg}");
+                                break;
+                        }
                     }
 
                     Messages.Remove(delete);

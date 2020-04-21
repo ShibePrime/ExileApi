@@ -67,7 +67,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
             catch (Exception ex)
             {
-                Core.Logger.Error($"Camera WorldToScreen {ex}");
+                DebugWindow.LogError($"Camera WorldToScreen {ex}");
             }
 
             return Vector2.Zero;
