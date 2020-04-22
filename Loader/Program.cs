@@ -2,10 +2,10 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using Serilog;
@@ -18,6 +18,8 @@ namespace Loader
     {
         public static void Main(string[] args)
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
             AskToKillOtherRunningProcesses();
             var loader = new Loader();
             loader.Load(args);
