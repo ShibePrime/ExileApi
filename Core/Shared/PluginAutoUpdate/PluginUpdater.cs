@@ -68,6 +68,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
             PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
             PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
+            PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
             var assembly = pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
             var pluginWrapper = pluginLoader.Load(compiledPluginDirectory, assembly);
             return pluginWrapper;
