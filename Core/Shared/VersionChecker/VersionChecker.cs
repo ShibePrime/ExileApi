@@ -88,6 +88,7 @@ namespace ExileCore.Shared.VersionChecker
             string url = VERSION_LATEST_URL;
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.UserAgent = "ExileApi";
             request.AutomaticDecompression = DecompressionMethods.GZip;
 
             try
