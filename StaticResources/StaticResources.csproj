@@ -52,6 +52,9 @@
     <None Include="fonts\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="roslyn\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="textures\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -66,6 +69,45 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="roslyn\csc.exe" />
+    <Content Include="roslyn\csi.exe" />
+    <Content Include="roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <Content Include="roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
+    <Content Include="roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <Content Include="roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
+    <Content Include="roslyn\Microsoft.Win32.Primitives.dll" />
+    <Content Include="roslyn\System.AppContext.dll" />
+    <Content Include="roslyn\System.Collections.Immutable.dll" />
+    <Content Include="roslyn\System.Console.dll" />
+    <Content Include="roslyn\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="roslyn\System.Diagnostics.FileVersionInfo.dll" />
+    <Content Include="roslyn\System.Diagnostics.StackTrace.dll" />
+    <Content Include="roslyn\System.Globalization.Calendars.dll" />
+    <Content Include="roslyn\System.IO.Compression.dll" />
+    <Content Include="roslyn\System.IO.Compression.ZipFile.dll" />
+    <Content Include="roslyn\System.IO.FileSystem.dll" />
+    <Content Include="roslyn\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="roslyn\System.Net.Http.dll" />
+    <Content Include="roslyn\System.Net.Sockets.dll" />
+    <Content Include="roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="roslyn\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <Content Include="roslyn\System.Security.Cryptography.Algorithms.dll" />
+    <Content Include="roslyn\System.Security.Cryptography.Encoding.dll" />
+    <Content Include="roslyn\System.Security.Cryptography.Primitives.dll" />
+    <Content Include="roslyn\System.Security.Cryptography.X509Certificates.dll" />
+    <Content Include="roslyn\System.Text.Encoding.CodePages.dll" />
+    <Content Include="roslyn\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="roslyn\System.ValueTuple.dll" />
+    <Content Include="roslyn\System.Xml.ReaderWriter.dll" />
+    <Content Include="roslyn\System.Xml.XmlDocument.dll" />
+    <Content Include="roslyn\System.Xml.XPath.dll" />
+    <Content Include="roslyn\System.Xml.XPath.XDocument.dll" />
+    <Content Include="roslyn\vbc.exe" />
+    <Content Include="roslyn\VBCSCompiler.exe" />
     <Content Include="Shaders\ImGuiPixelShader.hlsl" />
     <Content Include="Shaders\ImGuiVertexShader.hlsl" />
     <Content Include="Shaders\PixelShader.hlsl" />
