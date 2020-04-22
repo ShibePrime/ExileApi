@@ -84,9 +84,9 @@ namespace ExileCore
         [Menu("Coroutine Multithread", "", 2, 4000)]
         public ToggleNode CoroutineMultiThreading { get; set; } = new ToggleNode(true);
         [Menu("Added Entities Multithread", 3, 4000)]
-        public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(true);
+        public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(false);
         [Menu("Parse Entities Multithread", 4, 4000)]
-        public ToggleNode ParseEntitiesInMultiThread { get; set; } = new ToggleNode(true);
+        public ToggleNode ParseEntitiesInMultiThread { get; set; } = new ToggleNode(false);
         #endregion
 
         #region miscellaneous
