@@ -79,13 +79,13 @@ namespace ExileCore
         #region multithread
         [Menu("Multithread", 4000)]
         public EmptyNode EmptyMultithread { get; set; } = new EmptyNode();
-        [Menu("Load plugins Multithread", 1, 4000)]
-        public ToggleNode MultiThreadLoadPlugins { get; set; } = new ToggleNode(true);
-        [Menu("Coroutine Multi Thread", "", 2, 4000)]
+        [Menu("Load Plugins Multithread", 1, 4000)]
+        public ToggleNode MultiThreadLoadPlugins { get; set; } = new ToggleNode(false);
+        [Menu("Coroutine Multithread", "", 2, 4000)]
         public ToggleNode CoroutineMultiThreading { get; set; } = new ToggleNode(true);
-        [Menu("Added entities multi-threading", 3, 4000)]
+        [Menu("Added Entities Multithread", 3, 4000)]
         public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(true);
-        [Menu("Parse Entities Multi Thread", 4, 4000)]
+        [Menu("Parse Entities Multithread", 4, 4000)]
         public ToggleNode ParseEntitiesInMultiThread { get; set; } = new ToggleNode(true);
         #endregion
 

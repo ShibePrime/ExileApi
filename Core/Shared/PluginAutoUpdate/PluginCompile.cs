@@ -21,7 +21,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public PluginCompiler(DirectoryInfo rootDirectoryInfo)
         {
             RootDirectoryInfo = rootDirectoryInfo;
-            (Provider, DllFiles) = PrepareCompilation(rootDirectoryInfo);
+            (Provider, DllFiles) = PrepareCompilation(RootDirectoryInfo);
         }
 
         private (CodeDomProvider provider, string[] dllFiles) PrepareCompilation(DirectoryInfo rootDirectoryInfo)
@@ -99,13 +99,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
             }
 
-            var libsFolder = Path.Combine(source.FullName, "libs");
-
-            if (Directory.Exists(libsFolder))
-            {
-                var libsDll = Directory.GetFiles(libsFolder, "*.dll");
-                parameters.ReferencedAssemblies.AddRange(libsDll);
-            }
+            var libDlls = FindDllsFromCompiledDirectory(outputDirectory, source.Name);
+            parameters.ReferencedAssemblies.AddRange(libDlls);
 
             var result = Provider.CompileAssemblyFromFile(parameters, csFiles);
 
@@ -127,6 +122,28 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
 
             return null;
+        }
+
+        private string[] FindDllsFromCompiledDirectory(string compiledPath, string pluginName)
+        {
+            var dllFiles = Directory.GetFiles(compiledPath, "*.dll")
+                .Where(f => !f.Equals($"{pluginName}.dll"))
+                .ToArray();
+            return dllFiles;
+        }
+
+        // currently not in use, due to .dll's are placed in top level directory
+        private string[] FindDllsFromDependencyDirectory(string compiledPath)
+        {
+            var dllFiles = new List<string>();
+            foreach (var possibleDirectoryName in PluginCopyFiles.DependenciesDirectoryNames)
+            {
+                var path = Path.Combine(compiledPath, possibleDirectoryName);
+                if (!Directory.Exists(path)) continue;
+                var libsDll = Directory.GetFiles(path, "*.dll");
+                dllFiles.AddRange(libsDll);
+            }
+            return dllFiles.ToArray();
         }
     }
 }

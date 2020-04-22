@@ -29,16 +29,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 return;
             }
             var sw = Stopwatch.StartNew();
-            DebugWindow.LogMsg($"{plugin.Name?.Value}: Start update.");
+            DebugWindow.LogDebug($"{plugin.Name?.Value}: Start update.");
             var repositoryPath = Path.Combine(SourceDirectory, plugin.Name?.Value);
-            Repository repository = null;
 
-            try
-            {
-                repository = new Repository(repositoryPath);
-                if (repository == null) throw new Exception();
-            }
-            catch
+            if (!Repository.IsValid(repositoryPath))
             {
                 DebugWindow.LogMsg($"{plugin.Name?.Value}: No valid repository at: {repositoryPath}. Starting to clone...");
                 try
@@ -54,6 +48,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
                     return;
                 }
             }
+
+            var repository = new Repository(repositoryPath);
 
             try
             {

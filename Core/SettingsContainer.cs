@@ -10,11 +10,13 @@ namespace ExileCore
 {
     public class SettingsContainer
     {
-        private const string SETTINGS_FILE_NAME = "config/settings.json";
-        private const string DEFAULT_PROFILE_NAME = "global";
-        private const string CFG_DIR = "config";
-        private const string PLUGIN_AUTO_UPDATE_SETTINGS_FILE = "Plugins/updateSettings.json";
-        private const string PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT = "Plugins/updateSettings_default.json";
+
+        private string CFG_DIR => "config";
+        private string SETTINGS_FILE_NAME => Path.Combine(CFG_DIR, "settings.json");
+        private string PLUGIN_AUTO_UPDATE_SETTINGS_FILE => Path.Combine("Plugins", "updateSettings.json");
+        private string PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT => Path.Combine("Plugins", "updateSettings_default.json");
+
+        private string DEFAULT_PROFILE_NAME => "global";
         public static readonly JsonSerializerSettings jsonSettings;
         private string _currentProfileName = "";
         public CoreSettings CoreSettings { get; set; }
@@ -101,22 +103,6 @@ namespace ExileCore
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }
-        }
-
-        private void LoadPluginAutoUpdateSettingsFromFile(string file)
-        {
-            if (!File.Exists(file))
-            {
-                var pluginsUpdateSettings = new PluginsUpdateSettings();
-                File.AppendAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, JsonConvert.SerializeObject(pluginsUpdateSettings, Formatting.Indented));
-            }
-            else
-            {
-                var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE);
-                PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
-                PluginsUpdateSettings.Username = PluginsUpdateSettings.Username == null ? new TextNode("") : PluginsUpdateSettings.Username;
-                PluginsUpdateSettings.Password = PluginsUpdateSettings.Password == null ? new TextNode("") : PluginsUpdateSettings.Password;
             }
         }
 

@@ -24,6 +24,7 @@ namespace ExileCore.Shared
         private const string PluginsDirectory = "Plugins";
         private const string CompiledPluginsDirectory = "Compiled";
         private const string SourcePluginsDirectory = "Source";
+        private string AutoPluginUpdateSettingsPath => Path.Combine(PluginsDirectory, "updateSettings.json");
         private readonly GameController _gameController;
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
@@ -70,8 +71,7 @@ namespace ExileCore.Shared
         {
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
 
-            var pluginUpdateSettingsPath = Path.Combine(PluginsDirectory, "updateSettings.json");
-            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(pluginUpdateSettingsPath);
+            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(AutoPluginUpdateSettingsPath);
 
             var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
             if (pluginUpdateSettings != null)
