@@ -300,7 +300,7 @@ namespace ExileCore
                     };
                     break;
                 default:
-                    DebugWindow.LogMsg($"{type} not supported for menu now. Ask developers to add this type.");
+                    DebugWindow.LogDebug($"{type} not supported for menu now. Ask developers to add this type.");
                     break;
             }
         }
