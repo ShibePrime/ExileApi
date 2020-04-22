@@ -13,6 +13,7 @@ using ExileCore.Shared;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Nodes;
+using ExileCore.Shared.VersionChecker;
 using ImGuiNET;
 using JM.LinqFaster;
 using Serilog;
@@ -77,6 +78,8 @@ namespace ExileCore
                     WinApi.SetTransparent(f.Handle);
                 };
 
+                var versionChecker = new VersionChecker();
+
                 _coreDebugInformation = new DebugInformation("Core");
                 _menuDebugInformation = new DebugInformation("Menu+Debug");
                 _allPluginsDebugInformation = new DebugInformation("All plugins");
@@ -117,7 +120,7 @@ namespace ExileCore
                 // Task.Run(ParallelCoroutineRunner);
                 var th = new Thread(ParallelCoroutineManualThread) {Name = "Parallel Coroutine", IsBackground = true};
                 th.Start();
-                _mainMenu = new MenuWindow(this, _settings, _dx11.ImGuiRender.fonts);
+                _mainMenu = new MenuWindow(this, _settings, _dx11.ImGuiRender.fonts, ref versionChecker);
                 _debugWindow = new DebugWindow(Graphics, _coreSettings);
 
                 MultiThreadManager = new MultiThreadManager(_coreSettings.Threads);

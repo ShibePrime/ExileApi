@@ -8,6 +8,7 @@ using ExileCore.Shared;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.PluginAutoUpdate;
+using ExileCore.Shared.VersionChecker;
 using ImGuiNET;
 using JM.LinqFaster;
 using SharpDX;
@@ -47,8 +48,10 @@ namespace ExileCore
 
         public PluginsUpdateSettings PluginsUpdateSettings { get; }
         public List<ISettingsHolder> PluginsUpdateSettingsDrawers { get; }
+        
+        public VersionChecker VersionChecker { get; }
 
-        public MenuWindow(Core core, SettingsContainer settingsContainer, Dictionary<string, FontContainer> fonts)
+        public MenuWindow(Core core, SettingsContainer settingsContainer, Dictionary<string, FontContainer> fonts, ref VersionChecker versionChecker)
         {
             this.Core = core;
             _settingsContainer = settingsContainer;
@@ -60,6 +63,8 @@ namespace ExileCore
             PluginsUpdateSettings = settingsContainer.PluginsUpdateSettings;
             PluginsUpdateSettingsDrawers = new List<ISettingsHolder>();
             SettingsParser.Parse(PluginsUpdateSettings, PluginsUpdateSettingsDrawers);
+
+            VersionChecker = versionChecker;
 
             Selected = CoreSettingsAction;
 
@@ -171,6 +176,26 @@ namespace ExileCore
             }
         }
 
+        private (string text, Color color) VersionStatus()
+        {
+            switch (VersionChecker.VersionResult)
+            {
+                case VersionResult.Loading:
+                    return ("Loading...", Color.White);
+                case VersionResult.UpToDate:
+                    return (VersionChecker.LocalVersion?.VersionString, Color.Green);
+                case VersionResult.MajorUpdate:
+                    return ("Major Update Available", Color.Red);
+                case VersionResult.MinorUpdate:
+                    return ("Update Available", Color.Red);
+                case VersionResult.PatchUpdate:
+                    return ("Minor Update Available", Color.Red);
+                case VersionResult.Error:
+                    return ("Version Not Readable", Color.Orange);                    
+            }
+            return("Version Not Readable", Color.Yellow);
+        }
+
         public unsafe void Render(GameController _gameController, List<PluginWrapper> plugins)
         {
             if (plugins != null) plugins = plugins.OrderBy(x => x.Name).ToList();
@@ -216,7 +241,7 @@ namespace ExileCore
             ImGui.PushFont(Core.Graphics.Font.Atlas);
             ImGui.SetNextWindowSize(new Vector2(800, 600), ImGuiCond.FirstUseEver);
             var pOpen = CoreSettings.Enable.Value;
-            ImGui.Begin("HUD S3ttings", ref pOpen);
+            ImGui.Begin($"HUD S3ttings {VersionChecker.LocalVersion?.VersionString}", ref pOpen);
             CoreSettings.Enable.Value = pOpen;
 
             ImGui.BeginChild("Left menu window", new Vector2(PluginNameWidth, ImGui.GetContentRegionAvail().Y), true,
@@ -228,8 +253,13 @@ namespace ExileCore
                 Selected = CoreSettingsAction;
             }
 
-            ImGui.Separator();
+            var (versionText, versionColor) = VersionStatus();
+            if (versionText != null)
+            {
+                ImGui.TextColored(versionColor.ToImguiVec4(), versionText);
+            }
 
+            ImGui.Separator();
             if (ImGui.Selectable("PluginAutoUpdate", _index == -2))
             {
                 _index = -2;

@@ -14,6 +14,7 @@ namespace ExileCore
         private const string DEFAULT_PROFILE_NAME = "global";
         private const string CFG_DIR = "config";
         private const string PLUGIN_AUTO_UPDATE_SETTINGS_FILE = "Plugins/updateSettings.json";
+        private const string PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT = "Plugins/updateSettings_default.json";
         public static readonly JsonSerializerSettings jsonSettings;
         private string _currentProfileName = "";
         public CoreSettings CoreSettings { get; set; }
@@ -81,20 +82,41 @@ namespace ExileCore
             {
                 if (!File.Exists(PLUGIN_AUTO_UPDATE_SETTINGS_FILE))
                 {
-                    var pluginsUpdateSettings = new PluginsUpdateSettings();
-                    File.AppendAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, JsonConvert.SerializeObject(pluginsUpdateSettings, Formatting.Indented));
+                    var PluginsUpdateSettings = new PluginsUpdateSettings();
+                    if (File.Exists(PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT))
+                    {
+                        var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT);
+                        PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
+                    }
+                    File.AppendAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, JsonConvert.SerializeObject(PluginsUpdateSettings, Formatting.Indented));
                 }
                 else
                 {
                     var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE);
                     PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
-                    PluginsUpdateSettings.Username = PluginsUpdateSettings.Username == null ? new TextNode("") : PluginsUpdateSettings.Username;
-                    PluginsUpdateSettings.Password = PluginsUpdateSettings.Password == null ? new TextNode("") : PluginsUpdateSettings.Password;
                 }
+                PluginsUpdateSettings.Username = PluginsUpdateSettings.Username ?? new TextNode("");
+                PluginsUpdateSettings.Password = PluginsUpdateSettings.Password ?? new TextNode("");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+        }
+
+        private void LoadPluginAutoUpdateSettingsFromFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                var pluginsUpdateSettings = new PluginsUpdateSettings();
+                File.AppendAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, JsonConvert.SerializeObject(pluginsUpdateSettings, Formatting.Indented));
+            }
+            else
+            {
+                var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE);
+                PluginsUpdateSettings = JsonConvert.DeserializeObject<PluginsUpdateSettings>(readAllText);
+                PluginsUpdateSettings.Username = PluginsUpdateSettings.Username == null ? new TextNode("") : PluginsUpdateSettings.Username;
+                PluginsUpdateSettings.Password = PluginsUpdateSettings.Password == null ? new TextNode("") : PluginsUpdateSettings.Password;
             }
         }
 
