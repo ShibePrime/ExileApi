@@ -54,7 +54,9 @@ namespace ExileCore
                     foreach (var msg in History)
                     {
                         if (msg == null) continue;
-                        if (msg.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages) continue;
+                        if (msg.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages.Value) continue;
+                        if (msg.MsgType == MsgType.Error && !_coreSettings.ShowErrorMessages.Value) continue;
+                        if (msg.MsgType == MsgType.Message && !_coreSettings.ShowInformationMessages.Value) continue;
                         ImGui.PushStyleColor(ImGuiCol.Text, msg.ColorV4);
                         ImGui.TextUnformatted($"{msg.Time.ToLongTimeString()}: {msg.Msg}");
                         ImGui.PopStyleColor();
@@ -79,7 +81,7 @@ namespace ExileCore
                         continue;
                     }
 
-                    if (message.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages) continue;
+                    if (message.MsgType == MsgType.Debug && !_coreSettings.ShowDebugMessages.Value) continue;
                     var draw = message.Msg;
                     if (message.Count > 1) draw = $"({message.Count}){draw}";
 

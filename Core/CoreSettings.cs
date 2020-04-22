@@ -9,68 +9,95 @@ namespace ExileCore
 {
     public class CoreSettings : ISettings
     {
-        [Menu("Refresh area")]
-        public ButtonNode RefreshArea { get; set; } = new ButtonNode();
-        [Menu("Show debug window")]
-        public ToggleNode ShowDebugWindow { get; set; } = new ToggleNode(false);
-        [Menu("List profiles", "Currently not works. Soon.")]
-        public ListNode Profiles { get; set; } = new ListNode {Values = new List<string> {"global"}, Value = "global"};
-        [Menu("Main Menu Key Toggle", 10, 0)]
-        public HotkeyNode MainMenuKeyToggle { get; set; } = Keys.F12;
-        [Menu("Load plugins in multithread",
-            "When you use a lot plugins that option can help hud faster start. Currently not recommend use it because can be unstable start.", 15, 0)]
-        public ToggleNode MultiThreadLoadPlugins { get; set; } = new ToggleNode(false);
+        public ToggleNode Enable { get; set; } = new ToggleNode(true);
 
-        [Menu("Added entities multi-threading", "Just for test, most of plugin dont have expensive logic for turn on that option.", 31, 0)]
-        public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(false);
-        [Menu("Coroutine Multi Thread", "", 32, 0)]
-        public ToggleNode CoroutineMultiThreading { get; set; } = new ToggleNode(false);
-        [Menu("Parse Entities Multi Thread", "", 33, 0)]
-        public ToggleNode ParseEntitiesInMultiThread { get; set; } = new ToggleNode(false);
-        [Menu("Debug information", "With this option you can check how much every plugin works.", 35, 0)]
-        public ToggleNode CollectDebugInformation { get; set; } = new ToggleNode(true);
-        [Menu("Threads count", "How much threads use for prepare work.", 40, 0)]
-        public RangeNode<int> Threads { get; set; } = new RangeNode<int>(1, 0, 4);
-        [Menu("Message if plugin render work more than X ms")]
-        public RangeNode<int> CriticalTimeForPlugin { get; set; } = new RangeNode<int>(100, 1, 2000);
-        [Menu("Performance", "", 100)]
-        public EmptyNode PerfomanceRoot { get; set; } = new EmptyNode();
-        [Menu("Target FPS", 10, 100)]
-        public RangeNode<int> TargetFps { get; set; } = new RangeNode<int>(60, 5, 200);
-        [Menu("Target Parallel Coroutine Fps", 11, 100)]
-        public RangeNode<int> TargetParallelFPS { get; set; } = new RangeNode<int>(60, 30, 500);
-        [Menu("Entites FPS", "How need often update entities. You can see in DebugWindow->Coroutines time what spent for that work.", 20,
-            100)]
-        public RangeNode<int> EntitiesUpdate { get; set; } = new RangeNode<int>(60, 5, 200);
-        [Menu("Log read memory errors", 30, 100)]
+
+        #region main
+        [Menu("Main", 1000)]
+        public EmptyNode EmptyMain { get; set; } = new EmptyNode();
+        [Menu("Refresh area", 1, 1000)]
+        public ButtonNode RefreshArea { get; set; } = new ButtonNode();
+        [Menu("List profiles", "Currently not works. Soon.", 2, 1000)]
+        public ListNode Profiles { get; set; } = new ListNode { Values = new List<string> { "global" }, Value = "global" };
+        [Menu("Menu Key Toggle", 3, 1000)]
+        public HotkeyNode MainMenuKeyToggle { get; set; } = Keys.F12;
+        [Menu("Force Foreground", 4, 1000)]
+        public ToggleNode ForceForeground { get; set; } = new ToggleNode(false);
+        #endregion
+
+        #region messages
+        [Menu("Messages", 2000)]
+        public EmptyNode EmptyMessages { get; set; } = new EmptyNode();
+        [Menu("Show Information Messages", "Will always show in log window", 1, 2000)]
+        public ToggleNode ShowInformationMessages { get; set; } = new ToggleNode(true);
+        [Menu("Show Error Messages", "Will always show in log window", 2, 2000)]
+        public ToggleNode ShowErrorMessages { get; set; } = new ToggleNode(true);
+        [Menu("Show Debug Messages", "(De)activates entries in log window aswell", 3, 2000)]
+        public ToggleNode ShowDebugMessages { get; set; } = new ToggleNode(false);
+        [Menu("Show Log Window", 4, 2000)]
+        public ToggleNode ShowDebugLog { get; set; } = new ToggleNode(false);
+        [Menu("Show Debug Window", 5, 2000)]
+        public ToggleNode ShowDebugWindow { get; set; } = new ToggleNode(false);
+        [Menu("Debug Information", "With this option you can check how much every plugin works.", 6, 2000)]
+        public ToggleNode CollectDebugInformation { get; set; } = new ToggleNode(false);
+        [Menu("Log Read Memory Errors", 7, 2000)]
         public ToggleNode LogReadMemoryError { get; set; } = new ToggleNode(false);
-        [Menu("Dynamic FPS", "Hud FPS like FPS game", 15, 100)]
+        #endregion
+
+        #region performance
+        [Menu("Performance", 3000)]
+        public EmptyNode EmptyPerfomance { get; set; } = new EmptyNode();
+        [Menu("Threads count", 1, 3000)]
+        public RangeNode<int> Threads { get; set; } = new RangeNode<int>(1, 0, 4);
+        [Menu("HUD VSync", 2, 3000)]
+        public ToggleNode VSync { get; set; } = new ToggleNode(false);
+        [Menu("Dynamic FPS", "Hud FPS like FPS game", 3, 3000)]
+
         public ToggleNode DynamicFPS { get; set; } = new ToggleNode(false);
-        [Menu("Percent from game FPS", 16, 100)]
+        [Menu("Percent from game FPS", 4, 3000)]
         public RangeNode<int> DynamicPercent { get; set; } = new RangeNode<int>(100, 1, 150);
-        [Menu("Minimal FPS when dynamic", 17, 100)]
+        [Menu("Minimal FPS when dynamic", 5, 3000)]
         public RangeNode<int> MinimalFpsForDynamic { get; set; } = new RangeNode<int>(60, 10, 150);
-        [Menu("Parse server entities", 50, 100)]
+
+        [Menu("Target FPS", 6, 3000)]
+        public RangeNode<int> TargetFps { get; set; } = new RangeNode<int>(60, 5, 200);
+        [Menu("Target Parallel Coroutine Fps", 7, 3000)]
+        public RangeNode<int> TargetParallelFPS { get; set; } = new RangeNode<int>(60, 30, 500);
+        [Menu("Entites FPS", "How need often update entities. You can see in DebugWindow->Coroutines time what spent for that work.", 8, 3000)]
+        public RangeNode<int> EntitiesUpdate { get; set; } = new RangeNode<int>(60, 5, 200);
+        [Menu("Parse server entities", 10, 3000)]
         public ToggleNode ParseServerEntities { get; set; } = new ToggleNode(false);
-        [Menu("Collect entities in parallel when more than X", 55, 100)]
+        [Menu("Collect entities in parallel when more than X", 11, 3000)]
         public ToggleNode CollectEntitiesInParallelWhenMoreThanX { get; set; } = new ToggleNode(false);
         [Menu("Limit draw plot in ms",
-            "Don't put small value, because plot need a lot triangles and DebugWindow with a lot plot will be broke.")]
+            "Don't put small value, because plot need a lot triangles and DebugWindow with a lot plot will be broke.", 12, 3000)]
         public RangeNode<float> LimitDrawPlot { get; set; } = new RangeNode<float>(0.2f, 0.05f, 20f);
-        [Menu("HUD VSync")]
-        public ToggleNode VSync { get; set; } = new ToggleNode(false);
-        [Menu("Font")]
+        [Menu("Message if plugin render work more than X ms", 13, 3000)]
+        public RangeNode<int> CriticalTimeForPlugin { get; set; } = new RangeNode<int>(100, 1, 2000);
+        #endregion
+
+        #region multithread
+        [Menu("Multithread", 4000)]
+        public EmptyNode EmptyMultithread { get; set; } = new EmptyNode();
+        [Menu("Load plugins Multithread", 1, 4000)]
+        public ToggleNode MultiThreadLoadPlugins { get; set; } = new ToggleNode(true);
+        [Menu("Coroutine Multi Thread", "", 2, 4000)]
+        public ToggleNode CoroutineMultiThreading { get; set; } = new ToggleNode(true);
+        [Menu("Added entities multi-threading", 3, 4000)]
+        public ToggleNode AddedMultiThread { get; set; } = new ToggleNode(true);
+        [Menu("Parse Entities Multi Thread", 4, 4000)]
+        public ToggleNode ParseEntitiesInMultiThread { get; set; } = new ToggleNode(true);
+        #endregion
+
+        #region miscellaneous
+        [Menu("Miscellaneous", 5000)]
+        public EmptyNode EmptyMiscellaneous { get; set; } = new EmptyNode();
+        [Menu("Font", 1, 5000)]
         public ListNode Font { get; set; } = new ListNode {Values = new List<string> {"Not found"}};
-        [Menu("Font size", "Currently not works. Because this option broke calculate how much pixels needs for render.")]
-        [IgnoreMenu]
+        [IgnoreMenu] // "Currently not works. Because this option broke calculate how much pixels needs for render."
         public RangeNode<int> FontSize { get; set; } = new RangeNode<int>(13, 7, 36);
-        [Menu("Debug log")]
-        public ToggleNode ShowDebugLog { get; set; } = new ToggleNode(false);
-        [Menu("Show Debug Messages")]
-        public ToggleNode ShowDebugMessages { get; set; } = new ToggleNode(false);
-        public ToggleNode ShowDemoWindow { get; set; } = new ToggleNode(false);
+        [Menu("Volume", 3, 5000)]
         public RangeNode<int> Volume { get; set; } = new RangeNode<int>(100, 0, 100);
-        public ToggleNode Enable { get; set; } = new ToggleNode(true);
-        public ToggleNode ForceForeground { get; set; } = new ToggleNode(false);
+        #endregion
     }
 }

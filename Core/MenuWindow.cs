@@ -25,7 +25,6 @@ namespace ExileCore
         private DebugInformation AllPlugins;
         private readonly Action CoreSettingsAction = () => { };
         private readonly DebugInformation debugInformation;
-        private bool demo_window;
         private bool firstTime = true;
         private List<DebugInformation> MainDebugs = new List<DebugInformation>();
         private Action MoreInformation;
@@ -199,13 +198,6 @@ namespace ExileCore
         public unsafe void Render(GameController _gameController, List<PluginWrapper> plugins)
         {
             if (plugins != null) plugins = plugins.OrderBy(x => x.Name).ToList();
-
-            if (CoreSettings.ShowDemoWindow)
-            {
-                demo_window = true;
-                ImGui.ShowDemoWindow(ref demo_window);
-                CoreSettings.ShowDemoWindow.Value = demo_window;
-            }
 
             if (CoreSettings.ShowDebugWindow) debugInformation.TickAction(DebugWindowRender);
 
