@@ -116,10 +116,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="poehud.ico" />
-    <Content Include="Shaders\ImGuiPixelShader.hlsl" />
-    <Content Include="Shaders\ImGuiVertexShader.hlsl" />
-    <Content Include="Shaders\PixelShader.hlsl" />
-    <Content Include="Shaders\VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AppForm.resx">
