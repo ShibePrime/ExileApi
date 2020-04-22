@@ -25,14 +25,14 @@ namespace ExileCore.Shared.PluginAutoUpdate
             return false;
         }
 
-        private DateTime LatestChangeInDirectory(DirectoryInfo directory, DirectoryInfo exclude = null)
+        private DateTime LatestChangeInDirectory(DirectoryInfo directory, DirectoryInfo[] excludes = null)
         {
             directory.Refresh();
             var files = directory.GetFiles("*", SearchOption.AllDirectories);
             var lastWriteTime = DateTime.MinValue;
             foreach (var file in files)
             {
-                if (exclude != null && IsChildOfDirectory(file, exclude)) continue;
+                if (excludes != null && excludes.Any(exclude => IsChildOfDirectory(file, exclude))) continue;
 
                 if (file.LastWriteTime > lastWriteTime)
                 {

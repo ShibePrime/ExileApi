@@ -45,47 +45,53 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         private static void CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "", bool putFilesIntoRoot = false)
         {
-            var sourceSettings = GetDirectoryByNamesSource(sourceDirectory, possibleFolderName);
-            if (sourceSettings == null) return;
+            var sourceFolders = GetDirectoryByNamesSource(sourceDirectory, possibleFolderName);
+            if (sourceFolders == null) return;
             compiledDirectory.Create();
-            var compiledSettings = GetDirectoryByNamesCompiled(compiledDirectory, possibleFolderName);
-            string targetName = sourceSettings.Name;
-            if (compiledSettings != null && suffixIfExists != "")
-            {
-                targetName = targetName + suffixIfExists;
-            }
+            var compiledFolders = GetDirectoryByNamesCompiled(compiledDirectory, possibleFolderName);
 
-            string targetPath;
-            if (!putFilesIntoRoot)
+            foreach (var sourceFolder in sourceFolders)
             {
-                targetPath = Path.Combine(compiledDirectory.FullName, targetName);
-            }
-            else
-            {
-                targetPath = compiledDirectory.FullName;
-            }
-            var target = new DirectoryInfo(targetPath);
+                string targetName = sourceFolder.Name;
+                if (compiledFolders.Any(c => c.Name.Equals(targetName)) && suffixIfExists != "")
+                {
+                    targetName = targetName + suffixIfExists;
+                }
 
-            CopyAll(sourceSettings, target);
+                string targetPath;
+                if (!putFilesIntoRoot)
+                {
+                    targetPath = Path.Combine(compiledDirectory.FullName, targetName);
+                }
+                else
+                {
+                    targetPath = compiledDirectory.FullName;
+                }
+                var target = new DirectoryInfo(targetPath);
+
+                Task.Run(() => CopyAll(sourceFolder, target));
+            }
         }
 
-        public static DirectoryInfo GetDirectoryByNamesCompiled(DirectoryInfo directory, List<string> names)
+        public static DirectoryInfo[] GetDirectoryByNamesCompiled(DirectoryInfo directory, List<string> names)
         {
             var result = directory
                 .GetDirectories()
-                .FirstOrDefault(d => names.Contains(d.Name));
+                .Where(d => names.Contains(d.Name))
+                .ToArray();
             return result;
         }
 
 
-        public static DirectoryInfo GetDirectoryByNamesSource(DirectoryInfo directory, List<string> names)
+        public static DirectoryInfo[] GetDirectoryByNamesSource(DirectoryInfo directory, List<string> names)
         {
             var csprojPath = directory.GetFiles($"{directory.Name}.csproj", SearchOption.AllDirectories).FirstOrDefault();
             if (csprojPath == null) return null;
 
             var result = csprojPath.Directory
                 .GetDirectories()
-                .FirstOrDefault(d => names.Contains(d.Name));
+                .Where(d => names.Contains(d.Name))
+                .ToArray();
             return result;
         }
 
