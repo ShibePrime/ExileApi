@@ -1,6 +1,6 @@
 {
   "Enable": {
-    "Value": false
+    "Value": true
   },
   "Username": {
     "Value": ""
@@ -95,7 +95,7 @@
     },
     {
       "Enable": {
-        "Value": true
+        "Value": false
       },
       "Name": {
         "Value": "UnIdy"
@@ -107,7 +107,7 @@
     },
     {
       "Enable": {
-        "Value": true
+        "Value": false
       },
       "Name": {
         "Value": "AutoQuit"
@@ -150,6 +150,18 @@
       },
       "SourceUrl": {
         "Value": "https://github.com/Queuete/DeliriumSpawnerHighlight"
+      },
+      "LastUpdated": "0001-01-01T00:00:00"
+    },
+    {
+      "Enable": {
+        "Value": true
+      },
+      "Name": {
+        "Value": "InventoryItemsAnalyzer"
+      },
+      "SourceUrl": {
+        "Value": "https://github.com/Queuete/InventoryItemsAnalyzer"
       },
       "LastUpdated": "0001-01-01T00:00:00"
     }
