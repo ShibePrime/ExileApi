@@ -37,3 +37,6 @@
 [submodule "Plugins/SithylisQoL"]
 	path = Plugins/SithylisQoL
 	url = https://github.com/Queuete/SithylisQoL
+[submodule "InventoryItemsAnalyzer"]
+	path = InventoryItemsAnalyzer
+	url = https://github.com/Queuete/InventoryItemsAnalyzer
