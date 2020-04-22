@@ -182,7 +182,7 @@ namespace ExileCore
                 case VersionResult.Loading:
                     return ("Loading...", Color.White);
                 case VersionResult.UpToDate:
-                    return (VersionChecker.LocalVersion?.VersionString, Color.Green);
+                    return ("Latest Version " + VersionChecker.LocalVersion?.VersionString, Color.Green);
                 case VersionResult.MajorUpdate:
                     return ("Major Update Available", Color.Red);
                 case VersionResult.MinorUpdate:
