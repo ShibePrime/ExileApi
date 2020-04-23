@@ -127,7 +127,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         private string[] FindDllsFromCompiledDirectory(string compiledPath, string pluginName)
         {
             var dllFiles = Directory.GetFiles(compiledPath, "*.dll")
-                .Where(f => !f.Equals($"{pluginName}.dll"))
+                .Where(f => new DirectoryInfo(f)?.Name?.Equals($"{pluginName}.dll") == false)
                 .ToArray();
             return dllFiles;
         }
