@@ -276,6 +276,15 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
         }
 
+        public bool IsTransitioned => IsTransitionedHelper();
+        private bool IsTransitionedHelper()
+        {
+            var transitionable = GetComponent<Transitionable>();
+            var flag = transitionable?.Flag1; //1, 2
+            if (!flag.HasValue) return false;
+            return flag.Value == 2;
+        }
+
         public List<Buff> Buffs => buffCache.Value;
         private string CachePath { get; set; }
 
