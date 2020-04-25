@@ -84,7 +84,7 @@ namespace ExileCore
             {
                 if (!File.Exists(PLUGIN_AUTO_UPDATE_SETTINGS_FILE))
                 {
-                    var PluginsUpdateSettings = new PluginsUpdateSettings();
+                    PluginsUpdateSettings = new PluginsUpdateSettings();
                     if (File.Exists(PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT))
                     {
                         var readAllText = File.ReadAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE_DEFAULT);
