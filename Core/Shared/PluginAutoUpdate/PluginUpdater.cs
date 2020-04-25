@@ -66,10 +66,15 @@ namespace ExileCore.Shared.PluginAutoUpdate
             var compiledPluginDirectory = new DirectoryInfo(Path.Combine(CompiledPluginsDirectory, plugin.Name?.Value));
             if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return null;
 
-            PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
-            PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
-            PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
+            var dependencyTasks = PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
+            var settingsTasks = PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
+            var staticFilesTasks = PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
+
+            Task.WaitAll(dependencyTasks?.ToArray());
             var assembly = pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
+
+            Task.WaitAll(settingsTasks?.ToArray());
+            Task.WaitAll(staticFilesTasks?.ToArray());
             var pluginWrapper = pluginLoader.Load(compiledPluginDirectory, assembly);
             return pluginWrapper;
         }

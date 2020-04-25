@@ -13,9 +13,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public static List<string> DependenciesDirectoryNames => new List<string> { "libs", "Libs", "lib", "Lib", "packages", "Packages" };
         public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static" };
 
-        public static void CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        public static List<Task> CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
-            CopyFolder(
+            return CopyFolder(
                 sourceDirectory,
                 compiledDirectory,
                 SettingsDirectoryNames,
@@ -23,9 +23,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
             );
         }
 
-        public static void CopyDependencies(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        public static List<Task> CopyDependencies(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
-            CopyFolder(
+            return CopyFolder(
                 sourceDirectory,
                 compiledDirectory,
                 DependenciesDirectoryNames,
@@ -34,22 +34,23 @@ namespace ExileCore.Shared.PluginAutoUpdate
             );
         }
 
-        public static void CopyStaticFiles(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        public static List<Task> CopyStaticFiles(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
-            CopyFolder(
+            return CopyFolder(
                 sourceDirectory,
                 compiledDirectory,
                 StaticFilesNames
             );
         }
 
-        private static void CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "", bool putFilesIntoRoot = false)
+        private static List<Task> CopyFolder(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory, List<string> possibleFolderName, string suffixIfExists = "", bool putFilesIntoRoot = false)
         {
             var sourceFolders = GetDirectoryByNamesSource(sourceDirectory, possibleFolderName);
-            if (sourceFolders == null) return;
+            if (sourceFolders == null) return null;
             compiledDirectory.Create();
             var compiledFolders = GetDirectoryByNamesCompiled(compiledDirectory, possibleFolderName);
 
+            List<Task> copyTasks = new List<Task>();
             foreach (var sourceFolder in sourceFolders)
             {
                 string targetName = sourceFolder.Name;
@@ -69,8 +70,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
                 var target = new DirectoryInfo(targetPath);
 
-                Task.Run(() => CopyAll(sourceFolder, target));
+                copyTasks.Add(Task.Run(() => CopyAll(sourceFolder, target)));
             }
+            return copyTasks;
         }
 
         public static DirectoryInfo[] GetDirectoryByNamesCompiled(DirectoryInfo directory, List<string> names)
