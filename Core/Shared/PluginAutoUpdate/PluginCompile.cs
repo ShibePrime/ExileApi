@@ -102,9 +102,24 @@ namespace ExileCore.Shared.PluginAutoUpdate
             var libDlls = FindDllsFromCompiledDirectory(outputDirectory, source.Name);
             parameters.ReferencedAssemblies.AddRange(libDlls);
 
-            var result = Provider.CompileAssemblyFromFile(parameters, csFiles);
+            CompilerResults result = null;
+            try
+            {
+                result = Provider.CompileAssemblyFromFile(parameters, csFiles);
+            } 
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"{source.Name} -> Compiling from Assembly throw error.");
+                DebugWindow.LogDebug($"{source.Name} -> {e.Message}");
+            }
 
-            if (result.Errors.HasErrors)
+            if (result == null)
+            {
+                DebugWindow.LogError($"{source.Name} -> Compile failed! Assembly (result) is null.");
+                return null;
+            }
+
+            if (result.Errors.HasErrors == true)
             {
                 var AllErrors = "";
 

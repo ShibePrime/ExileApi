@@ -264,22 +264,32 @@ namespace ExileCore
                 };
             }
 
-            ImGui.Separator();
+            var textColor = plugins.Count > 0 ? Color.Green : Color.Red;
+            ImGui.TextColored(textColor.ToImguiVec4(), $"{plugins.Count} Plugins Loaded");
 
+            ImGui.Separator();
 
             if (_gameController != null && Core.pluginManager != null)
             {
                 for (var index = 0; index < plugins.Count; index++)
                 {
-                    var plugin = plugins[index];
-                    var temp = plugin.IsEnable;
-                    if (ImGui.Checkbox($"##{plugin.Name}{index}", ref temp)) plugin.TurnOnOffPlugin(temp);
-                    ImGui.SameLine();
-
-                    if (ImGui.Selectable(plugin.Name, _index == index))
+                    try
                     {
-                        _index = index;
-                        Selected = () => plugin.DrawSettings();
+                        var plugin = plugins[index];
+                        var temp = plugin.IsEnable;
+                        if (ImGui.Checkbox($"##{plugin.Name}{index}", ref temp)) plugin.TurnOnOffPlugin(temp);
+                        ImGui.SameLine();
+
+                        if (ImGui.Selectable(plugin.Name, _index == index))
+                        {
+                            _index = index;
+                            Selected = () => plugin.DrawSettings();
+                        }
+                    }
+                    catch (Exception e) 
+                    {
+                        DebugWindow.LogError($"Listing Plugins failed!");
+                        DebugWindow.LogDebug($"{e.Message}");
                     }
                 }
             }
