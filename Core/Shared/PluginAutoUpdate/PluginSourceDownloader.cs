@@ -42,9 +42,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
                     DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms.");
                     return;
                 }
-                catch
+                catch (Exception e)
                 {
-                    DebugWindow.LogError($"{plugin.Name?.Value}: Clone failed. Make sure the folder Plugins/Source/{plugin.Name?.Value} does not exist. Skipped!");
+                    DebugWindow.LogError($"{plugin.Name?.Value} -> Clone failed. Make sure the folder Plugins/Source/{plugin.Name?.Value} does not exist. Skipped!");
+                    DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
                     return;
                 }
             }
@@ -70,9 +71,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
                     throw new Exception(status.ToString());
                 }
             }
-            catch
+            catch (Exception e)
             {
                 DebugWindow.LogError($"{plugin.Name?.Value}: Update failed. Skipped!");
+                DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
             }
         }
 
