@@ -12,9 +12,10 @@ namespace ExileCore.Shared.VersionChecker
         [JsonProperty("name")]
         public string VersionString { get; set; }
 
-        [JsonProperty("assests")]
-        public IList<GithubReleaseAsset> Assets { get; set; }
+        [JsonProperty("assets")]
+        public List<GithubReleaseAsset> Assets { get; set; }
     }
+
 
     public struct GithubReleaseAsset
     {

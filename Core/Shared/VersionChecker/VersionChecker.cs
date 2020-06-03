@@ -26,13 +26,20 @@ namespace ExileCore.Shared.VersionChecker
         public VersionJson? LocalVersion { get; private set; }
         public VersionJson? LatestVersion { get; private set; }
 
-        public VersionChecker()
+        public VersionChecker(bool autoUpdate)
         {
             VersionResult = VersionResult.Loading;
-            Task.Run(() => HandleCheck());
+            CheckVersionAndUpdate(autoUpdate);
+
         }
 
-        public void HandleCheck()
+        public void CheckVersionAndUpdate(bool autoUpdate)
+        {
+            var updateCallback = (autoUpdate) ? new Action<GithubReleaseResponse>(AutoUpdate.Update) : null;
+            Task.Run(() => HandleVersion(updateCallback));
+        }
+
+        public void HandleVersion(Action<GithubReleaseResponse> updateCallback = null)
         {
             LocalVersion = LoadLocalVersion();
             if (LocalVersion == null) return;
@@ -51,6 +58,10 @@ namespace ExileCore.Shared.VersionChecker
             }
 
             VersionResult = VersionComparison(LocalVersion.Value, LatestVersion.Value);
+            if (VersionResult == VersionResult.MajorUpdate || VersionResult == VersionResult.MinorUpdate || VersionResult == VersionResult.PatchUpdate)
+            {
+                updateCallback?.Invoke(remoteVersionResponse.Value);
+            }
         }
 
         private VersionResult VersionComparison(VersionJson LocalVersion, VersionJson LatestVersion)
