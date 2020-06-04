@@ -483,6 +483,7 @@
     <Compile Include="Shared\VersionChecker\GithubReleaseResponse.cs" />
     <Compile Include="Shared\VersionChecker\VersionChecker.cs" />
     <Compile Include="Shared\VersionChecker\VersionJson.cs" />
+    <Compile Include="Shared\VersionChecker\VersionResult.cs" />
     <Compile Include="Shared\WinApi.cs" />
     <Compile Include="SoundController.cs" />
     <Compile Include="Time.cs" />
