@@ -34,7 +34,7 @@ namespace ExileCore.Shared.VersionChecker
                 .FirstOrDefault();
             if (!releaseZip.FileName.Equals(releaseFileName, StringComparison.InvariantCultureIgnoreCase))
             {
-                DebugWindow.LogError("Update failed -> Download not possible, release .zip url not found.");
+                DebugWindow.LogError("AutoUpdate -> Download failed, release .zip url not found.");
                 IsDownloading = false;
                 return;
             }
@@ -104,16 +104,16 @@ namespace ExileCore.Shared.VersionChecker
         {
             if (File.Exists(fileLocation))
             {
-                DebugWindow.LogMsg("Update file already exists.");
+                DebugWindow.LogMsg("AutoUpdate -> Update .zip file already exists.");
                 return;
             }
 
-            DebugWindow.LogMsg("Download update...");
+            DebugWindow.LogMsg("AutoUpdate -> Download update...");
             using (var client = new WebClient())
             {
                 client.DownloadFile(zipUrl, fileLocation);
             }
-            DebugWindow.LogMsg("Donwload update... done");
+            DebugWindow.LogMsg("AutoUpdate -> Donwload update... done");
         }
 
         private string Unzip(string fileLocation)

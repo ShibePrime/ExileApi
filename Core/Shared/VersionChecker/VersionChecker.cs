@@ -16,7 +16,6 @@ namespace ExileCore.Shared.VersionChecker
         public VersionResult VersionResult { get; private set; }
         public VersionJson? LocalVersion { get; private set; }
         public VersionJson? LatestVersion { get; private set; }
-
         public AutoUpdate AutoUpdate { get; }
 
         public VersionChecker()
