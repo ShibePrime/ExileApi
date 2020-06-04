@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExileCore.PoEMemory;
 using ExileCore.RenderQ;
@@ -78,8 +79,6 @@ namespace ExileCore
                     WinApi.SetTransparent(f.Handle);
                 };
 
-                var versionChecker = new VersionChecker();
-
                 _coreDebugInformation = new DebugInformation("Core");
                 _menuDebugInformation = new DebugInformation("Menu+Debug");
                 _allPluginsDebugInformation = new DebugInformation("All plugins");
@@ -96,6 +95,22 @@ namespace ExileCore
                 _coreSettings.Threads = new RangeNode<int>(_coreSettings.Threads.Value, 0, Environment.ProcessorCount);
                 CoroutineRunner = new Runner("Main Coroutine");
                 CoroutineRunnerParallel = new Runner("Parallel Coroutine");
+
+                VersionChecker versionChecker;
+                using (new PerformanceTimer("Check version"))
+                {
+                    versionChecker = new VersionChecker();
+                    // check every ~100s for an update
+                    Task.Run(() =>
+                    {
+                        while (true)
+                        {
+                            DebugWindow.LogDebug("Checking for update...");
+                            versionChecker.CheckVersionAndPrepareUpdate(_coreSettings.AutoPrepareUpdate);
+                            Thread.Sleep(100 * 1000);
+                        }
+                    });
+                }
 
                 using (new PerformanceTimer("DX11 Load"))
                 {

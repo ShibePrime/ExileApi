@@ -9,33 +9,35 @@ using System.Threading.Tasks;
 
 namespace ExileCore.Shared.VersionChecker
 {
-    public enum VersionResult
-    {
-        Loading,
-        UpToDate,
-        MajorUpdate,
-        MinorUpdate,
-        PatchUpdate,
-        Error
-    }
     public class VersionChecker
     {
-        private const string VERSION_FILE_NAME = "version.json";
+        public const string VERSION_FILE_NAME = "version.json";
         private const string VERSION_LATEST_URL = @"https://api.github.com/repos/Queuete/ExileApi/releases/latest";
         public VersionResult VersionResult { get; private set; }
         public VersionJson? LocalVersion { get; private set; }
         public VersionJson? LatestVersion { get; private set; }
+        public AutoUpdate AutoUpdate { get; }
 
         public VersionChecker()
         {
             VersionResult = VersionResult.Loading;
-            Task.Run(() => HandleCheck());
+            AutoUpdate = new AutoUpdate();
         }
 
-        public void HandleCheck()
+        public void CheckVersionAndPrepareUpdate(bool autoPrepareUpdate)
         {
-            LocalVersion = LoadLocalVersion();
-            if (LocalVersion == null) return;
+            var updateCallback = (autoPrepareUpdate) ? new Action<GithubReleaseResponse>(AutoUpdate.PrepareUpdate) : null;
+            Task.Run(() => HandleVersion(updateCallback));
+        }
+
+        private void HandleVersion(Action<GithubReleaseResponse> updateCallback = null)
+        {
+            LocalVersion = LoadLocalVersion(VERSION_FILE_NAME);
+            if (LocalVersion == null)
+            {
+                VersionResult = VersionResult.Error;
+                return;
+            }
 
             var remoteVersionTask = Task.Run(() => LoadLatestVersion());
             remoteVersionTask.Wait();
@@ -51,9 +53,14 @@ namespace ExileCore.Shared.VersionChecker
             }
 
             VersionResult = VersionComparison(LocalVersion.Value, LatestVersion.Value);
+            if (VersionResult.IsUpdate())
+            {
+                DebugWindow.LogMsg($"VersionChecker -> Update Available");
+                updateCallback?.Invoke(remoteVersionResponse.Value);
+            }
         }
 
-        private VersionResult VersionComparison(VersionJson LocalVersion, VersionJson LatestVersion)
+        public static VersionResult VersionComparison(VersionJson LocalVersion, VersionJson LatestVersion)
         {
             if (LocalVersion.Major < LatestVersion.Major)
             {
@@ -70,15 +77,14 @@ namespace ExileCore.Shared.VersionChecker
             return VersionResult.UpToDate;
         }
 
-        public VersionJson? LoadLocalVersion()
+        public static VersionJson? LoadLocalVersion(string versionFile)
         {
-            if (!File.Exists(VERSION_FILE_NAME))
+            if (!File.Exists(versionFile))
             {
-                VersionResult = VersionResult.Error;
-                DebugWindow.LogError($"VersionChecker -> Version file not found: {VERSION_FILE_NAME}");
+                DebugWindow.LogError($"VersionChecker -> Version file not found: {versionFile}");
                 return null;
             }
-            var readAllText = File.ReadAllText(VERSION_FILE_NAME);
+            var readAllText = File.ReadAllText(versionFile);
             return JsonConvert.DeserializeObject<VersionJson>(readAllText);
         }
 
@@ -109,7 +115,7 @@ namespace ExileCore.Shared.VersionChecker
             return JsonConvert.DeserializeObject<GithubReleaseResponse>(content);
         }
 
-        public VersionJson? ConvertStringToVersionJson(string input)
+        public static VersionJson? ConvertStringToVersionJson(string input)
         {
             if (input.Length < 5) return null;
             var slices = input.Split('.');

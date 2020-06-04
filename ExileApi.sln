@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticResources", "StaticRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryItemsAnalyzer", "Plugins\InventoryItemsAnalyzer\InventoryItemsAnalyzer.csproj", "{BE5267E5-B221-458C-9B2D-451C05774A69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{80948544-24F3-47D0-A50E-31C5CA973040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +204,14 @@ Global
 		{BE5267E5-B221-458C-9B2D-451C05774A69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BE5267E5-B221-458C-9B2D-451C05774A69}.Release|x64.ActiveCfg = Release|Any CPU
 		{BE5267E5-B221-458C-9B2D-451C05774A69}.Release|x64.Build.0 = Release|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Debug|x64.Build.0 = Debug|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Release|x64.ActiveCfg = Release|Any CPU
+		{80948544-24F3-47D0-A50E-31C5CA973040}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

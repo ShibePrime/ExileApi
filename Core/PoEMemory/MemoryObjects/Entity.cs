@@ -502,6 +502,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                     var startTime = 0;
                     node = M.Read<NativeListNodeComponent>(lastComponent);
 
+                    // TODO FIX ME
                     while (node.Next != lastComponent)
                     {
                         if (startTime > 30)

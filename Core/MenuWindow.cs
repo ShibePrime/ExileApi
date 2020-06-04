@@ -188,7 +188,7 @@ namespace ExileCore
                 case VersionResult.MinorUpdate:
                     return ("Update Available", Color.Red);
                 case VersionResult.PatchUpdate:
-                    return ("Minor Update Available", Color.Red);
+                    return ("Update Available", Color.Red);
                 case VersionResult.Error:
                     return ("Version Not Readable", Color.Orange);                    
             }
@@ -249,6 +249,30 @@ namespace ExileCore
             if (versionText != null)
             {
                 ImGui.TextColored(versionColor.ToImguiVec4(), versionText);
+            }
+            if (VersionChecker.VersionResult.IsUpdate())
+            {
+                if (VersionChecker.AutoUpdate.IsReadyToUpdate)
+                {
+                    if (ImGui.Button("Install Updates"))
+                    {
+                        VersionChecker.AutoUpdate.LaunchUpdater();
+                    }
+                }
+                else
+                {
+                    if (!VersionChecker.AutoUpdate.IsDownloading)
+                    {
+                        if (ImGui.Button("Download"))
+                        {
+                            VersionChecker.CheckVersionAndPrepareUpdate(true);
+                        }
+                    }
+                    else
+                    {
+                        ImGui.Text("Downloading...");
+                    }
+                }
             }
 
             ImGui.Separator();
