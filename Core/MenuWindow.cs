@@ -250,7 +250,7 @@ namespace ExileCore
             {
                 ImGui.TextColored(versionColor.ToImguiVec4(), versionText);
             }
-            if (VersionChecker.VersionResultIsUpdate)
+            if (VersionChecker.VersionResult.IsUpdate())
             {
                 if (VersionChecker.AutoUpdate.IsReadyToUpdate)
                 {

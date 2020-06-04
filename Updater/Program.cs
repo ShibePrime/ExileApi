@@ -15,7 +15,7 @@ namespace Updater
         static void Main(string[] args)
         {
             string updateFolderPath;
-            string releaseFileName;
+            string unzippedFolderName;
             string mainExecuteablePath;
             if (args.Length < 3)
             {
@@ -24,17 +24,17 @@ namespace Updater
                 string basePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
                 var baseDirectory = Path.GetDirectoryName(basePath);
                 updateFolderPath = Path.Combine(baseDirectory, "update");
-                releaseFileName = "PoeHelper.zip";
+                unzippedFolderName = "PoeHelper";
                 mainExecuteablePath = Path.Combine(baseDirectory, "Loader.exe");
             }
             else
             {
                 updateFolderPath = args[0];
-                releaseFileName = args[1];
+                unzippedFolderName = args[1];
                 mainExecuteablePath = args[2];
             }
             Console.WriteLine($"Log -> updateFolderPath: {updateFolderPath}");
-            Console.WriteLine($"Log -> releaseFileName: {releaseFileName}");
+            Console.WriteLine($"Log -> releaseFileName: {unzippedFolderName}");
             Console.WriteLine($"Log -> mainExecuteablePath: {mainExecuteablePath}");
 
             var executeableName = Path.GetFileName(mainExecuteablePath);
@@ -47,15 +47,8 @@ namespace Updater
 
             try
             {
-                var releaseFileFullPath = Path.Combine(updateFolderPath, releaseFileName);
-                if (!File.Exists(releaseFileFullPath))
-                {
-                    Console.WriteLine($"Error -> Release (zip) file does not exists, expected location: {releaseFileFullPath}");
-                    Console.Read();
-                    return;
-                }
-                var resultName = Unzip(updateFolderPath, releaseFileName);
-                ReplaceDirectory(resultName, Path.GetDirectoryName(mainExecuteablePath));
+                var unzippedPath = Path.Combine(updateFolderPath, unzippedFolderName);
+                ReplaceDirectory(unzippedPath, Path.GetDirectoryName(mainExecuteablePath));
 
                 Console.WriteLine($"Log -> Starting main executeable...");
                 Process.Start(mainExecuteablePath);
@@ -97,16 +90,6 @@ namespace Updater
             return false;
         }
 
-        private static string Unzip(string updateFolder, string fileName)
-        {
-            var fileNameWithoutExtension = StringArrayToString(fileName.Split('.'), 1);
-            var resultFolder = Path.Combine(updateFolder, fileNameWithoutExtension);
-            ZipFile.ExtractToDirectory(
-                Path.Combine(updateFolder, fileName),
-                resultFolder
-            );
-            return resultFolder;
-        }
 
         private static string StringArrayToString(string[] array, int skipFromBehind)
         {
