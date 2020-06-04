@@ -13,23 +13,23 @@ namespace ExileCore.Shared.VersionChecker
 {
     public class AutoUpdate
     {
-        private const string ReleaseFilename = "PoeHelper";
-        private const string UpdateFolder = "update";
-        private static string ReleaseFilenameWithEnding => $"{ReleaseFilename}.zip";
+        private const string RELEASE_FILENAME = "PoeHelper";
+        private const string UPDATE_FOLDER = "update";
+        private static string ReleaseFilenameWithExtension => $"{RELEASE_FILENAME}.zip";
 
 
         public static void Update(GithubReleaseResponse githubReleaseResponse)
         {
             var releaseZip = githubReleaseResponse.Assets
-                .Where(asset => asset.FileName.Equals(ReleaseFilenameWithEnding, StringComparison.InvariantCultureIgnoreCase))
+                .Where(asset => asset.FileName.Equals(ReleaseFilenameWithExtension, StringComparison.InvariantCultureIgnoreCase))
                 .FirstOrDefault();
-            if (!releaseZip.FileName.Equals(ReleaseFilenameWithEnding, StringComparison.InvariantCultureIgnoreCase))
+            if (!releaseZip.FileName.Equals(ReleaseFilenameWithExtension, StringComparison.InvariantCultureIgnoreCase))
             {
-                DebugWindow.LogError("Update failed -> Release .zip file not found.");
+                DebugWindow.LogError("Update failed -> Download not possible, release .zip url not found.");
                 return;
             }
 
-            var fileLocation = Path.Combine(UpdateFolder, ReleaseFilenameWithEnding);
+            var fileLocation = Path.Combine(UPDATE_FOLDER, ReleaseFilenameWithExtension);
             Download(releaseZip.BrowserDownloadUrl, fileLocation);
             LaunchUpdater();
         }
@@ -54,7 +54,7 @@ namespace ExileCore.Shared.VersionChecker
         {
             var startInfo = new ProcessStartInfo();            
             startInfo.FileName = Path.Combine(Application.StartupPath, "Updater.exe");
-            startInfo.Arguments = Path.Combine(Application.StartupPath, UpdateFolder) + " " + ReleaseFilenameWithEnding + " " + Application.ExecutablePath;
+            startInfo.Arguments = Path.Combine(Application.StartupPath, UPDATE_FOLDER) + " " + ReleaseFilenameWithExtension + " " + Application.ExecutablePath;
             Process.Start(startInfo);
             Application.Exit();
         }      
