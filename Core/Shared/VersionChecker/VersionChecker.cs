@@ -23,23 +23,25 @@ namespace ExileCore.Shared.VersionChecker
         private const string VERSION_FILE_NAME = "version.json";
         private const string VERSION_LATEST_URL = @"https://api.github.com/repos/Queuete/ExileApi/releases/latest";
         public VersionResult VersionResult { get; private set; }
+        public bool VersionResultIsUpdate => VersionResult == VersionResult.MajorUpdate || VersionResult == VersionResult.MinorUpdate || VersionResult == VersionResult.PatchUpdate;
         public VersionJson? LocalVersion { get; private set; }
         public VersionJson? LatestVersion { get; private set; }
 
-        public VersionChecker(bool autoUpdate)
+        public AutoUpdate AutoUpdate { get; }
+
+        public VersionChecker()
         {
             VersionResult = VersionResult.Loading;
-            CheckVersionAndUpdate(autoUpdate);
-
+            AutoUpdate = new AutoUpdate();
         }
 
-        public void CheckVersionAndUpdate(bool autoUpdate)
+        public void CheckVersionAndPrepareUpdate(bool autoPrepareUpdate)
         {
-            var updateCallback = (autoUpdate) ? new Action<GithubReleaseResponse>(AutoUpdate.Update) : null;
+            var updateCallback = (autoPrepareUpdate) ? new Action<GithubReleaseResponse>(AutoUpdate.PrepareUpdate) : null;
             Task.Run(() => HandleVersion(updateCallback));
         }
 
-        public void HandleVersion(Action<GithubReleaseResponse> updateCallback = null)
+        private void HandleVersion(Action<GithubReleaseResponse> updateCallback = null)
         {
             LocalVersion = LoadLocalVersion();
             if (LocalVersion == null) return;
@@ -58,8 +60,9 @@ namespace ExileCore.Shared.VersionChecker
             }
 
             VersionResult = VersionComparison(LocalVersion.Value, LatestVersion.Value);
-            if (VersionResult == VersionResult.MajorUpdate || VersionResult == VersionResult.MinorUpdate || VersionResult == VersionResult.PatchUpdate)
+            if (VersionResultIsUpdate)
             {
+                DebugWindow.LogMsg($"VersionChecker -> Update Available");
                 updateCallback?.Invoke(remoteVersionResponse.Value);
             }
         }

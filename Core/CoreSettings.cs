@@ -23,8 +23,8 @@ namespace ExileCore
         public HotkeyNode MainMenuKeyToggle { get; set; } = Keys.F12;
         [Menu("Force Foreground", 4, 1000)]
         public ToggleNode ForceForeground { get; set; } = new ToggleNode(false);
-        [Menu("Automatically Update", 5, 1000)]
-        public ToggleNode AutoUpdate { get; set; } = new ToggleNode(true);
+        [Menu("Automatically Download Update", 5, 1000)]
+        public ToggleNode AutoPrepareUpdate { get; set; } = new ToggleNode(true);
         #endregion
 
         #region messages

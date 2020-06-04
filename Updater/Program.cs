@@ -142,7 +142,7 @@ namespace Updater
                         }
                         catch
                         {
-                            Console.WriteLine($"Log -> File delete failed. {targetFile}");
+                            Console.WriteLine($"Log -> File can not be deleted, try copying: {targetFile}");
                             try
                             {
                                 var fileName = ReplaceLastOccurrence(targetFile, ".", random.Next(1000, 9999) + ".");

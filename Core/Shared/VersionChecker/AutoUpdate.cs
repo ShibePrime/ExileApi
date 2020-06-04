@@ -15,33 +15,56 @@ namespace ExileCore.Shared.VersionChecker
     {
         private const string RELEASE_FILENAME = "PoeHelper";
         private const string UPDATE_FOLDER = "update";
+        private const string UPDATER_EXECUTEABLE = "Updater.exe";
         private static string ReleaseFilenameWithExtension => $"{RELEASE_FILENAME}.zip";
+        public bool IsDownloading { get; private set; }
+        public bool IsReadyToUpdate { get; private set; }
 
-
-        public static void Update(GithubReleaseResponse githubReleaseResponse)
+        public AutoUpdate()
         {
+            IsDownloading = false;
+            IsReadyToUpdate = false;
+        }
+
+        public void PrepareUpdate(GithubReleaseResponse githubReleaseResponse)
+        {
+            IsDownloading = true;
             var releaseZip = githubReleaseResponse.Assets
                 .Where(asset => asset.FileName.Equals(ReleaseFilenameWithExtension, StringComparison.InvariantCultureIgnoreCase))
                 .FirstOrDefault();
             if (!releaseZip.FileName.Equals(ReleaseFilenameWithExtension, StringComparison.InvariantCultureIgnoreCase))
             {
                 DebugWindow.LogError("Update failed -> Download not possible, release .zip url not found.");
+                IsDownloading = false;
                 return;
             }
 
             var fileLocation = Path.Combine(UPDATE_FOLDER, ReleaseFilenameWithExtension);
-            Download(releaseZip.BrowserDownloadUrl, fileLocation);
-            LaunchUpdater();
+
+            if (FileExists(fileLocation))
+            {
+                IsReadyToUpdate = true;
+            }
+            else
+            {
+                Download(releaseZip.BrowserDownloadUrl, fileLocation);
+                IsReadyToUpdate = true;
+            }
+            IsDownloading = false;
         }
 
-        private static void Download(string zipUrl, string fileLocation)
+        private bool FileExists(string fileLocation)
         {
             if (File.Exists(fileLocation))
             {
-                DebugWindow.LogMsg("Update file already present.");
-                return;
+                DebugWindow.LogMsg("Update file exists.");
+                return true;
             }
+            return false;
+        }
 
+        private void Download(string zipUrl, string fileLocation)
+        {
             DebugWindow.LogMsg("Download update...");
             using (var client = new WebClient())
             {
@@ -50,10 +73,10 @@ namespace ExileCore.Shared.VersionChecker
             DebugWindow.LogMsg("Donwload update... done");
         }
 
-        private static void LaunchUpdater()
+        public void LaunchUpdater()
         {
             var startInfo = new ProcessStartInfo();            
-            startInfo.FileName = Path.Combine(Application.StartupPath, "Updater.exe");
+            startInfo.FileName = Path.Combine(Application.StartupPath, UPDATER_EXECUTEABLE);
             startInfo.Arguments = Path.Combine(Application.StartupPath, UPDATE_FOLDER) + " " + ReleaseFilenameWithExtension + " " + Application.ExecutablePath;
             Process.Start(startInfo);
             Application.Exit();

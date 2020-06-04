@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExileCore.PoEMemory;
 using ExileCore.RenderQ;
@@ -98,7 +99,17 @@ namespace ExileCore
                 VersionChecker versionChecker;
                 using (new PerformanceTimer("Check version"))
                 {
-                    versionChecker = new VersionChecker(_coreSettings.AutoUpdate);
+                    versionChecker = new VersionChecker();
+                    // check every ~100s for an update
+                    Task.Run(() =>
+                    {
+                        while (true)
+                        {
+                            DebugWindow.LogDebug("Checking for update...");
+                            versionChecker.CheckVersionAndPrepareUpdate(_coreSettings.AutoPrepareUpdate);
+                            Thread.Sleep(100 * 1000);
+                        }
+                    });
                 }
 
                 using (new PerformanceTimer("DX11 Load"))
