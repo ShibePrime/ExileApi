@@ -147,6 +147,7 @@ namespace ExileCore
                 {
                     //throw new OverflowException($"Maybe overflow memory in {nameof(ReadStructsArray)} so much structs {size}");
                     DebugWindow.LogError($"Maybe overflow memory in {nameof(ReadStructsArray)} for reading structures of type: {typeof(T).Name}", 3);
+                    return result;
                 }
             }
 
