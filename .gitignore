@@ -3,11 +3,14 @@
 # or wget:
 # wget --no-check-certificate http://gist.githubusercontent.com/kmorcinek/2710267/raw/.gitignore
 
+##### project specific ignores #####
+Plugins/*
+
 # User-specific files
 *.suo
 *.user
 *.sln.docstates
-Plugins/Source
+
 # Build results
 [Dd]ebug/
 [Rr]elease/
