@@ -75,7 +75,7 @@ namespace ExileCore
                     var message = MessagesList[index];
                     if (message == null) continue;
 
-                    if (message.Time < DateTime.UtcNow)
+                    if (message.Time < DateTime.UtcNow.AddSeconds(message.Duration))
                     {
                         toDelete.Enqueue(message.Msg);
                         continue;
@@ -158,9 +158,11 @@ namespace ExileCore
             {
                 if (Messages.TryGetValue(msg, out var result))
                 {
-                    result.Time = DateTime.UtcNow.AddSeconds(time);
-                    result.Color = color;
                     result.Count++;
+                    var newMessage = result.Copy();
+                    newMessage.Time = DateTime.UtcNow;
+                    newMessage.Duration = time;
+                    newMessage.Color = color;
                     History.PushBack(result);
                 }
                 else
@@ -169,7 +171,8 @@ namespace ExileCore
                     {
                         MsgType = msgType,
                         Msg = msg,
-                        Time = DateTime.UtcNow.AddSeconds(time),
+                        Time = DateTime.UtcNow,
+                        Duration = time,
                         ColorV4 = color.ToImguiVec4(),
                         Color = color,
                         Count = 1
@@ -195,9 +198,24 @@ namespace ExileCore
         public MsgType MsgType { get; set; }
         public string Msg { get; set; }
         public DateTime Time { get; set; }
+        public float Duration { get; set; }
         public Vector4 ColorV4 { get; set; }
         public Color Color { get; set; }
         public int Count { get; set; }
+
+        public DebugMsgDescription Copy()
+        {
+            return new DebugMsgDescription
+            {
+                MsgType = MsgType,
+                Msg = Msg,
+                Time = Time,
+                Duration = Duration,
+                ColorV4 = ColorV4,
+                Color = Color,
+                Count = Count
+            };
+        }
     }
 
     public enum MsgType
