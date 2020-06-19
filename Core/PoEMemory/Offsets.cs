@@ -122,7 +122,7 @@ namespace ExileCore.PoEMemory
 
         public Dictionary<OffsetsName, long> DoPatternScans(IMemory m)
         {
-            var array = m.FindPatterns(fileRootPattern, /*areaChangePattern,*/ GameStatePattern);
+            var array = m.FindPatterns(/*fileRootPattern, */ /*areaChangePattern,*/ GameStatePattern);
 
             var result = new Dictionary<OffsetsName, long>();
 
@@ -131,8 +131,9 @@ namespace ExileCore.PoEMemory
             var index = 0;
             var baseAddress = m.Process.MainModule.BaseAddress.ToInt64();
 
-            FileRoot = m.Read<int>(baseAddress + array[index] + 15) + array[index] + 19;
-            index++;
+            //FileRoot = m.Read<int>(baseAddress + array[index] + 15) + array[index] + 19;
+            //index++;
+            FileRoot = 0x362ecd0;
 
             //AreaChangeCount = m.Read<int>(baseAddress + array[index] + 11) + array[index] + 15;*
             //index++;
