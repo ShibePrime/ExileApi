@@ -205,8 +205,10 @@ namespace ExileCore
 
         public void RefreshState()
         {
-            if (gameController.Area.CurrentArea == null /*|| !EntitiesStack.CanRead */ || entityCollectSettingsContainer.NeedUpdate ||
-                !Player.IsValid)
+            if (gameController.Area.CurrentArea == null 
+                /*|| !EntitiesStack.CanRead */ 
+                || entityCollectSettingsContainer.NeedUpdate 
+                || !Player.IsValid)
                 return;
 
             while (Simple.Count > 0)

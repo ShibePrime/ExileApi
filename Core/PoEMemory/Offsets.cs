@@ -122,8 +122,7 @@ namespace ExileCore.PoEMemory
 
         public Dictionary<OffsetsName, long> DoPatternScans(IMemory m)
         {
-            var array = m.FindPatterns( /*basePtrPattern,*/
-                fileRootPattern, areaChangePattern, /* isLoadingScreenPattern,*/ GameStatePattern);
+            var array = m.FindPatterns(fileRootPattern, /*areaChangePattern,*/ GameStatePattern);
 
             var result = new Dictionary<OffsetsName, long>();
 
@@ -132,35 +131,18 @@ namespace ExileCore.PoEMemory
             var index = 0;
             var baseAddress = m.Process.MainModule.BaseAddress.ToInt64();
 
-            //  Base = m.Read<int>(baseAddress + array[index] + 0xF) + array[index] + 0x13; index++;
-            //  System.Console.WriteLine("Base Address: " + (Base + m.AddressOfProcess).ToString("x8"));
-
-            //  long InGameState = m.Read<long>(Base + BaseAddress, 0x8, 0xF8, 0x38);
-            //  System.Console.WriteLine("InGameState: " + InGameState.ToString("x8"));
-
             FileRoot = m.Read<int>(baseAddress + array[index] + 15) + array[index] + 19;
             index++;
 
-            //   System.Console.WriteLine("FileRoot Pointer: " + (FileRoot + m.AddressOfProcess).ToString("x8"));
-
-            AreaChangeCount = m.Read<int>(baseAddress + array[index] + 11) + array[index] + 15;
-            index++;
-
-            // System.Console.WriteLine("AreaChangeCount: " + m.ReadInt(AreaChangeCount + m.AddressOfProcess).ToString());
-
-            //    isLoadingScreenOffset = m.Read<int>(baseAddress + array[index] + 0x03) + array[index] + 0x07;
+            //AreaChangeCount = m.Read<int>(baseAddress + array[index] + 11) + array[index] + 15;*
             //index++;
-            // System.Console.WriteLine("Is Loading Screen Offset:" + (isLoadingScreenOffset + m.AddressOfProcess).ToString("x8"));
+            AreaChangeCount = 0x336CA88; // TODO change to Pattern for more stability
+
 
             GameStateOffset = m.Read<int>(baseAddress + array[index] + 29) + array[index] + 33;
 
-            //  System.Console.WriteLine("Game State Offset:" + (GameStateOffset + m.AddressOfProcess).ToString("x8"));
-
-            //  result.Add(OffsetsName.Base,Base);
             result.Add(OffsetsName.FileRoot, FileRoot);
             result.Add(OffsetsName.AreaChangeCount, AreaChangeCount);
-
-            //   result.Add(OffsetsName.IsLoadingScreenOffset,isLoadingScreenOffset);
             result.Add(OffsetsName.GameStateOffset, GameStateOffset);
             return result;
         }
