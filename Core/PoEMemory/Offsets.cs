@@ -10,23 +10,6 @@ namespace ExileCore.PoEMemory
         public static Offsets Korean = new Offsets {IgsOffset = 0, IgsDelta = 0, ExeName = "Pathofexile_x64_KG"};
 
         public static Offsets Steam = new Offsets {IgsOffset = 0x28, IgsDelta = 0, ExeName = "PathOfExile_x64Steam"};
-        /*
-        00007FF7006C7891  | 90                                 | nop                                        |
-        00007FF7006C7892  | 48 8B 1D EF 93 06 01               | mov rbx,qword ptr ds:[7FF701730C88]        |
-        00007FF7006C7899  | 48 89 05 E8 93 06 01               | mov qword ptr ds:[7FF701730C88],rax        |
-        00007FF7006C78A0  | 48 85 DB                           | test rbx,rbx                               |
-        00007FF7006C78A3  | 74 15                              | je pathofexile_x64.7FF7006C78BA            |
-        00007FF7006C78A5  | 48 8B CB                           | mov rcx,rbx                                |
-        00007FF7006C78A8  | E8 53 D7 00 00                     | call pathofexile_x64.7FF7006D5000          |
-        */
-        //    90 48 8B 1D ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 85 DB 74 15 48 8B CB E8
-
-        private static readonly Pattern basePtrPattern = new Pattern(
-            new byte[]
-            {
-                0x90, 0x48, 0x03, 0xD8, 0x48, 0x8B, 0x03, 0x48, 0x85, 0xC0, 0x75, 0x00, 0x48, 0x8B, 0x1D, 0x00, 0x00, 0x00, 0x00, 0x48,
-                0x8B, 0x05, 0x00, 0x00, 0x00, 0x00, 0x48, 0x85, 0xC0, 0X74, 0x00, 0x66, 0x90
-            }, "xxxxxxxxxxx?xxx????xxx????xxxx?xx", "BasePtr");
 
         /* FileRoot Pointer
         00007FF6C47EED01  | 48 8D 0D A8 23 7F 00               | lea rcx,qword ptr ds:[7FF6C4FE10B0]        | <--FileRootPtr
@@ -36,18 +19,16 @@ namespace ExileCore.PoEMemory
         00007FF6C47EED17  | 48 3B DF                           | cmp rbx,rdi                                |
         00007FF6C47EED1A  | 0F 84 26 01 00 00                  | je pathofexile_x64.7FF6C47EEE46            |
         */
-        // 3.3.x
-        //    48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 3D ?? ?? ?? ?? 48 8B 1F
 
-        private static readonly Pattern fileRootPattern =
+        private static readonly Pattern FileRootPattern =
             new Pattern(new byte[]
                 {
-					0x65, 0x48, 0x8b, 0x04, 0x25, 0x00, 0x00, 0x00, 0x00,
-					0x48, 0x8b, 0x08,
-					0x48, 0x8d, 0x00, 0x00, 0x00, 0x00, 0x00,
-					0x8B, 0x04, 0x0E,
-					0x39, 0x05
-				}, "xxxxx????xxxxx?????xxxxx", "File Root",
+                    0x48, 0x8b, 0x08,
+                    0x48, 0x8d, 0x2d,
+                    0x00, 0x00, 0x00, 0x00,
+                    0x41
+
+                }, "xxxxxx????x", "File Root",
                 14630000);
 
         /* Area Change
@@ -65,10 +46,8 @@ namespace ExileCore.PoEMemory
         00007FF63317CE6C | 49 8B 08                       | mov rcx,qword ptr ds:[r8]                       |
         00007FF63317CE6F | 49 8B 40 18                    | mov rax,qword ptr ds:[r8+18]                    |
         */
-        // 3.0.3b
-        //     48 83 EC 58 4C 8B C1 41 B9 01 00 00 00 48 8B 49 10
 
-        private static readonly Pattern areaChangePattern =
+        private static readonly Pattern AreaChangePattern =
             new Pattern(
                 new byte[]
                 {
@@ -83,19 +62,11 @@ namespace ExileCore.PoEMemory
 				}, "x??x?xxx?x??????x???x???x?", "Area change", 9430000);
 
         /*
-        PathOfExile_x64.exe+853E28 - 48 89 05 E9ABC400     - mov [PathOfExile_x64.exe+149EA18],rax { [00000000] }
-        PathOfExile_x64.exe+853E2F - 48 8B 44 24 40        - mov rax,[rsp+40]
-        PathOfExile_x64.exe+853E34 - 48 89 06              - mov [rsi],rax
-        PathOfExile_x64.exe+853E37 - 48 8B C6              - mov rax,rsi
-        PathOfExile_x64.exe+853E3A - 48 83 C4 20           - add rsp,20 { 32 }
-        PathOfExile_x64.exe+853E3E - 5E                    - pop rsi
-        PathOfExile_x64.exe+853E3F - C3                    - ret 
+        PathOfExile_x64.exe+118FD9 - 4C 8B 35 48255B01     - mov r14,[PathOfExile_x64.exe+16CB528] { [C6151734A0] }<<here
+        PathOfExile_x64.exe+118FE0 - 4D 85 F6              - test r14,r14
+        PathOfExile_x64.exe+118FE3 - 0F94 C0               - sete al
+        PathOfExile_x64.exe+118FE6 - 84 C0                 - test al,al
         */
-
-        private static readonly Pattern isLoadingScreenPattern =
-            new Pattern(
-                new byte[] {0x48, 0x89, 0x05, 0x00, 0x00, 0x00, 0x00, 0x48, 0x8B, 0x00, 0x00, 0x00, 0x48, 0x89, 0x00, 0x48, 0x8B, 0xC6},
-                "xxx????xx???xx?xxx", "Loading");
 
         private static readonly Pattern GameStatePattern = new Pattern(
             new byte[]
@@ -104,12 +75,6 @@ namespace ExileCore.PoEMemory
                 0x8b, 0xf9, 0x33, 0xed, 0x48, 0x39
             }, "xxxxxxxx?????xxxx????xxxxxxx", "Game State", 1240000);
 
-        /*
-        PathOfExile_x64.exe+118FD9 - 4C 8B 35 48255B01     - mov r14,[PathOfExile_x64.exe+16CB528] { [C6151734A0] }<<here
-        PathOfExile_x64.exe+118FE0 - 4D 85 F6              - test r14,r14
-        PathOfExile_x64.exe+118FE3 - 0F94 C0               - sete al
-        PathOfExile_x64.exe+118FE6 - 84 C0                 - test al,al
-        */
         public long AreaChangeCount { get; private set; }
         public long Base { get; private set; }
         public string ExeName { get; private set; }
@@ -122,7 +87,7 @@ namespace ExileCore.PoEMemory
 
         public Dictionary<OffsetsName, long> DoPatternScans(IMemory m)
         {
-            var array = m.FindPatterns(/*fileRootPattern, */ /*areaChangePattern,*/ GameStatePattern);
+            var array = m.FindPatterns(FileRootPattern, /*AreaChangePattern,*/ GameStatePattern);
 
             var result = new Dictionary<OffsetsName, long>();
 
@@ -131,9 +96,9 @@ namespace ExileCore.PoEMemory
             var index = 0;
             var baseAddress = m.Process.MainModule.BaseAddress.ToInt64();
 
-            //FileRoot = m.Read<int>(baseAddress + array[index] + 15) + array[index] + 19;
-            //index++;
-            FileRoot = 0x362ecd0;
+            FileRoot = m.Read<int>(baseAddress + array[index] + 6) + array[index] + 10;
+            index++;
+            //FileRoot = 0x362CCC0; 3.11.0c
 
             //AreaChangeCount = m.Read<int>(baseAddress + array[index] + 11) + array[index] + 15;*
             //index++;
