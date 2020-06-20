@@ -6,7 +6,7 @@ using GameOffsets;
 
 namespace ExileCore.PoEMemory.MemoryObjects
 {
-    public class IngameState : RemoteMemoryObject
+    public class IngameState : GameState
     {
         private readonly CachedValue<Camera> _camera;
         private readonly CachedValue<float> _CurrentUElementPosX;
@@ -27,8 +27,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<float> _UIHoverY;
         private readonly CachedValue<Element> _UIRoot;
 
-        public IngameState()
+        public IngameState(long address)
         {
+            Address = address;
+            ReloadStateName();
+
             _ingameState = new FrameCache<IngameStateOffsets>(() => M.Read<IngameStateOffsets>(Address /*+M.offsets.IgsOffsetDelta*/));
 
             _camera = new AreaCache<Camera>(
@@ -52,8 +55,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             _FrameTimeRectangle = new AreaCache<DiagnosticElement>(
                 () => GetObject<DiagnosticElement>(Address + /*0x1628*/
-                                                   +Extensions.GetOffset<IngameStateOffsets>(
-                                                       nameof(IngameStateOffsets.FrameTimeRectangle))));
+                                                   +Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FrameTimeRectangle))));
 
             _FPSRectangle = new AreaCache<DiagnosticElement>(
                 () => GetObject<DiagnosticElement>(Address /*0x1870*/ +

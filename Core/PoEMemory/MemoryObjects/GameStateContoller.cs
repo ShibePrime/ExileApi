@@ -43,8 +43,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             InGameStatePtr = AllGameStates["InGameState"].Address;
             LoadingStatePtr = AllGameStates["LoadingState"].Address;
             EscapeStatePtr = AllGameStates["EscapeState"].Address;
-            LoadingState = AllGameStates["AreaLoadingState"].AsObject<AreaLoadingState>();
-            IngameState = AllGameStates["InGameState"].AsObject<IngameState>();
+            LoadingState = new AreaLoadingState(AllGameStates["AreaLoadingState"].Address);
+            IngameState = new IngameState(InGameStatePtr);
 
             _inGame = new FrameCache<bool>(
                 () => IngameState.Address != 0 && IngameState.Data.Address != 0 && IngameState.ServerData.Address != 0 && !IsLoading /*&&
@@ -161,7 +161,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
     {
         private string stateName;
         public string StateName => stateName ?? (stateName = M.ReadNativeString(Address + 0x10));
-
+        public void ReloadStateName()
+        {
+            stateName = M.ReadNativeString(Address + 0x10);
+        }
         public override string ToString()
         {
             return StateName;
@@ -170,6 +173,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
     public class AreaLoadingState : GameState
     {
+        public AreaLoadingState(long address)
+        {
+            Address = address;
+            ReloadStateName();
+        }
         //This is actualy pointer to loading screen stuff (image, etc), but should works fine.
         public bool IsLoading => M.Read<long>(Address + 0xD8) == 1;
         public string AreaName => M.ReadStringU(M.Read<long>(Address + 0x1F0));
