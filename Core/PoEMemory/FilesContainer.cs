@@ -49,18 +49,9 @@ namespace ExileCore.PoEMemory
             {
                 AllFiles = FilesFromMemory.GetAllFiles();
             }
-
-            /*Task.Run(() =>
-            {
-                using (new PerformanceTimer("Preload stats and mods"))
-                {
-                    var test = Stats.records.Count;
-                    var test2 = Mods.records.Count;
-                    ParseFiles(AllFiles);
-                }
-            });*/
         }
 
+        #region Misc
         public ItemClasses ItemClasses { get; }
         public BaseItemTypes BaseItemTypes =>
             _baseItemTypes ?? (_baseItemTypes = new BaseItemTypes(_memory, () => FindFile("Data/BaseItemTypes.dat")));
@@ -79,6 +70,9 @@ namespace ExileCore.PoEMemory
         public PropheciesDat Prophecies => prophecies ?? (prophecies = new PropheciesDat(_memory, () => FindFile("Data/Prophecies.dat")));
         public UniversalFileWrapper<AtlasNode> AtlasNodes =>
             atlasNodes ?? (atlasNodes = new AtlasNodes(_memory, () => FindFile("Data/AtlasNode.dat")));
+        #endregion Misc
+
+        #region Betrayal
         public UniversalFileWrapper<BetrayalTarget> BetrayalTargets =>
             _betrayalTargets ?? (_betrayalTargets =
                 new UniversalFileWrapper<BetrayalTarget>(_memory, () => FindFile("Data/BetrayalTargets.dat")));
@@ -98,6 +92,8 @@ namespace ExileCore.PoEMemory
         public UniversalFileWrapper<BetrayalDialogue> BetrayalDialogue =>
             _betrayalDialogue ?? (_betrayalDialogue =
                 new UniversalFileWrapper<BetrayalDialogue>(_memory, () => FindFile("Data/BetrayalDialogue.dat")));
+
+        #endregion
 
         #region Metamorph
 
@@ -126,6 +122,43 @@ namespace ExileCore.PoEMemory
         public UniversalFileWrapper<MetamorphRewardTypeItemsClient> MetamorphRewardTypeItemsClient =>
             _metamorphRewardTypeItemsClient ?? (_metamorphRewardTypeItemsClient =
                 new UniversalFileWrapper<MetamorphRewardTypeItemsClient>(_memory, () => FindFile("Data/MetamorphosisRewardTypeItemsClient.dat")));
+
+        #endregion
+
+        #region Bestiary
+
+        private BestiaryCapturableMonsters bestiaryCapturableMonsters;
+        public BestiaryCapturableMonsters BestiaryCapturableMonsters =>
+            bestiaryCapturableMonsters != null
+                ? bestiaryCapturableMonsters
+                : bestiaryCapturableMonsters =
+                    new BestiaryCapturableMonsters(_memory, () => FindFile("Data/BestiaryCapturableMonsters.dat"));
+        private UniversalFileWrapper<BestiaryRecipe> bestiaryRecipes;
+        public UniversalFileWrapper<BestiaryRecipe> BestiaryRecipes =>
+            bestiaryRecipes != null
+                ? bestiaryRecipes
+                : bestiaryRecipes = new UniversalFileWrapper<BestiaryRecipe>(_memory, () => FindFile("Data/BestiaryRecipes.dat"));
+        private UniversalFileWrapper<BestiaryRecipeComponent> bestiaryRecipeComponents;
+        public UniversalFileWrapper<BestiaryRecipeComponent> BestiaryRecipeComponents =>
+            bestiaryRecipeComponents != null
+                ? bestiaryRecipeComponents
+                : bestiaryRecipeComponents =
+                    new UniversalFileWrapper<BestiaryRecipeComponent>(_memory, () => FindFile("Data/BestiaryRecipeComponent.dat"));
+        private UniversalFileWrapper<BestiaryGroup> bestiaryGroups;
+        public UniversalFileWrapper<BestiaryGroup> BestiaryGroups =>
+            bestiaryGroups != null
+                ? bestiaryGroups
+                : bestiaryGroups = new UniversalFileWrapper<BestiaryGroup>(_memory, () => FindFile("Data/BestiaryGroups.dat"));
+        private UniversalFileWrapper<BestiaryFamily> bestiaryFamilies;
+        public UniversalFileWrapper<BestiaryFamily> BestiaryFamilies =>
+            bestiaryFamilies != null
+                ? bestiaryFamilies
+                : bestiaryFamilies = new UniversalFileWrapper<BestiaryFamily>(_memory, () => FindFile("Data/BestiaryFamilies.dat"));
+        private UniversalFileWrapper<BestiaryGenus> bestiaryGenuses;
+        public UniversalFileWrapper<BestiaryGenus> BestiaryGenuses =>
+            bestiaryGenuses != null
+                ? bestiaryGenuses
+                : bestiaryGenuses = new UniversalFileWrapper<BestiaryGenus>(_memory, () => FindFile("Data/BestiaryGenus.dat"));
 
         #endregion
 
@@ -184,14 +217,6 @@ namespace ExileCore.PoEMemory
                     else
                         OtherFiles[file.Key] = file.Value;
                 }
-
-                /*Task.Run(() =>
-                {
-                        GroupedByTest2 = Files.GroupBy(x => x.Value.Test2).OrderBy(x=>x.Key).ToDictionary(z => z.Key, w => w.ToList());
-                         GroupedByChangeAction = Files.GroupBy(x => x.Value.ChangeCount ).OrderBy(x=>x.Key).ToDictionary(z => z.Key, w => w.ToList());
-                });
-          */
-
                 LoadedFiles?.Invoke(this, LoadedInThisArea);
             }
         }
@@ -213,41 +238,5 @@ namespace ExileCore.PoEMemory
             return 0;
         }
 
-        #region Bestiary
-
-        private BestiaryCapturableMonsters bestiaryCapturableMonsters;
-        public BestiaryCapturableMonsters BestiaryCapturableMonsters =>
-            bestiaryCapturableMonsters != null
-                ? bestiaryCapturableMonsters
-                : bestiaryCapturableMonsters =
-                    new BestiaryCapturableMonsters(_memory, () => FindFile("Data/BestiaryCapturableMonsters.dat"));
-        private UniversalFileWrapper<BestiaryRecipe> bestiaryRecipes;
-        public UniversalFileWrapper<BestiaryRecipe> BestiaryRecipes =>
-            bestiaryRecipes != null
-                ? bestiaryRecipes
-                : bestiaryRecipes = new UniversalFileWrapper<BestiaryRecipe>(_memory, () => FindFile("Data/BestiaryRecipes.dat"));
-        private UniversalFileWrapper<BestiaryRecipeComponent> bestiaryRecipeComponents;
-        public UniversalFileWrapper<BestiaryRecipeComponent> BestiaryRecipeComponents =>
-            bestiaryRecipeComponents != null
-                ? bestiaryRecipeComponents
-                : bestiaryRecipeComponents =
-                    new UniversalFileWrapper<BestiaryRecipeComponent>(_memory, () => FindFile("Data/BestiaryRecipeComponent.dat"));
-        private UniversalFileWrapper<BestiaryGroup> bestiaryGroups;
-        public UniversalFileWrapper<BestiaryGroup> BestiaryGroups =>
-            bestiaryGroups != null
-                ? bestiaryGroups
-                : bestiaryGroups = new UniversalFileWrapper<BestiaryGroup>(_memory, () => FindFile("Data/BestiaryGroups.dat"));
-        private UniversalFileWrapper<BestiaryFamily> bestiaryFamilies;
-        public UniversalFileWrapper<BestiaryFamily> BestiaryFamilies =>
-            bestiaryFamilies != null
-                ? bestiaryFamilies
-                : bestiaryFamilies = new UniversalFileWrapper<BestiaryFamily>(_memory, () => FindFile("Data/BestiaryFamilies.dat"));
-        private UniversalFileWrapper<BestiaryGenus> bestiaryGenuses;
-        public UniversalFileWrapper<BestiaryGenus> BestiaryGenuses =>
-            bestiaryGenuses != null
-                ? bestiaryGenuses
-                : bestiaryGenuses = new UniversalFileWrapper<BestiaryGenus>(_memory, () => FindFile("Data/BestiaryGenus.dat"));
-
-        #endregion
-    }
+       }
 }
