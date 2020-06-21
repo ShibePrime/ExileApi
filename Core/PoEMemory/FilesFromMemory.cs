@@ -41,7 +41,7 @@ namespace ExileCore.PoEMemory
             var files = new ConcurrentDictionary<string, FileInformation>();
             var fileRoot = mem.AddressOfProcess + mem.BaseOffsets[OffsetsName.FileRoot];
 
-            Parallel.For(0, 256, (i) =>
+            Parallel.For(0, 128, i =>
             {
                 var addr = fileRoot + i * 0x40;
                 var fileChunkStruct = mem.Read<FilesOffsets>(addr);
@@ -56,19 +56,19 @@ namespace ExileCore.PoEMemory
         {
             var node = mem.Read<FileNode>(head);
 
-            var sw = Stopwatch.StartNew();
             var headLong = head;
+
+            // first node in list does not contain file information
+            node = mem.Read<FileNode>(node.Next);
+
+            var maxCount = 1000;    // not seeing more than that amount of files in one bucket
 
             while (headLong != node.Next)
             {
-                if (sw.ElapsedMilliseconds > 2000)
-                {
-                    Core.Logger.Error($"ReadDictionary error. Elapsed: {sw.ElapsedMilliseconds}");
+                if (0 == --maxCount)
                     return;
-                }
 
-                var filesOffsets = mem.Read<FilesOffsets>(node.Value);
-                var advancedInformation = mem.Read<GameOffsets.FileInformation>(filesOffsets.MoreInformation);
+                var advancedInformation = mem.Read<GameOffsets.FileInformation>(node.Value);
                 if (advancedInformation.String.buf == 0) return;
 
                 var key = mem.ReadStringU(node.Key);
@@ -76,7 +76,7 @@ namespace ExileCore.PoEMemory
                 if (dictionary.ContainsKey(key))
                     Core.Logger.Error($"ReadDictionary error. Already contains key: {key}. Value: {node.Value:X}");
                 else
-                    dictionary[key] = new FileInformation(filesOffsets.MoreInformation, advancedInformation.AreaCount, advancedInformation.Test1, advancedInformation.Test2);
+                    dictionary[key] = new FileInformation(node.Value, advancedInformation.AreaCount, advancedInformation.Test1, advancedInformation.Test2);
 
                 node = mem.Read<FileNode>(node.Next);
             }
