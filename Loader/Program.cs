@@ -18,8 +18,6 @@ namespace Loader
     {
         public static void Main(string[] args)
         {
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
-            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
             AskToKillOtherRunningProcesses();
             var loader = new Loader();
             loader.Load(args);

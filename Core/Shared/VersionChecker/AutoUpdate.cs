@@ -119,10 +119,18 @@ namespace ExileCore.Shared.VersionChecker
         private string Unzip(string fileLocation)
         {
             var resultFolder = Path.Combine(UPDATE_FOLDER, RELEASE_FOLDER);
-            ZipFile.ExtractToDirectory(
+            try
+            {
+                ZipFile.ExtractToDirectory(
                 fileLocation,
                 resultFolder
-            );
+                );
+            } 
+            catch
+            {
+                DebugWindow.LogError($"AutoUpdate -> Unzip failed, you may need to delete the content of the folder {UPDATE_FOLDER} manually");
+            }
+            
             return resultFolder;
         }
 
