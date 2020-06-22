@@ -24,7 +24,7 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ServerDataOffsets
     {
-        public const int Skip = 0x5000;
+        public const int Skip = 0x7000;
         public const int ATLAS_REGION_UPGRADES = 0x7782;
 		[FieldOffset(0)] public long MasterAreas;
 		[FieldOffset(0x7068 - Skip)] public NativePtrArray PassiveSkillIds;
@@ -49,8 +49,8 @@ namespace GameOffsets
         [FieldOffset(0x7548 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x7618 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x76D0 - Skip)] public NativePtrArray GuildInventories;
-        [FieldOffset(0x7828 - Skip)] public ushort TradeChatChannel;
-        [FieldOffset(0x7830 - Skip)] public ushort GlobalChatChannel;
+        [FieldOffset(0x79e0 - Skip)] public ushort TradeChatChannel; // updated 3.11 moved by 0x1b8
+        [FieldOffset(0x79e8 - Skip)] public ushort GlobalChatChannel; // updated 3.11 moved by 0x1b8
 		[FieldOffset(0x787C - Skip)] public ushort LastActionId;//Do we need this?
 		[FieldOffset(0x78F0 - Skip)] public long CompletedMaps;//search for a LONG value equals to your current amount of completed maps. Pointer will be under this offset
         [FieldOffset(0x78F8 - Skip)] public long BonusCompletedAreas;
