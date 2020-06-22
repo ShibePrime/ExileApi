@@ -171,8 +171,18 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             for (var i = 0; i < bytes.Length; i += 8)
             {
-                key = BitConverter.ToInt32(bytes, i);
-                value = BitConverter.ToInt32(bytes, i + 0x04);
+                try
+                {
+                    key = BitConverter.ToInt32(bytes, i);
+                    value = BitConverter.ToInt32(bytes, i + 0x04);
+                } 
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"ActorSkill.ReadStats -> BitConverter failed, i: {i}");
+                    DebugWindow.LogError($"ActorSkill.ReadStats -> {e.Message}");
+                    continue;
+                }
+
                 stats[(GameStat) key] = value;
             }
         }
