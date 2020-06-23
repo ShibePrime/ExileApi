@@ -81,30 +81,5 @@ namespace ExileCore.PoEMemory
                 node = mem.Read<FileNode>(node.Next);
             }
         }
-
-        public Dictionary<string, FileInformation> GetAllFilesSync()
-        {
-            var files = new Dictionary<string, FileInformation>();
-            var fileRoot = mem.AddressOfProcess + mem.BaseOffsets[OffsetsName.FileRoot];
-            var start = mem.Read<long>(fileRoot + 0x8);
-            var filesPointer = mem.ReadListPointer(new IntPtr(start));
-
-            foreach (var p in filesPointer)
-            {
-                var filesOffsets = mem.Read<FilesOffsets>(p);
-                var advancedInformation = mem.Read<GameOffsets.FileInformation>(filesOffsets.MoreInformation);
-                if (advancedInformation.String.buf == 0) continue;
-
-                var str = RemoteMemoryObject.Cache.StringCache.Read($"{nameof(FilesFromMemory)}{advancedInformation.String.buf}",
-                    () => advancedInformation.String.ToString(mem));
-
-                if (str.Length <= 0) continue;
-
-                files[str] = new FileInformation(filesOffsets.MoreInformation, advancedInformation.AreaCount, advancedInformation.Test1,
-                    advancedInformation.Test2);
-            }
-
-            return files;
-        }
     }
 }

@@ -175,13 +175,7 @@ namespace ExileCore.PoEMemory
         public Dictionary<string, FileInformation> Data { get; private set; } = new Dictionary<string, FileInformation>();
         public Dictionary<string, FileInformation> OtherFiles { get; } = new Dictionary<string, FileInformation>();
         public Dictionary<string, FileInformation> LoadedInThisArea { get; private set; } = new Dictionary<string, FileInformation>(1024);
-        public Dictionary<int, List<KeyValuePair<string, FileInformation>>> GroupedByTest2 { get; set; }
-        public Dictionary<int, List<KeyValuePair<string, FileInformation>>> GroupedByChangeAction { get; set; }
 
-        public void LoadFiles()
-        {
-            AllFiles = FilesFromMemory.GetAllFilesSync();
-        }
 
         public event EventHandler<Dictionary<string, FileInformation>> LoadedFiles;
 
