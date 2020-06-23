@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using ExileCore.Shared.PluginAutoUpdate.Settings;
+using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             PluginsUpdateSettings = pluginsUpdateSettings ?? throw new ArgumentNullException(nameof(pluginsUpdateSettings));
         }
 
-        public void Update(PluginUpdateSettings plugin)
+        public void Update(SinglePluginUpdateSettings plugin)
         {
             if (!plugin.Enable)
             {

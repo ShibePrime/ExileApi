@@ -4,6 +4,7 @@ using System.Threading;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
 using ExileCore.Shared.PluginAutoUpdate;
+using ExileCore.Shared.PluginAutoUpdate.Settings;
 using Newtonsoft.Json;
 
 namespace ExileCore

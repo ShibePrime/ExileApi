@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExileCore.Shared.PluginAutoUpdate.Settings;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
         }
 
         private List<PluginWrapper> UpdateSinglePlugin(
-            PluginUpdateSettings plugin, 
+            SinglePluginUpdateSettings plugin, 
             PluginSourceDownloader pluginSourceDownloader, 
             PluginFilter pluginFilter, 
             PluginCompiler pluginCompiler,

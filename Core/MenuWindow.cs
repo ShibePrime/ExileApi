@@ -7,7 +7,7 @@ using ExileCore.RenderQ;
 using ExileCore.Shared;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
-using ExileCore.Shared.PluginAutoUpdate;
+using ExileCore.Shared.PluginAutoUpdate.Settings;
 using ExileCore.Shared.VersionChecker;
 using ImGuiNET;
 using JM.LinqFaster;
@@ -281,10 +281,7 @@ namespace ExileCore
                 _index = -2;
                 Selected = () => 
                 {
-                    foreach (var drawer in PluginsUpdateSettingsDrawers)
-                    {
-                        drawer.Draw();
-                    }
+                    PluginsUpdateSettings.Draw();
                 };
             }
 

@@ -462,8 +462,9 @@
     <Compile Include="Shared\PluginAutoUpdate\PluginFilter.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginLoader.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginSourceDownloader.cs" />
-    <Compile Include="Shared\PluginAutoUpdate\PluginsSettings.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginUpdater.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\Settings\PluginsUpdateSetttings.cs" />
+    <Compile Include="Shared\PluginAutoUpdate\Settings\SinglePluginUpdateSettings.cs" />
     <Compile Include="Shared\PluginManager.cs" />
     <Compile Include="Shared\PluginWrapper.cs" />
     <Compile Include="Shared\Runner.cs" />

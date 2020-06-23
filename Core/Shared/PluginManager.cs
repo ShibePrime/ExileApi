@@ -12,6 +12,7 @@ using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.PluginAutoUpdate;
+using ExileCore.Shared.PluginAutoUpdate.Settings;
 using JM.LinqFaster;
 using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using MoreLinq.Extensions;

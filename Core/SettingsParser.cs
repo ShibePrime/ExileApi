@@ -93,7 +93,7 @@ namespace ExileCore
 
 
                 var type = property.GetValue(settings);
-                HandleType(menuAttribute, holder, type);
+                HandleType(holder, type);
             }
         }
 
@@ -132,7 +132,7 @@ namespace ExileCore
             return false;
         }
 
-        private static void HandleType(MenuAttribute menuAttribute, SettingsHolder holder, object type)
+        private static void HandleType(SettingsHolder holder, object type)
         {
             switch (type)
             {
