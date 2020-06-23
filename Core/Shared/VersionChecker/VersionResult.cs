@@ -18,7 +18,7 @@ namespace ExileCore.Shared.VersionChecker
 
     public static class VersionResultExtension
     {
-        public static bool IsUpdate(this VersionResult vr)
+        public static bool IsUpdateAvailable(this VersionResult vr)
         {
             return vr == VersionResult.MajorUpdate || vr == VersionResult.MinorUpdate || vr == VersionResult.PatchUpdate;
         }

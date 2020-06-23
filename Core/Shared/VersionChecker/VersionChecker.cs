@@ -53,7 +53,7 @@ namespace ExileCore.Shared.VersionChecker
             }
 
             VersionResult = VersionComparison(LocalVersion.Value, LatestVersion.Value);
-            if (VersionResult.IsUpdate())
+            if (VersionResult.IsUpdateAvailable())
             {
                 DebugWindow.LogMsg($"VersionChecker -> Update Available");
                 updateCallback?.Invoke(remoteVersionResponse.Value);

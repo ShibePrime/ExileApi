@@ -70,15 +70,25 @@ namespace ExileCore.Shared
         private void LoadPlugins(GameController gameController)
         {
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
-
+            var forceLoadCompiledOnly = false;
             var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(AutoPluginUpdateSettingsPath);
 
             var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
             if (pluginUpdateSettings != null)
             {
-                loadPluginTasks.AddRange(RunPluginAutoUpdate(pluginLoader, pluginUpdateSettings));
+                try
+                {
+                    var pluginAutoUpdates = RunPluginAutoUpdate(pluginLoader, pluginUpdateSettings);
+                    loadPluginTasks.AddRange(pluginAutoUpdates);
+                }
+                catch(Exception e)
+                {
+                    DebugWindow.LogError("PluginManager -> AutoUpdate failed, load all compiled plugins.");
+                    DebugWindow.LogError($"PluginManager -> {e.Message}");
+                    forceLoadCompiledOnly = true;
+                }
             }
-            loadPluginTasks.AddRange(LoadCompiledDirPlugins(pluginLoader, pluginUpdateSettings));
+            loadPluginTasks.AddRange(LoadCompiledDirPlugins(pluginLoader, pluginUpdateSettings, forceLoadCompiledOnly));
 
             Task.WaitAll(loadPluginTasks?.ToArray());
 
@@ -112,10 +122,10 @@ namespace ExileCore.Shared
             return pluginTasks;
         }
 
-        private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
+        private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings, bool forceLoadCompiledOnly)
         {
             List<string> excludedNames = new List<string>();
-            if (pluginsUpdateSettings != null && pluginsUpdateSettings.Enable)
+            if (pluginsUpdateSettings != null && pluginsUpdateSettings.Enable && !forceLoadCompiledOnly)
             {
                 var excluded = pluginsUpdateSettings.Plugins?
                     .Where(p => p.Enable)

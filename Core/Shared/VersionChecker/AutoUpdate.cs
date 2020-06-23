@@ -76,7 +76,7 @@ namespace ExileCore.Shared.VersionChecker
             }
 
             var versionComparison = VersionChecker.VersionComparison(localVersion.Value, latestVersion.Value);
-            if (versionComparison.IsUpdate())
+            if (versionComparison.IsUpdateAvailable())
             {
                 DebugWindow.LogError($"AutoUpdate -> Current update folder is outdated, delete and start update process again");
                 CleanUpdateFolder();
