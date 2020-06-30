@@ -306,7 +306,15 @@ namespace ExileCore.Shared
 
         public void DrawSettings()
         {
-            Plugin.DrawSettings();
+            try
+            {
+                Plugin.DrawSettings();
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"PluginWrapper -> DrawSettings for {Plugin?.Name} failed");
+                DebugWindow.LogError($"PluginWrapper -> {e.Message}");
+            }
         }
 
         public void ReloadPlugin(IPlugin plugin, GameController gameController, Graphics graphics, PluginManager pluginManager)
