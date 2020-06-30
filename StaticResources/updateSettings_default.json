@@ -153,19 +153,7 @@
       },
       "LastUpdated": "0001-01-01T00:00:00"
     },
-    {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
-        "Value": "InventoryItemsAnalyzer"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/InventoryItemsAnalyzer"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-	{
+	  {
       "Enable": {
         "Value": true
       },
