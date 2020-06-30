@@ -55,33 +55,26 @@ namespace ExileCore.PoEMemory.MemoryObjects
                         {
                             if (item.ChildCount == 0) continue; //3.3 fix, Can cause problems but filter out first incorrect item
                             var normalItem = item.AsObject<NormalInventoryItem>();
-
-                            // if (normalItem.InventPosX > 11 || normalItem.InventPosY > 4) continue;//Sometimes it gives big wrong values. Fix from macaddict (#plugin-help)
                             list.Add(normalItem);
                         }
-
                         break;
+
                     case InventoryType.NormalStash:
                         foreach (var item in InvRoot.Children)
                         {
                             if (item.ChildCount == 0) continue; //3.3 fix, Can cause problems but filter out first incorrect item
                             var normalItem = item.AsObject<NormalInventoryItem>();
-
-                            //if (normalItem.InventPosX > 11 || normalItem.InventPosY > 11) continue;
                             list.Add(normalItem);
                         }
-
                         break;
+
                     case InventoryType.QuadStash:
                         foreach (var item in InvRoot.Children)
                         {
                             if (item.ChildCount == 0) continue; //3.3 fix, Can cause problems but filter out first incorrect item
                             var normalItem = item.AsObject<NormalInventoryItem>();
-
-                            //if (normalItem.InventPosX > 23 || normalItem.InventPosY > 23) continue;
                             list.Add(normalItem);
                         }
-
                         break;
 
                     //For 3.3 child count is 3, not 2 as earlier, so we using the second one
@@ -91,24 +84,24 @@ namespace ExileCore.PoEMemory.MemoryObjects
                             if (item.ChildCount > 1)
                                 list.Add(item[1].AsObject<CurrencyInventoryItem>());
                         }
-
                         break;
+
                     case InventoryType.EssenceStash:
                         foreach (var item in InvRoot.Children)
                         {
                             if (item.ChildCount > 1)
                                 list.Add(item[1].AsObject<EssenceInventoryItem>());
                         }
-
                         break;
+
                     case InventoryType.FragmentStash:
                         foreach (var item in InvRoot.Children)
                         {
                             if (item.ChildCount > 1)
                                 list.Add(item[1].AsObject<FragmentInventoryItem>());
                         }
-
                         break;
+
                     case InventoryType.DivinationStash:
                         foreach (var item in InvRoot.Children)
                         {
@@ -119,8 +112,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
                             if (item.Children[1].ChildCount > 1)
                                 list.Add(item[1][1].AsObject<DivinationInventoryItem>());
                         }
-
                         break;
+
                     case InventoryType.MapStash:
                         foreach (var subInventories in InvRoot.Children[3].Children)
                         {
@@ -139,16 +132,48 @@ namespace ExileCore.PoEMemory.MemoryObjects
                                 list.Add(item.AsObject<NormalInventoryItem>());
                             }
                         }
-
                         break;
+
                     case InventoryType.DelveStash:
                         foreach (var item in InvRoot.Children)
                         {
                             if (item.ChildCount > 1)
                                 list.Add(item[1].AsObject<DelveInventoryItem>());
                         }
-
                         break;
+
+                    case InventoryType.BlightStash:
+                        foreach (var item in InvRoot.Children)
+                        {
+                            if (item.ChildCount > 1)
+                                list.Add(item[1].AsObject<BlightInventoryItem>());
+                        }
+                        break;
+
+                    case InventoryType.DeliriumStash:
+                        foreach (var item in InvRoot.Children)
+                        {
+                            if (item.ChildCount > 1)
+                                list.Add(item[1].AsObject<DeliriumInventoryItem>());
+                        }
+                        break;
+
+                    case InventoryType.MetamorphStash:
+                        foreach (var item in InvRoot.Children)
+                        {
+                            if (item.ChildCount > 1)
+                                list.Add(item[1].AsObject<MetamorphInventoryItem>());
+                        }
+                        break;
+
+                    case InventoryType.UniqueStash:
+                        foreach (var item in InvRoot.Children)
+                        {
+                            if (item.ChildCount > 1)
+                                list.Add(item[1].AsObject<NormalInventoryItem>());
+                        }
+                        break;
+
                 }
 
                 return list;
