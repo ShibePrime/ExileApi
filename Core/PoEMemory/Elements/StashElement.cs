@@ -81,7 +81,7 @@ namespace ExileCore.PoEMemory.Elements
             if (index >= TotalStashes || index < 0)
                 return string.Empty;
 
-            var temp = ViewAllStashPanel.Children.First(x => x.ChildCount >= 4)?[index];
+            var temp = ViewAllStashPanel.Children.FirstOrDefault(x => x.ChildCount >= 4)?[index];
             return temp != null ? temp[(int) temp.ChildCount - 1].Text : string.Empty;
         }
     }

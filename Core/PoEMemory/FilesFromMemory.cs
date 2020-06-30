@@ -13,18 +13,14 @@ namespace ExileCore.PoEMemory
 {
     public struct FileInformation
     {
-        public FileInformation(long ptr, int changeCount, int test1, int test2)
+        public FileInformation(long ptr, int changeCount)
         {
             Ptr = ptr;
             ChangeCount = changeCount;
-            Test1 = test1;
-            Test2 = test2;
         }
 
         public long Ptr { get; }
         public int ChangeCount { get; }
-        public int Test1 { get; }
-        public int Test2 { get; }
     }
 
     public class FilesFromMemory
@@ -41,7 +37,9 @@ namespace ExileCore.PoEMemory
             var files = new ConcurrentDictionary<string, FileInformation>();
             var fileRoot = mem.AddressOfProcess + mem.BaseOffsets[OffsetsName.FileRoot];
 
-            Parallel.For(0, 128, i =>
+            var parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = 128;
+            Parallel.For(0, 128, parallelOptions, i =>
             {
                 var addr = fileRoot + i * 0x40;
                 var fileChunkStruct = mem.Read<FilesOffsets>(addr);
@@ -74,9 +72,14 @@ namespace ExileCore.PoEMemory
                 var key = mem.ReadStringU(node.Key);
 
                 if (dictionary.ContainsKey(key))
-                    Core.Logger.Error($"ReadDictionary error. Already contains key: {key}. Value: {node.Value:X}");
+                {
+                    // Ignore those errors for now, there seems to be no pattern to them
+                    //DebugWindow.LogError($"FilesFromMemory -> ReadDictionary error. Already contains key: {key}. Value: {node.Value:X}");
+                }
                 else
-                    dictionary[key] = new FileInformation(node.Value, advancedInformation.AreaCount, advancedInformation.Test1, advancedInformation.Test2);
+                {
+                    dictionary[key] = new FileInformation(node.Value, advancedInformation.AreaCount);
+                }
 
                 node = mem.Read<FileNode>(node.Next);
             }

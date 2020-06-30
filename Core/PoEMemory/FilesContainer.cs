@@ -45,10 +45,7 @@ namespace ExileCore.PoEMemory
             ItemClasses = new ItemClasses();
             FilesFromMemory = new FilesFromMemory(_memory);
 
-            using (new PerformanceTimer("Load files from memory"))
-            {
-                AllFiles = FilesFromMemory.GetAllFiles();
-            }
+            ReloadFiles();
         }
 
         #region Misc
@@ -178,6 +175,14 @@ namespace ExileCore.PoEMemory
 
 
         public event EventHandler<Dictionary<string, FileInformation>> LoadedFiles;
+
+        public void ReloadFiles()
+        {
+            using (new PerformanceTimer("Load files from memory"))
+            {
+                AllFiles = FilesFromMemory.GetAllFiles();
+            }
+        }
 
         public void ParseFiles(Dictionary<string, FileInformation> files)
         {
