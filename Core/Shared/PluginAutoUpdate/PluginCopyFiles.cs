@@ -114,7 +114,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             // Copy each file into the new directory.
             foreach (FileInfo fi in source.GetFiles())
             {
-                if (limitFileExtensions != null && !limitFileExtensions.Contains(fi.Extension)) continue;
+                /*if (limitFileExtensions != null && !limitFileExtensions.Contains(fi.Extension)) continue;*/
                 fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
             }
 
