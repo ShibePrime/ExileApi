@@ -51,15 +51,12 @@ namespace ExileCore.PoEMemory
             new Pattern(
                 new byte[]
                 {
-					0x74, 0x11,
-					0x41, 0x8b, 0xc7,
-					0xf0,
-					0x0f, 0xc1, 0x01,
-					0x8b, 0x05, 0x01, 0x7d, 0x61, 0x01,
-					0x41, 0x89, 0x40, 0x38,
-					0x49, 0x8b, 0x55, 0x08,
-					0x48, 0x85, 0xd2
-				}, "x??x?xxx?x??????x???x???x?", "Area change", 9430000);
+                    0xE8, 
+                    0x00, 0x00, 0x00, 0x00, 
+                    0xE8, 
+                    0x00, 0x00, 0x00, 0x00, 
+                    0xFF, 0x05
+                }, "x????x????xx", "Area change", 9430000);
 
         /*
         PathOfExile_x64.exe+118FD9 - 4C 8B 35 48255B01     - mov r14,[PathOfExile_x64.exe+16CB528] { [C6151734A0] }<<here
@@ -87,7 +84,7 @@ namespace ExileCore.PoEMemory
 
         public Dictionary<OffsetsName, long> DoPatternScans(IMemory m)
         {
-            var array = m.FindPatterns(FileRootPattern, /*AreaChangePattern,*/ GameStatePattern);
+            var array = m.FindPatterns(FileRootPattern, AreaChangePattern, GameStatePattern);
 
             var result = new Dictionary<OffsetsName, long>();
 
@@ -100,9 +97,9 @@ namespace ExileCore.PoEMemory
             index++;
             //FileRoot = 0x362CCC0; 3.11.0c
 
-            //AreaChangeCount = m.Read<int>(baseAddress + array[index] + 11) + array[index] + 15;*
-            //index++;
-            AreaChangeCount = 0x336CA88; // TODO change to Pattern for more stability
+            AreaChangeCount = m.Read<int>(baseAddress + array[index] + 0xC) + array[index] + 0x10;
+            index++;
+            //AreaChangeCount = 0x336AA88; 3.11.0f
 
 
             GameStateOffset = m.Read<int>(baseAddress + array[index] + 29) + array[index] + 33;
