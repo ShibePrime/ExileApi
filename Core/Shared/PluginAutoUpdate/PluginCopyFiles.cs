@@ -13,6 +13,16 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public static List<string> DependenciesDirectoryNames => new List<string> { "libs", "Libs", "lib", "Lib", "packages", "Packages" };
         public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static" };
 
+
+        public static Task CopyTxtAndJsonFromRoot(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        {
+            return Task.Run(() =>
+            {
+                var fileExtensionsToCopy = new List<string> { ".txt", ".json" };
+                CopyAll(sourceDirectory, compiledDirectory, fileExtensionsToCopy);
+            });
+        }
+
         public static List<Task> CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
             return CopyFolder(
@@ -20,7 +30,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 compiledDirectory,
                 SettingsDirectoryNames,
                 "_new"
-            );
+            );            
         }
 
         public static List<Task> CopyDependencies(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
@@ -97,13 +107,14 @@ namespace ExileCore.Shared.PluginAutoUpdate
             return result;
         }
 
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target, List<string> limitFileExtensions = null)
         {
             Directory.CreateDirectory(target.FullName);
 
             // Copy each file into the new directory.
             foreach (FileInfo fi in source.GetFiles())
             {
+                if (limitFileExtensions != null && !limitFileExtensions.Contains(fi.Extension)) continue;
                 fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
             }
 
