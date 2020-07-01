@@ -56,11 +56,9 @@ namespace ExileCore.PoEMemory.Elements
 
         public Inventory GetStashInventoryByIndex(int index) //This one is correct
         {
-            if (index >= TotalStashes)
-                return null;
-
-            if (StashInventoryPanel.Children[index].ChildCount == 0)
-                return null;
+            if (index >= TotalStashes) return null;
+            if (index < 0) return null;
+            if (StashInventoryPanel.Children[index].ChildCount == 0) return null;
 
             Inventory stashInventoryByIndex = null;
 
