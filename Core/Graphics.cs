@@ -125,6 +125,11 @@ namespace ExileCore
             ImGuiRender.LowLevelApi.AddRectFilled(p1.ToVector2Num(), p2.ToVector2Num(), color.ToImgui(), rounding);
         }
 
+        public void DrawTexture(System.IntPtr user_texture_id, Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        {
+            ImGuiRender.LowLevelApi.AddImageQuad(user_texture_id, a.ToVector2Num(), b.ToVector2Num(), c.ToVector2Num(), d.ToVector2Num());
+        }
+
         public void DrawImage(string fileName, RectangleF rectangle)
         {
             DrawImage(fileName, rectangle, DefaultUV, Color.White);
