@@ -242,7 +242,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
                         _cacheInventoryType = InventoryType.MapStash;
                         break;
                     }
-
                     _cacheInventoryType = InventoryType.InvalidInventory;
                     break;
                 case 0x01:
@@ -252,6 +251,15 @@ namespace ExileCore.PoEMemory.MemoryObjects
                     break;
                 case 0x23:
                     _cacheInventoryType = InventoryType.DelveStash;
+                    break;
+                case 0x50:
+                    _cacheInventoryType = InventoryType.BlightStash;
+                    break;
+                case 0x1c:
+                    _cacheInventoryType = InventoryType.DeliriumStash;
+                    break;
+                case 0xe:
+                    _cacheInventoryType = InventoryType.MetamorphStash;
                     break;
                 default:
                     _cacheInventoryType = InventoryType.InvalidInventory;
