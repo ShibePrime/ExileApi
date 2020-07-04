@@ -21,7 +21,7 @@ namespace GameOffsets
         // That one works for all kind of skills.
         // [FieldOffset(0x128)] public Vector2 SkillDestination;
         [FieldOffset(0x650)] public NativePtrArray ActorSkillsArray;
-        [FieldOffset(0x670)] public NativePtrArray ActorVaalSkills; // probably wrong
-        [FieldOffset(0x698)] public NativePtrArray DeployedObjectArray; // probably wrong
+        [FieldOffset(0x540)] public NativePtrArray ActorVaalSkills; 
+        [FieldOffset(0x6A0)] public NativePtrArray DeployedObjectArray; 
     }
 }
