@@ -10,46 +10,46 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class IngameData : RemoteMemoryObject
     {
-        private readonly CachedValue<IngameDataOffsets> _cacheStruct;
+        private readonly CachedValue<IngameDataOffsets> _IngameData;
         private readonly CachedValue<AreaTemplate> _CurrentArea;
         private readonly CachedValue<WorldArea> _CurrentWorldArea;
         private readonly CachedValue<long> _EntitiesCount;
-        private EntityList _EntityList;
-        private readonly CachedValue<Entity> _localPlayer;
-        private NativePtrArray cacheStats;
-        private readonly Dictionary<GameStat, int> mapStats = new Dictionary<GameStat, int>();
+        private readonly CachedValue<Entity> _LocalPlayer;
+        private readonly Dictionary<GameStat, int> _MapStats = new Dictionary<GameStat, int>();
+        private EntityList _EntityList { get; set; }
+        private NativePtrArray _CacheStats { get; set; }
 
         public IngameData()
         {
-            _cacheStruct = new AreaCache<IngameDataOffsets>(() => M.Read<IngameDataOffsets>(Address));
-            _localPlayer = new AreaCache<Entity>(() => GetObject<Entity>(_cacheStruct.Value.LocalPlayer));
-            _CurrentArea = new AreaCache<AreaTemplate>(() => GetObject<AreaTemplate>(_cacheStruct.Value.CurrentArea));
+            _IngameData = new AreaCache<IngameDataOffsets>(() => M.Read<IngameDataOffsets>(Address));
+            _LocalPlayer = new AreaCache<Entity>(() => GetObject<Entity>(_IngameData.Value.LocalPlayer));
+            _CurrentArea = new AreaCache<AreaTemplate>(() => GetObject<AreaTemplate>(_IngameData.Value.CurrentArea));
             _CurrentWorldArea = new AreaCache<WorldArea>(() => TheGame.Files.WorldAreas.GetByAddress(CurrentArea.Address));
             var offset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.EntitiesCount));
             _EntitiesCount = new FrameCache<long>(() => M.Read<long>(Address + offset));
         }
 
-        public IngameDataOffsets DataStruct => _cacheStruct.Value;
+        public IngameDataOffsets DataStruct => _IngameData.Value;
         public long EntitiesCount => _EntitiesCount.Value;
         public AreaTemplate CurrentArea => _CurrentArea.Value;
         public WorldArea CurrentWorldArea => _CurrentWorldArea.Value;
-        public int CurrentAreaLevel => _cacheStruct.Value.CurrentAreaLevel;
-        public uint CurrentAreaHash => _cacheStruct.Value.CurrentAreaHash;
-        public Entity LocalPlayer => _localPlayer.Value;
+        public int CurrentAreaLevel => _IngameData.Value.CurrentAreaLevel;
+        public uint CurrentAreaHash => _IngameData.Value.CurrentAreaHash;
+        public Entity LocalPlayer => _LocalPlayer.Value;
         public long EntiteisTest => DataStruct.EntityList;
         public EntityList EntityList => _EntityList ?? (_EntityList = GetObject<EntityList>(DataStruct.EntityList));
-        private long LabDataPtr => _cacheStruct.Value.LabDataPtr;
+        private long LabDataPtr => _IngameData.Value.LabDataPtr;
         public LabyrinthData LabyrinthData => LabDataPtr == 0 ? null : GetObject<LabyrinthData>(LabDataPtr);
-        public TerrainData Terrain => _cacheStruct.Value.Terrain;
+        public TerrainData Terrain => _IngameData.Value.Terrain;
 
         public Dictionary<GameStat, int> MapStats
         {
             get
             {
-                if (cacheStats.Equals(_cacheStruct.Value.MapStats)) return mapStats;
-                mapStats.Clear();
-                var statPtrStart = _cacheStruct.Value.MapStats.First;
-                var statPtrEnd = _cacheStruct.Value.MapStats.Last;
+                if (_CacheStats.Equals(_IngameData.Value.MapStats)) return _MapStats;
+                _MapStats.Clear();
+                var statPtrStart = _IngameData.Value.MapStats.First;
+                var statPtrEnd = _IngameData.Value.MapStats.Last;
                 var key = 0;
                 var value = 0;
                 var total_stats = (int) (statPtrEnd - statPtrStart);
@@ -63,11 +63,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 {
                     key = BitConverter.ToInt32(bytes, i);
                     value = BitConverter.ToInt32(bytes, i + 0x04);
-                    mapStats[(GameStat) key] = value;
+                    _MapStats[(GameStat) key] = value;
                 }
 
-                cacheStats = _cacheStruct.Value.MapStats;
-                return mapStats;
+                _CacheStats = _IngameData.Value.MapStats;
+                return _MapStats;
             }
         }
 
