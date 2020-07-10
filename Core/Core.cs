@@ -105,7 +105,13 @@ namespace ExileCore
                     {
                         while (true)
                         {
-                            DebugWindow.LogDebug("Checking for update...");
+                            if (versionChecker.AutoUpdate.IsDownloading)
+                            {
+                                DebugWindow.LogMsg("Core -> Currently downloading update, dont check again..."); 
+                                Thread.Sleep(10 * 1000);
+                                continue;
+                            }
+                            DebugWindow.LogDebug("Core -> Checking for update...");
                             versionChecker.CheckVersionAndPrepareUpdate(_coreSettings.AutoPrepareUpdate);
                             Thread.Sleep(100 * 1000);
                         }
