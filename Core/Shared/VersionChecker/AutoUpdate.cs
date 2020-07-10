@@ -108,10 +108,21 @@ namespace ExileCore.Shared.VersionChecker
                 return;
             }
 
+            var dir = Path.GetDirectoryName(fileLocation);
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
             DebugWindow.LogMsg("AutoUpdate -> Download update...");
             using (var client = new WebClient())
             {
-                client.DownloadFile(zipUrl, fileLocation);
+                try
+                {
+                    client.DownloadFile(zipUrl, fileLocation);
+                }
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"AutoUpdate -> Download failed");
+                    DebugWindow.LogError($"AutoUpdate -> {e.Message}");
+                }
             }
             DebugWindow.LogMsg("AutoUpdate -> Donwload update... done");
         }
