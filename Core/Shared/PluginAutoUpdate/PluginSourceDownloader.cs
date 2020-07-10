@@ -1,6 +1,7 @@
 ﻿using ExileCore.Shared.PluginAutoUpdate.Settings;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
+using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,7 +41,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 {
                     Clone(plugin.SourceUrl?.Value, repositoryPath);
                     sw.Stop();
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms.");
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
                     return;
                 }
                 catch (Exception e)
@@ -64,7 +65,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 }
                 else if (status == MergeStatus.FastForward || status == MergeStatus.NonFastForward)
                 {
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.");
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
                     return;
                 }
                 else
