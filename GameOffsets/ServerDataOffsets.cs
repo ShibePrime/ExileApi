@@ -25,7 +25,7 @@ namespace GameOffsets
     public struct ServerDataOffsets
     {
         public const int Skip = 0x7000;
-        public const int ATLAS_REGION_UPGRADES = 0x7782;
+        public const int ATLAS_REGION_UPGRADES = 0x7BB2;
 
         // wrong, probably moved to different location
         [FieldOffset(0x7068 - Skip)] public NativePtrArray PassiveSkillIds;
@@ -54,9 +54,9 @@ namespace GameOffsets
         [FieldOffset(0x79E0 - Skip)] public ushort TradeChatChannel;
         [FieldOffset(0x79E8 - Skip)] public ushort GlobalChatChannel;
         [FieldOffset(0x7A38 - Skip)] public ushort LastActionId;//Do we need this?
-        [FieldOffset(0x7AB0 - Skip)] public long CompletedMaps;//search for a LONG value equals to your current amount of completed maps. Pointer will be under this offset
-        [FieldOffset(0x7AF0 - Skip)] public long BonusCompletedAreas;
-        [FieldOffset(0x7B30 - Skip)] public long AwakenedAreas;
+        [FieldOffset(0x7AB8 - Skip)] public long CompletedMaps;//search for a LONG value equals to your current amount of completed maps. Pointer will be under this offset
+        [FieldOffset(0x7AF8 - Skip)] public long BonusCompletedAreas;
+        [FieldOffset(0x7B38 - Skip)] public long AwakenedAreas;
         [FieldOffset(0x85E4 - Skip)] public byte MonsterLevel;
         [FieldOffset(0x85e5 - Skip)] public byte MonstersRemaining;
         [FieldOffset(0x8698 - Skip)] public ushort CurrentSulphiteAmount; //Maybe wrong not tested
