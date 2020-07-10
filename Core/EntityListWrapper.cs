@@ -227,21 +227,8 @@ namespace ExileCore
                 if (entityId >= int.MaxValue && !_settings.ParseServerEntities)
                     continue;
 
-                if ( /*!entity.IsValid ||*/ entity.Type == EntityType.Error)
+                if (entity.Type == EntityType.Error)
                     continue;
-
-                /*if (entity.Type == EntityType.Monster && (entity.GetComponent<Life>() == null ||
-                                                          entity.GetComponent<ObjectMagicProperties>() == null))
-                {
-                    entity.IsValid = false;
-                    continue;
-                }*/
-
-                if (entity.League == LeagueType.Legion)
-                {
-                    if (entity.Stats == null)
-                        continue;
-                }
 
                 EntityAddedAny?.Invoke(entity);
                 if ((int) entity.Type >= 100) EntityAdded?.Invoke(entity);
