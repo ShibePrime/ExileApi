@@ -22,7 +22,7 @@ namespace ExileCore.PoEMemory.Elements
             }
         }
 
-        public override string Text
+        public string Text
         {
             get
             {

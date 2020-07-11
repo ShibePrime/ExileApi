@@ -38,7 +38,7 @@ namespace ExileCore.PoEMemory.Elements
             }
         }
 
-        public new Element Tooltip
+        public Element Tooltip
         {
             get
             {

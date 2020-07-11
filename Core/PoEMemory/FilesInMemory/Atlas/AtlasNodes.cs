@@ -12,7 +12,7 @@ namespace ExileCore.PoEMemory.FilesInMemory.Atlas
         {
         }
 
-        public new IList<AtlasNode> EntriesList
+        public IList<AtlasNode> EntriesList
         {
             get
             {
@@ -21,7 +21,7 @@ namespace ExileCore.PoEMemory.FilesInMemory.Atlas
             }
         }
 
-        public new AtlasNode GetByAddress(long address)
+        public AtlasNode GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }

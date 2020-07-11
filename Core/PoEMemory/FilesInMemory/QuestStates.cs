@@ -14,7 +14,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        public new IList<QuestState> EntriesList => base.EntriesList.ToList();
+        public IList<QuestState> EntriesList => base.EntriesList.ToList();
 
         public QuestState GetQuestState(string questId, int stateId)
         {
@@ -52,7 +52,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return null;
         }
 
-        public new QuestState GetByAddress(long address)
+        public QuestState GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }

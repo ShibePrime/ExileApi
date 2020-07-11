@@ -19,7 +19,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        public new IList<LabyrinthTrial> EntriesList => base.EntriesList.ToList();
+        public IList<LabyrinthTrial> EntriesList => base.EntriesList.ToList();
 
         public LabyrinthTrial GetLabyrinthTrialByAreaId(string id)
         {
@@ -36,7 +36,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return EntriesList.FirstOrDefault(x => x.Area == area);
         }
 
-        public new LabyrinthTrial GetByAddress(long address)
+        public LabyrinthTrial GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }

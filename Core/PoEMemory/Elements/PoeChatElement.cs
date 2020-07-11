@@ -4,7 +4,7 @@ namespace ExileCore.PoEMemory.Elements
     {
         public long TotalMessageCount => ChildCount;
 
-        public new EntityLabel this[int index]
+        public EntityLabel this[int index]
         {
             get
             {

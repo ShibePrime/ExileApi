@@ -12,7 +12,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        public new IList<Quest> EntriesList
+        public IList<Quest> EntriesList
         {
             get
             {
@@ -21,7 +21,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
             }
         }
 
-        public new Quest GetByAddress(long address)
+        public Quest GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }
