@@ -6,7 +6,7 @@ namespace GameOffsets
 	public struct IngameUElementsOffsets
 	{
 		[FieldOffset(0x210)] public long GetQuests;
-		[FieldOffset(0x238)] public long GameUI;
+		[FieldOffset(0x250)] public long GameUI;
 		[FieldOffset(0x370)] public long Mouse;
 		[FieldOffset(0x378)] public long SkillBar;
 		[FieldOffset(0x380)] public long HiddenSkillBar;

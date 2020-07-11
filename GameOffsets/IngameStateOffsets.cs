@@ -5,15 +5,15 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct IngameStateOffsets
     {
-        [FieldOffset(0x80)] public long IngameUi;
+		[FieldOffset(0x15D0)] public long IngameUi;
 		[FieldOffset(0xA0)] public long EntityLabelMap;
         [FieldOffset(0x4F8)] public long Data;
         [FieldOffset(0x500)] public long ServerData;
         [FieldOffset(0x628)] public long UIRoot;
-        [FieldOffset(0x650)] public long UIHoverTooltip;
-        [FieldOffset(0x658)] public float CurentUElementPosX;
-        [FieldOffset(0x65C)] public float CurentUElementPosY;
-        [FieldOffset(0x660)] public long UIHover;
+		[FieldOffset(0x660)] public long UIHoverTooltip;
+		[FieldOffset(0x668)] public float CurentUElementPosX;
+		[FieldOffset(0x66C)] public float CurentUElementPosY;
+		[FieldOffset(0x670)] public long UIHover;
         [FieldOffset(0x698)] public int MouseXGlobal;
         [FieldOffset(0x69C)] public int MouseYGlobal;
         [FieldOffset(0x6A4)] public float UIHoverX;
