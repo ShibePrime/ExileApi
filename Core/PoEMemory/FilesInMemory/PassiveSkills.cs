@@ -15,7 +15,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         }
 
         public Dictionary<int, PassiveSkill> PassiveSkillsDictionary { get; } = new Dictionary<int, PassiveSkill>();
-        public IList<PassiveSkill> EntriesList => _EntriesList ?? (_EntriesList = base.EntriesList.ToList());
+        public new IList<PassiveSkill> EntriesList => _EntriesList ?? (_EntriesList = base.EntriesList.ToList());
 
         public PassiveSkill GetPassiveSkillByPassiveId(int index)
         {
@@ -40,12 +40,12 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return EntriesList.FirstOrDefault(x => x.Id == id);
         }
 
-        protected void EntryAdded(long addr, PassiveSkill entry)
+        protected new void EntryAdded(long addr, PassiveSkill entry)
         {
             PassiveSkillsDictionary.Add(entry.PassiveId, entry);
         }
 
-        public PassiveSkill GetByAddress(long address)
+        public new PassiveSkill GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }

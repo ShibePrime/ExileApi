@@ -14,7 +14,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
         }
 
-        public IList<MonsterVariety> EntriesList => base.EntriesList.ToList();
+        public new IList<MonsterVariety> EntriesList => base.EntriesList.ToList();
 
         public MonsterVariety TranslateFromMetadata(string path)
         {
@@ -23,12 +23,12 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return result;
         }
 
-        protected void EntryAdded(long addr, MonsterVariety entry)
+        protected new void EntryAdded(long addr, MonsterVariety entry)
         {
             MonsterVarietyMetadataDictionary.Add(entry.VarietyId, entry);
         }
 
-        public MonsterVariety GetByAddress(long address)
+        public new MonsterVariety GetByAddress(long address)
         {
             return base.GetByAddress(address);
         }
