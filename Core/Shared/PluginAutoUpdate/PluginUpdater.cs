@@ -72,11 +72,11 @@ namespace ExileCore.Shared.PluginAutoUpdate
             var staticFilesTasks = PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
             /*var txtJsonFilesTask = PluginCopyFiles.CopyTxtAndJsonFromRoot(sourcePluginDirectory, compiledPluginDirectory);*/
 
-            Task.WaitAll(dependencyTasks?.ToArray());
+            if (dependencyTasks != null) Task.WaitAll(dependencyTasks.ToArray());
             var assembly = pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
 
-            Task.WaitAll(settingsTasks?.ToArray());
-            Task.WaitAll(staticFilesTasks?.ToArray());
+            if (settingsTasks != null) Task.WaitAll(settingsTasks.ToArray());
+            if (staticFilesTasks != null) Task.WaitAll(staticFilesTasks.ToArray());
             /*txtJsonFilesTask.Wait();*/
             var pluginWrapper = pluginLoader.Load(compiledPluginDirectory, assembly);
             return pluginWrapper;
