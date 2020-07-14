@@ -6,6 +6,7 @@ namespace GameOffsets
     public struct TargetableComponentOffsets
     {
         [FieldOffset(0x48)] public bool isTargetable;
+        [FieldOffset(0x49)] public bool isHighlightable;
         [FieldOffset(0x4A)] public bool isTargeted;
     }
 }

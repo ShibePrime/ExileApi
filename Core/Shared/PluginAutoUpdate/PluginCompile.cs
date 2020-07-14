@@ -42,9 +42,15 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
                 var dllFiles = rootDirectoryInfo.GetFiles("*.dll", SearchOption.TopDirectoryOnly)
                     .WhereF(x => !x.Name.Equals("cimgui.dll") && x.Name.Count(c => c == '-' || c == '_') != 5)
-                    .SelectF(x => x.FullName).ToArray();
+                    .SelectF(x => x.FullName).ToList();
 
-                return (provider, dllFiles);
+/*                var systemDllFilesPath = new DirectoryInfo(@"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\");
+                var systemDllFiles = systemDllFilesPath.GetFiles("*.dll", SearchOption.TopDirectoryOnly)
+                    .SelectF(x => x.FullName).ToList();
+
+                dllFiles.AddRange(systemDllFiles);*/
+
+                return (provider, dllFiles.ToArray());
             }
         }
 

@@ -8,7 +8,7 @@ namespace GameOffsets
     {
         [FieldOffset(0x8)] public long OwnerAddress;
 		[FieldOffset(0x158)] public byte Reaction;
-        [FieldOffset(0x16C)] public int Size;
+		[FieldOffset(0x164)] public int Size;
 		[FieldOffset(0x1AC)] public Vector2 PrevPosition;
 		[FieldOffset(0x1C4)] public Vector2 RelativeCoord;
 		[FieldOffset(0x1E8)] public Vector2 GridPosition;
