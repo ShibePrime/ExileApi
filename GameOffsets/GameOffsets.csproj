@@ -85,8 +85,10 @@
     <Compile Include="ServerInventoryOffsets.cs" />
     <Compile Include="ServerStashTabOffsets.cs" />
     <Compile Include="SkillGemOffsets.cs" />
+    <Compile Include="StateMachineComponentOffsets.cs" />
     <Compile Include="StatsComponentOffsets.cs" />
     <Compile Include="StrongboxChestComponentData.cs" />
+    <Compile Include="Structs.cs" />
     <Compile Include="TargetableComponentOffsets.cs" />
     <Compile Include="TerrainData.cs" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1">

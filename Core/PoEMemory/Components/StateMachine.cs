@@ -65,7 +65,7 @@ namespace ExileCore.PoEMemory.Components
             for (var i = 0; i < statesCount; i++)
             {
                 var readAddr = statesPtr + i * 0xA8;
-                var nativeStringU = M.Read<NativeUtf8Text>(readAddr);
+                var nativeStringU = M.Read<NativeStringU>(readAddr);
                 var stateName = nativeStringU.ToString(M);
                 var stateValue = valuesIntArray[i];
 
