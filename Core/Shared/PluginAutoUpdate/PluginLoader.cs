@@ -29,10 +29,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
         }
 
 
-        public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly = null)
+        public List<PluginWrapper> Load(DirectoryInfo info)
         {
             if (info == null) return null;
-            assembly =  LoadAssembly(info);
+            var assembly =  LoadAssembly(info);
             if (assembly == null) return null;
             PluginLoadTime.TryAdd(info.FullName, Stopwatch.StartNew());
 

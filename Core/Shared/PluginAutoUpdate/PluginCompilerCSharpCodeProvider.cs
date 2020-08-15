@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace ExileCore.Shared.PluginAutoUpdate
 {
-    public class PluginCompiler
+    public class PluginCompilerCSharpCodeProvider : IPluginCompiler
     {
         DirectoryInfo RootDirectoryInfo { get; set; }
         private CodeDomProvider Provider { get; set; }
         private string[] DllFiles { get; set; }
 
-        public PluginCompiler(DirectoryInfo rootDirectoryInfo)
+        public PluginCompilerCSharpCodeProvider(DirectoryInfo rootDirectoryInfo)
         {
             RootDirectoryInfo = rootDirectoryInfo;
             (Provider, DllFiles) = PrepareCompilation(RootDirectoryInfo);
@@ -54,7 +54,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
         }
 
-        public Assembly CompilePlugin(DirectoryInfo source, string outputDirectory)
+        public void CompilePlugin(DirectoryInfo source, string outputDirectory)
         {
             var csFiles = source.GetFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName)
                 .ToArray();
@@ -67,7 +67,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             {
                 GenerateExecutable = false,
                 CompilerOptions = "/optimize /unsafe",
-                OutputAssembly = Path.Combine(outputDirectory, $"{source.Name}.dll")
+                OutputAssembly = Path.Combine(outputDirectory, $"{source.Name}.dll"),
             };
 
             parameters.ReferencedAssemblies.AddRange(DllFiles);
@@ -122,7 +122,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             if (result == null)
             {
                 DebugWindow.LogError($"{source.Name} -> Compile failed! Assembly (result) is null.");
-                return null;
+                return;
             }
 
             if (result.Errors.HasErrors == true)
@@ -137,12 +137,12 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
                 //File.WriteAllText(Path.Combine(info.FullName, "Errors.txt"), AllErrors);
             }
-            else
-            {
-                return result.CompiledAssembly;
-            }
+            //else
+            //{
+            //    return result.CompiledAssembly;
+            //}
 
-            return null;
+            //return null;
         }
 
         private string[] FindDllsFromCompiledDirectory(string compiledPath, string pluginName)
