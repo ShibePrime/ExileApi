@@ -10,6 +10,6 @@ namespace ExileCore.Shared.PluginAutoUpdate
 {
     interface IPluginCompiler
     {
-        void CompilePlugin(DirectoryInfo source, string outputDirectory);
+        void CompilePlugin(FileInfo csProj, string outputDirectory, DirectoryInfo exileApiRootDirectory);
     }
 }

@@ -50,7 +50,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             var pluginCompiler = new PluginCompiler();
             foreach (var plugin in PluginsUpdateSettings.Plugins)
             {
-                tasks.Add(Task.Run(() => UpdateSinglePlugin(plugin, PluginSourceDownloader, PluginFilter, pluginCompiler, PluginLoader)));
+                tasks.Add(Task.Run(() => UpdateSinglePlugin(plugin, PluginSourceDownloader, PluginFilter, pluginCompiler, RootDirectory, PluginLoader)));
             }
             return tasks;
         }
@@ -60,6 +60,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             PluginSourceDownloader pluginSourceDownloader, 
             PluginFilter pluginFilter, 
             IPluginCompiler pluginCompiler,
+            string rootDirectory,
             PluginLoader pluginLoader
             )
         {
@@ -74,7 +75,19 @@ namespace ExileCore.Shared.PluginAutoUpdate
             /*var txtJsonFilesTask = PluginCopyFiles.CopyTxtAndJsonFromRoot(sourcePluginDirectory, compiledPluginDirectory);*/
 
             if (dependencyTasks != null) Task.WaitAll(dependencyTasks.ToArray());
-            pluginCompiler.CompilePlugin(sourcePluginDirectory, compiledPluginDirectory.FullName);
+
+            var csProjFiles = sourcePluginDirectory
+                .GetFiles("*.csproj", SearchOption.AllDirectories)
+                .Where(f => f.Extension == ".csproj");
+            foreach (var csProjFile in csProjFiles)
+            {
+                pluginCompiler.CompilePlugin(
+                    csProjFile,
+                    compiledPluginDirectory.FullName,
+                    new DirectoryInfo(rootDirectory)
+                    );
+            }
+
 
             if (settingsTasks != null) Task.WaitAll(settingsTasks.ToArray());
             if (staticFilesTasks != null) Task.WaitAll(staticFilesTasks.ToArray());

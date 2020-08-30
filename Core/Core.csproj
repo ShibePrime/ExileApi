@@ -481,7 +481,6 @@
     <Compile Include="Shared\PInvoke\ObjectAttributes.cs" />
     <Compile Include="Shared\PluginAutoUpdate\IPluginCompiler.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCompiler.cs" />
-    <Compile Include="Shared\PluginAutoUpdate\PluginCompilerCSharpCodeProvider.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCopyFiles.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginFilter.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginLoader.cs" />

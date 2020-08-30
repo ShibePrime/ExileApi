@@ -19,10 +19,11 @@ namespace PluginCompiler
         {
             var csProj = new FileInfo(@"E:\Git\PoeHUD\PoeHelper\Plugins\Source\GetChaosValue\Ninja Price\Ninja Price.csproj");
             var output = @"E:\Git\PoeHUD\PoeHelper\Plugins\Compiled\Ninja Price";
-            CompilePlugin(csProj, output);
+            var exileApiRoot = new DirectoryInfo(@"E:\Git\PoeHUD\ExileApi");
+            CompilePlugin(csProj, output, exileApiRoot);
         }
 
-        public static void CompilePlugin(FileInfo csProj, string outputDirectory, string exileApiRootDirectory)
+        public static void CompilePlugin(FileInfo csProj, string outputDirectory, DirectoryInfo exileApiRootDirectory)
         {
             var sourceFolder = csProj.Directory;
             var csFiles = sourceFolder.GetFiles("*.cs", SearchOption.AllDirectories).Select(x => x.FullName)
@@ -41,13 +42,10 @@ namespace PluginCompiler
             };
 
             var dependencies = GetDependenciesFromCsProjLines(File.ReadAllLines(csProj.FullName));
-
-            // TODO pass in
-            var rootDirectory = sourceFolder.Parent.Parent.Parent.Parent;
             var runtimeDirectory = new DirectoryInfo(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory());
 
             TryToAddReferencedAssemblies(ref dependencies, ref parameters, sourceFolder, SearchOption.AllDirectories);
-            TryToAddReferencedAssemblies(ref dependencies, ref parameters, rootDirectory, SearchOption.TopDirectoryOnly);
+            TryToAddReferencedAssemblies(ref dependencies, ref parameters, exileApiRootDirectory, SearchOption.TopDirectoryOnly);
             TryToAddReferencedAssemblies(ref dependencies, ref parameters, runtimeDirectory, SearchOption.TopDirectoryOnly);
 
             var missingDependencies = dependencies.Where(d => d.isAdded == false).ToList();
