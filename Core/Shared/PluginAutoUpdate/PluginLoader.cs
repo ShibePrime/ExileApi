@@ -29,10 +29,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
         }
 
 
-        public List<PluginWrapper> Load(DirectoryInfo info, Assembly assembly = null)
+        public List<PluginWrapper> Load(DirectoryInfo info)
         {
             if (info == null) return null;
-            assembly =  LoadAssembly(info);
+            var assembly =  LoadAssembly(info);
             if (assembly == null) return null;
             PluginLoadTime.TryAdd(info.FullName, Stopwatch.StartNew());
 
@@ -55,7 +55,13 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
                 if (dll == null)
                 {
-                    DebugWindow.LogError($"Not found plugin dll in {dir.FullName}. (Dll should be like folder)");
+                    dll = directoryInfo.GetFiles("*.dll", SearchOption.TopDirectoryOnly).SingleOrDefault();
+                }
+
+                if (dll == null)
+                {
+                    DebugWindow.LogError($"PluginLoader -> Not found plugin dll in {dir.FullName}.");
+                    DebugWindow.LogError("PluginLoader -> Dll should be named like folder or only dll in folder.");                    
                     return null;
                 }
                 
