@@ -37,7 +37,7 @@ namespace GameOffsets
         [FieldOffset(0x7120 - Skip)] public int SpentAscendencyPoints;
 
         [FieldOffset(0x73B0 - Skip)] public byte PlayerClass;
-        [FieldOffset(0x7428 - Skip)] public byte NetworkState;
+        [FieldOffset(0x7828 - Skip)] public byte NetworkState;
         [FieldOffset(0x7450 - Skip)] public NativeStringU League;
         [FieldOffset(0x74C0 - Skip)] public float TimeInGame;
         [FieldOffset(0x74C8 - Skip)] public int Latency;
@@ -48,7 +48,7 @@ namespace GameOffsets
         [FieldOffset(0x7688 - Skip)] public long GuildName;
         [FieldOffset(0x7690 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x76E8 - Skip)] public NativePtrArray NearestPlayers;
-        [FieldOffset(0x77F0 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x7c28 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x78C8 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x7980 - Skip)] public NativePtrArray GuildInventories;
         [FieldOffset(0x7AE0 - Skip)] public ushort TradeChatChannel;
