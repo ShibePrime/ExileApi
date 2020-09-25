@@ -46,7 +46,7 @@ namespace GameOffsets
         [FieldOffset(0x75F0 - Skip)] public byte PartyStatusType;
         [FieldOffset(0x7600 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x7688 - Skip)] public long GuildName;
-        [FieldOffset(0x7690 - Skip)] public SkillBarIdsStruct SkillBarIds;
+        [FieldOffset(0x7A90 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x76E8 - Skip)] public NativePtrArray NearestPlayers;
         [FieldOffset(0x7c28 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x78C8 - Skip)] public NativePtrArray NPCInventories;
