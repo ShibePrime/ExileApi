@@ -24,7 +24,7 @@ namespace ExileCore.PoEMemory.Components
         /// </summary>
         public short ActionId => Address != 0 ? Struct.ActionId : (short) 0;
         public ActionFlags Action => Address != 0 ? (ActionFlags) Struct.ActionId : ActionFlags.None;
-        public bool isMoving => (Action & ActionFlags.Moving) > 0;
+        public bool isMoving => (Action & ActionFlags.Moving) > 0 || CurrentAction != null && CurrentAction.Skill.Name == "Cyclone";
         public bool isAttacking => (Action & ActionFlags.UsingAbility) > 0;
         public int AnimationId => Address != 0 ? Struct.AnimationId : 0;
         public AnimationE Animation => Address != 0 ? (AnimationE) Struct.AnimationId : AnimationE.Idle;
