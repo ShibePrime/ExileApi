@@ -6,8 +6,8 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ActionWrapperOffsets
     {
-        [FieldOffset(0x78)] public Vector2 Destination;
-        [FieldOffset(0x70)] public long Target;
-        [FieldOffset(0x58)] public long Skill;
+        [FieldOffset(0xB0)] public long Target;
+        [FieldOffset(0x150)] public long Skill;
+        [FieldOffset(0x170)] public Vector2 Destination;
     }
 }
