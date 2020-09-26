@@ -24,10 +24,16 @@ namespace ExileCore.PoEMemory.Components
         /// </summary>
         public short ActionId => Address != 0 ? Struct.ActionId : (short) 0;
         public ActionFlags Action => Address != 0 ? (ActionFlags) Struct.ActionId : ActionFlags.None;
-        public bool isMoving => (Action & ActionFlags.Moving) > 0 || CurrentAction != null && CurrentAction.Skill.Name == "Cyclone";
+        /// <summary>
+        /// Currently performed action information.
+        /// WARNING: This memory location changes a lot,
+        /// put try catch if you are accessing this variable and the fields in it.
+        /// </summary>
+        public ActionWrapper CurrentAction => Struct.ActionPtr > 0 ? GetObject<ActionWrapper>(Struct.ActionPtr) : null;
         public bool isAttacking => (Action & ActionFlags.UsingAbility) > 0;
         public int AnimationId => Address != 0 ? Struct.AnimationId : 0;
         public AnimationE Animation => Address != 0 ? (AnimationE) Struct.AnimationId : AnimationE.Idle;
+        public bool isMoving => (Action & ActionFlags.Moving) > 0 || CurrentAction != null && CurrentAction.Skill.Name == "Cyclone";
         /*public bool HasMinion(Entity entity) {
             if (Address == 0) return false;
 
@@ -44,12 +50,6 @@ namespace ExileCore.PoEMemory.Components
 
         //public float TimeSinseLastMove => -M.Read<float>(Address + 0x110);
         //public float TimeSinseLastAction => -M.Read<float>(Address + 0x114);
-        /// <summary>
-        /// Currently performed action information.
-        /// WARNING: This memory location changes a lot,
-        /// put try catch if you are accessing this variable and the fields in it.
-        /// </summary>
-        public ActionWrapper CurrentAction => Struct.ActionPtr > 0 ? GetObject<ActionWrapper>(Struct.ActionPtr) : null;
 
         // e.g minions, mines
         public long DeployedObjectsCount => Struct.DeployedObjectArray.Size / 8;
