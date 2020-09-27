@@ -133,20 +133,20 @@ namespace ExileCore.Shared
             foreach (var plugin in settings.Plugins)
             {
                 var fittingPluginFromDump = dumpSettings.Plugins
-                    .Where(d => d.Name == plugin.Name)
-                    .Where(d => d.SourceUrl == plugin.SourceUrl)
+                    .Where(d => d.Name?.Value == plugin.Name?.Value)
+                    .Where(d => d.SourceUrl?.Value == plugin.SourceUrl?.Value)
                     .FirstOrDefault();
                 // unchanged entry
                 if (fittingPluginFromDump != null) continue;
 
                 try
                 {
-                    DebugWindow.LogMsg($"PluginManager -> Remove old files from {plugin.Name}");
-                    DeleteFilesFromPlugin(plugin.Name);
+                    DebugWindow.LogMsg($"PluginManager -> Remove old files from {plugin.Name?.Value}");
+                    DeleteFilesFromPlugin(plugin.Name?.Value);
                 } 
                 catch (Exception e)
                 {
-                    DebugWindow.LogError($"PluginManager -> Remove old files from {plugin.Name} failed");
+                    DebugWindow.LogError($"PluginManager -> Remove old files from {plugin.Name?.Value} failed");
                     DebugWindow.LogDebug($"PluginManager -> {e.Message}");
                 }
             }
@@ -155,7 +155,7 @@ namespace ExileCore.Shared
         private void DeleteFilesFromPlugin(string pluginName)
         {
             var sourceDirectory = new DirectoryInfo(Path.Combine(Directories[PluginsDirectory], SourcePluginsDirectory));
-            var compiledDirectory = new DirectoryInfo(Path.Combine(Directories[PluginsDirectory], SourcePluginsDirectory));
+            var compiledDirectory = new DirectoryInfo(Path.Combine(Directories[PluginsDirectory], CompiledPluginsDirectory));
 
             var directoriesToDelete = new List<DirectoryInfo>();
             directoriesToDelete.AddRange(sourceDirectory.GetDirectories(pluginName, SearchOption.TopDirectoryOnly));
@@ -163,6 +163,11 @@ namespace ExileCore.Shared
 
             foreach (var directory in directoriesToDelete)
             {
+                foreach (var f in directory.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    f.Attributes = FileAttributes.Normal;
+                    f.Delete();
+                }
                 directory.Delete(true);
             }
         }
