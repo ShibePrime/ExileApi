@@ -23,7 +23,7 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public void Draw()
         {
             var enable = Enable.Value;
-            ImGui.Checkbox($"Enable the PluginAutoUpdate mechanismn {UniqueName}", ref enable);
+            ImGui.Checkbox($"(De)activate the whole PluginAutoUpdate mechanismn {UniqueName}", ref enable);
             Enable.Value = enable;
 
             ImGui.Spacing();
@@ -35,7 +35,9 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                 var newPlugin = new SinglePluginUpdateSettings()
                 {
                     Enable = new ToggleNode(true),
+                    Name = new TextNode("new Plugin"),
                     SourceUrl = new TextNode(""),
+                    LastUpdated = DateTime.Now
                 };
                 Plugins.Reverse();
                 Plugins.Add(newPlugin);

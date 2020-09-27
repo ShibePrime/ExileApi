@@ -12,8 +12,9 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
     public class SinglePluginUpdateSettings : ISettings
     {
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
-        public string Name => SourceUrl?.Value.Split('/').Last() ?? "Empty?";
+        public TextNode Name { get; set; } = new TextNode();
         public TextNode SourceUrl { get; set; } = new TextNode();
+        public DateTime LastUpdated { get; set; } = DateTime.MinValue;
 
 
         private Random Random { get; } = new Random();
@@ -24,7 +25,7 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
             {
                 if (_uniqueName == "")
                 {
-                    _uniqueName = $"##{Name}{Random.Next(0, int.MaxValue)}";
+                    _uniqueName = $"##{Name?.Value}{Random.Next(0, int.MaxValue)}";
                 }
                 return _uniqueName;
             }
@@ -35,8 +36,17 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public void Draw()
         {
             var enable = Enable.Value;
-            ImGui.Checkbox($"{Name}{UniqueName}", ref enable);
+            ImGui.Checkbox($"Auto Update{UniqueName}", ref enable);
             Enable.Value = enable;
+
+            ImGui.SameLine();
+            ImGui.Indent(110);
+            ImGui.PushItemWidth(200);
+            string name = Name.Value;
+            ImGui.InputText(UniqueName + "Name", ref name, 50);
+            Name.Value = name;
+            ImGui.PopItemWidth();
+            ImGui.Unindent(110);
 
             ImGui.SameLine();
             ImGui.Indent(344);
