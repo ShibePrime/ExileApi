@@ -64,7 +64,7 @@
     <None Include="Sounds\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="updateSettings_default.json">
+    <None Include="Plugins\updateSettings_default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
