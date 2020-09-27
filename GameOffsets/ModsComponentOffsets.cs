@@ -17,9 +17,9 @@ namespace GameOffsets
         [FieldOffset(0x1A8)] public NativePtrArray GetStats;
         [FieldOffset(0x1D8)] public NativePtrArray GetCraftedStats;
         [FieldOffset(0x1F0)] public NativePtrArray GetFracturedStats;
-        [FieldOffset(0x46C)] public int ItemLevel;
-        [FieldOffset(0x470)] public int RequiredLevel;
-        [FieldOffset(0x474)] public byte IsUsable;
-        [FieldOffset(0x475)] public byte IsMirrored;
+        [FieldOffset(0x474)] public int ItemLevel;
+        [FieldOffset(0x478)] public int RequiredLevel;
+        [FieldOffset(0x47C)] public byte IsUsable;
+        [FieldOffset(0x47D)] public byte IsMirrored;
     }
 }
