@@ -11,16 +11,27 @@ namespace ExileCore.Shared.PluginAutoUpdate
     {
         public static List<string> SettingsDirectoryNames => new List<string> { "settings", "Settings", "config", "Config" };     
         public static List<string> DependenciesDirectoryNames => new List<string> { "libs", "Libs", "lib", "Lib", "packages", "Packages" };
-        public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static" };
+        public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static", "textures", "Textures", "texture", "Texture" };
 
 
-        public static Task CopyTxtAndJsonFromRoot(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        public static List<Task> CopyTxtAndJsonFromRoot(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
         {
-            return Task.Run(() =>
+            var tasks = new List<Task>();
+            var files = new List<FileInfo>();
+            files.AddRange(sourceDirectory.GetFiles("*.txt", SearchOption.TopDirectoryOnly).ToList());
+            files.AddRange(sourceDirectory.GetFiles("*.json", SearchOption.TopDirectoryOnly).ToList());
+
+            foreach (var file in files)
             {
-                var fileExtensionsToCopy = new List<string> { ".txt", ".json" };
-                CopyAll(sourceDirectory, compiledDirectory, fileExtensionsToCopy);
-            });
+                var compiledFilePath = Path.Combine(compiledDirectory.FullName, file.Name);
+                var compiledFile = new FileInfo(compiledFilePath);
+                if (compiledFile.Exists) continue; 
+
+                var task = Task.Run(() => file.CopyTo(compiledFilePath));
+                tasks.Add(task);
+            }
+
+            return tasks;
         }
 
         public static List<Task> CopySettings(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
@@ -98,6 +109,10 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public static DirectoryInfo[] GetDirectoryByNamesSource(DirectoryInfo directory, List<string> names)
         {
             var csprojPath = directory.GetFiles($"{directory.Name}.csproj", SearchOption.AllDirectories).FirstOrDefault();
+            if (csprojPath == null)
+            {
+                csprojPath = directory.GetFiles("*.csproj", SearchOption.AllDirectories).FirstOrDefault();
+            }
             if (csprojPath == null) return null;
 
             var result = csprojPath.Directory
@@ -107,14 +122,13 @@ namespace ExileCore.Shared.PluginAutoUpdate
             return result;
         }
 
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target, List<string> limitFileExtensions = null)
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
         {
             Directory.CreateDirectory(target.FullName);
 
             // Copy each file into the new directory.
             foreach (FileInfo fi in source.GetFiles())
             {
-                /*if (limitFileExtensions != null && !limitFileExtensions.Contains(fi.Extension)) continue;*/
                 fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
             }
 

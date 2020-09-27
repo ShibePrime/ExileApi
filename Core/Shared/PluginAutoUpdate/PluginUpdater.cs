@@ -46,7 +46,6 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 return tasks;
             }
 
-            //var pluginCompiler = new PluginCompilerCSharpCodeProvider(new DirectoryInfo(RootDirectory));
             var pluginCompiler = new PluginCompiler();
             foreach (var plugin in PluginsUpdateSettings.Plugins)
             {
@@ -64,34 +63,46 @@ namespace ExileCore.Shared.PluginAutoUpdate
             PluginLoader pluginLoader
             )
         {
-            pluginSourceDownloader.Update(plugin);
+
             var sourcePluginDirectory = new DirectoryInfo(Path.Combine(SourcePluginsDirectory, plugin.Name?.Value));
             var compiledPluginDirectory = new DirectoryInfo(Path.Combine(CompiledPluginsDirectory, plugin.Name?.Value));
-            if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return null;
 
-            var dependencyTasks = PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
-            var settingsTasks = PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
-            var staticFilesTasks = PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
-            /*var txtJsonFilesTask = PluginCopyFiles.CopyTxtAndJsonFromRoot(sourcePluginDirectory, compiledPluginDirectory);*/
-
-            if (dependencyTasks != null) Task.WaitAll(dependencyTasks.ToArray());
-
-            var csProjFiles = sourcePluginDirectory
-                .GetFiles("*.csproj", SearchOption.AllDirectories)
-                .Where(f => f.Extension == ".csproj");
-            foreach (var csProjFile in csProjFiles)
+            try
             {
-                pluginCompiler.CompilePlugin(
-                    csProjFile,
-                    compiledPluginDirectory.FullName,
-                    new DirectoryInfo(rootDirectory)
-                    );
+                pluginSourceDownloader.Update(plugin);
+
+                if (!pluginFilter.ShouldCompilePlugin(sourcePluginDirectory, compiledPluginDirectory)) return null;
+
+                var dependencyTasks = PluginCopyFiles.CopyDependencies(sourcePluginDirectory, compiledPluginDirectory);
+                var settingsTasks = PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
+                var staticFilesTasks = PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
+                var txtJsonFilesTask = PluginCopyFiles.CopyTxtAndJsonFromRoot(sourcePluginDirectory, compiledPluginDirectory);
+
+                if (dependencyTasks != null) Task.WaitAll(dependencyTasks.ToArray());
+
+                var csProjFiles = sourcePluginDirectory
+                    .GetFiles("*.csproj", SearchOption.AllDirectories)
+                    .Where(f => f.Extension == ".csproj");
+                foreach (var csProjFile in csProjFiles)
+                {
+                    pluginCompiler.CompilePlugin(
+                        csProjFile,
+                        compiledPluginDirectory.FullName,
+                        new DirectoryInfo(rootDirectory)
+                        );
+                }
+
+
+                if (settingsTasks != null) Task.WaitAll(settingsTasks.ToArray());
+                if (staticFilesTasks != null) Task.WaitAll(staticFilesTasks.ToArray());
+                if (txtJsonFilesTask != null) Task.WaitAll(txtJsonFilesTask.ToArray());
+            } 
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"PluginUpdater -> {plugin} UpdateSinglePlugin failed.");
+                DebugWindow.LogDebug($"PluginUpdater -> {e.Message}");
             }
 
-
-            if (settingsTasks != null) Task.WaitAll(settingsTasks.ToArray());
-            if (staticFilesTasks != null) Task.WaitAll(staticFilesTasks.ToArray());
-            /*txtJsonFilesTask.Wait();*/
             var pluginWrapper = pluginLoader.Load(compiledPluginDirectory);
             return pluginWrapper;
         }

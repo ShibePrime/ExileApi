@@ -25,7 +25,6 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         private FileInfo _roslynCscExe { get; }
         public string CompilerFullPath => _roslynCscExe.FullName;
-
         public int CompilerServerTimeToLive => 900;
     }
 
