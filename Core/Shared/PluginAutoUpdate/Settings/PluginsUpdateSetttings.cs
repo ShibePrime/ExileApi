@@ -23,7 +23,7 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public void Draw()
         {
             var enable = Enable.Value;
-            ImGui.Checkbox($"(De)activate the whole PluginAutoUpdate mechanismn {UniqueName}", ref enable);
+            ImGui.Checkbox($"Enable the PluginAutoUpdate mechanismn {UniqueName}", ref enable);
             Enable.Value = enable;
 
             ImGui.Spacing();
