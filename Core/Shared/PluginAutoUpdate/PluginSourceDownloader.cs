@@ -41,7 +41,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 {
                     Clone(plugin.SourceUrl?.Value, repositoryPath);
                     sw.Stop();
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
+                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms, from {plugin.SourceUrl?.Value}.", 5, Color.Green);
                     return;
                 }
                 catch (Exception e)
