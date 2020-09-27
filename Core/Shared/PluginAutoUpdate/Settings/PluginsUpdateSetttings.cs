@@ -36,7 +36,6 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                 {
                     Enable = new ToggleNode(true),
                     SourceUrl = new TextNode(""),
-                    LastUpdated = DateTime.Now
                 };
                 Plugins.Reverse();
                 Plugins.Add(newPlugin);
