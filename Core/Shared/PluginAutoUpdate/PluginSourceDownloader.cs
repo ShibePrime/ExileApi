@@ -27,27 +27,27 @@ namespace ExileCore.Shared.PluginAutoUpdate
         {
             if (!plugin.Enable)
             {
-                DebugWindow.LogMsg($"{plugin.Name?.Value}: Update disabled in settings!");
+                DebugWindow.LogMsg($"{plugin.Name}: Update disabled in settings!");
                 return;
             }
             var sw = Stopwatch.StartNew();
-            DebugWindow.LogDebug($"{plugin.Name?.Value}: Start update.");
-            var repositoryPath = Path.Combine(SourceDirectory, plugin.Name?.Value);
+            DebugWindow.LogDebug($"{plugin.Name}: Start update.");
+            var repositoryPath = Path.Combine(SourceDirectory, plugin.Name);
 
             if (!Repository.IsValid(repositoryPath))
             {
-                DebugWindow.LogMsg($"{plugin.Name?.Value}: No valid repository at: {repositoryPath}. Starting to clone...");
+                DebugWindow.LogMsg($"{plugin.Name}: No valid repository at: {repositoryPath}. Starting to clone...");
                 try
                 {
                     Clone(plugin.SourceUrl?.Value, repositoryPath);
                     sw.Stop();
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms, from {plugin.SourceUrl?.Value}.", 5, Color.Green);
+                    DebugWindow.LogMsg($"{plugin.Name}: Clone successful in {sw.ElapsedMilliseconds} ms, from {plugin.SourceUrl?.Value}.", 5, Color.Green);
                     return;
                 }
                 catch (Exception e)
                 {
-                    DebugWindow.LogError($"{plugin.Name?.Value} -> Clone failed. Make sure the folder Plugins/Source/{plugin.Name?.Value} does not exist. Skipped!");
-                    DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
+                    DebugWindow.LogError($"{plugin.Name} -> Clone failed. Make sure the folder Plugins/Source/{plugin.Name} does not exist. Skipped!");
+                    DebugWindow.LogDebug($"{plugin.Name} -> {e.Message}");
                     return;
                 }
             }
@@ -60,12 +60,12 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 sw.Stop();
                 if (status == MergeStatus.UpToDate)
                 {
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Already up to date, checked in {sw.ElapsedMilliseconds} ms.");
+                    DebugWindow.LogMsg($"{plugin.Name}: Already up to date, checked in {sw.ElapsedMilliseconds} ms.");
                     return;
                 }
                 else if (status == MergeStatus.FastForward || status == MergeStatus.NonFastForward)
                 {
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
+                    DebugWindow.LogMsg($"{plugin.Name}: Update successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
                     return;
                 }
                 else
@@ -75,8 +75,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
             catch (Exception e)
             {
-                DebugWindow.LogError($"{plugin.Name?.Value}: Update failed. Skipped!");
-                DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
+                DebugWindow.LogError($"{plugin.Name}: Update failed. Skipped!");
+                DebugWindow.LogDebug($"{plugin.Name} -> {e.Message}");
             }
         }
 
@@ -109,7 +109,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 (url, usernameFromUrl, types) =>
                     new UsernamePasswordCredentials()
                     {
-                        Username = PluginsUpdateSettings.Username?.Value,
+                        Username = PluginsUpdateSettings.Username,
                         Password = PluginsUpdateSettings.Password?.Value,
                     }
                 )

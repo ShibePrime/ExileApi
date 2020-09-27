@@ -133,7 +133,7 @@ namespace ExileCore.Shared
             foreach (var plugin in settings.Plugins)
             {
                 var fittingPluginFromDump = dumpSettings.Plugins
-                    .Where(d => d.Name?.Value == plugin.Name?.Value)
+                    .Where(d => d.Name == plugin.Name)
                     .Where(d => d.SourceUrl?.Value == plugin.SourceUrl?.Value)
                     .FirstOrDefault();
                 // unchanged entry
@@ -141,12 +141,12 @@ namespace ExileCore.Shared
 
                 try
                 {
-                    DebugWindow.LogMsg($"PluginManager -> Remove old files from {plugin.Name?.Value}");
-                    DeleteFilesFromPlugin(plugin.Name?.Value);
+                    DebugWindow.LogMsg($"PluginManager -> Remove old files from {plugin.Name}");
+                    DeleteFilesFromPlugin(plugin.Name);
                 } 
                 catch (Exception e)
                 {
-                    DebugWindow.LogError($"PluginManager -> Remove old files from {plugin.Name?.Value} failed");
+                    DebugWindow.LogError($"PluginManager -> Remove old files from {plugin.Name} failed");
                     DebugWindow.LogDebug($"PluginManager -> {e.Message}");
                 }
             }
@@ -193,7 +193,7 @@ namespace ExileCore.Shared
             {
                 var excluded = pluginsUpdateSettings.Plugins?
                     .Where(p => p.Enable)
-                    .Select(p => p.Name?.Value);
+                    .Select(p => p.Name);
                 excludedNames.AddRange(excluded);
             }
             var compiledDirectories = new DirectoryInfo(Directories[CompiledPluginsDirectory])

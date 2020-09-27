@@ -35,7 +35,6 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                 var newPlugin = new SinglePluginUpdateSettings()
                 {
                     Enable = new ToggleNode(true),
-                    Name = new TextNode("new Plugin"),
                     SourceUrl = new TextNode(""),
                     LastUpdated = DateTime.Now
                 };
