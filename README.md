@@ -19,6 +19,7 @@ Git https://git-scm.com/downloads
 5. This should compile already, there could be some reference errors, those are mostly fixed by removing the reference (solution exlporer-plugin_project->references) the ones with warnings need to be readded
 
 -> Adding plugins (example DevTree)
+
 6. Open git bash in "ExileApi/Plugins"
 7. Run `git clone https://github.com/Queuete/DevTree`
 8. Open Visual Studio, right click the "ExileApi" solution in the "Solution Explorer". -> Add -> New Solution Folder (name it "Plugins")
