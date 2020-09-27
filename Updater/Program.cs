@@ -182,6 +182,7 @@ namespace Updater
         private static void CleanFolder(string updateFolder)
         {
             var directory = new DirectoryInfo(updateFolder);
+            if (!directory.Exists) return;
 
             foreach (FileInfo file in directory.EnumerateFiles())
             {
