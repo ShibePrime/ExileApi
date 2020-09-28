@@ -17,6 +17,7 @@ using JM.LinqFaster;
 using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
 using MoreLinq.Extensions;
 using SharpDX;
+using SharpDX.Direct3D11;
 
 namespace ExileCore.Shared
 {
@@ -26,6 +27,7 @@ namespace ExileCore.Shared
         private const string CompiledPluginsDirectory = "Compiled";
         private const string SourcePluginsDirectory = "Source";
         private string AutoPluginUpdateSettingsPath => Path.Combine(PluginsDirectory, "updateSettings.json");
+        private string AutoPluginUpdateSettingsPathDump => Path.Combine("config", "dumpUpdateSettings.json");
         private readonly GameController _gameController;
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
@@ -72,7 +74,22 @@ namespace ExileCore.Shared
         {
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
             var forceLoadCompiledOnly = false;
+
             var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(AutoPluginUpdateSettingsPath);
+
+            // check for changes in the updateSettings. Delete changed repositories, to make sure all changes are acted upon
+            if (pluginUpdateSettings.Enable)
+            {
+                var file = new FileInfo(AutoPluginUpdateSettingsPathDump);
+                PluginsUpdateSettings dumpPluginUpdateSettings = null;
+                if (file.Exists)
+                {
+                    dumpPluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(AutoPluginUpdateSettingsPathDump);
+                }
+
+                RemoveChangedPlugins(pluginUpdateSettings, dumpPluginUpdateSettings);
+                SettingsContainer.SaveSettingFile(AutoPluginUpdateSettingsPathDump, pluginUpdateSettings);
+            }
 
             var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
             if (pluginUpdateSettings != null)
@@ -107,6 +124,52 @@ namespace ExileCore.Shared
 
             AreaOnOnAreaChange(gameController.Area.CurrentArea);
             AllPluginsLoaded = true;
+        }
+
+        private void RemoveChangedPlugins(PluginsUpdateSettings settings, PluginsUpdateSettings dumpSettings)
+        {
+            if (dumpSettings == null) return;
+
+            foreach (var plugin in settings.Plugins)
+            {
+                var fittingPluginFromDump = dumpSettings.Plugins
+                    .Where(d => d.Name?.Value == plugin.Name?.Value)
+                    .Where(d => d.SourceUrl?.Value == plugin.SourceUrl?.Value)
+                    .FirstOrDefault();
+                // unchanged entry
+                if (fittingPluginFromDump != null) continue;
+
+                try
+                {
+                    DebugWindow.LogMsg($"PluginManager -> Remove old files from {plugin.Name?.Value}");
+                    DeleteFilesFromPlugin(plugin.Name?.Value);
+                } 
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"PluginManager -> Remove old files from {plugin.Name?.Value} failed");
+                    DebugWindow.LogDebug($"PluginManager -> {e.Message}");
+                }
+            }
+        }
+
+        private void DeleteFilesFromPlugin(string pluginName)
+        {
+            var sourceDirectory = new DirectoryInfo(Path.Combine(Directories[PluginsDirectory], SourcePluginsDirectory));
+            var compiledDirectory = new DirectoryInfo(Path.Combine(Directories[PluginsDirectory], CompiledPluginsDirectory));
+
+            var directoriesToDelete = new List<DirectoryInfo>();
+            directoriesToDelete.AddRange(sourceDirectory.GetDirectories(pluginName, SearchOption.TopDirectoryOnly));
+            directoriesToDelete.AddRange(compiledDirectory.GetDirectories(pluginName, SearchOption.TopDirectoryOnly));
+
+            foreach (var directory in directoriesToDelete)
+            {
+                foreach (var f in directory.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    f.Attributes = FileAttributes.Normal;
+                    f.Delete();
+                }
+                directory.Delete(true);
+            }
         }
 
         private List<Task<List<PluginWrapper>>> RunPluginAutoUpdate(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
