@@ -34,7 +34,7 @@ namespace ExileCore.PoEMemory
         {
             var files = new ConcurrentDictionary<string, FileInformation>();
             var fileRootAddress = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
-            Parallel.For(0, 256, i => {
+            Parallel.For(0, 128, i => {
                 var fileAddress = fileRootAddress + i * 0x40;
                 var fileChunk = _mem.Read<FilesOffsets>(fileAddress);
                 ReadDictionary(fileChunk.ListPtr, files);
@@ -71,7 +71,7 @@ namespace ExileCore.PoEMemory
         {
             var files = new ConcurrentDictionary<string, FileInformation>();
             var fileRootAddress = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
-            Parallel.For(0, 256, i => {
+            Parallel.For(0, 128, i => {
                 var fileAddress = fileRootAddress + i * 0x40;
                 var fileChunk = _mem.Read<FilesOffsets>(fileAddress);
                 ReadDictionary(fileChunk.ListPtr, files);
