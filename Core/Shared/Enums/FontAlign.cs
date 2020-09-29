@@ -1,5 +1,8 @@
-﻿namespace ExileCore.Shared.Enums
+﻿using System;
+
+namespace ExileCore.Shared.Enums
 {
+    [Flags]
     public enum FontAlign
     {
         Left = 0,
