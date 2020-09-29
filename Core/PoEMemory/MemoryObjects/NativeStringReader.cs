@@ -4,21 +4,20 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class NativeStringReader
     {
-        public static string ReadString(long address, IMemory M)
+        public static string ReadString(long address, IMemory m, int length = 256)
         {
-            var Size = M.Read<uint>(address + 0x10);
-            var Capacity = M.Read<uint>(address + 0x18);
+            var size = m.Read<uint>(address + 0x10);
+            var capacity = m.Read<uint>(address + 0x18);
 
-            //var size = Size;
-            //if (size == 0)
-            //    return string.Empty;
-            if ( /*8 <= size ||*/ 8 <= Capacity) //Have no idea how to deal with this
-            {
-                var readAddr = M.Read<long>(address);
-                return M.ReadStringU(readAddr);
-            }
+            return m.ReadStringU(8 <= capacity ? m.Read<long>(address) : address, length);
+        }
 
-            return M.ReadStringU(address);
+        public static string ReadStringLong(long address, IMemory m)
+        {
+            var size = m.Read<int>(address + 0x10) * 2;
+            var capacity = m.Read<uint>(address + 0x18);
+
+            return m.ReadStringU(8 <= capacity ? m.Read<long>(address) : address);
         }
     }
 }
