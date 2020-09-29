@@ -158,7 +158,10 @@
     <Content Include="textures\tooltip.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fonts\Abel-Regular.ttf" />
     <None Include="fonts\agave-r.ttf" />
+    <None Include="fonts\AmaticSC-Bold.ttf" />
+    <None Include="fonts\AmaticSC-Regular.ttf" />
     <None Include="fonts\Anonymous Pro.ttf" />
     <None Include="fonts\calibri.ttf" />
     <None Include="fonts\calibrib.ttf" />
@@ -177,6 +180,8 @@
     <None Include="fonts\consolaz.ttf" />
     <None Include="fonts\Constantine.ttf" />
     <None Include="fonts\DFPT_B5_POE.ttf" />
+    <None Include="fonts\Dosis-Regular.ttf" />
+    <None Include="fonts\Dosis-VariableFont_wght.ttf" />
     <None Include="fonts\DroidSans.ttf" />
     <None Include="fonts\FantasqueSansMono-Bold.ttf" />
     <None Include="fonts\FantasqueSansMono-Regular.ttf" />
@@ -185,25 +190,38 @@
     <None Include="fonts\Fontin-Regular.ttf" />
     <None Include="fonts\Fontin-SmallCaps.ttf" />
     <None Include="fonts\FrizQuadrataITC.ttf" />
+    <None Include="fonts\Heebo-Light.ttf" />
+    <None Include="fonts\Heebo-VariableFont_wght.ttf" />
     <None Include="fonts\hkyt.ttf" />
     <None Include="fonts\JetBrainsMono-Regular.ttf" />
     <None Include="fonts\MesloLGL-Bold.ttf" />
     <None Include="fonts\MesloLGL-Regular.ttf" />
-    <None Include="fonts\MesloLGM-Bold.ttf" />
     <None Include="fonts\MesloLGS-Bold.ttf" />
     <None Include="fonts\MesloLGSDZ-Regular.ttf" />
-    <None Include="fonts\NotoMono-Regular.ttf" />
     <None Include="fonts\NotoSans-Regular.ttf" />
+    <None Include="fonts\NunitoSans-Bold.ttf" />
+    <None Include="fonts\NunitoSans-Light.ttf" />
+    <None Include="fonts\NunitoSans-Regular.ttf" />
+    <None Include="fonts\OpenSans-Bold.ttf" />
+    <None Include="fonts\OpenSans-Light.ttf" />
+    <None Include="fonts\OpenSans-Regular.ttf" />
+    <None Include="fonts\OpenSansCondensed-Light.ttf" />
     <None Include="fonts\OptimusPrincepsSemiBold.ttf" />
     <None Include="fonts\Orkney Medium.ttf" />
+    <None Include="fonts\PermanentMarker-Regular.ttf" />
     <None Include="fonts\Quikhand.ttf" />
     <None Include="fonts\Roboto-Medium.ttf" />
     <None Include="fonts\scientifica.ttf" />
     <None Include="fonts\scientificaCAPS.ttf" />
+    <None Include="fonts\ShadowsIntoLight-Regular.ttf" />
+    <None Include="fonts\SourceSansPro-ExtraLight.ttf" />
+    <None Include="fonts\SourceSansPro-Regular.ttf" />
+    <None Include="fonts\SpecialElite-Regular.ttf" />
     <None Include="Shaders\ImGuiPixelShader.bin" />
     <None Include="Shaders\ImGuiVertexShader.bin" />
     <None Include="Shaders\PixelShader.bin" />
     <None Include="Shaders\VertexShader.bin" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
