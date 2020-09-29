@@ -14,12 +14,12 @@ namespace GameOffsets
         [FieldOffset(0x180)] public int Strength;
         [FieldOffset(0x184)] public int Dexterity;
         [FieldOffset(0x188)] public int Intelligence;
+        [FieldOffset(0x1AA)] public byte Level;
         [FieldOffset(0x1AC)] public byte PantheonMinor;
         [FieldOffset(0x1AD)] public byte PantheonMajor;
-        [FieldOffset(0x1AA)] public byte Level;
         [FieldOffset(0x16C)] public byte AllocatedLootId;                
-        [FieldOffset(0x20A)] public byte PropheciesCount;
-        public long PropheciesOffset => 0x20c;
+        [FieldOffset(0x212)] public byte PropheciesCount;
+        public long PropheciesOffset => 0x214;
         public long ProphecyLength => 0x4; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
 
         public long TrialPassStatesOffset => 0x2b4; // probably wrong
