@@ -196,8 +196,10 @@
     <None Include="fonts\JetBrainsMono-Regular.ttf" />
     <None Include="fonts\MesloLGL-Bold.ttf" />
     <None Include="fonts\MesloLGL-Regular.ttf" />
+    <None Include="fonts\MesloLGM-Bold.ttf" />
     <None Include="fonts\MesloLGS-Bold.ttf" />
     <None Include="fonts\MesloLGSDZ-Regular.ttf" />
+    <None Include="fonts\NotoMono-Regular.ttf" />
     <None Include="fonts\NotoSans-Regular.ttf" />
     <None Include="fonts\NunitoSans-Bold.ttf" />
     <None Include="fonts\NunitoSans-Light.ttf" />
