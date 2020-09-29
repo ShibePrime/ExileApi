@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ExileCore.Shared.Enums;
-using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
 using GameOffsets;
 using MoreLinq;
 
 namespace ExileCore.PoEMemory
 {
-    public struct FileInformation
+    public readonly struct FileInformation
     {
         public FileInformation(long ptr, int changeCount)
         {
@@ -25,64 +23,61 @@ namespace ExileCore.PoEMemory
 
     public class FilesFromMemory
     {
-        private readonly IMemory mem;
+        private readonly IMemory _mem;
 
         public FilesFromMemory(IMemory memory)
         {
-            mem = memory;
+            _mem = memory;
         }
 
         public Dictionary<string, FileInformation> GetAllFiles()
         {
             var files = new ConcurrentDictionary<string, FileInformation>();
-            var fileRoot = mem.AddressOfProcess + mem.BaseOffsets[OffsetsName.FileRoot];
-
-            var parallelOptions = new ParallelOptions();
-            parallelOptions.MaxDegreeOfParallelism = 128;
-            Parallel.For(0, 128, parallelOptions, i =>
-            {
-                var addr = fileRoot + i * 0x40;
-                var fileChunkStruct = mem.Read<FilesOffsets>(addr);
-
+            var addressOfProcess = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
+            Parallel.For(0, 256, i => {
+                var readAddress = addressOfProcess + i * 0x40;
+                var fileChunkStruct = _mem.Read<FilesOffsets>(readAddress);
                 ReadDictionary(fileChunkStruct.ListPtr, files);
             });
-
             return files.ToDictionary();
         }
 
         public void ReadDictionary(long head, ConcurrentDictionary<string, FileInformation> dictionary)
         {
-            var node = mem.Read<FileNode>(head);
-
+            var node = _mem.Read<FileNode>(head);
+            var sw = Stopwatch.StartNew();
             var headLong = head;
-
-            // first node in list does not contain file information
-            node = mem.Read<FileNode>(node.Next);
-
-            var maxCount = 1000;    // not seeing more than that amount of files in one bucket
 
             while (headLong != node.Next)
             {
-                if (0 == --maxCount)
-                    return;
-
-                var advancedInformation = mem.Read<GameOffsets.FileInformation>(node.Value);
-                if (advancedInformation.String.buf == 0) return;
-
-                var key = mem.ReadStringU(node.Key);
-
-                if (dictionary.ContainsKey(key))
+                if (sw.ElapsedMilliseconds > 2000)
                 {
-                    // Ignore those errors for now, there seems to be no pattern to them
-                    //DebugWindow.LogError($"FilesFromMemory -> ReadDictionary error. Already contains key: {key}. Value: {node.Value:X}");
-                }
-                else
-                {
-                    dictionary[key] = new FileInformation(node.Value, advancedInformation.AreaCount);
+                    DebugWindow.LogError($"ReadDictionary error. Elapsed: {sw.ElapsedMilliseconds}");
+                    break;
                 }
 
-                node = mem.Read<FileNode>(node.Next);
+                var key = _mem.ReadStringU(node.Key);
+                
+                if (!dictionary.TryGetValue(key, out _))
+                {
+                    var changeCount = _mem.Read<int>(node.Value + 0x38);
+                    dictionary[key] = new FileInformation(node.Value, changeCount);
+                }
+
+                node = _mem.Read<FileNode>(node.Next);
             }
+        }
+
+        public Dictionary<string, FileInformation> GetAllFilesSync()
+        {
+            var files = new ConcurrentDictionary<string, FileInformation>();
+            var addressOfProcess = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
+            Parallel.For(0, 256, i => {
+                var readAddress = addressOfProcess + i * 0x40;
+                var fileChunkStruct = _mem.Read<FilesOffsets>(readAddress);
+                ReadDictionary(fileChunkStruct.ListPtr, files);
+            });
+            return files.ToDictionary();
         }
     }
 }
