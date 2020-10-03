@@ -22,44 +22,52 @@ namespace GameOffsets
     }
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
+    public struct ServerPlayerDataOffsets
+    {
+        [FieldOffset(0x204)] public int CharacterLevel;
+        [FieldOffset(0x208)] public int PassiveRefundPointsLeft;
+        [FieldOffset(0x20C)] public int QuestPassiveSkillPoints;
+        [FieldOffset(0x210)] public int FreePassiveSkillPointsLeft;
+        [FieldOffset(0x214)] public int TotalAscendencyPoints;
+        [FieldOffset(0x218)] public int SpentAscendencyPoints;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ServerDataOffsets
     {
         public const int Skip = 0x7000;
-        public const int ATLAS_REGION_UPGRADES = 0x7BB2;
+        public const int ATLAS_REGION_UPGRADES = 0x815A;
 
         // wrong, probably moved to different location
-        [FieldOffset(0x7068 - Skip)] public NativePtrArray PassiveSkillIds;
-        [FieldOffset(0x710C - Skip)] public int CharacterLevel;
-        [FieldOffset(0x7110 - Skip)] public int PassiveRefundPointsLeft;
-        [FieldOffset(0x7114 - Skip)] public int QuestPassiveSkillPoints;
-        [FieldOffset(0x7118 - Skip)] public int FreePassiveSkillPointsLeft;
-        [FieldOffset(0x711C - Skip)] public int TotalAscendencyPoints;
-        [FieldOffset(0x7120 - Skip)] public int SpentAscendencyPoints;
-
-        [FieldOffset(0x73B0 - Skip)] public byte PlayerClass;
+        [FieldOffset(0x7EB8 - Skip)] public NativePtrArray PassiveSkillIds; // TODO: 3.12.2
+        [FieldOffset(0x7818 - Skip)] public long PlayerRelatedData;
+        
+        [FieldOffset(0x77B0 - Skip)] public byte PlayerClass; // TODO: 3.12.2
         [FieldOffset(0x7828 - Skip)] public byte NetworkState;
-        [FieldOffset(0x7450 - Skip)] public NativeStringU League;
-        [FieldOffset(0x74C0 - Skip)] public float TimeInGame;
-        [FieldOffset(0x74C8 - Skip)] public int Latency;
-        [FieldOffset(0x74D8 - Skip)] public NativePtrArray PlayerStashTabs;
-        [FieldOffset(0x74F0 - Skip)] public NativePtrArray GuildStashTabs;
-        [FieldOffset(0x75F0 - Skip)] public byte PartyStatusType;
-        [FieldOffset(0x7600 - Skip)] public byte PartyAllocationType;
-        [FieldOffset(0x7688 - Skip)] public long GuildName;
+        [FieldOffset(0x7850 - Skip)] public NativeStringU League;
+        [FieldOffset(0x78C0 - Skip)] public float TimeInGame;
+        [FieldOffset(0x78C8 - Skip)] public int Latency;
+        [FieldOffset(0x78D8 - Skip)] public NativePtrArray PlayerStashTabs; // TODO: 3.12.2
+        [FieldOffset(0x78F0 - Skip)] public NativePtrArray GuildStashTabs; // TODO: 3.12.2
+        [FieldOffset(0x78F0 - Skip)] public byte PartyStatusType; // TODO: 3.12.2
+        [FieldOffset(0x7A00 - Skip)] public byte PartyAllocationType; // TODO: 3.12.2
+        [FieldOffset(0x7A88 - Skip)] public long GuildName;
         [FieldOffset(0x7A90 - Skip)] public SkillBarIdsStruct SkillBarIds;
-        [FieldOffset(0x76E8 - Skip)] public NativePtrArray NearestPlayers;
-        [FieldOffset(0x7c28 - Skip)] public NativePtrArray PlayerInventories;
-        [FieldOffset(0x78C8 - Skip)] public NativePtrArray NPCInventories;
-        [FieldOffset(0x7980 - Skip)] public NativePtrArray GuildInventories;
-        [FieldOffset(0x7AE0 - Skip)] public ushort TradeChatChannel;
-        [FieldOffset(0x7AE8 - Skip)] public ushort GlobalChatChannel;
-        [FieldOffset(0x7B38 - Skip)] public ushort LastActionId;//Do we need this?
-        [FieldOffset(0x7BB8 - Skip)] public long CompletedMaps;//search for a LONG value equals to your current amount of completed maps. Pointer will be under this offset
-        [FieldOffset(0x7BF8 - Skip)] public long BonusCompletedAreas;
-        [FieldOffset(0x7C38 - Skip)] public long AwakenedAreas;
-        [FieldOffset(0x86EC - Skip)] public byte MonsterLevel;
-        [FieldOffset(0x86ED - Skip)] public byte MonstersRemaining;
-        [FieldOffset(0x87A0 - Skip)] public ushort CurrentSulphiteAmount; //Maybe wrong not tested
-        [FieldOffset(0x8790 - Skip)] public int CurrentAzuriteAmount;
+        [FieldOffset(0x7AE8 - Skip)] public NativePtrArray NearestPlayers;
+        [FieldOffset(0x7C28 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x7D38 - Skip)] public NativePtrArray NPCInventories;
+        [FieldOffset(0x7E48 - Skip)] public NativePtrArray GuildInventories;
+        [FieldOffset(0x7F88 - Skip)] public ushort TradeChatChannel;
+        [FieldOffset(0x7F90 - Skip)] public ushort GlobalChatChannel;
+        [FieldOffset(0x7FE0 - Skip)] public ushort LastActionId;
+        
+        // Note: Search for a LONG value equal to your current amount of completed maps. Map list will be the next byte.
+        [FieldOffset(0x8060 - Skip)] public long CompletedMaps; 
+        [FieldOffset(0x80A0 - Skip)] public long BonusCompletedAreas;
+        [FieldOffset(0x80E0 - Skip)] public long AwakenedAreas;
+        [FieldOffset(0x8B94 - Skip)] public byte MonsterLevel;
+        [FieldOffset(0x8B95 - Skip)] public byte MonstersRemaining;
+        [FieldOffset(0x8C38 - Skip)] public int CurrentAzuriteAmount;
+        [FieldOffset(0x8C48 - Skip)] public ushort CurrentSulphiteAmount;
     }
 }
