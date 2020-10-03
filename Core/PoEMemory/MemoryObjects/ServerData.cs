@@ -19,6 +19,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _cachedValue = new FrameCache<ServerPlayerDataOffsets>(() => M.Read<ServerPlayerDataOffsets>(Address));
         }
         public ServerPlayerDataOffsets ServerPlayerDataStruct => _cachedValue.Value;
+
+        public CharacterClass PlayerClass => (CharacterClass) (ServerPlayerDataStruct.PlayerClass & 0x0F);
         public int CharacterLevel => ServerPlayerDataStruct.CharacterLevel;
         public int PassiveRefundPointsLeft => ServerPlayerDataStruct.PassiveRefundPointsLeft;
         public int QuestPassiveSkillPoints => ServerPlayerDataStruct.QuestPassiveSkillPoints;
@@ -49,7 +51,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         //if 51 - more than 50 monsters remaining (no exact number)
         //if 255 - not supported for current map (town or scenary map)
-        public CharacterClass PlayerClass => (CharacterClass) (ServerDataStruct.PlayerClass & 0xF);
+        public CharacterClass PlayerClass => ServerPlayerDataStruct.PlayerClass;
         public byte MonstersRemaining => ServerDataStruct.MonstersRemaining;
         public ushort CurrentSulphiteAmount => _cachedValue.Value.CurrentSulphiteAmount;
         public int CurrentAzuriteAmount => _cachedValue.Value.CurrentAzuriteAmount;

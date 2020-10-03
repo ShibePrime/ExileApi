@@ -24,6 +24,7 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ServerPlayerDataOffsets
     {
+        [FieldOffset(0x200)] public byte PlayerClass;
         [FieldOffset(0x204)] public int CharacterLevel;
         [FieldOffset(0x208)] public int PassiveRefundPointsLeft;
         [FieldOffset(0x20C)] public int QuestPassiveSkillPoints;
@@ -42,15 +43,19 @@ namespace GameOffsets
         [FieldOffset(0x7EB8 - Skip)] public NativePtrArray PassiveSkillIds; // TODO: 3.12.2
         [FieldOffset(0x7818 - Skip)] public long PlayerRelatedData;
         
-        [FieldOffset(0x77B0 - Skip)] public byte PlayerClass; // TODO: 3.12.2
         [FieldOffset(0x7828 - Skip)] public byte NetworkState;
         [FieldOffset(0x7850 - Skip)] public NativeStringU League;
         [FieldOffset(0x78C0 - Skip)] public float TimeInGame;
         [FieldOffset(0x78C8 - Skip)] public int Latency;
         [FieldOffset(0x78D8 - Skip)] public NativePtrArray PlayerStashTabs; // TODO: 3.12.2
         [FieldOffset(0x78F0 - Skip)] public NativePtrArray GuildStashTabs; // TODO: 3.12.2
-        [FieldOffset(0x78F0 - Skip)] public byte PartyStatusType; // TODO: 3.12.2
-        [FieldOffset(0x7A00 - Skip)] public byte PartyAllocationType; // TODO: 3.12.2
+        //[FieldOffset(0x7918 - Skip)] public NativePtrArray GuildList;
+        //[FieldOffset(0x7930 - Skip)] public NativePtrArray FriendsList;
+        //[FieldOffset(0x7940 - Skip)] public NativePtrArray UnknownSocialList;
+        //[FieldOffset(0x7980 - Skip)] public NativePtrArray PendingInvites;
+        [FieldOffset(0x7A00 - Skip)] public byte PartyStatusType;
+        //[FieldOffset(0x7A08 - Skip)] public NativePtrArray CurrentParty;
+        [FieldOffset(0x7A20 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x7A88 - Skip)] public long GuildName;
         [FieldOffset(0x7A90 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x7AE8 - Skip)] public NativePtrArray NearestPlayers;
