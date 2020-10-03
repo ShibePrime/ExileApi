@@ -11,36 +11,32 @@ namespace ExileCore.PoEMemory.MemoryObjects
     public class ServerInventory : RemoteMemoryObject
     {
         private readonly CachedValue<ServerInventoryOffsets> cachedValue;
-
+        private readonly int hashReadLimit = 500;
         public ServerInventory()
         {
             cachedValue = new FrameCache<ServerInventoryOffsets>(() => M.Read<ServerInventoryOffsets>(Address));
         }
 
         private ServerInventoryOffsets Struct => cachedValue.Value;
-        public InventoryTypeE InventType => (InventoryTypeE) M.Read<byte>(Address);
-        public InventorySlotE InventSlot => (InventorySlotE) M.Read<byte>(Address + 0x1);
-        public int Columns => M.Read<int>(Address + 0xc);
-        public int Rows => M.Read<int>(Address + 0x10);
-        public bool IsRequested => M.Read<byte>(Address + 0x4) == 1;
-        public long CountItems => M.Read<long>(Address + 0x50);
-        public int TotalItemsCounts => M.Read<int>(Address + 0x50);
-        public int ServerRequestCounter => M.Read<int>(Address + 0xA8);
-
-        //   public IEnumerable<InventSlotItem> InventorySlotItems => ReadHashMap(Address + 0x48).Values.ToList();
-        public IList<InventSlotItem> InventorySlotItems => ReadHashMap(Struct.InventorySlotItemsPtr, 500).Values.ToList();
-        public long Hash => M.Read<long>(Struct.InventorySlotItemsPtr + 0x10);
-
-        //  public IList<Entity> Items => ReadHashMap(Address + 0x48).Values.Select(x => x.Item).ToList();
-        public IList<Entity> Items => ReadHashMap(Struct.InventorySlotItemsPtr, 500).Values.Select(x => x.Item).ToList();
+        public InventoryTypeE InventType => (InventoryTypeE) Struct.InventType;
+        public InventorySlotE InventSlot => (InventorySlotE) Struct.InventSlot;
+        public int Columns => Struct.Columns;
+        public int Rows => Struct.Rows;
+        public bool IsRequested => Struct.IsRequested == 1;
+        public long CountItems => Struct.CountItems;
+        public int TotalItemsCounts => Struct.TotalItemsCount;
+        public int ServerRequestCounter => Struct.ServerRequestCounter;
+        public IList<InventSlotItem> InventorySlotItems => ReadHashMap(Struct.InventorySlotItemsPtr, hashReadLimit).Values.ToList();
+        public long Hash => Struct.Hash;
+        public IList<Entity> Items => ReadHashMap(Struct.InventorySlotItemsPtr, hashReadLimit).Values.Select(x => x.Item).ToList();
 
         public InventSlotItem this[int x, int y]
         {
             get
             {
-                var invAddr = M.Read<long>(Address + 0x30);
+                var invAddr = Struct.InventoryItemsPtr;
                 y = y * Columns;
-                var itmAddr = M.Read<long>(invAddr + (x + y) * 8);
+                var itmAddr = M.Read<long>(invAddr + (x + y) * 0x08);
 
                 if (itmAddr <= 0)
                     return null;

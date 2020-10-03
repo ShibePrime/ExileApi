@@ -33,6 +33,16 @@ namespace ExileCore.Shared.Enums
         UniqueStashInv,
         CraftingSpreeCurrency,
         CraftingSpreeItem,
-        NormalOrQuad
+        NormalOrQuad,
+        AtlasWatchtower,
+        Harvest1, // TODO: Check inventory items to see if Harvest enums are actually Harvest
+        Unknown30, // TODO: Check if these are 3.11 3-pack league tabs
+        Unknown31,
+        Harvest2,
+        Unknown33,
+        HeistAllyEquipment,
+        Trinket,
+        HeistLocker,
+        StashRegularTab
     }
 }
