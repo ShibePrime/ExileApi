@@ -51,7 +51,7 @@ namespace GameOffsets
         [FieldOffset(0x108)] public float Scale;
         [FieldOffset(0x130)] public float Width;
         [FieldOffset(0x134)] public float Height;
-        [FieldOffset(0x178)] public bool isHighlighted;
+        [FieldOffset(0x1B1)] public bool isHighlighted;
 
         //  [FieldOffset(0x3CB)] public byte isShadow; //0
         //  [FieldOffset(0x3C9)] public byte isShadow2; //1

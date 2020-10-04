@@ -10,27 +10,48 @@ using GameOffsets;
 
 namespace ExileCore.PoEMemory.MemoryObjects
 {
+    public class ServerPlayerData : RemoteMemoryObject
+    {
+        private readonly CachedValue<ServerPlayerDataOffsets> _cachedValue;
+
+        public ServerPlayerData()
+        {
+            _cachedValue = new FrameCache<ServerPlayerDataOffsets>(() => M.Read<ServerPlayerDataOffsets>(Address));
+        }
+        public ServerPlayerDataOffsets ServerPlayerDataStruct => _cachedValue.Value;
+
+        public CharacterClass PlayerClass => (CharacterClass) (ServerPlayerDataStruct.PlayerClass & 0x0F);
+        public int CharacterLevel => ServerPlayerDataStruct.CharacterLevel;
+        public int PassiveRefundPointsLeft => ServerPlayerDataStruct.PassiveRefundPointsLeft;
+        public int QuestPassiveSkillPoints => ServerPlayerDataStruct.QuestPassiveSkillPoints;
+        public int FreePassiveSkillPointsLeft => ServerPlayerDataStruct.FreePassiveSkillPointsLeft;
+        public int TotalAscendencyPoints => ServerPlayerDataStruct.TotalAscendencyPoints;
+        public int SpentAscendencyPoints => ServerPlayerDataStruct.SpentAscendencyPoints;
+    }
     public class ServerData : RemoteMemoryObject
     {
         private static readonly int NetworkStateOff =
             Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.NetworkState)) + ServerDataOffsets.Skip;
 
         private readonly CachedValue<ServerDataOffsets> _cachedValue;
+        private readonly CachedValue<ServerPlayerData> _playerData;
         private readonly List<Player> result = new List<Player>();
 
         public ServerData()
         {
             _cachedValue = new FrameCache<ServerDataOffsets>(() => M.Read<ServerDataOffsets>(Address + ServerDataOffsets.Skip));
+            _playerData = new FrameCache<ServerPlayerData>(() => GetObject<ServerPlayerData>(_cachedValue.Value.PlayerRelatedData));
         }
 
         public ServerDataOffsets ServerDataStruct => _cachedValue.Value;
+        public ServerPlayerData ServerPlayerDataStruct => _playerData.Value;
         public ushort TradeChatChannel => ServerDataStruct.TradeChatChannel;
         public ushort GlobalChatChannel => ServerDataStruct.GlobalChatChannel;
         public byte MonsterLevel => ServerDataStruct.MonsterLevel;
 
         //if 51 - more than 50 monsters remaining (no exact number)
         //if 255 - not supported for current map (town or scenary map)
-        public CharacterClass PlayerClass => (CharacterClass) (ServerDataStruct.PlayerClass & 0xF);
+        public CharacterClass PlayerClass => ServerPlayerDataStruct.PlayerClass;
         public byte MonstersRemaining => ServerDataStruct.MonstersRemaining;
         public ushort CurrentSulphiteAmount => _cachedValue.Value.CurrentSulphiteAmount;
         public int CurrentAzuriteAmount => _cachedValue.Value.CurrentAzuriteAmount;
@@ -42,15 +63,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (Address == 0) return null;
                 var startPtr = ServerDataStruct.NearestPlayers.First;
                 var endPtr = ServerDataStruct.NearestPlayers.Last;
-                startPtr += 16; //Don't ask me why. Just skipping first 2
-
                 //Sometimes wrong offsets and read 10000000+ objects
-                if (startPtr < Address || (endPtr - startPtr) / 16 > 50)
+                if (startPtr < Address || (endPtr - startPtr) / 0x18 > 50)
                     return result;
 
                 result.Clear();
 
-                for (var addr = startPtr; addr < endPtr; addr += 16) //16 because we are reading each second pointer (pointer vectors)
+                for (var addr = startPtr; addr < endPtr; addr += 0x18) //16 because we are reading each second pointer (pointer vectors)
                 {
                     result.Add(ReadObject<Player>(addr));
                 }
@@ -67,12 +86,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
         #region PlayerData
 
         public ushort LastActionId => ServerDataStruct.LastActionId;
-        public int CharacterLevel => ServerDataStruct.CharacterLevel;
-        public int PassiveRefundPointsLeft => ServerDataStruct.PassiveRefundPointsLeft;
-        public int FreePassiveSkillPointsLeft => ServerDataStruct.FreePassiveSkillPointsLeft;
-        public int QuestPassiveSkillPoints => ServerDataStruct.QuestPassiveSkillPoints;
-        public int TotalAscendencyPoints => ServerDataStruct.TotalAscendencyPoints;
-        public int SpentAscendencyPoints => ServerDataStruct.SpentAscendencyPoints;
+        public int CharacterLevel => ServerPlayerDataStruct.CharacterLevel;
+        public int PassiveRefundPointsLeft => ServerPlayerDataStruct.PassiveRefundPointsLeft;
+        public int FreePassiveSkillPointsLeft => ServerPlayerDataStruct.FreePassiveSkillPointsLeft;
+        public int QuestPassiveSkillPoints => ServerPlayerDataStruct.QuestPassiveSkillPoints;
+        public int TotalAscendencyPoints => ServerPlayerDataStruct.TotalAscendencyPoints;
+        public int SpentAscendencyPoints => ServerPlayerDataStruct.SpentAscendencyPoints;
         public PartyAllocation PartyAllocationType => (PartyAllocation) ServerDataStruct.PartyAllocationType;
         public string League => ServerDataStruct.League.ToString(M);
         public PartyStatus PartyStatusType => (PartyStatus) this.ServerDataStruct.PartyStatusType;
@@ -80,7 +99,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public NetworkStateE NetworkState => (NetworkStateE) this.ServerDataStruct.NetworkState;
         public int Latency => ServerDataStruct.Latency;
         public string Guild => NativeStringReader.ReadString(M.Read<long>(Address + 0x70E0), M);
-        public BetrayalData BetrayalData => GetObject<BetrayalData>(M.Read<long>(Address + 0x3C8, 0x718));
+        public BetrayalData BetrayalData => GetObject<BetrayalData>(M.Read<long>(Address + 0x3C8, 0x718)); // TODO: 3.12.2
 
         public IList<ushort> SkillBarIds
         {

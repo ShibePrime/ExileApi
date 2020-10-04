@@ -226,6 +226,7 @@
     <Compile Include="PoEMemory\Components\Preload.cs" />
     <Compile Include="PoEMemory\Components\Prophecy.cs" />
     <Compile Include="PoEMemory\Components\Quality.cs" />
+    <Compile Include="PoEMemory\Components\Quest.cs" />
     <Compile Include="PoEMemory\Components\Render.cs" />
     <Compile Include="PoEMemory\Components\RenderItem.cs" />
     <Compile Include="PoEMemory\Components\Sector.cs" />
