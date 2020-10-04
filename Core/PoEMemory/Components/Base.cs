@@ -20,9 +20,9 @@ namespace ExileCore.PoEMemory.Components
 		public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
 		public bool isCorrupted => M.Read<byte>(Address + 0xDA) == 1;
 		public bool isSynthesized => M.Read<byte>(Address + 0xDE) == 1;
-        public string PublicPrice => M.Read<NativeStringU>(Address + 0x60).ToString(M);
+        public string PublicPrice => M.Read<NativeStringU>(Address + 0x60).ToString(M); // TODO: 3.12.2
 
-        // public bool isFractured => M.Read<byte>(Address + 0x98) == 0;
+        // public bool isFractured => M.Read<byte>(Address + 0x98) == 0; // TODO: 3.12.2
 
         // 0x8 - link to base item
         // +0x10 - Name

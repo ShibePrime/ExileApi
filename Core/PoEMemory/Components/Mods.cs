@@ -25,8 +25,8 @@ namespace ExileCore.PoEMemory.Components
         public string UniqueName =>
             Address != 0
                 ? Cache.StringCache.Read($"{nameof(Mods)}{ModsStruct.UniqueName + 0x8}",
-                    () => M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x8, 0x30)) +
-                          M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x18, 0x30)))
+                    () => M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x8, 0x04)) +
+                          M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x18, 0x04)))
                 : string.Empty;
 
         // public bool Identified => Address != 0 && M.Read<byte>(Address + 0x88) == 1;
