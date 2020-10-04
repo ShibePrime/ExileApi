@@ -41,6 +41,28 @@ namespace ExileCore.Shared.Enums
         IncursionSacrifice,
         BetrayalUnveiling,
         ItemSynthesisInput,
-        ItemSynthesisOutput
+        ItemSynthesisOutput,
+        AnointingOils,
+        AnointingTarget,
+        MetamorphConstruct,
+        AtlasWatchtower,
+        AtlasTray,
+        Harvest1, // TODO: Check inventory items to see if Harvest enums are actually Harvest
+        Harvest2,
+        Harvest3,
+        HeistBlueprint,
+        HeistKarstEquipment,
+        HeistNilesEquipment,
+        HeistHuckEquipment,
+        HeistTibbsEquipment,
+        HeistNenetEquipment,
+        HeistVinderiEquipment,
+        HeistTullinaEquipment,
+        HeistGiannaEquipment,
+        HeistIslaEquipment,
+        Trinket1,
+        HeistBlueprintPlanner,
+        GrandHeist,
+        HeistLocker
     }
 }
