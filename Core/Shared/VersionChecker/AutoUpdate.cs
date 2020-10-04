@@ -149,7 +149,7 @@ namespace ExileCore.Shared.VersionChecker
         {
             var startInfo = new ProcessStartInfo();            
             startInfo.FileName = Path.Combine(Application.StartupPath, UPDATER_EXECUTEABLE);
-            startInfo.Arguments = Path.Combine(Application.StartupPath, UPDATE_FOLDER) + " " + RELEASE_FOLDER + " " + Application.ExecutablePath;
+            startInfo.Arguments = $"\"{Path.Combine(Application.StartupPath, UPDATE_FOLDER)}\" \"{RELEASE_FOLDER}\" \"{Application.ExecutablePath}\"";
             Process.Start(startInfo);
             Application.Exit();
         }      
