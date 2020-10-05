@@ -82,8 +82,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PoeFilterParser, Version=1.0.44.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PoeFilterParser.1.0.44\lib\net471\PoeFilterParser.dll</HintPath>
+    <Reference Include="PoeFilterParser, Version=1.0.58.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PoeFilterParser.1.0.58\lib\net48\PoeFilterParser.dll</HintPath>
     </Reference>
     <Reference Include="ProcessMemoryUtilities, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\ProcessMemoryUtilities.Net.1.2.0\lib\net48\ProcessMemoryUtilities.dll</HintPath>
