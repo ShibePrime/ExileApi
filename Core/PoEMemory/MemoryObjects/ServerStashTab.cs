@@ -1,3 +1,5 @@
+using System;
+using System.Net.Configuration;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
@@ -18,20 +20,21 @@ namespace ExileCore.PoEMemory.MemoryObjects
         }
 
         public ServerStashTabOffsets ServerStashTabOffsets => _cachedValue.Value;
-        public string NameOld => NativeStringReader.ReadString(Address + 0x8, M) + (RemoveOnly ? " (Remove-only)" : string.Empty);
-        public string Name => ServerStashTabOffsets.Name.ToString(M);
+        public string Name => ServerStashTabOffsets.Name.ToString(M); 
+        public string VisibleName => Name + (RemoveOnly ? " (Remove-only)" : string.Empty);
 
-        //public int InventoryId => M.Read<int>(Address + 0x20);
+        [Obsolete("Use VisibleName instead.", false)]
+        public string NameOld => VisibleName;
         public uint Color => ServerStashTabOffsets.Color;
+
+        //NOTE: Color is laid out BBGGRRAA in memory (3.12.3)
         public Color Color2 =>
-            new Color(M.Read<byte>(Address + ColorOffset), M.Read<byte>(Address + ColorOffset + 1),
-                M.Read<byte>(Address + ColorOffset + 2));
+            new Color(M.Read<byte>(Address + ColorOffset + 2), M.Read<byte>(Address + ColorOffset + 1),
+                M.Read<byte>(Address + ColorOffset), M.Read<byte>(Address + ColorOffset + 3));
         public InventoryTabPermissions MemberFlags => (InventoryTabPermissions) ServerStashTabOffsets.MemberFlags;
         public InventoryTabPermissions OfficerFlags => (InventoryTabPermissions) ServerStashTabOffsets.OfficerFlags;
         public InventoryTabType TabType => (InventoryTabType) ServerStashTabOffsets.TabType;
         public ushort VisibleIndex => ServerStashTabOffsets.DisplayIndex;
-
-        //public ushort LinkedParentId => M.ReadUShort(Address + 0x26);
         public InventoryTabFlags Flags => (InventoryTabFlags) ServerStashTabOffsets.Flags;
         public bool RemoveOnly => (Flags & InventoryTabFlags.RemoveOnly) == InventoryTabFlags.RemoveOnly;
         public bool IsHidden => (Flags & InventoryTabFlags.Hidden) == InventoryTabFlags.Hidden;

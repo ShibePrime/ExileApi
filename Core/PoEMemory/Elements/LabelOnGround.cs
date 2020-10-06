@@ -72,7 +72,7 @@ namespace ExileCore.PoEMemory.Elements
 
         private long GetLabelInfo()
         {
-            return Label != null ? Label.Address != 0 ? M.Read<long>(Label.Address + 0x3A8) : 0 : 0;
+            return Label != null ? Label.Address != 0 ? M.Read<long>(Label.Address + 0x398) : 0 : 0;
         }
 
         public override string ToString()
