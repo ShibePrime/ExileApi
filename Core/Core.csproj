@@ -367,6 +367,7 @@
     <Compile Include="Shared\CoroutineTask.cs" />
     <Compile Include="Shared\DebugObjects.cs" />
     <Compile Include="Shared\Enums\AnimationE.cs" />
+    <Compile Include="Shared\Enums\AtlasRegionE.cs" />
     <Compile Include="Shared\Enums\InfluenceFlags.cs" />
     <Compile Include="Shared\Enums\League.cs" />
     <Compile Include="Shared\Enums\MapIconsIndex.cs" />

@@ -274,6 +274,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public IList<WorldArea> ShapedMaps => new List<WorldArea>();// GetAreas(ServerDataStruct.ShapedAreas);
         public IList<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreas);
 
+        public Dictionary<AtlasRegionE, WorldArea> WatchtowerMaps => GetWatchtowerMaps(Address + ServerDataOffsets.ATLAS_WATCHTOWER_LOCATIONS);
+
         [ObsoleteAttribute("Elder Guardian Areas were removed with the 3.9.0 Atlas Rework. You should not be using this.", true)]
         public IList<WorldArea> ElderGuardiansAreas => new List<WorldArea>();// GetAreas(ServerDataStruct.ElderGuardiansAreas);
 
@@ -315,6 +317,24 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
 
             return res;
+        }
+
+        private Dictionary<AtlasRegionE, WorldArea> GetWatchtowerMaps(long first)
+        {
+            var maps = new Dictionary<AtlasRegionE, WorldArea>();
+            if (first == 0)
+            {
+                return maps;
+            }
+
+            first += 0x08; // Array is 8x16 bytes => 8 byte address (Atlas Info) + 8 byte address (Watchtower Map)
+            for (int i = 0; i < 8; ++i, first += 0x10)
+            {
+                var map = ReadObject<WorldArea>(first);
+                maps[(AtlasRegionE) i] = map ?? new WorldArea();
+            }
+
+            return maps;
         }
 
         #endregion
