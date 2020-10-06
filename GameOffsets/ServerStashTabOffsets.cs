@@ -6,7 +6,9 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ServerStashTabOffsets
     {
-        [FieldOffset(0x8)] public NativeStringU Name;
+        [FieldOffset(0x08)] public NativeStringU Name;
+        //[FieldOffset(0x20)] public int InventoryId; // TODO: Relocated from ServerStashTab.cs. Check if valid. (3.12.3)
+        //[FieldOffset(0x26)] public ushort LinkedParentId; // TODO: Relacted from ServerStashTab.cs. Check if valid. (3.12.3)
         [FieldOffset(0x2c)] public uint Color;
 		[FieldOffset(0x34)] public uint OfficerFlags;
 		[FieldOffset(0x34)] public uint TabType;

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.FilesInMemory.Atlas;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using GameOffsets;
+using GameOffsets.Native;
 
 namespace ExileCore.PoEMemory.MemoryObjects
 {
@@ -20,13 +22,14 @@ namespace ExileCore.PoEMemory.MemoryObjects
         }
         public ServerPlayerDataOffsets ServerPlayerDataStruct => _cachedValue.Value;
 
-        public CharacterClass PlayerClass => (CharacterClass) (ServerPlayerDataStruct.PlayerClass & 0x0F);
-        public int CharacterLevel => ServerPlayerDataStruct.CharacterLevel;
+        public CharacterClass Class => (CharacterClass) (ServerPlayerDataStruct.PlayerClass & 0x0F);
+        public int Level => ServerPlayerDataStruct.CharacterLevel;
         public int PassiveRefundPointsLeft => ServerPlayerDataStruct.PassiveRefundPointsLeft;
         public int QuestPassiveSkillPoints => ServerPlayerDataStruct.QuestPassiveSkillPoints;
         public int FreePassiveSkillPointsLeft => ServerPlayerDataStruct.FreePassiveSkillPointsLeft;
         public int TotalAscendencyPoints => ServerPlayerDataStruct.TotalAscendencyPoints;
         public int SpentAscendencyPoints => ServerPlayerDataStruct.SpentAscendencyPoints;
+        public NativePtrArray AllocatedPassivesIds => ServerPlayerDataStruct.PassiveSkillIds;
     }
     public class ServerData : RemoteMemoryObject
     {
@@ -37,6 +40,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<ServerPlayerData> _playerData;
         private readonly List<Player> result = new List<Player>();
 
+        private const int MaxElementsToScan = 1024;
+
         public ServerData()
         {
             _cachedValue = new FrameCache<ServerDataOffsets>(() => M.Read<ServerDataOffsets>(Address + ServerDataOffsets.Skip));
@@ -44,14 +49,14 @@ namespace ExileCore.PoEMemory.MemoryObjects
         }
 
         public ServerDataOffsets ServerDataStruct => _cachedValue.Value;
-        public ServerPlayerData ServerPlayerDataStruct => _playerData.Value;
+        public ServerPlayerData PlayerInformation => _playerData.Value;
         public ushort TradeChatChannel => ServerDataStruct.TradeChatChannel;
         public ushort GlobalChatChannel => ServerDataStruct.GlobalChatChannel;
         public byte MonsterLevel => ServerDataStruct.MonsterLevel;
 
         //if 51 - more than 50 monsters remaining (no exact number)
         //if 255 - not supported for current map (town or scenary map)
-        public CharacterClass PlayerClass => ServerPlayerDataStruct.PlayerClass;
+        public CharacterClass PlayerClass => PlayerInformation.Class;
         public byte MonstersRemaining => ServerDataStruct.MonstersRemaining;
         public ushort CurrentSulphiteAmount => _cachedValue.Value.CurrentSulphiteAmount;
         public int CurrentAzuriteAmount => _cachedValue.Value.CurrentAzuriteAmount;
@@ -60,18 +65,25 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                if (Address == 0) return null;
-                var startPtr = ServerDataStruct.NearestPlayers.First;
-                var endPtr = ServerDataStruct.NearestPlayers.Last;
-                //Sometimes wrong offsets and read 10000000+ objects
-                if (startPtr < Address || (endPtr - startPtr) / 0x18 > 50)
+                if (Address == 0)
+                {
                     return result;
+                }
+
+                const int structSize = 0x18;
+                var first = ServerDataStruct.NearestPlayers.First;
+                var last = ServerDataStruct.NearestPlayers.Last;
+
+                if (first < 0 || last < 0 || (last - first) / structSize > 64)
+                {
+                    return result;
+                }
 
                 result.Clear();
 
-                for (var addr = startPtr; addr < endPtr; addr += 0x18) //16 because we are reading each second pointer (pointer vectors)
+                for (var playerAddress = first; playerAddress < last; playerAddress += structSize)
                 {
-                    result.Add(ReadObject<Player>(addr));
+                    result.Add(ReadObject<Player>(playerAddress));
                 }
 
                 return result;
@@ -86,19 +98,19 @@ namespace ExileCore.PoEMemory.MemoryObjects
         #region PlayerData
 
         public ushort LastActionId => ServerDataStruct.LastActionId;
-        public int CharacterLevel => ServerPlayerDataStruct.CharacterLevel;
-        public int PassiveRefundPointsLeft => ServerPlayerDataStruct.PassiveRefundPointsLeft;
-        public int FreePassiveSkillPointsLeft => ServerPlayerDataStruct.FreePassiveSkillPointsLeft;
-        public int QuestPassiveSkillPoints => ServerPlayerDataStruct.QuestPassiveSkillPoints;
-        public int TotalAscendencyPoints => ServerPlayerDataStruct.TotalAscendencyPoints;
-        public int SpentAscendencyPoints => ServerPlayerDataStruct.SpentAscendencyPoints;
+        public int CharacterLevel => PlayerInformation.Level;
+        public int PassiveRefundPointsLeft => PlayerInformation.PassiveRefundPointsLeft;
+        public int FreePassiveSkillPointsLeft => PlayerInformation.FreePassiveSkillPointsLeft;
+        public int QuestPassiveSkillPoints => PlayerInformation.QuestPassiveSkillPoints;
+        public int TotalAscendencyPoints => PlayerInformation.TotalAscendencyPoints;
+        public int SpentAscendencyPoints => PlayerInformation.SpentAscendencyPoints;
         public PartyAllocation PartyAllocationType => (PartyAllocation) ServerDataStruct.PartyAllocationType;
         public string League => ServerDataStruct.League.ToString(M);
         public PartyStatus PartyStatusType => (PartyStatus) this.ServerDataStruct.PartyStatusType;
         public bool IsInGame => NetworkState == NetworkStateE.Connected;
         public NetworkStateE NetworkState => (NetworkStateE) this.ServerDataStruct.NetworkState;
         public int Latency => ServerDataStruct.Latency;
-        public string Guild => NativeStringReader.ReadString(M.Read<long>(Address + 0x70E0), M);
+        public string Guild => NativeStringReader.ReadString(ServerDataStruct.GuildNameAddress, M);
         public BetrayalData BetrayalData => GetObject<BetrayalData>(M.Read<long>(Address + 0x3C8, 0x718)); // TODO: 3.12.2
 
         public IList<ushort> SkillBarIds
@@ -134,24 +146,31 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                if (Address == 0) 
-                    return null;
-                var fisrPtr = ServerDataStruct.PassiveSkillIds.First;
-                var endPtr = ServerDataStruct.PassiveSkillIds.Last;
-                var totalStats = (int) (endPtr - fisrPtr);
-                var bytes = M.ReadMem(fisrPtr, totalStats);
-                var res = new List<ushort>();
+                var passiveSkillIds = new List<ushort>();
 
+                if (Address == 0)
+                {
+                    return passiveSkillIds;
+                }
+
+                
+                var first = PlayerInformation.AllocatedPassivesIds.First;
+                var last = PlayerInformation.AllocatedPassivesIds.Last;
+                var totalStats = (int) (last - first);
+                
                 if (totalStats < 0 || totalStats > 500)
-                    return new List<ushort>();
+                {
+                    return passiveSkillIds;
+                }
 
+                var bytes = M.ReadMem(first, totalStats);
                 for (var i = 0; i < bytes.Length; i += 2)
                 {
                     var id = BitConverter.ToUInt16(bytes, i);
-                    res.Add(id);
+                    passiveSkillIds.Add(id);
                 }
 
-                return res;
+                return passiveSkillIds;
             }
         }
 
@@ -159,89 +178,58 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         #region Stash Tabs
 
-        // public IList<ServerStashTab> PlayerStashTabs => GetStashTabs(Extensions.GetOffset<ServerDataOffsets>("PlayerStashTabsStart"), Extensions.GetOffset<ServerDataOffsets>("PlayerStashTabsEnd"));
-        public IList<ServerStashTab> PlayerStashTabs =>
-            GetStashTabs(Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.PlayerStashTabs)),
-                Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.PlayerStashTabs)) + 0x8);
-        public IList<ServerStashTab> GuildStashTabs =>
-            GetStashTabs(Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.GuildStashTabs)),
-                Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.GuildStashTabs)) + 0x8);
+        public IList<ServerStashTab> PlayerStashTabs => GetStashTabs(ServerDataStruct.PlayerStashTabs);
+        public IList<ServerStashTab> GuildStashTabs =>  GetStashTabs(ServerDataStruct.GuildStashTabs);
 
-        private IList<ServerStashTab> GetStashTabs(int offsetBegin, int offsetEnd)
+        private IList<ServerStashTab> GetStashTabs(NativePtrArray tabs)
         {
-            var firstAddr = M.Read<long>(Address + offsetBegin);
-            var lastAddr = M.Read<long>(Address + offsetEnd);
+            var first = tabs.First;
+            var last = tabs.Last;
 
-            if (firstAddr <= 0 || lastAddr <= 0) return null;
-            
-            var len = lastAddr - firstAddr;
-            if (len <= 0 || len > 2048 || firstAddr <= 0 || lastAddr <= 0)
+            if (first <= 0 || last <= 0)
+            {
                 return new List<ServerStashTab>();
+            }
+            
+            var tabCount = (last - first) / ServerStashTab.StructSize;
+            
+            if (tabCount <= 0 || tabCount > MaxElementsToScan) 
+            {
+                return new List<ServerStashTab>();
+            }
 
-            var tabs = M.ReadStructsArray<ServerStashTab>(firstAddr, lastAddr, ServerStashTab.StructSize, TheGame);
-
-            //Skipping hidden tabs of premium maps tab (read notes in StashTabController.cs)
-            //tabs.RemoveAll(x => (x.Flags & InventoryTabFlags.Hidden) == InventoryTabFlags.Hidden);
-            return new List<ServerStashTab>(tabs);
-
-            // return new List<IServerStashTab>(tabs.Where(x=> (x.Flags & InventoryTabFlags.Hidden) != 0));
+            return M.ReadStructsArray<ServerStashTab>(first, last, ServerStashTab.StructSize, TheGame).ToList();
         }
 
         #endregion
 
         #region Inventories
 
-        public IList<InventoryHolder> PlayerInventories
+        public IList<InventoryHolder> PlayerInventories => GetInventory(ServerDataStruct.PlayerInventories);
+        public IList<InventoryHolder> NPCInventories => GetInventory(ServerDataStruct.NPCInventories);
+        public IList<InventoryHolder> GuildInventories => GetInventory(ServerDataStruct.GuildInventories);
+
+        private IList<InventoryHolder> GetInventory(NativePtrArray inventories)
         {
-            get
+            var first = inventories.First;
+            var last = inventories.Last;
+
+            if (first <= 0 || last <= 0)
             {
-                var firstAddr = ServerDataStruct.PlayerInventories.First;
-                var lastAddr = ServerDataStruct.PlayerInventories.Last;
-                if (firstAddr == 0) return null;
-
-                //Sometimes wrong offsets and read 10000000+ objects
-                if (firstAddr == 0 || (lastAddr - firstAddr) / InventoryHolder.StructSize > 1024)
-                    return new List<InventoryHolder>();
-
-                return M.ReadStructsArray<InventoryHolder>(firstAddr, lastAddr, InventoryHolder.StructSize, this).ToList();
+                return new List<InventoryHolder>();
             }
+
+            var inventoryCount = (last - first) / InventoryHolder.StructSize;
+
+            if (inventoryCount < 0 || inventoryCount > MaxElementsToScan)
+            {
+                return new List<InventoryHolder>();
+            }
+
+            return M.ReadStructsArray<InventoryHolder>(first, last, InventoryHolder.StructSize, this).ToList();
         }
 
-        public IList<InventoryHolder> NPCInventories
-        {
-            get
-            {
-                var firstAddr = ServerDataStruct.NPCInventories.First;
-                var lastAddr = ServerDataStruct.NPCInventories.Last;
-                if (firstAddr == 0) return null;
-        
-
-                //Sometimes wrong offsets and read 10000000+ objects
-                if (firstAddr == 0 || (lastAddr - firstAddr) / InventoryHolder.StructSize > 1024)
-                    return new List<InventoryHolder>();
-
-                return M.ReadStructsArray<InventoryHolder>(firstAddr, lastAddr, InventoryHolder.StructSize, TheGame).ToList();
-            }
-        }
-
-        public IList<InventoryHolder> GuildInventories
-        {
-            get
-            {
-                var firstAddr = ServerDataStruct.GuildInventories.First;
-                var lastAddr = ServerDataStruct.GuildInventories.Last;
-                if (firstAddr == 0) return null;
-           
-
-                //Sometimes wrong offsets and read 10000000+ objects
-                if (firstAddr == 0 || (lastAddr - firstAddr) / InventoryHolder.StructSize > 1024)
-                    return new List<InventoryHolder>();
-
-                return M.ReadStructsArray<InventoryHolder>(firstAddr, lastAddr, InventoryHolder.StructSize, TheGame).ToList();
-            }
-        }
-
-        #region Utils functions
+        #region Inventory Util functions
 
         public ServerInventory GetPlayerInventoryBySlot(InventorySlotE slot)
         {
@@ -285,8 +273,14 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public IList<WorldArea> CompletedAreas => GetAreas(ServerDataStruct.CompletedMaps);
         public IList<WorldArea> ShapedMaps => new List<WorldArea>();// GetAreas(ServerDataStruct.ShapedAreas);
         public IList<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreas);
+
+        [ObsoleteAttribute("Elder Guardian Areas were removed with the 3.9.0 Atlas Rework. You should not be using this.", true)]
         public IList<WorldArea> ElderGuardiansAreas => new List<WorldArea>();// GetAreas(ServerDataStruct.ElderGuardiansAreas);
+
+        [ObsoleteAttribute("Masters Areas were removed with the 3.9.0 Atlas Rework. You should not be using this.", true)]
         public IList<WorldArea> MasterAreas => new List<WorldArea>();// GetAreas(ServerDataStruct.MasterAreas);
+
+        [ObsoleteAttribute("Elder Influenced Areas were removed with the 3.9.0 Atlas Rework. You should not be using this.", true)]
         public IList<WorldArea> ShaperElderAreas => new List<WorldArea>();// GetAreas(ServerDataStruct.ElderInfluencedAreas);
         private IList<WorldArea> GetAreas(long address)
         {

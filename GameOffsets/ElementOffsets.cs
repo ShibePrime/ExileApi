@@ -47,15 +47,19 @@ namespace GameOffsets
         [FieldOffset(0x98)] public float X;
         [FieldOffset(0x9C)] public float Y;
 
-        // [FieldOffset(0x338)] public long Tooltip;
+        //FieldOffset(0x338)] public long Tooltip;
         [FieldOffset(0x108)] public float Scale;
+        //[FieldOffset(0x11B)] public byte OverlayFillA; // Opacity switches from FF to 8c when faded
         [FieldOffset(0x130)] public float Width;
         [FieldOffset(0x134)] public float Height;
-        [FieldOffset(0x1B1)] public bool isHighlighted;
+        [FieldOffset(0x178)] public bool isHighlighted; // Checks B Channel of Border (#00000000 to #E7B478FF highlighted)
+        //[FieldOffset(0x178)] public byte HighlightedBorderB;
+        //[FieldOffset(0x179)] public byte HighlightedBorderG;
+        //[FieldOffset(0x17A)] public byte HighlightedBorderR;
+        //[FieldOffset(0x17B)] public byte HighlightedBorderA;
+        //[FieldOffset(0x3CB)] public byte isShadow; //0
+        //[FieldOffset(0x3C9)] public byte isShadow2; //1
 
-        //  [FieldOffset(0x3CB)] public byte isShadow; //0
-        //  [FieldOffset(0x3C9)] public byte isShadow2; //1
-
-        //  [FieldOffset(0x3B0)] public NativeStringU TestString;
+        //[FieldOffset(0x3B0)] public NativeStringU TestString;
     }
 }

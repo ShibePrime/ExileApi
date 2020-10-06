@@ -17,7 +17,8 @@ namespace ExileCore.PoEMemory.Components
 
         public Player()
         {
-            _player = new FrameCache<PlayerComponentOffsets>(() => Address == 0 ? default : M.Read<PlayerComponentOffsets>(Address));
+            _player = new FrameCache<PlayerComponentOffsets>(() =>
+                Address == 0 ? default : M.Read<PlayerComponentOffsets>(Address));
         }
 
         public string PlayerName => NativeStringReader.ReadString(Address + 0x158, M);
@@ -27,8 +28,10 @@ namespace ExileCore.PoEMemory.Components
         public int Intelligence => Address != 0 ? _player.Value.Intelligence : 0;
         public int Level => Address != 0 ? _player.Value.Level : 1;
         public int AllocatedLootId => Address != 0 ? _player.Value.AllocatedLootId : 1;
+
         [ObsoleteAttribute("Hideoutproperties are obsolete.", true)]
         public int HideoutLevel => Address != 0 ? _player.Value.HideoutLevel : 0;
+
         public int PropheciesCount => Address != 0 ? _player.Value.PropheciesCount : 0;
 
         public IList<ProphecyDat> Prophecies
@@ -50,7 +53,8 @@ namespace ExileCore.PoEMemory.Components
                         result.Add(prophecy);
                     }
 
-                    readAddr += _player.Value.ProphecyLength; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
+                    readAddr += _player.Value
+                        .ProphecyLength; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
                 }
 
                 return result;
@@ -59,6 +63,7 @@ namespace ExileCore.PoEMemory.Components
 
         [ObsoleteAttribute("Hideoutproperties are obsolete.", true)]
         public HideoutWrapper Hideout => ReadObject<HideoutWrapper>(Address + _player.Value.HideoutWrapperOffset);
+
         public PantheonGod PantheonMinor => (PantheonGod) _player.Value.PantheonMinor;
         public PantheonGod PantheonMajor => (PantheonGod) _player.Value.PantheonMajor;
 
@@ -114,7 +119,8 @@ namespace ExileCore.PoEMemory.Components
             var trialWrapper = TheGame.Files.LabyrinthTrials.GetLabyrinthTrialByArea(area);
 
             if (trialWrapper == null)
-                throw new ArgumentException($"Can't find trial wrapper for area '{area.Name}' (seems not a trial area).");
+                throw new ArgumentException(
+                    $"Can't find trial wrapper for area '{area.Name}' (seems not a trial area).");
 
             return TrialPassStates.Get(trialWrapper.Id - 1);
         }
@@ -126,7 +132,7 @@ namespace ExileCore.PoEMemory.Components
             {
                 // TODO FIX ME
                 var stateBuff = M.ReadBytes(
-                    Address + _player.Value.TrialPassStatesOffset, 
+                    Address + _player.Value.TrialPassStatesOffset,
                     _player.Value.TrialPassStatesLength); // (286+) bytes of info.
                 return new BitArray(stateBuff);
             }
@@ -146,7 +152,10 @@ namespace ExileCore.PoEMemory.Components
                     var wrapper = TheGame.Files.LabyrinthTrials.GetLabyrinthTrialByAreaId(trialAreaId);
 
                     result.Add(
-                        new TrialState {TrialAreaId = trialAreaId, TrialArea = wrapper, IsCompleted = passStates.Get(wrapper.Id - 1)});
+                        new TrialState
+                        {
+                            TrialAreaId = trialAreaId, TrialArea = wrapper, IsCompleted = passStates.Get(wrapper.Id - 1)
+                        });
                 }
 
                 return result;
@@ -169,5 +178,10 @@ namespace ExileCore.PoEMemory.Components
         #endregion
 
         #endregion
+
+        public new string ToString()
+        {
+            return PlayerName;
+        }
     }
 }
