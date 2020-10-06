@@ -40,6 +40,7 @@ namespace GameOffsets
     {
         public const int Skip = 0x7000;
         public const int ATLAS_REGION_UPGRADES = 0x815A;
+        public const int ATLAS_WATCHTOWER_LOCATIONS = 0x8168;
 
         // wrong, probably moved to different location
         [FieldOffset(0x7818 - Skip)] public long PlayerRelatedData;
