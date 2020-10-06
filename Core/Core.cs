@@ -350,7 +350,7 @@ namespace ExileCore
 
                     try
                     {
-                        _mainMenu.Render(GameController, pluginManager.Plugins);
+                        _mainMenu.Render(GameController, pluginManager?.Plugins);
                     }
                     catch (Exception e)
                     {
@@ -397,7 +397,7 @@ namespace ExileCore
 
                     if (_coreSettings.CollectDebugInformation)
                     {
-                        foreach (var plugin in pluginManager.Plugins)
+                        foreach (var plugin in pluginManager?.Plugins)
                         {
                             if (!plugin.IsEnable) continue;
                             if (!GameController.InGame && !plugin.Force) continue;
@@ -418,7 +418,7 @@ namespace ExileCore
                     }
                     else
                     {
-                        foreach (var plugin in pluginManager.Plugins)
+                        foreach (var plugin in pluginManager?.Plugins)
                         {
                             if (!plugin.IsEnable) continue;
                             if (!GameController.InGame && !plugin.Force) continue;
@@ -471,7 +471,7 @@ namespace ExileCore
 
                     if (_coreSettings.CollectDebugInformation)
                     {
-                        foreach (var plugin in pluginManager.Plugins)
+                        foreach (var plugin in pluginManager?.Plugins)
                         {
                             if (!plugin.IsEnable) continue;
                             if (!plugin.CanRender) continue;
@@ -481,7 +481,7 @@ namespace ExileCore
                     }
                     else
                     {
-                        foreach (var plugin in pluginManager.Plugins)
+                        foreach (var plugin in pluginManager?.Plugins)
                         {
                             if (!plugin.IsEnable) continue;
                             if (!GameController.InGame && !plugin.Force) continue;
