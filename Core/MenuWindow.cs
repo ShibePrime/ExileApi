@@ -197,9 +197,12 @@ namespace ExileCore
 
         public unsafe void Render(GameController _gameController, List<PluginWrapper> plugins)
         {
-            if (plugins != null) plugins = plugins.OrderBy(x => x.Name).ToList();
+            plugins = plugins?.OrderBy(x => x.Name).ToList();
 
-            if (CoreSettings.ShowDebugWindow) debugInformation.TickAction(DebugWindowRender);
+            if (CoreSettings.ShowDebugWindow)
+            {
+                debugInformation.TickAction(DebugWindowRender);
+            }
 
             if (CoreSettings.MainMenuKeyToggle.PressedOnce())
             {
