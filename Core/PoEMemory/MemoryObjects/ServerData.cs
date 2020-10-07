@@ -53,10 +53,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public ushort TradeChatChannel => ServerDataStruct.TradeChatChannel;
         public ushort GlobalChatChannel => ServerDataStruct.GlobalChatChannel;
         public byte MonsterLevel => ServerDataStruct.MonsterLevel;
+        public CharacterClass PlayerClass => PlayerInformation.Class;
 
         //if 51 - more than 50 monsters remaining (no exact number)
         //if 255 - not supported for current map (town or scenary map)
-        public CharacterClass PlayerClass => PlayerInformation.Class;
         public byte MonstersRemaining => ServerDataStruct.MonstersRemaining;
         public ushort CurrentSulphiteAmount => _cachedValue.Value.CurrentSulphiteAmount;
         public int CurrentAzuriteAmount => _cachedValue.Value.CurrentAzuriteAmount;
