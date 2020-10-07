@@ -15,7 +15,7 @@ namespace GameOffsets
         //[FieldOffset(0x3C8)] public long PvpResultPanel;
         //[FieldOffset(0x3E0)] public long PvpSpectatingPanel;
         //[FieldOffset(0x3F0)] public long EditingHideoutNotifyPanel;
-        //[FieldOffset(0x400)] public long ChatPanel;
+        [FieldOffset(0x400)] public long ChatPanel;
         //[FieldOffset(0x420)] public long BestiaryMissionCompletePanel;
         //[FieldOffset(0x428)] public long BestiaryNewBeastNotifyPanel;
         //[FieldOffset(0x430)] public long BestiaryNewRecipeNotifyPanel;
@@ -116,6 +116,6 @@ namespace GameOffsets
         //[FieldOffset(0xA00)] public long HeistNotifyPanel;
         [FieldOffset(0x8A8)] public long InvitesPanel;
         [FieldOffset(0xA10)] public long ItemOnGroundTooltip;
-		[FieldOffset(0x0/*0xF18*/)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
+		[FieldOffset(0xAA0)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
 	}
 }

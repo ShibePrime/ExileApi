@@ -38,7 +38,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _DelveWindow ?? (_DelveWindow = GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow));
         public SkillBarElement SkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.SkillBar);
         public SkillBarElement HiddenSkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.HiddenSkillBar);
-        public PoeChatElement ChatBox => GetObject<PoeChatElement>(M.Read<long>(Address + 0x3F8, 0x2C8, 0xE20, 0x350));
+        public PoeChatElement ChatBox => GetObject<PoeChatElement>(IngameUIElementsStruct.ChatPanel);
         public IList<string> ChatMessages => ChatBox.Children.Select(x => x.Text).ToList();
         public Element QuestTracker => GetObject<Element>(IngameUIElementsStruct.QuestTracker);
         public QuestRewardWindow QuestRewardWindow => GetObject<QuestRewardWindow>(IngameUIElementsStruct.QuestRewardWindow);
@@ -56,7 +56,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public GemLvlUpPanel GemLvlUpPanel => GetObject<GemLvlUpPanel>(IngameUIElementsStruct.GemLvlUpPanel);
         public Element InvitesPanel => GetObject<Element>(IngameUIElementsStruct.InvitesPanel);
         public ItemOnGroundTooltip ItemOnGroundTooltip => GetObject<ItemOnGroundTooltip>(IngameUIElementsStruct.ItemOnGroundTooltip);
-        public MapStashTabElement MapStashTab => ReadObject<MapStashTabElement>(IngameUIElementsStruct.MapTabWindowStartPtr + 0xAA0);
+        public MapStashTabElement MapStashTab => ReadObject<MapStashTabElement>(IngameUIElementsStruct.MapTabWindowStartPtr);
         public Element Sulphit => GetObject<Element>(IngameUIElementsStruct.Map).GetChildAtIndex(0);
         public Cursor Cursor => _cursor ?? (_cursor = GetObject<Cursor>(IngameUIElementsStruct.Mouse));
         public Element BetrayalWindow => _BetrayalWindow ?? (_BetrayalWindow = GetObject<Element>(IngameUIElementsStruct.BetrayalWindow));
