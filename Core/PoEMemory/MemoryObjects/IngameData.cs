@@ -36,7 +36,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public int CurrentAreaLevel => _IngameData.Value.CurrentAreaLevel;
         public uint CurrentAreaHash => _IngameData.Value.CurrentAreaHash;
         public Entity LocalPlayer => _LocalPlayer.Value;
-        public long EntiteisTest => DataStruct.EntityList;
+        public long EntitiesTest => DataStruct.EntityList;
         public EntityList EntityList => _EntityList ?? (_EntityList = GetObject<EntityList>(DataStruct.EntityList));
         private long LabDataPtr => _IngameData.Value.LabDataPtr;
         public LabyrinthData LabyrinthData => LabDataPtr == 0 ? null : GetObject<LabyrinthData>(LabDataPtr);
@@ -50,19 +50,17 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 _MapStats.Clear();
                 var statPtrStart = _IngameData.Value.MapStats.First;
                 var statPtrEnd = _IngameData.Value.MapStats.Last;
-                var key = 0;
-                var value = 0;
-                var total_stats = (int) (statPtrEnd - statPtrStart);
+                var totalStats = (int) (statPtrEnd - statPtrStart);
 
-                if (total_stats / 8 > 200)
+                if (totalStats / 8 > 200)
                     return null;
 
-                var bytes = M.ReadMem(statPtrStart, total_stats);
+                var bytes = M.ReadMem(statPtrStart, totalStats);
 
                 for (var i = 0; i < bytes.Length; i += 8)
                 {
-                    key = BitConverter.ToInt32(bytes, i);
-                    value = BitConverter.ToInt32(bytes, i + 0x04);
+                    var key = BitConverter.ToInt32(bytes, i);
+                    var value = BitConverter.ToInt32(bytes, i + 0x04);
                     _MapStats[(GameStat) key] = value;
                 }
 

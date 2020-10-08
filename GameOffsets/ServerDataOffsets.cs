@@ -39,17 +39,17 @@ namespace GameOffsets
     public struct ServerDataOffsets
     {
         public const int Skip = 0x7000;
-        public const int ATLAS_REGION_UPGRADES = 0x815A;
-        public const int ATLAS_WATCHTOWER_LOCATIONS = 0x8168;
+        public const int AtlasRegionUpgrades = 0x815A;
+        public const int AtlasWatchtowerLocations = 0x8168;
+        public const int BestiaryBeastsCapturedCounts = 0x8378;
 
-        // wrong, probably moved to different location
         [FieldOffset(0x7818 - Skip)] public long PlayerRelatedData;
         [FieldOffset(0x7828 - Skip)] public byte NetworkState;
         [FieldOffset(0x7840 - Skip)] public NativeStringU League;
         [FieldOffset(0x78C0 - Skip)] public float TimeInGame;
         [FieldOffset(0x78C8 - Skip)] public int Latency;
         [FieldOffset(0x78D8 - Skip)] public NativePtrArray PlayerStashTabs;
-        [FieldOffset(0x78F0 - Skip)] public NativePtrArray GuildStashTabs; // TODO: 3.12.2
+        [FieldOffset(0x78F0 - Skip)] public NativePtrArray GuildStashTabs;
         //[FieldOffset(0x7918 - Skip)] public NativePtrArray GuildList;
         //[FieldOffset(0x7930 - Skip)] public NativePtrArray FriendsList;
         //[FieldOffset(0x7940 - Skip)] public NativePtrArray UnknownSocialList;
