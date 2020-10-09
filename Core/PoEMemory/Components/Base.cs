@@ -1,26 +1,39 @@
+using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using GameOffsets.Native;
-using ExileCore.Shared.Enums;
+using GameOffsets;
+using ExileCore.Shared.Cache;
 
 namespace ExileCore.PoEMemory.Components
 {
     public class Base : Component
     {
+        private readonly CachedValue<BaseComponentOffsets> _cachedValue;
+
+        public Base()
+        {
+            _cachedValue = new FrameCache<BaseComponentOffsets>(() => M.Read<BaseComponentOffsets>(Address));
+        }
+
+        public BaseComponentOffsets BaseStruct => _cachedValue.Value;
+
         //x20 - some strings about item
         private string _name;
         public string Name => _name ?? (_name = M.Read<NativeStringU>(Address + 0x10, 0x18).ToString(M));
         public int ItemCellsSizeX => M.Read<int>(Address + 0x10, 0x10);
         public int ItemCellsSizeY => M.Read<int>(Address + 0x10, 0x14);
-		private Influence InfluenceFlag => (Influence)M.Read<byte>(Address + 0xD8);
-		public bool isShaper => (InfluenceFlag & Influence.Shaper) == Influence.Shaper;
-		public bool isElder => (InfluenceFlag & Influence.Elder) == Influence.Elder;
-		public bool isCrusader => (InfluenceFlag & Influence.Crusader) == Influence.Crusader;
-		public bool isHunter => (InfluenceFlag & Influence.Hunter) == Influence.Hunter;
-		public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
-		public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
-		public bool isCorrupted => M.Read<byte>(Address + 0xDA) == 1;
-		public bool isSynthesized => M.Read<byte>(Address + 0xDE) == 1;
-        public string PublicPrice => M.Read<NativeStringU>(Address + 0x60).ToString(M); // TODO: 3.12.2
+        private Influence InfluenceFlag => (Influence)BaseStruct.InfluenceFlag;
+        public bool isShaper => (InfluenceFlag & Influence.Shaper) == Influence.Shaper;
+        public bool isElder => (InfluenceFlag & Influence.Elder) == Influence.Elder;
+        public bool isCrusader => (InfluenceFlag & Influence.Crusader) == Influence.Crusader;
+        public bool isHunter => (InfluenceFlag & Influence.Hunter) == Influence.Hunter;
+        public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
+        public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
+        public bool isCorrupted => BaseStruct.isCorrupted;
+        public bool isSynthesized => BaseStruct.isSynthesized;
+        // REVISIT: not using Cache.StringCache here.  no profiles
+        // point to it being used often enough in a single frame.
+        public string PublicPrice => M.Read<NativeStringU>(BaseStruct.PublicPricePtr).ToString(M); // TODO: 3.12.2
 
         // public bool isFractured => M.Read<byte>(Address + 0x98) == 0; // TODO: 3.12.2
 
