@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.MemoryObjects;
@@ -11,89 +12,92 @@ namespace ExileCore.PoEMemory.Components
 {
     public class Mods : Component
     {
-        private readonly CachedValue<ModsComponentOffsets> _cachedValue;
+        private readonly CachedValue<ModsComponentOffsets> _CachedValue;
 
         public Mods()
         {
-            _cachedValue = new FrameCache<ModsComponentOffsets>(() => M.Read<ModsComponentOffsets>(Address));
+            _CachedValue = new FrameCache<ModsComponentOffsets>(() => M.Read<ModsComponentOffsets>(Address));
         }
 
-        public ModsComponentOffsets ModsStruct => _cachedValue.Value;
+        public ModsComponentOffsets ModsStruct => _CachedValue.Value;
 
-        //  public string UniqueName => Address != 0 ? M.ReadStringU(M.Read<long>(Address + 0x30, 0x8, 0x4)) + M.ReadStringU(M.Read<long>(Address + 0x30, 0x18, 4)) : string.Empty;
-        //   public string UniqueName => Address != 0 ? M.ReadStringU(M.Read<long>(Address + 0x30, 0x8,0x30)) + M.ReadStringU(M.Read<long>(Address + 0x30, 0x18,0x30)) : string.Empty;
-        public string UniqueName =>
-            Address != 0
-                ? Cache.StringCache.Read($"{nameof(Mods)}{ModsStruct.UniqueName + 0x8}",
-                    () => M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x8, 0x04)) +
-                          M.ReadStringU(M.Read<long>(ModsStruct.UniqueName + 0x18, 0x04)))
-                : string.Empty;
-
-        // public bool Identified => Address != 0 && M.Read<byte>(Address + 0x88) == 1;
+        public string UniqueName => GetUniqueName(ModsStruct.UniqueName);
         public bool Identified => Address != 0 && ModsStruct.Identified;
-        public ItemRarity ItemRarity => Address != 0 ? (ItemRarity) ModsStruct.ItemRarity : ItemRarity.Normal;
-
-        //Usefull for cache items
+        public ItemRarity ItemRarity => Address != 0 ? (ItemRarity) ModsStruct.ItemRarity : ItemRarity.Normal; 
         public long Hash => ModsStruct.implicitMods.GetHashCode() ^ ModsStruct.explicitMods.GetHashCode() ^ ModsStruct.GetHashCode();
 
-        public List<ItemMod> ItemMods
-        {
-            get
-            {
-                var implicitMods = GetMods(ModsStruct.implicitMods.First, ModsStruct.implicitMods.Last);
-                var explicitMods = GetMods(ModsStruct.explicitMods.First, ModsStruct.explicitMods.Last);
-                return implicitMods.Concat(explicitMods).ToList();
-            }
-        }
+        public int ItemLevel => Address != 0 ? ModsStruct.ItemLevel : 1;
+        public int RequiredLevel => Address != 0 ? ModsStruct.RequiredLevel : 1;
+        public bool IsUsable => Address != 0 && ModsStruct.IsUsable == 1;
+        public bool IsMirrored => Address != 0 && ModsStruct.IsMirrored == 1;
 
-        public int ItemLevel => Address != 0 ? ModsStruct.ItemLevel /*M.Read<int>(Address + 0x42c) */ : 1;
-        public int RequiredLevel => Address != 0 ? ModsStruct.RequiredLevel /*M.Read<int>(Address + 0x430)*/ : 1;
-        public bool IsUsable => Address != 0 && M.Read<byte>(Address + 0x370) == 1;
-        public bool IsMirrored => Address != 0 && M.Read<byte>(Address + 0x371) == 1;
-        public int CountFractured => M.Read<byte>(Address + 0x89);
-        public bool Synthesised => M.Read<byte>(Address + 0x437) == 1;
-        public bool HaveFractured => Address != 0 && CountFractured > 0;
+        public int FracturedCount => (int) ModsStruct.GetFracturedStats.Size / ModsComponentOffsets.StatRecordSize;
+        public bool IsFractured => FracturedCount > 0;
+        [Obsolete("Use IsFractured", false)]
+        public bool HaveFractured => IsFractured;
+        [Obsolete("Use FracturedCount", false)]
+        public int CountFractured => FracturedCount;
+
+        public int SynthesizedCount => (int) ModsStruct.GetSynthesizedStats.Size / ModsComponentOffsets.StatRecordSize;
+        public bool IsSynthesized => SynthesizedCount > 0;
+        [Obsolete("Use IsSynthesized", false)]
+        public bool Synthesised => IsSynthesized;
+
         public ItemStats ItemStats => new ItemStats(Owner);
         public List<string> HumanStats => GetStats(ModsStruct.GetStats);
         public List<string> HumanCraftedStats => GetStats(ModsStruct.GetCraftedStats);
         public List<string> HumanImpStats => GetStats(ModsStruct.GetImplicitStats);
         public List<string> FracturedStats => GetStats(ModsStruct.GetFracturedStats);
 
-        private List<string> GetStats(NativePtrArray array)
+        private string GetUniqueName(NativePtrArray source)
         {
-            var readPointersArray = M.ReadPointersArray(array.First, array.Last, ModsComponentOffsets.HumanStats);
-            var result = new List<string>();
+            var words = new List<string>();
+            if (Address == 0) return string.Empty;
 
-            foreach (var pointer in readPointersArray)
+            for (var first = source.First + 8; first < source.Last; first += ModsComponentOffsets.NameRecordSize)
             {
-                result.Add(Cache.StringCache.Read($"{nameof(Mods)}{pointer}", () => M.ReadStringU(pointer)));
+                words.Add(M.ReadStringU(M.Read<long>(first, ModsComponentOffsets.NameOffset)).Trim());
             }
 
-            return result;
+            return Cache.StringCache.Read($"{nameof(Mods)}{source.First}", () => string.Join(" ", words.ToArray()));
         }
 
-        private List<ItemMod> GetMods(long startOffset, long endOffset)
+        public List<ItemMod> ItemMods
         {
-            var list = new List<ItemMod>();
-
-            if (Address == 0)
-                return list;
-
-            var begin = startOffset;
-            var end = endOffset;
-            var count = (end - begin) / 0x28;
-
-            if (count > 12)
-                return list;
-
-            //System.Windows.Forms.MessageBox.Show(begin.ToString("x"));
-
-            for (var i = begin; i < end; i += 0x28)
+            get
             {
-                list.Add(GetObject<ItemMod>(i));
+                var implicitMods = GetMods(ModsStruct.implicitMods);
+                var explicitMods = GetMods(ModsStruct.explicitMods);
+                return implicitMods.Concat(explicitMods).ToList();
+            }
+        }
+
+        private List<ItemMod> GetMods(NativePtrArray source)
+        {
+            var mods = new List<ItemMod>();
+            if (Address == 0) return mods;
+            if (source.Size / ModsComponentOffsets.ItemModRecordSize > 12) return mods;
+
+            for (var modAddress = source.First; modAddress < source.Last; modAddress += ModsComponentOffsets.ItemModRecordSize)
+            {
+                mods.Add(GetObject<ItemMod>(modAddress));
             }
 
-            return list;
+            return mods;
+        }
+
+        private List<string> GetStats(NativePtrArray source)
+        {
+            var stats = new List<string>();
+            if (Address == 0) return stats;
+            var readPointersArray = M.ReadPointersArray(source.First, source.Last, ModsComponentOffsets.StatRecordSize);
+
+            foreach (var statAddress in readPointersArray)
+            {
+                stats.Add(Cache.StringCache.Read($"{nameof(Mods)}{statAddress}", () => M.ReadStringU(statAddress)));
+            }
+
+            return stats;
         }
     }
 }
