@@ -35,13 +35,13 @@ namespace ExileCore.PoEMemory.Components
 
         public class Wing : RemoteMemoryObject
         {
-            public List<HeistJob> Jobs => GetJobs(Address + 0x00);
+            public List<HeistJobRecord> Jobs => GetJobs(Address + 0x00);
             public List<HeistChestRewardTypeRecord> RewardRooms => GetRooms(Address + 0x20);
             public List<HeistNpcRecord> Crew => GetCrew(Address + 0x38);
 
-            private List<HeistJob> GetJobs(long source)
+            private List<HeistJobRecord> GetJobs(long source)
             {
-                var jobs = new List<HeistJob>();
+                var jobs = new List<HeistJobRecord>();
 
                 var first = M.Read<long>(source);
                 var last = M.Read<long>(source + 0x08);

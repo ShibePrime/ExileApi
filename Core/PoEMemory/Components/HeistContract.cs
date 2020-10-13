@@ -26,7 +26,7 @@ namespace ExileCore.PoEMemory.Components
 
         public BaseItemType TargetItem => TheGame.Files.BaseItemTypes.GetFromAddress(Objectives.TargetKey);
         public string Client => M.ReadStringU(Objectives.ClientKey);
-        public HeistJob RequiredJob => TheGame.Files.HeistJobs.GetByAddress(Requirements.JobKey);
+        public HeistJobRecord RequiredJob => TheGame.Files.HeistJobs.GetByAddress(Requirements.JobKey);
         public byte RequiredJobLevel => Requirements.JobLevel;
     }
 }
