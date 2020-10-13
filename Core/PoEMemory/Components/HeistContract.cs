@@ -16,7 +16,7 @@ namespace ExileCore.PoEMemory.Components
             _ContractData = new FrameCache<HeistContractComponentOffsets>(() =>
             M.Read<HeistContractComponentOffsets>(Address));
             _ObjectivesData = new FrameCache<HeistContractObjectiveOffsets>(() =>
-            M.Read<HeistContractObjectiveOffsets>(_ContractData.Value.Objective));
+            M.Read<HeistContractObjectiveOffsets>(_ContractData.Value.ObjectiveKey));
             _RequirementData = new FrameCache<HeistContractRequirementOffsets>(() =>
             M.Read<HeistContractRequirementOffsets>(_ContractData.Value.Requirements.First));
         }

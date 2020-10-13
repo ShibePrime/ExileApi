@@ -28,9 +28,9 @@ namespace ExileCore.PoEMemory
         private UniversalFileWrapper<BetrayalRank> _BetrayalRanks;
         private UniversalFileWrapper<BetrayalReward> _BetrayalRewards;
         private UniversalFileWrapper<BetrayalTarget> _BetrayalTargets;
-        private UniversalFileWrapper<HeistJob> _HeistJobs;
-        private UniversalFileWrapper<HeistChestRewardType> _HeistChestRewardTypes;
-        private UniversalFileWrapper<HeistNpc> _HeistNpcs;
+        private UniversalFileWrapper<HeistJobRecord> _HeistJobs;
+        private UniversalFileWrapper<HeistChestRewardTypeRecord> _HeistChestRewardTypes;
+        private UniversalFileWrapper<HeistNpcRecord> _HeistNpcs;
         private LabyrinthTrials _LabyrinthTrials;
         private ModsDat _Mods;
         private MonsterVarieties _MonsterVarieties;
@@ -119,15 +119,15 @@ namespace ExileCore.PoEMemory
 
         #region Heist
         
-        public UniversalFileWrapper<HeistJob> HeistJobs =>
-            _HeistJobs ??= new UniversalFileWrapper<HeistJob>(_Memory, () => FindFile("Data/HeistJobs.dat"));
+        public UniversalFileWrapper<HeistJobRecord> HeistJobs =>
+            _HeistJobs ??= new UniversalFileWrapper<HeistJobRecord>(_Memory, () => FindFile("Data/HeistJobs.dat"));
 
-        public UniversalFileWrapper<HeistChestRewardType> HeistChestRewardType =>
+        public UniversalFileWrapper<HeistChestRewardTypeRecord> HeistChestRewardType =>
             _HeistChestRewardTypes ??=
-                new UniversalFileWrapper<HeistChestRewardType>(_Memory,
+                new UniversalFileWrapper<HeistChestRewardTypeRecord>(_Memory,
                     () => FindFile("Data/HeistChestRewardTypes.dat"));
-        public UniversalFileWrapper<HeistNpc> HeistNpcs => _HeistNpcs ??=
-            new UniversalFileWrapper<HeistNpc>(_Memory, () => FindFile("Data/HeistNPCs.dat"));
+        public UniversalFileWrapper<HeistNpcRecord> HeistNpcs => _HeistNpcs ??=
+            new UniversalFileWrapper<HeistNpcRecord>(_Memory, () => FindFile("Data/HeistNPCs.dat"));
 
         #endregion
         

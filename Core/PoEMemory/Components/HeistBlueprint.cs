@@ -17,6 +17,7 @@ namespace ExileCore.PoEMemory.Components
         }
 
         public HeistBlueprintComponentOffsets BlueprintStruct => _CachedBlueprint.Value;
+        public byte AreaLevel => BlueprintStruct.AreaLevel;
         public List<Wing> Wings => GetWings(BlueprintStruct.Wings);
 
         private List<Wing> GetWings(NativePtrArray source)
@@ -35,8 +36,8 @@ namespace ExileCore.PoEMemory.Components
         public class Wing : RemoteMemoryObject
         {
             public List<HeistJob> Jobs => GetJobs(Address + 0x00);
-            public List<HeistChestRewardType> RewardRooms => GetRooms(Address + 0x20);
-            public List<HeistNpc> Crew => GetCrew(Address + 0x38);
+            public List<HeistChestRewardTypeRecord> RewardRooms => GetRooms(Address + 0x20);
+            public List<HeistNpcRecord> Crew => GetCrew(Address + 0x38);
 
             private List<HeistJob> GetJobs(long source)
             {
@@ -48,15 +49,17 @@ namespace ExileCore.PoEMemory.Components
 
                 for (var recordAddress = first; recordAddress < last; recordAddress += recordSize)
                 {
-                    jobs.Add(TheGame.Files.HeistJobs.GetByAddress(M.Read<long>(recordAddress + 0x08)));
+                    var jobAddress = M.Read<long>(Address + 0x08);
+                    if (jobAddress == 0) continue;
+                    jobs.Add(TheGame.Files.HeistJobs.GetByAddress(jobAddress));
                 }
 
                 return jobs;
             }
 
-            private List<HeistChestRewardType> GetRooms(long source)
+            private List<HeistChestRewardTypeRecord> GetRooms(long source)
             {
-                var rooms = new List<HeistChestRewardType>();
+                var rooms = new List<HeistChestRewardTypeRecord>();
 
                 var first = M.Read<long>(source);
                 var last = M.Read<long>(source + 0x08);
@@ -64,15 +67,17 @@ namespace ExileCore.PoEMemory.Components
 
                 for (var recordAddress = first; recordAddress < last; recordAddress += recordSize)
                 {
-                    rooms.Add(TheGame.Files.HeistChestRewardType.GetByAddress(M.Read<long>(recordAddress + 0x08)));
+                    var rewardTypeAddress = M.Read<long>(recordAddress + 0x08);
+                    if (rewardTypeAddress == 0) continue;
+                    rooms.Add(TheGame.Files.HeistChestRewardType.GetByAddress(rewardTypeAddress));
                 }
 
                 return rooms;
             }
 
-            private List<HeistNpc> GetCrew(long source)
+            private List<HeistNpcRecord> GetCrew(long source)
             {
-                var crew = new List<HeistNpc>();
+                var crew = new List<HeistNpcRecord>();
 
                 var first = M.Read<long>(source);
                 var last = M.Read<long>(source + 0x08);
@@ -80,7 +85,9 @@ namespace ExileCore.PoEMemory.Components
 
                 for (var recordAddress = first; recordAddress < last; recordAddress += recordSize)
                 {
-                    crew.Add(TheGame.Files.HeistNpcs.GetByAddress(M.Read<long>(recordAddress + 0x08)));
+                    var npcAddress = M.Read<long>(recordAddress + 0x08);
+                    if (npcAddress == 0) continue;
+                    crew.Add(TheGame.Files.HeistNpcs.GetByAddress(npcAddress));
                 }
 
                 return crew;

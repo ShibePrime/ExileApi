@@ -12,6 +12,7 @@ namespace GameOffsets
         public static readonly int NpcRecordSize = 0x10;
 
         [FieldOffset(0x8)] public long Owner;
+        [FieldOffset(0x1C)] public byte AreaLevel;
         [FieldOffset(0x20)] public NativePtrArray Wings;
     }
 }
