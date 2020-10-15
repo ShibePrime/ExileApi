@@ -161,7 +161,7 @@ namespace ExileCore
                     holder.DrawDelegate = () =>
                     {
                         var str = $"{holder.Name} {hotkeyNode.Value}##{hotkeyNode.Value}";
-                        var popupOpened = false;
+                        var popupOpened = true;
 
                         if (ImGui.Button(str))
                         {
