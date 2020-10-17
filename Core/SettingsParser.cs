@@ -108,7 +108,7 @@ namespace ExileCore
                         draws.Add(holder);
                     }
                 }
-                else
+                else if (id != -1)
                 {
                     var parent = GetAllDrawers(draws).Find(x => x.ID == id);
                     if (parent != null)
@@ -121,6 +121,10 @@ namespace ExileCore
                     {
                         draws.Add(holder);
                     }
+                }
+                else
+                {
+                    draws.Add(holder);
                 }
 
                 var type = property.GetValue(settings);
