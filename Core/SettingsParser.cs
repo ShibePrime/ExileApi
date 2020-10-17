@@ -20,7 +20,7 @@ namespace ExileCore
     {
         public static Type ListOfWhat(object list)
         {
-            return !(list is IList) ? null : (Type)ListOfWhat2((dynamic)list);
+            return !(list is IList) ? null : (Type) ListOfWhat2((dynamic) list);
         }
 
         private static Type ListOfWhat2<T>(IList<T> list)
@@ -29,6 +29,13 @@ namespace ExileCore
         }
 
         public static void Parse(ISettings settings, List<ISettingsHolder> draws, int id = -1)
+        {
+            var nextAvailableKey = -2;
+
+            Parse(settings, draws, id, ref nextAvailableKey);
+        }
+
+        private static void Parse(ISettings settings, List<ISettingsHolder> draws, int id, ref int nextAvailableKey)
         {
             if (settings == null)
             {
@@ -41,8 +48,8 @@ namespace ExileCore
             foreach (var property in props)
             {
                 if (property.GetCustomAttribute<IgnoreMenuAttribute>() != null) continue;
+
                 var menuAttribute = property.GetCustomAttribute<MenuAttribute>();
-                var isSettings = property.PropertyType.GetInterfaces().ContainsF(typeof(ISettings));
 
                 if (property.Name == "Enable" && menuAttribute == null) continue;
 
@@ -52,24 +59,35 @@ namespace ExileCore
                 {
                     Name = menuAttribute.MenuName,
                     Tooltip = menuAttribute.Tooltip,
-                    ID = menuAttribute.index == -1 ? MathHepler.Randomizer.Next(int.MaxValue) : menuAttribute.index
+                    ID = menuAttribute.index == -1 ? nextAvailableKey-- : menuAttribute.index
                 };
 
 
-                if (isSettings)
+                if (property.PropertyType.GetInterfaces().ContainsF(typeof(ISettings)))
                 {
-                    HandleSubSettings(settings, draws, property, menuAttribute, holder);
+                    var innerSettings = (ISettings) property.GetValue(settings);
+
+                    if (menuAttribute.index == -1)
+                    {
+                        Parse(innerSettings, draws, id, ref nextAvailableKey);
+                        continue;
+                    }
+
+                    holder.Type = HolderChildType.Tab;
+                    draws.Add(holder);
+                    Parse(innerSettings, draws, menuAttribute.index, ref nextAvailableKey);
+                    var parent = GetAllDrawers(draws).Find(x => x.ID == menuAttribute.parentIndex);
+                    parent?.Children.Add(holder);
                     continue;
                 }
 
                 if (IsISettingsList(property, settings))
                 {
-                    var list = property.GetValue(settings) as IList;
-                    if (list == null) continue;
+                    if (!(property.GetValue(settings) is IList list)) continue;
 
                     foreach (var item in list)
                     {
-                        Parse(item as ISettings, draws);
+                        Parse(item as ISettings, draws, id, ref nextAvailableKey);
                     }
 
                     continue;
@@ -78,12 +96,31 @@ namespace ExileCore
                 if (menuAttribute.parentIndex != -1)
                 {
                     var parent = GetAllDrawers(draws).Find(x => x.ID == menuAttribute.parentIndex);
-                    parent?.Children.Add(holder);
+                    if (parent != null)
+                    {
+                        // TODO - Check if the new setting index collides with any children.
+                        parent.Children.Add(holder);
+                    }
+                    else
+                    {
+                        DebugWindow.LogDebug(
+                            $"SettingsParser => ParentIndex used before created. [Menu(\"{menuAttribute.MenuName}\", ..., {menuAttribute.parentIndex})] added as a top-level setting.");
+                        draws.Add(holder);
+                    }
                 }
                 else if (id != -1)
                 {
                     var parent = GetAllDrawers(draws).Find(x => x.ID == id);
-                    parent?.Children.Add(holder);
+                    if (parent != null)
+                    {
+                        DebugWindow.LogDebug(
+                            $"SettingsParser => Index collision. '[Menu(\"{menuAttribute.MenuName}\", ..., {id}, ...)] added as sub-setting of \"{parent.Name}\".");
+                        parent.Children.Add(holder);
+                    }
+                    else
+                    {
+                        draws.Add(holder);
+                    }
                 }
                 else
                 {
@@ -91,25 +128,8 @@ namespace ExileCore
                 }
 
                 var type = property.GetValue(settings);
-                HandleType(holder, type);
+                HandleType(holder, type, property.ToString());
             }
-        }
-
-        private static void HandleSubSettings(ISettings settings, List<ISettingsHolder> draws, PropertyInfo property, MenuAttribute menuAttribute, SettingsHolder holder)
-        {
-            var innerSettings = (ISettings)property.GetValue(settings);
-
-            if (menuAttribute.index == -1)
-            {
-                Parse(innerSettings, draws);
-                return;
-            }
-
-            holder.Type = HolderChildType.Tab;
-            draws.Add(holder);
-            Parse(innerSettings, draws, menuAttribute.index);
-            var parent = GetAllDrawers(draws).Find(x => x.ID == menuAttribute.parentIndex);
-            parent?.Children.Add(holder);
         }
 
         private static bool IsISettingsList(PropertyInfo propertyInfo, ISettings settings)
@@ -142,7 +162,7 @@ namespace ExileCore
             return false;
         }
 
-        private static void HandleType(SettingsHolder holder, object type)
+        private static void HandleType(SettingsHolder holder, object type, string propertyInfo)
         {
             switch (type)
             {
@@ -155,7 +175,9 @@ namespace ExileCore
                         }
                     };
                     return;
+                case null:
                 case EmptyNode _:
+                    holder.DrawDelegate = () => { };
                     return;
                 case HotkeyNode hotkeyNode:
                     holder.DrawDelegate = () =>
@@ -182,8 +204,8 @@ namespace ExileCore
 
                         foreach (var key in Enum.GetValues(typeof(Keys)))
                         {
-                            if (!Input.GetKeyState((Keys)key)) continue;
-                            hotkeyNode.Value = (Keys)key;
+                            if (!Input.GetKeyState((Keys) key)) continue;
+                            hotkeyNode.Value = (Keys) key;
                             ImGui.CloseCurrentPopup();
                             break;
                         }
@@ -276,8 +298,8 @@ namespace ExileCore
                 case RangeNode<long> lRangeNode:
                     holder.DrawDelegate = () =>
                     {
-                        var value = (int)lRangeNode.Value;
-                        ImGui.SliderInt(holder.Unique, ref value, (int)lRangeNode.Min, (int)lRangeNode.Max);
+                        var value = (int) lRangeNode.Value;
+                        ImGui.SliderInt(holder.Unique, ref value, (int) lRangeNode.Min, (int) lRangeNode.Max);
                         lRangeNode.Value = value;
                     };
                     return;
@@ -300,7 +322,9 @@ namespace ExileCore
                     };
                     return;
             }
-            DebugWindow.LogDebug($"{type} not supported for menu now. Ask developers to add this type.");
+
+            DebugWindow.LogDebug(
+                $"SettingsParser => DrawDelegate not auto-generated for '{propertyInfo}'.");
         }
 
         private static List<ISettingsHolder> GetAllDrawers(List<ISettingsHolder> settingPropertyDrawers)
@@ -317,7 +341,7 @@ namespace ExileCore
                 if (settingsHolder.Contains(drawer))
                 {
                     DebugWindow.LogError(
-                        $" Possible overflow or duplicating drawers detected while generating menu. Name: {drawer.Name}, Id: {drawer.ID}",
+                        $"SettingsParser => Possible overflow or duplicate drawers detected when generating menu. Name: {drawer.Name}, Id: {drawer.ID}",
                         5);
                 }
                 else
@@ -382,7 +406,8 @@ namespace ExileCore
 
             var firstCursorPos = ImGui.GetCursorPos().Translate(10, font.FontSize * -0.66f);
 
-            ImGui.BeginChild(Unique, new Vector2(contentRegionAvail.X, font.FontSize * 2 * (Children.Count + 0.2f)), true);
+            ImGui.BeginChild(Unique, new Vector2(contentRegionAvail.X, font.FontSize * 2 * (Children.Count + 0.2f)),
+                true);
 
             foreach (var child in Children)
             {
@@ -403,6 +428,7 @@ namespace ExileCore
                     ImGui.SetTooltip(Tooltip);
                 }
             }
+
             ImGui.SetCursorPos(secondCursorPos);
             ImGui.EndGroup();
 

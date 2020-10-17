@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExileCore.Shared.Attributes;
 
 namespace ExileCore.Shared.PluginAutoUpdate.Settings
 {
@@ -14,8 +15,8 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
         public TextNode Name { get; set; } = new TextNode();
         public TextNode SourceUrl { get; set; } = new TextNode();
+        [IgnoreMenu]
         public DateTime LastUpdated { get; set; } = DateTime.MinValue;
-
 
         private Random Random { get; } = new Random();
         private string _uniqueName = "";
