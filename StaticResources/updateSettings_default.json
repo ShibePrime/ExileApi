@@ -14,18 +14,6 @@
         "Value": true
       },
       "Name": {
-        "Value": "DevTree"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/DevTree"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-    {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
         "Value": "HealthBars"
       },
       "SourceUrl": {
@@ -74,46 +62,10 @@
         "Value": true
       },
       "Name": {
-        "Value": "BuffUtil"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/BuffUtil"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-    {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
         "Value": "BasicFlaskRoutine"
       },
       "SourceUrl": {
         "Value": "https://github.com/Queuete/BasicFlaskRoutine"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-    {
-      "Enable": {
-        "Value": false
-      },
-      "Name": {
-        "Value": "UnIdy"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/UnIdy"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-    {
-      "Enable": {
-        "Value": false
-      },
-      "Name": {
-        "Value": "AutoQuit"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/AutoQuit"
       },
       "LastUpdated": "0001-01-01T00:00:00"
     },
@@ -146,34 +98,10 @@
         "Value": true
       },
       "Name": {
-        "Value": "DeliriumSpawnerHighlight"
+        "Value": "PreloadAlert"
       },
       "SourceUrl": {
-        "Value": "https://github.com/Queuete/DeliriumSpawnerHighlight"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-	  {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
-        "Value": "CoPilot"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/totalschaden/copilot"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-	  {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
-        "Value": "HeistIcons"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/IlliumIv/HeistIcons"
+        "Value": "https://github.com/IlliumIv/MiscInformation"
       },
       "LastUpdated": "0001-01-01T00:00:00"
     }
