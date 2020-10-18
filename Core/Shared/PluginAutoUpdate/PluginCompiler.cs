@@ -105,6 +105,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         private List<(string name, bool isAdded)> GetDependenciesFromCsProjLines(ICollection<string> lines)
         {
+            /*
+             * TODO consider using Regexp for better readability or a single loop checking every line for all possible cases.
+             */
             var dependencies = new List<(string name, bool isAdded)>();
 
             var references = lines
@@ -133,6 +136,20 @@ namespace ExileCore.Shared.PluginAutoUpdate
                     .Replace("\">", "")
                     .Split(',')
                     .First();
+                dependencies.Add((referenceName + ".dll", false));
+            }
+
+            var packageReferences = lines
+                .Where(lines => lines.TrimStart().StartsWith("<PackageReference Include="))
+                .Where(line => line.TrimEnd().EndsWith("\">"))
+                .ToList();
+
+            foreach (var packageReference in packageReferences)
+            {
+                var referenceName = packageReference
+                    .Replace(" ", "")
+                    .Replace("<PackageReferenceInclude=\"", "")
+                    .Replace("\">", "");
                 dependencies.Add((referenceName + ".dll", false));
             }
 
