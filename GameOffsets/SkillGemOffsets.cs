@@ -12,6 +12,7 @@ namespace GameOffsets
         [FieldOffset(0x2C)] public uint Level;
         [FieldOffset(0x30)] public uint ExperiencePrevLevel;
         [FieldOffset(0x34)] public uint ExperienceMaxLevel;
+        [FieldOffset(0x38)] public uint QualityTypeId;
     }
 
     [StructLayout(LayoutKind.Explicit, Pack = 1)]

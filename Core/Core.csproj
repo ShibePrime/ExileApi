@@ -383,6 +383,7 @@
     <Compile Include="Shared\Enums\League.cs" />
     <Compile Include="Shared\Enums\MapIconsIndex.cs" />
     <Compile Include="Shared\Enums\MyMapIconsIndex.cs" />
+    <Compile Include="Shared\Enums\SkillGemQualityType.cs" />
     <Compile Include="Shared\Helpers\IntPtrExtensions.cs" />
     <Compile Include="Shared\Interfaces\IDebugObjects.cs" />
     <Compile Include="PluginPanel.cs" />
