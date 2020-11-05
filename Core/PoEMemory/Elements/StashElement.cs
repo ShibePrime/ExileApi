@@ -12,15 +12,15 @@ namespace ExileCore.PoEMemory.Elements
         public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2B8)) : null;
 
         // Nice struct starts at 0xB80 till 0xBD0 and all are 8 byte long pointers.
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8, 0x428)) : null;
-        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8, 0x438)) : null;
-        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8, 0x440)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5A8)) : null;
+        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5B8)) : null;
+        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5C0)) : null;
         public Element ViewAllStashPanel =>
-            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8, 0x448)) : null; // going extra inside.
+            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5C8)) : null; // going extra inside.
 
         //Not fixed
-        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8, 0x450)) : null;
-        public int IndexVisibleStash => M.Read<int>(Address + 0x2D8, 0x490);
+        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5D0)) : null;
+        public int IndexVisibleStash => M.Read<int>(Address + 0x2C8, 0x620);
         public Inventory VisibleStash => GetVisibleStash();
         public IList<string> AllStashNames => GetAllStashNames();
         public IList<Inventory> AllInventories => GetAllInventories();
