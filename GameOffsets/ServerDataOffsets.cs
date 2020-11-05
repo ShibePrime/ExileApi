@@ -41,7 +41,7 @@ namespace GameOffsets
         public const int Skip = 0x7000;
         public const int AtlasRegionUpgrades = 0x819A;
         public const int AtlasWatchtowerLocations = 0x81A8;
-        public const int BestiaryBeastsCapturedCounts = 0x8378; // TODO: Changed in 3.12.4D
+        public const int BestiaryBeastsCapturedCounts = 0x83B8;
 
         [FieldOffset(0x7818 - Skip)] public long PlayerRelatedData;
         [FieldOffset(0x7828 - Skip)] public byte NetworkState;
@@ -50,13 +50,13 @@ namespace GameOffsets
         [FieldOffset(0x78C8 - Skip)] public int Latency;
         [FieldOffset(0x78D8 - Skip)] public NativePtrArray PlayerStashTabs;
         [FieldOffset(0x78F0 - Skip)] public NativePtrArray GuildStashTabs;
-        //[FieldOffset(0x7918 - Skip)] public NativePtrArray GuildList; // TODO: Changed in 3.12.4D
-        //[FieldOffset(0x7930 - Skip)] public NativePtrArray FriendsList; // TODO: Changed in 3.12.4D
+        [FieldOffset(0x7958 - Skip)] public NativePtrArray GuildList;
+        [FieldOffset(0x7970 - Skip)] public NativePtrArray FriendsList;
         //[FieldOffset(0x7940 - Skip)] public NativePtrArray UnknownSocialList; // TODO: Changed in 3.12.4D
-        //[FieldOffset(0x7980 - Skip)] public NativePtrArray PendingInvites; // TODO: Changed in 3.12.4D
-        [FieldOffset(0x7A00 - Skip)] public byte PartyStatusType; // TODO: Changed in 3.12.4D
-        //[FieldOffset(0x7A08 - Skip)] public NativePtrArray CurrentParty; // TODO: Changed in 3.12.4D
-        [FieldOffset(0x7A20 - Skip)] public byte PartyAllocationType; // TODO: Changed in 3.12.4D
+        [FieldOffset(0x79C0 - Skip)] public NativePtrArray PendingInvites;
+        [FieldOffset(0x7A40 - Skip)] public byte PartyStatusType;
+        [FieldOffset(0x7A48 - Skip)] public NativePtrArray CurrentParty;
+        [FieldOffset(0x7A60 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x7AC8 - Skip)] public long GuildNameAddress;
         [FieldOffset(0x7AD0 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x7B28 - Skip)] public NativePtrArray NearestPlayers;
