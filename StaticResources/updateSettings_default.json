@@ -74,18 +74,6 @@
         "Value": true
       },
       "Name": {
-        "Value": "PickIt"
-      },
-      "SourceUrl": {
-        "Value": "https://github.com/Queuete/PickIt"
-      },
-      "LastUpdated": "0001-01-01T00:00:00"
-    },
-    {
-      "Enable": {
-        "Value": true
-      },
-      "Name": {
         "Value": "PreloadAlert"
       },
       "SourceUrl": {
@@ -102,6 +90,54 @@
       },
       "SourceUrl": {
         "Value": "https://github.com/IlliumIv/MiscInformation"
+      },
+      "LastUpdated": "0001-01-01T00:00:00"
+    },
+	{
+      "Enable": {
+        "Value": true
+      },
+      "Name": {
+        "Value": "SimpleStashie"
+      },
+      "SourceUrl": {
+        "Value": "https://github.com/Queuete/SimpleStashie"
+      },
+      "LastUpdated": "0001-01-01T00:00:00"
+    },
+	{
+      "Enable": {
+        "Value": true
+      },
+      "Name": {
+        "Value": "SimplePickIt"
+      },
+      "SourceUrl": {
+        "Value": "https://github.com/Queuete/SimplePickIt"
+      },
+      "LastUpdated": "0001-01-01T00:00:00"
+    },
+	{
+      "Enable": {
+        "Value": true
+      },
+      "Name": {
+        "Value": "SimpleHotkeyChain"
+      },
+      "SourceUrl": {
+        "Value": "https://github.com/Queuete/SimpleHotkeyChain"
+      },
+      "LastUpdated": "0001-01-01T00:00:00"
+    },
+	{
+      "Enable": {
+        "Value": true
+      },
+      "Name": {
+        "Value": "EliteBar"
+      },
+      "SourceUrl": {
+        "Value": "https://github.com/Queuete/EliteBar"
       },
       "LastUpdated": "0001-01-01T00:00:00"
     }
