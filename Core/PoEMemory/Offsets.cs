@@ -24,9 +24,9 @@ namespace ExileCore.PoEMemory
             new Pattern(new byte[]
                 {
                     0x48, 0x8b, 0x08,
-                    0x48, 0x8d, 0x2d,
+                    0x4c, 0x8d, 0x35,
                     0x00, 0x00, 0x00, 0x00,
-                    0x41
+                    0x8b
 
                 }, "xxxxxx????x", "File Root",
                 14630000);
@@ -68,9 +68,8 @@ namespace ExileCore.PoEMemory
         private static readonly Pattern GameStatePattern = new Pattern(
             new byte[]
             {
-                0x48, 0x83, 0xec, 0x50, 0x48, 0xc7, 0x44, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x48, 0x89, 0x9c, 0x24, 0x00, 0x00, 0x00, 0x00, 0x48,
-                0x8b, 0xf9, 0x33, 0xed, 0x48, 0x39
-            }, "xxxxxxxx?????xxxx????xxxxxxx", "Game State", 1240000);
+	            0x48, 0x8b, 0xf9, 0x33, 0xed, 0x48, 0x39, 0x2d , 0x00, 0x00, 0x00, 0x00, 0x0f, 0x85, 0x1a,
+            }, "xxxxxxxx????xxx", "Game State", 1240000);
 
         public long AreaChangeCount { get; private set; }
         public long Base { get; private set; }
@@ -102,7 +101,7 @@ namespace ExileCore.PoEMemory
             //AreaChangeCount = 0x336AA88; 3.11.0f
 
 
-            GameStateOffset = m.Read<int>(baseAddress + array[index] + 29) + array[index] + 33;
+            GameStateOffset = m.Read<int>(baseAddress + array[index] + 8) + array[index] + 12;
 
             result.Add(OffsetsName.FileRoot, FileRoot);
             result.Add(OffsetsName.AreaChangeCount, AreaChangeCount);
