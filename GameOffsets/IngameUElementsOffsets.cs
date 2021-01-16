@@ -15,7 +15,7 @@ namespace GameOffsets
         //[FieldOffset(0x3C8)] public long PvpResultPanel;
         //[FieldOffset(0x3E0)] public long PvpSpectatingPanel;
         //[FieldOffset(0x3F0)] public long EditingHideoutNotifyPanel;
-        [FieldOffset(0x400)] public long ChatPanel;
+        [FieldOffset(0x410)] public long ChatPanel;
         //[FieldOffset(0x420)] public long BestiaryMissionCompletePanel;
         //[FieldOffset(0x428)] public long BestiaryNewBeastNotifyPanel;
         //[FieldOffset(0x430)] public long BestiaryNewRecipeNotifyPanel;
@@ -27,8 +27,8 @@ namespace GameOffsets
         //[FieldOffset(0x4F8)] public long OpenLeftPanel2; // Holds same address as above.
         //[FieldOffset(0x500)] public long OpenRightPanel2; // Holds same address as above.
         //[FieldOffset(0x518)] public long MtxShopPanel;
-        [FieldOffset(0x520)] public long InventoryPanel;
-        [FieldOffset(0x528)] public long StashElement;
+        [FieldOffset(0x500)] public long InventoryPanel;
+        [FieldOffset(0x538)] public long StashElement;
         //[FieldOffset(0x538)] public long GuildStashPanel;
         //[FieldOffset(0x540)] public long HideoutStashPanel; // Hideout stash panels from before rework.
         //[FieldOffset(0x548)] public long SocialPanel;
@@ -43,16 +43,16 @@ namespace GameOffsets
         //[FieldOffset(0x590)] public long MtxPanel;
         //[FieldOffset(0x598)] public long DecorationsPanel;
         //[FieldOffset(0x5A0)] public long HelpPanel;
-        [FieldOffset(0x5A8)] public long Map;
-        [FieldOffset(0x5B0)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x5B8)] public long Map;
+        [FieldOffset(0x5c0)] public long itemsOnGroundLabelRoot;
         //[FieldOffset(0x5BB)] public long VisibleHealthBars; // TODO: Check if is only friendly or all bars.
         [FieldOffset(0x5D0)] public long BanditDialog;
         //[FieldOffset(0x630)] public long BuffPanel;
         [FieldOffset(0x648)] public long NpcDialog;
         [FieldOffset(0x650)] public long QuestRewardWindow;
-        [FieldOffset(0x658)] public long PurchaseWindow;
-        [FieldOffset(0x660)] public long SellWindow;
-        [FieldOffset(0x668)] public long TradeWindow;
+        [FieldOffset(0x668)] public long PurchaseWindow;
+        [FieldOffset(0x670)] public long SellWindow;
+        [FieldOffset(0x678)] public long TradeWindow;
         //[FieldOffset(0x670)] public long MapReceptacle;
         //[FieldOffset(0x678)] public long PerandusCadiroOfferPanel;
         //[FieldOffset(0x680)] public long LabyrinthDivineFontPanel;
@@ -106,7 +106,7 @@ namespace GameOffsets
         //[FieldOffset(0x8E0)] public long SummonTanePanel;
         //[FieldOffset(0x8F8)] public long HideoutMusicPanel;
         //[FieldOffset(0x908)] public long ZoneTravelNotifyPanel;
-        [FieldOffset(0x958)] public long GemLvlUpPanel;
+        [FieldOffset(0x8D8)] public long GemLvlUpPanel;
         //[FieldOffset(0x9B8)] public long RampagePanel;
         //[FieldOffset(0x9C0)] public long IncursionProgressPanel;
         //[FieldOffset(0x9C8)] public long ZeroMustSurvivePanel;
