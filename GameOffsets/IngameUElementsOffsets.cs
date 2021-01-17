@@ -27,7 +27,7 @@ namespace GameOffsets
         //[FieldOffset(0x4F8)] public long OpenLeftPanel2; // Holds same address as above.
         //[FieldOffset(0x500)] public long OpenRightPanel2; // Holds same address as above.
         //[FieldOffset(0x518)] public long MtxShopPanel;
-        [FieldOffset(0x500)] public long InventoryPanel;
+        [FieldOffset(0x530)] public long InventoryPanel;
         [FieldOffset(0x538)] public long StashElement;
         //[FieldOffset(0x538)] public long GuildStashPanel;
         //[FieldOffset(0x540)] public long HideoutStashPanel; // Hideout stash panels from before rework.
