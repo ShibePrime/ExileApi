@@ -106,7 +106,7 @@ namespace GameOffsets
         //[FieldOffset(0x8E0)] public long SummonTanePanel;
         //[FieldOffset(0x8F8)] public long HideoutMusicPanel;
         //[FieldOffset(0x908)] public long ZoneTravelNotifyPanel;
-        [FieldOffset(0x8D8)] public long GemLvlUpPanel;
+        [FieldOffset(0x990)] public long GemLvlUpPanel;
         //[FieldOffset(0x9B8)] public long RampagePanel;
         //[FieldOffset(0x9C0)] public long IncursionProgressPanel;
         //[FieldOffset(0x9C8)] public long ZeroMustSurvivePanel;
