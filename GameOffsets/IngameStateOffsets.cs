@@ -23,9 +23,9 @@ namespace GameOffsets
 	    [FieldOffset(0x5EC)] public float TimeInGame;
 	    [FieldOffset(0x5F4)] public float TimeInGameF;
 	    [FieldOffset(0x6F8)] public int DiagnosticInfoType;
-	    [FieldOffset(0x928)] public long LatencyRectangle;
-	    [FieldOffset(0xDC8)] public long FrameTimeRectangle;
-	    [FieldOffset(0x1018)] public long FPSRectangle;
+	    [FieldOffset(0x838)] public long LatencyRectangle;
+	    [FieldOffset(0xCD8)] public long FrameTimeRectangle;
+	    [FieldOffset(0xF28)] public long FPSRectangle;
 	    [FieldOffset(0x1080)] public int Camera;
     }
 }
