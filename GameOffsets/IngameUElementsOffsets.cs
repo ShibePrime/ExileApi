@@ -68,7 +68,7 @@ namespace GameOffsets
         //[FieldOffset(0x6D8)] public long FriendNoteEditorPanel;
         //[FieldOffset(0x6E0)] public long BetaLadderScreen;
         //[FieldOffset(0x6F0)] public long DivinationCardTradeScreen;
-        [FieldOffset(0x6F8)] public long IncursionWindow;
+        [FieldOffset(0x708)] public long IncursionWindow;
         //[FieldOffset(0x700)] public long IncursionCorruptionAltarPanel;
         //[FieldOffset(0x708)] public long IncursionAltarOfSacrificePanel;
         //[FieldOffset(0x710)] public long IncursionLapidaryLensPanel;
