@@ -117,5 +117,6 @@ namespace GameOffsets
         [FieldOffset(0x8A8)] public long InvitesPanel;
         [FieldOffset(0xA10)] public long ItemOnGroundTooltip;
 		[FieldOffset(0xAA0)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
-	}
+        [FieldOffset(0x7E8)] public long RitualWindow;
+    }
 }
