@@ -68,7 +68,7 @@ namespace GameOffsets
         //[FieldOffset(0x6D8)] public long FriendNoteEditorPanel;
         //[FieldOffset(0x6E0)] public long BetaLadderScreen;
         //[FieldOffset(0x6F0)] public long DivinationCardTradeScreen;
-        [FieldOffset(0x6F8)] public long IncursionWindow;
+        [FieldOffset(0x708)] public long IncursionWindow;
         //[FieldOffset(0x700)] public long IncursionCorruptionAltarPanel;
         //[FieldOffset(0x708)] public long IncursionAltarOfSacrificePanel;
         //[FieldOffset(0x710)] public long IncursionLapidaryLensPanel;
@@ -117,5 +117,6 @@ namespace GameOffsets
         [FieldOffset(0x8A8)] public long InvitesPanel;
         [FieldOffset(0xA10)] public long ItemOnGroundTooltip;
 		[FieldOffset(0xAA0)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
-	}
+        [FieldOffset(0x7E8)] public long RitualWindow;
+    }
 }
