@@ -50,9 +50,19 @@ namespace Updater
             CleanFolder(tempFolderPath);
 
             var executeableName = Path.GetFileName(mainExecuteablePath);
-            if (!KillMainExe(executeableName, 15))
+
+            var processesToKillTasks = new Task<bool>[]
             {
-                Console.WriteLine($"Error -> Main Application was not closed in time, update failed");
+                Task.Run(() => KillExecuteable(executeableName, 15)),
+                Task.Run(() => KillExecuteable("csc.exe", 15)),
+                Task.Run(() => KillExecuteable("VBCSCompiler.exe", 15))
+            };
+
+            Task.WaitAll(processesToKillTasks);
+
+            if (processesToKillTasks.Any(t => t.Result == false)) 
+            {
+                Console.WriteLine($"Error -> Main Application, csc.exe or VBCSCompiler.exe was not closed in time, update failed");
                 Console.Read();
                 return;
             }
@@ -79,7 +89,7 @@ namespace Updater
             }
         }
 
-        private static bool KillMainExe(string executeableName, int maxSeconds)
+        private static bool KillExecuteable(string executeableName, int maxSeconds)
         {
             var nameWithoutExtension = StringArrayToString(executeableName.Split('.'), 1);
 
