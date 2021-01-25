@@ -14,61 +14,54 @@ namespace Updater
     {
         static void Main(string[] args)
         {
-            string updateFolderPath;
-            string unzippedFolderName;
-            string mainExecuteablePath;
-            if (args.Length < 3)
-            {
-                Console.WriteLine("Updater started manually without path arguments");
-                string basePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-                var baseDirectory = Path.GetDirectoryName(basePath);
-
-                updateFolderPath = Path.Combine(baseDirectory, "update");
-                unzippedFolderName = "PoeHelper";
-                mainExecuteablePath = Path.Combine(baseDirectory, "Loader.exe");
-
-                if (Directory.GetFiles(updateFolderPath).Length == 0)
-                {
-                    Console.WriteLine("No update possible. To run the HUD, launch the Loader.exe");
-                    Console.Read();
-                    return;
-                }
-            }
-            else
-            {
-                updateFolderPath = args[0];
-                unzippedFolderName = args[1];
-                mainExecuteablePath = args[2];
-            }
-            Console.WriteLine($"Log -> updateFolderPath: {updateFolderPath}");
-            Console.WriteLine($"Log -> releaseFileName: {unzippedFolderName}");
-            Console.WriteLine($"Log -> mainExecuteablePath: {mainExecuteablePath}");
-
-            var exeFolderPath = Path.GetDirectoryName(mainExecuteablePath);
-            var tempFolderPath = Path.Combine(exeFolderPath, "temp");
-            Console.WriteLine($"Log -> Cleaning directory: {tempFolderPath}");
-            CleanFolder(tempFolderPath);
-
-            var executeableName = Path.GetFileName(mainExecuteablePath);
-
-            var processesToKillTasks = new Task<bool>[]
-            {
-                Task.Run(() => KillExecuteable(executeableName, 15)),
-                Task.Run(() => KillExecuteable("csc.exe", 15)),
-                Task.Run(() => KillExecuteable("VBCSCompiler.exe", 15))
-            };
-
-            Task.WaitAll(processesToKillTasks);
-
-            if (processesToKillTasks.Any(t => t.Result == false)) 
-            {
-                Console.WriteLine($"Error -> Main Application, csc.exe or VBCSCompiler.exe was not closed in time, update failed");
-                Console.Read();
-                return;
-            }
-
             try
             {
+                string updateFolderPath;
+                string unzippedFolderName;
+                string mainExecuteablePath;
+                if (args.Length < 3)
+                {
+                    Console.WriteLine("Updater started manually without path arguments");
+                    string basePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+                    var baseDirectory = Path.GetDirectoryName(basePath);
+
+                    updateFolderPath = Path.Combine(baseDirectory, "update");
+                    unzippedFolderName = "PoeHelper";
+                    mainExecuteablePath = Path.Combine(baseDirectory, "Loader.exe");
+
+                    if (Directory.GetFiles(updateFolderPath).Length == 0)
+                    {
+                        Console.WriteLine("No update possible. To run the HUD, launch the Loader.exe");
+                        Console.Read();
+                        return;
+                    }
+                }
+                else
+                {
+                    updateFolderPath = args[0];
+                    unzippedFolderName = args[1];
+                    mainExecuteablePath = args[2];
+                }
+                Console.WriteLine($"Log -> updateFolderPath: {updateFolderPath}");
+                Console.WriteLine($"Log -> releaseFileName: {unzippedFolderName}");
+                Console.WriteLine($"Log -> mainExecuteablePath: {mainExecuteablePath}");
+
+                var exeFolderPath = Path.GetDirectoryName(mainExecuteablePath);
+                var tempFolderPath = Path.Combine(exeFolderPath, "temp");
+                Console.WriteLine($"Log -> Cleaning directory: {tempFolderPath}");
+                CleanFolder(tempFolderPath);
+
+                var executeableName = Path.GetFileName(mainExecuteablePath);
+                var processesToKillTasks = new Task<bool>[]
+                {
+                    Task.Run(() => KillExecuteable(executeableName, 15)),
+                    Task.Run(() => KillExecuteable("csc.exe", 15)),
+                    Task.Run(() => KillExecuteable("VBCSCompiler.exe", 15))
+                };
+
+                Task.WaitAll(processesToKillTasks);
+
+
                 var unzippedPath = Path.Combine(updateFolderPath, unzippedFolderName);
 
                 Directory.CreateDirectory(tempFolderPath);
@@ -93,19 +86,28 @@ namespace Updater
         {
             var nameWithoutExtension = StringArrayToString(executeableName.Split('.'), 1);
 
-            var timer = new Stopwatch();
-            timer.Start();
-            var maxMs = maxSeconds * 1000;
-
-            while (IsProcessOpen(nameWithoutExtension) && timer.ElapsedMilliseconds < maxMs)
+            try
             {
-                Console.WriteLine($"Log -> Try to kill {executeableName}");
-                KillProcess(nameWithoutExtension);
-                if (!IsProcessOpen(nameWithoutExtension)) return true;
+                var timer = new Stopwatch();
+                timer.Start();
+                var maxMs = maxSeconds * 1000;
 
-                Console.WriteLine($"Log -> {executeableName} is still running... {timer.ElapsedMilliseconds} / {maxMs}");
-                Thread.Sleep(500);
+                while (IsProcessOpen(nameWithoutExtension) && timer.ElapsedMilliseconds < maxMs)
+                {
+                    Console.WriteLine($"Log -> Try to kill {executeableName}");
+                    KillProcess(nameWithoutExtension);
+                    if (!IsProcessOpen(nameWithoutExtension)) return true;
+
+                    Console.WriteLine($"Log -> {executeableName} is still running... {timer.ElapsedMilliseconds} / {maxMs}");
+                    Thread.Sleep(500);
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Warning -> Unable to kill {executeableName}");
+                Console.WriteLine($"Warning -> {e}");
+            }
+
 
             return !IsProcessOpen(nameWithoutExtension);
         }
