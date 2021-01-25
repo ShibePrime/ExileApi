@@ -11,6 +11,7 @@ namespace ExileCore.Shared.Enums
         Legion,
         Delirium,
         Harvest,
-        Heist
+        Heist,
+        Ritual
     }
 }

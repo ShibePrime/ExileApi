@@ -12,7 +12,7 @@ namespace ExileCore.PoEMemory.Elements
         public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2B8)) : null;
 
         // Nice struct starts at 0xB80 till 0xBD0 and all are 8 byte long pointers.
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5A8)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x928)) : null;
         private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x938)) : null;
         public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x930)) : null;
         public Element ViewAllStashPanel =>

@@ -20,8 +20,8 @@ namespace ExileCore.PoEMemory.Components
         //x20 - some strings about item
         private string _name;
         public string Name => _name ?? (_name = M.Read<NativeStringU>(Address + 0x10, 0x18).ToString(M));
-        public int ItemCellsSizeX => M.Read<int>(Address + 0x10, 0x10);
-        public int ItemCellsSizeY => M.Read<int>(Address + 0x10, 0x14);
+        public byte ItemCellsSizeX => M.Read<byte>(Address + 0x10, 0x10);
+        public byte ItemCellsSizeY => M.Read<byte>(Address + 0x10, 0x11);
         private Influence InfluenceFlag => (Influence)BaseStruct.InfluenceFlag;
         public bool isShaper => (InfluenceFlag & Influence.Shaper) == Influence.Shaper;
         public bool isElder => (InfluenceFlag & Influence.Elder) == Influence.Elder;
@@ -33,7 +33,7 @@ namespace ExileCore.PoEMemory.Components
         public bool isSynthesized => BaseStruct.isSynthesized;
         // REVISIT: not using Cache.StringCache here.  no profiles
         // point to it being used often enough in a single frame.
-        public string PublicPrice => M.Read<NativeStringU>(BaseStruct.PublicPricePtr).ToString(M); // TODO: 3.12.2
+        public string PublicPrice => M.Read<NativeStringU>(BaseStruct.PublicPricePtr).ToString(M);
 
         // public bool isFractured => M.Read<byte>(Address + 0x98) == 0; // TODO: 3.12.2
 
