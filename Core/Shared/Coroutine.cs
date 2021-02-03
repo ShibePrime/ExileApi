@@ -275,6 +275,46 @@ namespace ExileCore.Shared
             yield return RealWork;
         }
     }
+    /// <summary>
+    /// Takes a function and lets the Coroutine wait until the given function returns true or the specified time threshold is exceeded.
+    /// Using this over WaitFunction is recommended.
+    /// </summary>
+    public class WaitFunctionTimed : YieldBase
+    {
+        private readonly Func<bool> fn;
+        public int Milliseconds { get; }
+        public bool StopCode { get; }
+        public string ErrorMessage { get; }
+
+        public WaitFunctionTimed(Func<bool> fn, bool stopCode = false, int maxWait = 1000, string errorMessage = "")
+        {
+            this.fn = fn;
+            Milliseconds = maxWait;
+            StopCode = stopCode;
+            ErrorMessage = errorMessage;
+            Current = GetEnumerator();
+        }
+
+        public sealed override IEnumerator GetEnumerator()
+        {
+            var wait = sw.Elapsed.TotalMilliseconds + Milliseconds;
+            while (!fn() && sw.Elapsed.TotalMilliseconds < wait)
+            {
+                yield return null;
+            }
+            if (!fn() && StopCode)
+            {
+                if (ErrorMessage != "")
+                {
+                    DebugWindow.LogMsg(ErrorMessage);
+                }
+                Logger.Log.Error($"Code Stopped in {this}");
+                yield break;
+            }
+
+            yield return RealWork;
+        }
+    }
 
     public class WaitTime : YieldBase
     {
