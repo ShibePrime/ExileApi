@@ -12,15 +12,15 @@ namespace ExileCore.PoEMemory.Elements
         public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2B8)) : null;
 
         // Nice struct starts at 0xB80 till 0xBD0 and all are 8 byte long pointers.
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5A8)) : null;
-        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5B8)) : null;
-        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5C0)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x928)) : null;
+        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x938)) : null;
+        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x930)) : null;
         public Element ViewAllStashPanel =>
-            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5C8)) : null; // going extra inside.
+            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x948)) : null; // going extra inside.
 
         //Not fixed
-        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x5D0)) : null;
-        public int IndexVisibleStash => M.Read<int>(Address + 0x2C8, 0x620);
+        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0, 0x230, 0x950)) : null;
+        public int IndexVisibleStash => M.Read<int>(Address + 0x2C0, 0x230, 0x9a0);
         public Inventory VisibleStash => GetVisibleStash();
         public IList<string> AllStashNames => GetAllStashNames();
         public IList<Inventory> AllInventories => GetAllInventories();
@@ -88,7 +88,7 @@ namespace ExileCore.PoEMemory.Elements
                 return string.Empty;
 
             var temp = ViewAllStashPanel.Children.FirstOrDefault(x => x.ChildCount >= 4)?[index];
-            return temp != null ? temp[(int) temp.ChildCount - 1].Text : string.Empty;
+            return temp?.Children?.FirstOrDefault()?.Children?.LastOrDefault()?.Text ?? string.Empty;
         }
     }
 }

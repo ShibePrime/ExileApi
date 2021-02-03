@@ -357,6 +357,7 @@
     <Compile Include="PoEMemory\MemoryObjects\Quest.cs" />
     <Compile Include="PoEMemory\MemoryObjects\QuestRewardWindow.cs" />
     <Compile Include="PoEMemory\MemoryObjects\QuestState.cs" />
+    <Compile Include="PoEMemory\MemoryObjects\RitualWindow.cs" />
     <Compile Include="PoEMemory\MemoryObjects\SellWindow.cs" />
     <Compile Include="PoEMemory\MemoryObjects\ServerData.cs" />
     <Compile Include="PoEMemory\MemoryObjects\ServerInventory.cs" />

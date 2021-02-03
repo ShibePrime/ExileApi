@@ -11,7 +11,7 @@ namespace GameOffsets
         [FieldOffset(0x238)] public int XReal;
         [FieldOffset(0x23C)] public int YReal;
         [FieldOffset(0x248)] public int CursorInInventory;
-        [FieldOffset(0x3B8)] public long ItemCount;
-        [FieldOffset(0x4A0)] public int TotalBoxesInInventoryRow;
+        [FieldOffset(0x390)] public long ItemCount;
+        [FieldOffset(0x478)] public int TotalBoxesInInventoryRow;
     }
 }

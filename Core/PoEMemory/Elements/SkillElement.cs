@@ -11,13 +11,13 @@ namespace ExileCore.PoEMemory.Elements
         public string SkillIconPath => M.ReadStringU(M.Read<long>(unknown1 + 0x10), 100).TrimEnd('0');
 
         // Number of time a skill is used ... reset on area change.
-        public int totalUses => M.Read<int>(unknown3 + 0x50);
+        public int totalUses => M.Read<int>(unknown3 + 0x58);
 
         // Usefull for channeling skills only.
         public bool isUsing => M.Read<byte>(unknown3 + 0x08) > 2;
 
         // A variable is unknown.
-        private long unknown1 => M.Read<long>(Address + OffsetBuffers + 0x244);
-        private long unknown3 => M.Read<long>(Address + OffsetBuffers + 0x32C);
+        private long unknown1 => M.Read<long>(Address + OffsetBuffers + 0x158);
+        private long unknown3 => M.Read<long>(Address + OffsetBuffers + 0x230);
     }
 }

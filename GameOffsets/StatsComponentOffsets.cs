@@ -13,6 +13,6 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct SubStatsComponentOffsets
     {
-        [FieldOffset(0xF0)] public NativePtrArray Stats;
+        [FieldOffset(0xE8)] public NativePtrArray Stats;
     }
 }

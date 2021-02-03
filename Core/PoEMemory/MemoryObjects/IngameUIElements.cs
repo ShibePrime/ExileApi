@@ -58,8 +58,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         // This offset points to the chat body panel that is a grandchild of the previous element.
         // Chatbox.Parent.Parent.Parent is equivalent to ChatBoxRoot.
-        public PoeChatElement ChatBox => GetObject<PoeChatElement>(ChatBoxRoot.GetChildAtIndex(1).GetChildAtIndex(2).GetChildAtIndex(1).Address);
-        public IList<string> ChatMessages => ChatBox.Children.Select(x => x.Text).ToList();
+        private long? _chatBoxAddress => ChatBoxRoot?.GetChildAtIndex(1)?.GetChildAtIndex(2)?.GetChildAtIndex(1)?.Address;
+        public PoeChatElement ChatBox => _chatBoxAddress.HasValue ? GetObject<PoeChatElement>(_chatBoxAddress.Value) : null;
+        public IList<string> ChatMessages => ChatBox?.Children.Select(x => x.Text).ToList();
         public Element QuestTracker => GetObject<Element>(IngameUIElementsStruct.QuestTracker);
         public QuestRewardWindow QuestRewardWindow => GetObject<QuestRewardWindow>(IngameUIElementsStruct.QuestRewardWindow);
         public Element OpenLeftPanel => GetObject<Element>(IngameUIElementsStruct.OpenLeftPanel);
@@ -97,6 +98,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public WorldMapElement AreaInstanceUi => GetObject<WorldMapElement>(IngameUIElementsStruct.AreaInstanceUi);
         public WorldMapElement WorldMap => GetObject<WorldMapElement>(IngameUIElementsStruct.WorldMap);
         public MetamorphWindowElement MetamorphWindow => GetObject<MetamorphWindowElement>(IngameUIElementsStruct.MetamorphWindow);
+        public RitualWindow RitualWindow => GetObject<RitualWindow>(IngameUIElementsStruct.RitualWindow);
 
         public IList<Tuple<Quest, int>> GetUncompletedQuests
         {
