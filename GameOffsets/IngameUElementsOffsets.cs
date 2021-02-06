@@ -22,8 +22,8 @@ namespace GameOffsets
         [FieldOffset(0x480)] public long QuestTracker;
         //[FieldOffset(0x488)] public long BenchCraftNewRecipeNotifyPanel;
         //[FieldOffset(0x4A8)] public long HideoutUnlockNotifyPanel;
-        [FieldOffset(0x4E8)] public long OpenLeftPanel;
-        [FieldOffset(0x4F0)] public long OpenRightPanel;
+        [FieldOffset(0x4F8)] public long OpenLeftPanel;
+        [FieldOffset(0x500)] public long OpenRightPanel;
         //[FieldOffset(0x4F8)] public long OpenLeftPanel2; // Holds same address as above.
         //[FieldOffset(0x500)] public long OpenRightPanel2; // Holds same address as above.
         //[FieldOffset(0x518)] public long MtxShopPanel;
