@@ -58650,17 +58650,17 @@ namespace ExileCore.Shared.Enums
 		/// <summary>
 		/// virtual_support_anticipation_charge_gain_interval_ms
 		/// </summary>
-		VirtualSupportAnticipationChargeGainIntervalMs = 11730,
+		VirtualSupportAnticipationChargeGainIntervalMs = 11708,
 
 		/// <summary>
 		/// support_anticipation_charge_gain_frequency_+%
 		/// </summary>
-		SupportAnticipationChargeGainFrequencyPct = 11731,
+		SupportAnticipationChargeGainFrequencyPct = 11709,
 
 		/// <summary>
 		/// support_added_cooldown_count_if_not_instant
 		/// </summary>
-		SupportAddedCooldownCountIfNotInstant = 11732,
+		SupportAddedCooldownCountIfNotInstant = 11710,
 
 		/// <summary>
 		/// manaweave_cost_equals_%_unreserved_mana
