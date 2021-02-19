@@ -50,7 +50,7 @@ namespace ExileCore.PoEMemory.Elements
 
                     limit++;
 
-                    if (limit > 1000)
+                    if (limit > 100000)
                         return null;
                 }
 
