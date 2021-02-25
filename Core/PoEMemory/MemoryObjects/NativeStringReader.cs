@@ -4,7 +4,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class NativeStringReader
     {
-        public static string ReadString(long address, IMemory m, int length = 256)
+        public static string ReadString(long address, IMemory m, int length = 512)
         {
             var size = m.Read<uint>(address + 0x10);
             var capacity = m.Read<uint>(address + 0x18);
