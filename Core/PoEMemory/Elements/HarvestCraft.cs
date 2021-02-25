@@ -12,15 +12,18 @@
 
         private string removeRandomFormatting(string text)
         {
-            if (text.IndexOf('<') != -1) //removing text coloring property (things like <white> and <craftcolor>)
+            if (text != null)
             {
-                int start = text.IndexOf('<');
-                int end = text.IndexOf('>', start) + 1;
-                string result = text.Remove(start, end - start);
-                text = removeRandomFormatting(result);
+                if (text.IndexOf('<') != -1) //removing text coloring property (things like <white> and <craftcolor>)
+                {
+                    int start = text.IndexOf('<');
+                    int end = text.IndexOf('>', start) + 1;
+                    string result = text.Remove(start, end - start);
+                    text = removeRandomFormatting(result);
+                }
+                text = text.Replace("{", "");
+                text = text.Replace("}", "");
             }
-            text = text.Replace("{", "");
-            text = text.Replace("}", "");
             return text;
         }
 
