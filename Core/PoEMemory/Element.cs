@@ -63,6 +63,16 @@ namespace ExileCore.PoEMemory
             }
         }
 
+        public virtual string LongText
+        {
+            get
+            {
+                var text = AsObject<EntityLabel>().Text3;
+                if (!string.IsNullOrWhiteSpace(text)) return text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}");
+                return null;
+            }
+        }
+
         /*public virtual string Text
         {
             get
