@@ -254,6 +254,7 @@
     <Compile Include="PoEMemory\Elements\BanditDialog.cs" />
     <Compile Include="PoEMemory\Elements\DelveElement.cs" />
     <Compile Include="PoEMemory\Elements\EntityLabel.cs" />
+    <Compile Include="PoEMemory\Elements\HarvestCraft.cs" />
     <Compile Include="PoEMemory\Elements\HoverItemIcon.cs" />
     <Compile Include="PoEMemory\Elements\HPbarElement.cs" />
     <Compile Include="PoEMemory\Elements\IncursionWindow.cs" />
@@ -336,6 +337,7 @@
     <Compile Include="PoEMemory\MemoryObjects\GameUi.cs" />
     <Compile Include="PoEMemory\MemoryObjects\GemLvlUpPanel.cs" />
     <Compile Include="PoEMemory\MemoryObjects\GrantedEffectsPerLevel.cs" />
+    <Compile Include="PoEMemory\MemoryObjects\HarvestWindow.cs" />
     <Compile Include="PoEMemory\MemoryObjects\Heist\HeistChestRewardTypeRecord.cs" />
     <Compile Include="PoEMemory\MemoryObjects\Heist\HeistJobRecord.cs" />
     <Compile Include="PoEMemory\MemoryObjects\Heist\HeistNpcRecord.cs" />
