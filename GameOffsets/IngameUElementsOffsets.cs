@@ -74,13 +74,13 @@ namespace GameOffsets
         //[FieldOffset(0x710)] public long IncursionLapidaryLensPanel;
         //[FieldOffset(0x718)] public long NikoSubterraneanChartPanel; // This is the subterrranean chart when talking to niko.
         [FieldOffset(0x720)] public long DelveWindow;  // This is the subterranean chart using in the mine.
-		[FieldOffset(0x728)] public long ZanaMissionChoice;
+		    [FieldOffset(0x728)] public long ZanaMissionChoice;
         //[FieldOffset(0x730)] public long SupportGemExamplesPanel;
         //[FieldOffset(0x738)] public long JunSyndicateInvestigationPanel; // this is the murder board when talking to Jun.
         [FieldOffset(0x740)] public long BetrayalWindow; // this is the murder board shown during Betrayal encounter.
         //[FieldOffset(0x748)] public long HelenaHideoutSelectPanel;
         [FieldOffset(0x750)] public long CraftBenchWindow;
-		[FieldOffset(0x758)] public long UnveilWindow;
+		    [FieldOffset(0x758)] public long UnveilWindow;
         //[FieldOffset(0x760)] public long BetrayalTrappedStashPanel;
         //[FieldOffset(0x768)] public long BetrayalTinysTrialPanel;
         //[FieldOffset(0x770)] public long BetrayalSyndicateCraftingBenchPanel;
@@ -116,10 +116,11 @@ namespace GameOffsets
         //[FieldOffset(0xA00)] public long HeistNotifyPanel;
         [FieldOffset(0x8A8)] public long InvitesPanel;
         [FieldOffset(0xA10)] public long ItemOnGroundTooltip;
-		[FieldOffset(0xAA0)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
+		    [FieldOffset(0xAA0)] public long MapTabWindowStartPtr; //TODO: Find out what exactly this is...
         [FieldOffset(0x7E8)] public long RitualWindow;
         [FieldOffset(0x7B0)] public long HarvestWindow;
         [FieldOffset(0x7B8)] public long HorticraftWindow;
-	[FieldOffset(0x818)] public long DelveDarkness; 
+	      [FieldOffset(0x818)] public long DelveDarkness; 
+
     }
 }
