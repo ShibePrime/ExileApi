@@ -99,7 +99,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public WorldMapElement WorldMap => GetObject<WorldMapElement>(IngameUIElementsStruct.WorldMap);
         public MetamorphWindowElement MetamorphWindow => GetObject<MetamorphWindowElement>(IngameUIElementsStruct.MetamorphWindow);
         public RitualWindow RitualWindow => GetObject<RitualWindow>(IngameUIElementsStruct.RitualWindow);
-
+        public DelveDarknessElem delve_darkness_elem => GetObject<DelveDarknessElem>(IngameUIElementsStruct.DelveDarkessElem);
+        
         public IList<Tuple<Quest, int>> GetUncompletedQuests
         {
             get
