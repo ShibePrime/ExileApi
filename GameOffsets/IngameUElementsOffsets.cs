@@ -120,6 +120,6 @@ namespace GameOffsets
         [FieldOffset(0x7E8)] public long RitualWindow;
         [FieldOffset(0x7B0)] public long HarvestWindow;
         [FieldOffset(0x7B8)] public long HorticraftWindow;
-	[FieldOffset(0x818)] public long DelveDarkessElem; 
+	[FieldOffset(0x818)] public long DelveDarkness; 
     }
 }
