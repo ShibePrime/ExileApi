@@ -1,11 +1,7 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Interfaces;
 using GameOffsets;
-using MoreLinq;
 
 namespace ExileCore.PoEMemory
 {
@@ -32,51 +28,25 @@ namespace ExileCore.PoEMemory
 
         public Dictionary<string, FileInformation> GetAllFiles()
         {
-            var files = new ConcurrentDictionary<string, FileInformation>();
+            var files = new Dictionary<string, FileInformation>();
             var fileRootAddress = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
-            Parallel.For(0, 128, i => {
-                var fileAddress = fileRootAddress + i * 0x40;
-                var fileChunk = _mem.Read<FilesOffsets>(fileAddress);
-                ReadDictionary(fileChunk.ListPtr, files);
-            });
-            return files.ToDictionary();
-        }
-
-        public void ReadDictionary(long head, ConcurrentDictionary<string, FileInformation> dictionary)
-        {
-            var node = _mem.Read<FileNode>(head);
-            var sw = Stopwatch.StartNew();
-            
-            while (head != node.Next)
+            for (int rbIndex = 0; rbIndex < 16; rbIndex++)
             {
-                if (sw.ElapsedMilliseconds > 2000)
+                var fileRootBlock = _mem.Read<FileRootBlock>(fileRootAddress + rbIndex * 0x28);
+                for (int bIndex = 0; bIndex < fileRootBlock.Capacity / 8; bIndex++)
                 {
-                    DebugWindow.LogError($"FilesFromMemory -> ReadDictionary(...) timeout error. Elapsed: {sw.ElapsedMilliseconds}");
-                    break;
+                    var basePtr = fileRootBlock.FileNodesPtr + bIndex * 0xc8;
+                    var hasValues = _mem.ReadBytes(basePtr, 8);
+                    for (int index = 0; index < 8; index++) if (hasValues[index] == 0)
+                        {
+                            var fileEntryPtr = _mem.Read<long>(basePtr + 8 + index * 0x18 + 8);
+                            var fileInfo = _mem.Read<GameOffsets.FileInformation>(fileEntryPtr);
+                            var key = _mem.ReadStringU(fileInfo.String);
+                            files[key] = new FileInformation(fileEntryPtr, fileInfo.AreaCount);
+                        }
                 }
-
-                var key = _mem.ReadStringU(node.Key);
-                
-                if (!dictionary.TryGetValue(key, out _))
-                {
-                    var areaChangeCount = _mem.Read<int>(node.Value + 0x38);
-                    dictionary[key] = new FileInformation(node.Value, areaChangeCount);
-                }
-
-                node = _mem.Read<FileNode>(node.Next);
             }
-        }
-
-        public Dictionary<string, FileInformation> GetAllFilesSync()
-        {
-            var files = new ConcurrentDictionary<string, FileInformation>();
-            var fileRootAddress = _mem.AddressOfProcess + _mem.BaseOffsets[OffsetsName.FileRoot];
-            Parallel.For(0, 128, i => {
-                var fileAddress = fileRootAddress + i * 0x40;
-                var fileChunk = _mem.Read<FilesOffsets>(fileAddress);
-                ReadDictionary(fileChunk.ListPtr, files);
-            });
-            return files.ToDictionary();
+            return files;
         }
     }
 }
