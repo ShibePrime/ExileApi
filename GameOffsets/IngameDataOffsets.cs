@@ -14,6 +14,6 @@ namespace GameOffsets
         [FieldOffset(0x11C)] public long LabDataPtr;
         [FieldOffset(0x4C0)] public long EntityList;
         [FieldOffset(0x4C8)] public long EntitiesCount;
-        [FieldOffset(0x670)] public TerrainData Terrain;
+        [FieldOffset(0x640)] public TerrainData Terrain;
     }
 }

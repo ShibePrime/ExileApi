@@ -8,8 +8,8 @@ namespace GameOffsets
     {
         [FieldOffset(0x18)] public long NumCols;
         [FieldOffset(0x20)] public long NumRows;
-        [FieldOffset(0xB0)] public NativePtrArray LayerMelee;
-        [FieldOffset(0xC8)] public NativePtrArray LayerRanged;
-        [FieldOffset(0xE0)] public int BytesPerRow;
+        [FieldOffset(0xd8)] public NativePtrArray LayerMelee;
+        [FieldOffset(0xf0)] public NativePtrArray LayerRanged;
+        [FieldOffset(0x108)] public int BytesPerRow;
     }
 }
