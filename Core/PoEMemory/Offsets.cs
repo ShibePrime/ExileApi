@@ -24,9 +24,9 @@ namespace ExileCore.PoEMemory
             new Pattern(new byte[]
                 {
                     0x48, 0x8b, 0x08,
-                    0x4c, 0x8d, 0x35,
+                    0x48, 0x8d, 0x3d,
                     0x00, 0x00, 0x00, 0x00,
-                    0x8b
+                    0x41
 
                 }, "xxxxxx????x", "File Root",
                 14630000);
