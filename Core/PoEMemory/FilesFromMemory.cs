@@ -33,7 +33,7 @@ namespace ExileCore.PoEMemory
             for (int rbIndex = 0; rbIndex < 16; rbIndex++)
             {
                 var fileRootBlock = _mem.Read<FileRootBlock>(fileRootAddress + rbIndex * 0x28);
-                for (int bIndex = 0; bIndex < 512; bIndex++)
+                for (int bIndex = 0; bIndex < (fileRootBlock.Capacity + 1) / 8; bIndex++)
                 {
                     var basePtr = fileRootBlock.FileNodesPtr + bIndex * 0xc8;
                     var hasValues = _mem.ReadBytes(basePtr, 8);
