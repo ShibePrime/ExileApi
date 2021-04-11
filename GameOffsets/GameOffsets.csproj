@@ -89,6 +89,7 @@
     <Compile Include="ServerInventoryOffsets.cs" />
     <Compile Include="ServerStashTabOffsets.cs" />
     <Compile Include="SkillGemOffsets.cs" />
+    <Compile Include="SkillUiStateOffsets.cs" />
     <Compile Include="StateMachineComponentOffsets.cs" />
     <Compile Include="StatsComponentOffsets.cs" />
     <Compile Include="StrongboxChestComponentData.cs" />
