@@ -33,17 +33,19 @@ namespace ExileCore.PoEMemory
             for (int rbIndex = 0; rbIndex < 16; rbIndex++)
             {
                 var fileRootBlock = _mem.Read<FileRootBlock>(fileRootAddress + rbIndex * 0x28);
-                for (int bIndex = 0; bIndex < fileRootBlock.Capacity / 8; bIndex++)
+                for (int bIndex = 0; bIndex < 512; bIndex++)
                 {
                     var basePtr = fileRootBlock.FileNodesPtr + bIndex * 0xc8;
                     var hasValues = _mem.ReadBytes(basePtr, 8);
-                    for (int index = 0; index < 8; index++) if (hasValues[index] == 0)
-                        {
-                            var fileEntryPtr = _mem.Read<long>(basePtr + 8 + index * 0x18 + 8);
-                            var fileInfo = _mem.Read<GameOffsets.FileInformation>(fileEntryPtr);
-                            var key = _mem.ReadStringU(fileInfo.String);
-                            files[key] = new FileInformation(fileEntryPtr, fileInfo.AreaCount);
-                        }
+                    for (int index = 0; index < 8; index++)
+                    {
+                        if (hasValues[index] == 0xFF) continue;
+                         
+                        var fileEntryPtr = _mem.Read<long>(basePtr + 8 + index * 0x18 + 8);
+                        var fileInfo = _mem.Read<GameOffsets.FileInformation>(fileEntryPtr);
+                        var key = _mem.ReadStringU(fileInfo.String);
+                        files[key] = new FileInformation(fileEntryPtr, fileInfo.AreaCount);
+                    }                        
                 }
             }
             return files;
