@@ -1,12 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Xml.Serialization;
+using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
+using GameOffsets;
 
 namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorSkill : RemoteMemoryObject
     {
+	    public ActorSkill()
+	    {
+		    _skillUiState = new AreaCache<long>(GetSkillUiStatePtr);
+		}
+
         public ushort Id => M.Read<ushort>(Address + 0x10);
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x20);
         public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x50) > 0; 
@@ -83,41 +91,48 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool IsTotem => GetStat(GameStat.IsTotem) == 1 || GetStat(GameStat.SkillIsTotemified) == 1;
         public bool IsTrap => GetStat(GameStat.IsTrap) == 1 || GetStat(GameStat.SkillIsTrapped) == 1;
         public bool IsVaalSkill => SoulsPerUse >= 1 && TotalVaalUses >= 1;
+
         private bool IsMine => true; //TODO
-        /*public int UsesAvailable
+
+        private readonly CachedValue<long> _skillUiState;
+
+        public bool IsOnCooldown
         {
-            get
-            {
-
-            if (MaxUses == 0)
-            {
-                if (IsTotem)
-                {
-                    return GetStat(PlayerStats.SkillDisplayNumberOfTotemsAllowed);
-                }
-                return 1;
-            }
-            return -1;
-
-            if (IsMine)
-            {
-                return (GetStat(PlayerStats.SkillDisplayNumberOfRemoteMinesAllowed) - NumberDeployed);
-            }
-            return (MaxUses - NumberDeployed);                         
-            }
+	        get
+	        {
+		        var ptr = _skillUiState.Value;
+                if (ptr == long.MaxValue)
+			        return false;
+		        var state = M.Read<SkillUiStateOffsets>(ptr);
+		        return (state.CooldownHigh - state.CooldownLow) >> 4 >= state.NumberOfUses;
+	        }
         }
-  
-
-        public int NumberDeployed
+        public int RemainingUses
         {
-            get
-            {
-                return DeployedObjects.Count;
-            }
-        }*/
+	        get
+	        {
+		        var ptr = _skillUiState.Value;
+		        if (ptr == long.MaxValue)
+					return 0;
+		        var state = M.Read<SkillUiStateOffsets>(ptr);
+		        return state.NumberOfUses - ((int)(state.CooldownHigh - state.CooldownLow) >> 4);
+	        }
+        }
 
-        //Doesn't work after patch or what
-        //public List<DeployedObject> DeployedObjects => ObjectManager.Instance.GameController.Player.GetComponent<Actor>().DeployedObjects.Where(x => x.ObjectKey == Id).ToList();
+        long GetSkillUiStatePtr()
+        {
+	        var listStart = M.Read<long>(pTheGame.IngameState.IngameUi.Address + 0x3b8, 0x980, 0x168);
+	        var listEnd = M.Read<long>(pTheGame.IngameState.IngameUi.Address + 0x3b8, 0x980, 0x170);
+	        int maxCount = 100;
+	        for (var ptr = listStart; ptr < listEnd && maxCount > 0; ptr += 0x48, maxCount--)
+	        {
+		        var state = M.Read<SkillUiStateOffsets>(ptr);
+		        if (state.SkillId == Id)
+			        return ptr;
+	        }
+	        return long.MaxValue;
+        }
+
 
         public string InternalName
         {
