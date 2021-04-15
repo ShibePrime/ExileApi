@@ -118,20 +118,25 @@ namespace ExileCore
                     });
                 }
 
+                    
+                if (Environment.OSVersion.Version.Major != 10) DebugWindow.LogError($"Core -> Windows 10 is the only supported system. Hud will probably not work!");
+
                 using (new PerformanceTimer("DX11 Load"))
                 {
                     _dx11 = new DX11(form, _coreSettings);
                 }
 
-                if (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 1)
-                {
-                    DebugWindow.LogMsg($"SoundController init skipped because win7 issue.");
-                }
-                else
+                try
                 {
                     _soundController = new SoundController("Sounds");
+                    _coreSettings.Volume.OnValueChanged += (sender, i) => { _soundController.SetVolume(i / 100f); };
                 }
-                _coreSettings.Volume.OnValueChanged += (sender, i) => { _soundController.SetVolume(i / 100f); };
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"Core -> Loading SoundController failed.");
+                    DebugWindow.LogError($"Core -> {e}");
+                }
+
                 _coreSettings.VSync.OnValueChanged += (obj, b) => { _dx11.VSync = _coreSettings.VSync.Value; };
                 Graphics = new Graphics(_dx11, _coreSettings);
 
