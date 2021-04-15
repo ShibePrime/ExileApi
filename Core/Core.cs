@@ -116,10 +116,8 @@ namespace ExileCore
                             Thread.Sleep(100 * 1000);
                         }
                     });
-                }
-
-                    
-                if (Environment.OSVersion.Version.Major != 10) DebugWindow.LogError($"Core -> Windows 10 is the only supported system. Hud will probably not work!");
+                }                                    
+                DebugWindow.LogMsg($"Core -> Windows 10 is the only supported system!");
 
                 using (new PerformanceTimer("DX11 Load"))
                 {
