@@ -8,8 +8,8 @@ namespace GameOffsets
 	    [FieldOffset(0x30)] public long Data;
 	    [FieldOffset(0x98)] public long IngameUi;
 		[FieldOffset(0xB8)] public long EntityLabelMap;
-	    [FieldOffset(0x418)] public long ServerData;
-	    [FieldOffset(0x540)] public long UIRoot;
+	    [FieldOffset(0x420)] public long ServerData;
+	    [FieldOffset(0x548)] public long UIRoot;
 	    [FieldOffset(0x578)] public long UIHoverTooltip; //if this is a memory region, that tells if ANY tooltip is shown on the screen, then this offset is correct
 	    [FieldOffset(0x580)] public float CurentUElementPosX;
 	    [FieldOffset(0x584)] public float CurentUElementPosY;
