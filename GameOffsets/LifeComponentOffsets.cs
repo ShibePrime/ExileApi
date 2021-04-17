@@ -7,20 +7,21 @@ namespace GameOffsets
     public struct LifeComponentOffsets
     {
         [FieldOffset(0x8)] public long Owner;
-        [FieldOffset(0x180)] public NativePtrArray Buffs;
-        [FieldOffset(0x1B8)] public float ManaRegen;
-        [FieldOffset(0x1BC)] public int MaxMana;
-        [FieldOffset(0x1C0)] public int ReservedFlatMana;
-        [FieldOffset(0x1C4)] public int CurMana;
-        [FieldOffset(0x1C8)] public int ReservedPercentMana;
+        [FieldOffset(0x180)] public NativePtrArray Buffs;  // wrong?
 
-        [FieldOffset(0x1F4)] public int MaxES;
-        [FieldOffset(0x1FC)] public int CurES;
+        [FieldOffset(0x1B0)] public float ManaRegen;
+        [FieldOffset(0x1B4)] public int MaxMana;
+        [FieldOffset(0x1B8)] public int CurMana;
+        [FieldOffset(0x1C0)] public int ReservedFlatMana; // wrong
+        [FieldOffset(0x1C8)] public int ReservedPercentMana; // wrong
+
+        [FieldOffset(0x1EC)] public int MaxES;
+        [FieldOffset(0x1F0)] public int CurES;
         
-        [FieldOffset(0x190)] public float Regen;
-        [FieldOffset(0x254)] public int MaxHP;
-        [FieldOffset(0x258)] public int ReservedFlatHP;
-        [FieldOffset(0x25C)] public int CurHP;
-        [FieldOffset(0x260)] public int ReservedPercentHP;
+        [FieldOffset(0x248)] public float Regen;
+        [FieldOffset(0x24C)] public int MaxHP;
+        [FieldOffset(0x250)] public int CurHP;
+        [FieldOffset(0x258)] public int ReservedFlatHP;  // wrong
+        [FieldOffset(0x260)] public int ReservedPercentHP;  // wrong
     }
 }
