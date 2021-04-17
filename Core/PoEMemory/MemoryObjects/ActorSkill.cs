@@ -121,8 +121,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         long GetSkillUiStatePtr()
         {
-	        var listStart = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x8088, 0x570, 0x28, 0x170);
-	        var listEnd = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x8088, 0x570, 0x28, 0x178);
+	        var listStart = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x8088, 0x610, 0x28, 0x170);
+	        var listEnd = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x8088, 0x610, 0x28, 0x178);
 	        int maxCount = 100;
 	        for (var ptr = listStart; ptr < listEnd && maxCount > 0; ptr += 0x48, maxCount--)
 	        {
