@@ -41,7 +41,7 @@ namespace ExileCore.PoEMemory
         public long ChildCount => (Elem.ChildEnd - Elem.ChildStart) / 8;
 
         //public bool IsVisibleLocal => Address!=0 && _cacheElementIsVisibleLocal.Value;
-        public bool IsVisibleLocal => (Elem.IsVisibleLocal & 4) == 4;
+        public bool IsVisibleLocal => (Elem.IsVisibleLocal & 8) == 8;
         public Element Root => TheGame.IngameState.UIRoot;
         public Element Parent => Elem.Parent == 0 ? null : _parent ?? (_parent = GetObject<Element>(Elem.Parent));
         public Vector2 Position => Elem.Position;
