@@ -20,9 +20,8 @@ namespace GameOffsets
         // Use the one inside the ActionPtr struct (i.e. ActionWrapperOffsets).
         // That one works for all kind of skills.
         // [FieldOffset(0x128)] public Vector2 SkillDestination;
-        [FieldOffset(0x680)] public NativePtrArray ActorSkillsArray;
-        [FieldOffset(0x6B0)] public NativePtrArray ActorVaalSkills; 
-        [FieldOffset(0x578)] public NativePtrArray HasMinionArray; // TODO: Find this.
-        [FieldOffset(0x6D0)] public NativePtrArray DeployedObjectArray; 
+        [FieldOffset(0x690)] public NativePtrArray ActorSkillsArray;
+        [FieldOffset(0x6C0)] public NativePtrArray ActorVaalSkills;
+        [FieldOffset(0x6E0)] public NativePtrArray DeployedObjectArray; 
     }
 }
