@@ -13,7 +13,7 @@ namespace GameOffsets
 		[FieldOffset(0x1C8)] public Vector2 RelativeCoord;
         [FieldOffset(0x1E8)] public int GridX;
         [FieldOffset(0x1EC)] public int GridY;
-        [FieldOffset(0x1F4)] public float Rotation;
+        [FieldOffset(0x1F0)] public float Rotation;
         [FieldOffset(0x214)] public Vector2 WorldPosition;
         [FieldOffset(0x214)] public float WorldX;
         [FieldOffset(0x218)] public float WorldY;
