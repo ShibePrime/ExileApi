@@ -7,7 +7,7 @@ namespace GameOffsets
     public struct IngameDataOffsets
     {
         [FieldOffset(0x78)] public long CurrentArea;
-        [FieldOffset(0x90)] public byte CurrentAreaLevel;
+        [FieldOffset(0x98)] public byte CurrentAreaLevel;
         [FieldOffset(0xFC)] public uint CurrentAreaHash;
         [FieldOffset(0xF8)] public NativePtrArray MapStats;
         [FieldOffset(0x470)] public long LocalPlayer;
