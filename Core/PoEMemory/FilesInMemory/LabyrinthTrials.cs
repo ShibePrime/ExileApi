@@ -23,7 +23,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
 
         public LabyrinthTrial GetLabyrinthTrialByAreaId(string id)
         {
-            return EntriesList.FirstOrDefault(x => x.Area.Id == id);
+            return EntriesList.FirstOrDefault(x => x.Area?.Id == id);
         }
 
         public LabyrinthTrial GetLabyrinthTrialById(int index)

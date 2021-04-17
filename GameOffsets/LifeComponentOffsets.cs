@@ -12,8 +12,7 @@ namespace GameOffsets
         [FieldOffset(0x1B0)] public float ManaRegen;
         [FieldOffset(0x1B4)] public int MaxMana;
         [FieldOffset(0x1B8)] public int CurMana;
-        [FieldOffset(0x1C0)] public int ReservedFlatMana; // wrong
-        [FieldOffset(0x1C8)] public int ReservedPercentMana; // wrong
+        [FieldOffset(0x1C0)] public int ReservedPercentMana;
 
         [FieldOffset(0x1EC)] public int MaxES;
         [FieldOffset(0x1F0)] public int CurES;
@@ -21,7 +20,6 @@ namespace GameOffsets
         [FieldOffset(0x248)] public float Regen;
         [FieldOffset(0x24C)] public int MaxHP;
         [FieldOffset(0x250)] public int CurHP;
-        [FieldOffset(0x258)] public int ReservedFlatHP;  // wrong
-        [FieldOffset(0x260)] public int ReservedPercentHP;  // wrong
+        [FieldOffset(0x258)] public int ReservedPercentHP;
     }
 }

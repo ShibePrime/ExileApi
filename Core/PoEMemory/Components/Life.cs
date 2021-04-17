@@ -25,16 +25,16 @@ namespace ExileCore.PoEMemory.Components
         private LifeComponentOffsets LifeComponentOffsetsStruct => _life.Value;
         public int MaxHP => Address != 0 ? LifeComponentOffsetsStruct.MaxHP : 1;
         public int CurHP => Address != 0 ? LifeComponentOffsetsStruct.CurHP : 0;
-        public int ReservedFlatHP => LifeComponentOffsetsStruct.ReservedFlatHP;
-        public int ReservedPercentHP => LifeComponentOffsetsStruct.ReservedPercentHP;
+        public double ReservedPercentHP => LifeComponentOffsetsStruct.ReservedPercentHP / 100;
+        public int ReservedFlatHP => (int)(MaxHP * ReservedPercentHP / 100);
         public int MaxMana => Address != 0 ? LifeComponentOffsetsStruct.MaxMana : 1;
         public int CurMana => Address != 0 ? LifeComponentOffsetsStruct.CurMana : 1;
-        public int ReservedFlatMana => LifeComponentOffsetsStruct.ReservedFlatMana;
-        public int ReservedPercentMana => LifeComponentOffsetsStruct.ReservedPercentMana;
+        public double ReservedPercentMana => LifeComponentOffsetsStruct.ReservedPercentMana / 100;
+        public int ReservedFlatMana => (int)(MaxMana * ReservedPercentMana / 100);
         public int MaxES => LifeComponentOffsetsStruct.MaxES;
         public int CurES => LifeComponentOffsetsStruct.CurES;
-        public float HPPercentage => CurHP / (float) (MaxHP - ReservedFlatHP - Math.Round(ReservedPercentHP * 0.01 * MaxHP));
-        public float MPPercentage => CurMana / (float) (MaxMana - ReservedFlatMana - Math.Round(ReservedPercentMana * 0.01 * MaxMana));
+        public float HPPercentage => CurHP / (float) (MaxHP - ReservedFlatHP);
+        public float MPPercentage => CurMana / (float) (MaxMana - ReservedFlatMana);
         public float ESPercentage => MaxES == 0 ? 0 : CurES / (float) MaxES;
 
         //public bool CorpseUsable => M.ReadMem(Address + 0x238, 1)[0] == 1; // Total guess, didn't verify
