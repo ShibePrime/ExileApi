@@ -46,7 +46,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
                 var baseItemType = new BaseItemType
                 {
                     Metadata = key,
-                    ClassName = M.ReadStringU(M.Read<long>(i + 0x10, 0)),
+                    ClassName = M.ReadStringU(M.Read<long>(i + 0x8, 0)),
                     Width = M.Read<int>(i + 0x18),
                     Height = M.Read<int>(i + 0x1C),
                     BaseName = M.ReadStringU(M.Read<long>(i + 0x20)),

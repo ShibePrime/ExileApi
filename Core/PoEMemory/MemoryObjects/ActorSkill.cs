@@ -16,7 +16,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 		}
 
         public ushort Id => M.Read<ushort>(Address + 0x10);
-        public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x20);
+        public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x18);
         public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x50) > 0; 
         public bool CanBeUsed => M.Read<byte>(Address + 0x51) == 0;
         public int Cost => M.Read<byte>(Address + 0x54); 
