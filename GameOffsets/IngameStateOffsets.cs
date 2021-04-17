@@ -5,7 +5,7 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct IngameStateOffsets
     {
-	    [FieldOffset(0x38)] public long Data;
+	    [FieldOffset(0x30)] public long Data;
 	    [FieldOffset(0xA0)] public long IngameUi;
 		[FieldOffset(0xC0)] public long EntityLabelMap;
 	    [FieldOffset(0x420)] public long ServerData;
