@@ -7,7 +7,7 @@ namespace GameOffsets
     public struct PositionedComponentOffsets
     {
         [FieldOffset(0x8)] public long OwnerAddress;
-		[FieldOffset(0x15C)] public byte Reaction;
+		[FieldOffset(0x159)] public byte Reaction;
 		[FieldOffset(0x168)] public int Size;
 		[FieldOffset(0x1B0)] public Vector2 PrevPosition;
 		[FieldOffset(0x1C8)] public Vector2 RelativeCoord;
