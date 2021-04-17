@@ -6,7 +6,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class GrantedEffectsPerLevel : RemoteMemoryObject
     {
-        public SkillGemWrapper SkillGemWrapper => ReadObject<SkillGemWrapper>(Address + 0x8);
+        public SkillGemWrapper SkillGemWrapper => ReadObject<SkillGemWrapper>(Address);
         public int Level => M.Read<int>(Address + 0x10);
         public int RequiredLevel => M.Read<int>(Address + 0x74);
         public int ManaMultiplier => M.Read<int>(Address + 0x78);
