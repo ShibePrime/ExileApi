@@ -12,6 +12,7 @@ namespace ExileCore.Shared.Enums
         Delirium,
         Harvest,
         Heist,
-        Ritual
+        Ritual,
+        Ultimatum,
     }
 }
