@@ -41,6 +41,7 @@
     <Compile Include="ActorDeployedObject.cs" />
     <Compile Include="BaseComponentOffsets.cs" />
     <Compile Include="BuffOffsets.cs" />
+    <Compile Include="BuffsOffsets.cs" />
     <Compile Include="BuffStringOffsets.cs" />
     <Compile Include="CameraOffsets.cs" />
     <Compile Include="ChestComponentOffsets.cs" />

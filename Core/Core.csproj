@@ -193,6 +193,7 @@
     <Compile Include="PoEMemory\Components\Beam.cs" />
     <Compile Include="PoEMemory\Components\BlightTower.cs" />
     <Compile Include="PoEMemory\Components\Buff.cs" />
+    <Compile Include="PoEMemory\Components\Buffs.cs" />
     <Compile Include="PoEMemory\Components\CapturedMonster.cs" />
     <Compile Include="PoEMemory\Components\Charges.cs" />
     <Compile Include="PoEMemory\Components\Chest.cs" />

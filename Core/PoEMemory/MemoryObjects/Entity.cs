@@ -43,12 +43,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _hiddenCheckCache = new LatancyCache<bool>(() =>
             {
                 if (IsValid)
-                    isHidden = HasComponent<Life>() && GetComponent<Life>().HasBuff("hidden_monster");
+                    isHidden = HasComponent<Buffs>() && GetComponent<Buffs>().HasBuff("hidden_monster");
 
                 return isHidden;
             }, 50);
 
-            buffCache = this.ValidCache(() => GetComponent<Life>()?.Buffs);
+            buffCache = this.ValidCache(() => GetComponent<Buffs>()?.BuffsList);
         }
 
         public static Entity Player { get; set; }
