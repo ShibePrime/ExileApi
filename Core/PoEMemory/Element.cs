@@ -248,21 +248,12 @@ namespace ExileCore.PoEMemory
             foreach(var ch in Children)
                 ch.GetAllTextElements(res);
         }
-        public Element GetElemByStr(NpcLinks link_enum) {
-            return GetElemByStr(link_enum.ToString());
-        }
-        public Element GetElemByStr(string str, bool ignore_case = true) {
-            if(ignore_case  ) {
-                if(Text?.ToLower() == str.ToLower()) {
-                    return this;
-                }
-            } else {
-                if(Text == str) {
-                    return this;
-                }
+        public Element GetElementByString(string str) {
+            if(Text == str) {
+                return this;
             }
-            foreach(var ch in Children) {
-                var element = ch.GetElemByStr(str);
+            foreach(var child in Children) {
+                var element = child.GetElementByString(str);
                 if(element != null) return element;
             }
             return null;
