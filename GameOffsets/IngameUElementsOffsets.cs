@@ -49,7 +49,7 @@ namespace GameOffsets
         [FieldOffset(0x5D8)] public long BanditDialog;
         //[FieldOffset(0x630)] public long BuffPanel;
         [FieldOffset(0x650)] public long NpcDialog;
-        [FieldOffset(0x658)] public long QuestRewardWindow;
+        [FieldOffset(0x668)] public long QuestRewardWindow;
         [FieldOffset(0x670)] public long PurchaseWindow;
         [FieldOffset(0x678)] public long SellWindow;
         [FieldOffset(0x680)] public long TradeWindow;
