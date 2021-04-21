@@ -2,7 +2,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorVaalSkill : RemoteMemoryObject
     {
-        private const int NAMES_POINTER_OFFSET = 0x8;
+        private const int NAMES_POINTER_OFFSET = 0x0;
         private const int INTERNAL_NAME_OFFSET = 0x0;
         private const int NAME_OFFSET = 0x8;
         private const int DESCRIPTION_OFFSET = 0x10;
