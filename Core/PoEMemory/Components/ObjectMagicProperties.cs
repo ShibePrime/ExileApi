@@ -50,7 +50,7 @@ namespace ExileCore.PoEMemory.Components
 
                 for (var i = begin; i < end; i += 0x28)
                 {
-                    var read = M.Read<long>(i + 0x20, 0);
+                    var read = M.Read<long>(i + 0x18, 0);
                     var mod = Cache.StringCache.Read($"{nameof(ObjectMagicProperties)}{read}", () => M.ReadStringU(read));
                     modsList.Add(mod);
                     j++;
