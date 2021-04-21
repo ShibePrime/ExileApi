@@ -104,7 +104,7 @@ namespace ExileCore.Shared.VersionChecker
         {
             if (File.Exists(fileLocation))
             {
-                DebugWindow.LogMsg("AutoUpdate -> Update .zip file already exists.");
+                DebugWindow.LogMsg("AutoUpdate -> Update .zip file already exists");
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace ExileCore.Shared.VersionChecker
                 }
                 catch (Exception e)
                 {
-                    DebugWindow.LogError($"AutoUpdate -> Download failed");
+                    DebugWindow.LogError($"AutoUpdate -> Download update... failed");
                     DebugWindow.LogError($"AutoUpdate -> {e.Message}");
                 }
             }
@@ -132,14 +132,29 @@ namespace ExileCore.Shared.VersionChecker
             var resultFolder = Path.Combine(UPDATE_FOLDER, RELEASE_FOLDER);
             try
             {
-                ZipFile.ExtractToDirectory(
-                fileLocation,
-                resultFolder
-                );
-            } 
+                DebugWindow.LogMsg($"AutoUpdate -> Extract .zip...");
+                ZipFile.ExtractToDirectory(fileLocation, resultFolder);
+                DebugWindow.LogMsg($"AutoUpdate -> Extract .zip... done");
+            }
             catch
             {
-                DebugWindow.LogError($"AutoUpdate -> Unzip failed, you may need to delete the content of the folder {UPDATE_FOLDER} manually");
+                DebugWindow.LogError($"AutoUpdate -> Extract .zip... failed");
+                try
+                {
+                    DebugWindow.LogMsg("AutoUpdate -> Delete existing .zip file...");
+                    File.Delete(fileLocation);
+                    DebugWindow.LogMsg("AutoUpdate -> Delete existing .zip file... done");
+
+                    DebugWindow.LogMsg("AutoUpdate -> Delete already unpacked data...");
+                    CleanUpdateFolder();
+                    DebugWindow.LogMsg("AutoUpdate -> Delete already unpacked data... done");
+                }
+                catch (Exception e)
+                {
+                    DebugWindow.LogError("AutoUpdate -> Delete exisiting .zip file or already unpacked data... failed");
+                    DebugWindow.LogMsg($"AutoUpdate -> You need to delete the content of the folder \"{UPDATE_FOLDER}\" manually ");
+                    DebugWindow.LogDebug($"AutoUpdate -> {e.Message}");
+                }
             }
             
             return resultFolder;

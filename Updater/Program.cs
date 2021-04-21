@@ -101,13 +101,16 @@ namespace Updater
                     Console.WriteLine($"Log -> {executeableName} is still running... {timer.ElapsedMilliseconds} / {maxMs}");
                     Thread.Sleep(500);
                 }
+
+                if (IsProcessOpen(nameWithoutExtension)) throw new Exception($"{executeableName} not killed after {timer.ElapsedMilliseconds}ms");
+
+                Console.WriteLine($"Log -> {executeableName} successfully killed");
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Warning -> Unable to kill {executeableName}");
                 Console.WriteLine($"Warning -> {e}");
             }
-
 
             return !IsProcessOpen(nameWithoutExtension);
         }
