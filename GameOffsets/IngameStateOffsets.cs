@@ -22,6 +22,6 @@ namespace GameOffsets
 	    [FieldOffset(0x840)] public long LatencyRectangle;
 	    [FieldOffset(0xCE0)] public long FrameTimeRectangle;
 	    [FieldOffset(0xF30)] public long FPSRectangle;
-	    [FieldOffset(0x1088)] public int Camera;
+	    [FieldOffset(0x1080)] public int Camera;
     }
 }
