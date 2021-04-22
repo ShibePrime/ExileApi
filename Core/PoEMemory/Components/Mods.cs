@@ -71,7 +71,8 @@ namespace ExileCore.PoEMemory.Components
             {
                 var implicitMods = GetMods(ModsStruct.implicitMods);
                 var explicitMods = GetMods(ModsStruct.explicitMods);
-                return implicitMods.Concat(explicitMods).ToList();
+                var enchantMods = GetMods(ModsStruct.enchantMods);
+                return implicitMods.Concat(explicitMods).Concat(enchantMods).ToList();
             }
         }
 
