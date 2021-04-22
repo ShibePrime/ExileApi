@@ -22,6 +22,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<ServerData> _serverData;
         private readonly CachedValue<float> _TimeInGameF;
         private readonly CachedValue<Element> _UIHover;
+        private readonly CachedValue<Element> _UIHoverElement;
         private readonly CachedValue<Element> _UIHoverTooltip;
         private readonly CachedValue<float> _UIHoverX;
         private readonly CachedValue<float> _UIHoverY;
@@ -42,6 +43,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _ingameUi = new AreaCache<IngameUIElements>(() => GetObject<IngameUIElements>(_ingameState.Value.IngameUi));
             _UIRoot = new AreaCache<Element>(() => GetObject<Element>(_ingameState.Value.UIRoot));
             _UIHover = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHover));
+            _UIHoverElement = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverElement));
             _UIHoverX = new FrameCache<float>(() => _ingameState.Value.UIHoverX);
             _UIHoverY = new FrameCache<float>(() => _ingameState.Value.UIHoverY);
             _UIHoverTooltip = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverTooltip));
@@ -74,6 +76,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UIHover => _UIHover.Value;
         public float UIHoverX => _UIHoverX.Value;
         public float UIHoverY => _UIHoverY.Value;
+        public Element UIHoverElement => _UIHoverElement.Value;
         public Element UIHoverTooltip => _UIHoverTooltip.Value;
         public float CurentUElementPosX => _CurrentUElementPosX.Value;
         public float CurentUElementPosY => _CurrentUElementPosY.Value;

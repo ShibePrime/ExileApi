@@ -10,6 +10,7 @@ namespace GameOffsets
 		[FieldOffset(0xC0)] public long EntityLabelMap;
 	    [FieldOffset(0x420)] public long ServerData;
 	    [FieldOffset(0x548)] public long UIRoot;
+	    [FieldOffset(0x580)] public long UIHoverElement;
 	    [FieldOffset(0x580)] public long UIHoverTooltip; //if this is a memory region, that tells if ANY tooltip is shown on the screen, then this offset is correct
 	    [FieldOffset(0x5CC)] public float CurentUElementPosX;
 	    [FieldOffset(0x5D0)] public float CurentUElementPosY;
