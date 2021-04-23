@@ -8,12 +8,12 @@ namespace GameOffsets
     {
         [FieldOffset(0x0)] public NativeStringU Key;
         [FieldOffset(0x8)] public long Unknown8;
-        [FieldOffset(0x1C)] public int MinLevel;
         [FieldOffset(0x14)] public long TypeName;
-        [FieldOffset(0x28)] public long StatNames1;
-        [FieldOffset(0x38)] public long StatNames2;
-        [FieldOffset(0x48)] public long StatNames3;
-        [FieldOffset(0x58)] public long StatName4;
+        [FieldOffset(0x1C)] public int MinLevel;
+        [FieldOffset(0x20)] public long StatNames1;
+        [FieldOffset(0x30)] public long StatNames2;
+        [FieldOffset(0x40)] public long StatNames3;
+        [FieldOffset(0x50)] public long StatName4;
         [FieldOffset(0x60)] public int Domain;
         [FieldOffset(0x64)] public long UserFriendlyName;
         [FieldOffset(0x6C)] public int AffixType;
