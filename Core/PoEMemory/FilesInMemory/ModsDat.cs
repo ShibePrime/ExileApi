@@ -129,7 +129,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
 
                 for (var i = 0; i < Tags.Length; i++)
                 {
-                    var ii = ta + 0x8 + 0x10 * i;
+                    var ii = ta + 0x10 * i;
                     var l = m.Read<long>(ii, 0);
 
                     Tags[i] = tagsDat.Records[

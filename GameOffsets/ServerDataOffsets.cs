@@ -60,20 +60,29 @@ namespace GameOffsets
         [FieldOffset(0x8108 - Skip)] public NativePtrArray GuildInventories;
         [FieldOffset(0x8220 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x8320 - Skip)] public NativePtrArray NPCInventories;
-        public const int AtlasRegionUpgrades = 0x841A;
-        public const int AtlasWatchtowerLocations = 0x8428;
-        [FieldOffset(0x8628 - Skip)] public ushort TradeChatChannel;
-        public const int BestiaryBeastsCapturedCounts = 0x8638;
-        [FieldOffset(0x8580 - Skip)] public ushort GlobalChatChannel;
-        [FieldOffset(0x85E0 - Skip)] public ushort LastActionId;
         
-        // Note: Search for a LONG value equal to your current amount of completed maps. Map list will be the next byte.
-        [FieldOffset(0x86D8 - Skip)] public long CompletedMaps; 
-        [FieldOffset(0x8698 - Skip)] public long BonusCompletedAreas;
-        [FieldOffset(0x8718 - Skip)] public long AwakenedAreas;
-        [FieldOffset(0x91CC - Skip)] public byte MonsterLevel;
-        [FieldOffset(0x91CD - Skip)] public byte MonstersRemaining;
-        [FieldOffset(0x9270 - Skip)] public int CurrentAzuriteAmount;
-        [FieldOffset(0x9280 - Skip)] public ushort CurrentSulphiteAmount;
+        public const int BestiaryBeastsCapturedCounts = 0x8638;
+        [FieldOffset(0x85F8 - Skip)] public ushort TradeChatChannel;
+        [FieldOffset(0x8600 - Skip)] public ushort GlobalChatChannel;
+        [FieldOffset(0x8650 - Skip)] public ushort LastActionId;
+        
+        // Note: Search for a LONG value equal to your current amount of completed maps.
+        //       Previous byte is a linked list of maps. Map list will be the next byte.
+        [FieldOffset(0x86E8 - Skip)] public long CompletedMapsList;
+        [FieldOffset(0x86F0 - Skip)] public long CompletedMapsCount;
+        [FieldOffset(0x86F8 - Skip)] public long CompletedMapsArray;
+        [FieldOffset(0x8728 - Skip)] public long BonusCompletedAreasList;
+        [FieldOffset(0x8730 - Skip)] public long BonusCompletedAreasCount;
+        [FieldOffset(0x8738 - Skip)] public long BonusCompletedAreasArray;
+        [FieldOffset(0x8768 - Skip)] public long AwakenedAreasList;
+        [FieldOffset(0x8770 - Skip)] public long AwakenedAreasCount;
+        [FieldOffset(0x8778 - Skip)] public long AwakenedAreasArray;
+        public const int AtlasRegionUpgrades = 0x87F2;
+        public const int AtlasWatchtowerLocations = 0x8800;
+
+        [FieldOffset(0x922C - Skip)] public byte MonsterLevel;
+        [FieldOffset(0x922D - Skip)] public byte MonstersRemaining;
+        [FieldOffset(0x92D8 - Skip)] public int CurrentAzuriteAmount;
+        [FieldOffset(0x92E8 - Skip)] public ushort CurrentSulphiteAmount;
     }
 }

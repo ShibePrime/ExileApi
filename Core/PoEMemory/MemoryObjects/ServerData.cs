@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.FilesInMemory.Atlas;
 using ExileCore.Shared.Cache;
@@ -268,8 +269,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         #region Atlas
 
-        public IList<WorldArea> CompletedAreas => GetAreas(ServerDataStruct.CompletedMaps);
-        public IList<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreas);
+        public IList<WorldArea> CompletedAreas => GetAreas(ServerDataStruct.CompletedMapsList);
+        public IList<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreasList);
+        public IList<WorldArea> AwakenedCompletedAreas => GetAreas(ServerDataStruct.AwakenedAreasList);
         public Dictionary<AtlasRegionE, WorldArea> WatchtowerMaps => GetWatchtowerMaps(Address + ServerDataOffsets.AtlasWatchtowerLocations);
 
         #region Features removed from 3.9 patch
@@ -283,40 +285,32 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public IList<WorldArea> ShaperElderAreas => new List<WorldArea>();
         #endregion
 
-        private IList<WorldArea> GetAreas(long address)
+        private IList<WorldArea> GetAreas(long listAddress) // f7a8
         {
             var worldAreas = new List<WorldArea>();
+            var readCount = 0;
 
-            if (Address == 0 || address == 0) return worldAreas;
+            if (Address == 0 || listAddress == 0) return worldAreas;
 
-            var size = M.Read<int>(Address - 0x8);
-            var listStart = M.Read<long>(address);
-            var errorCount = 0;
+            var lastAddress = M.Read<long>(listAddress);
 
-            if (listStart == 0 || size == 0)
-                return worldAreas;
+            if (lastAddress == 0) return worldAreas;
 
-            for (var areaAddress = M.Read<long>(listStart); areaAddress != listStart; areaAddress = M.Read<long>(areaAddress))
+            var currentAddress = lastAddress; 
+
+            if (currentAddress == 0) return worldAreas;
+
+            for (var nextAddress = M.Read<long>(currentAddress);
+                nextAddress != lastAddress && nextAddress != 0;
+                nextAddress = M.Read<long>(currentAddress))
             {
-                if (areaAddress == 0)
-                {
-                    return worldAreas;
-                }
+                var areaAddress = M.Read<long>(currentAddress + 0x10);
+                var byAddress = TheGame.Files.WorldAreas.GetByAddress(areaAddress);
+                if (byAddress != null) worldAreas.Add(byAddress);
+                currentAddress = nextAddress;
 
-                var byAddress = TheGame.Files.WorldAreas.GetByAddress(M.Read<long>(areaAddress + 0x18));
-
-                if (byAddress != null)
-                    worldAreas.Add(byAddress);
-
-                if (--size < 0) break;
-                errorCount++;
-
-                //Sometimes wrong offsets and read 10000000+ objects
-                if (errorCount > 1024)
-                {
-                    worldAreas = new List<WorldArea>();
-                    break;
-                }
+                // Read count shouldn't be higher than the number of maps
+                if (++readCount == 256) return new List<WorldArea>();
             }
 
             return worldAreas;
@@ -330,7 +324,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 return maps;
             }
 
-            first += 0x08; // Array is 8x16 bytes => 8 byte address (Atlas Info) + 8 byte address (Watchtower Map)
+            first += 0x00; // Array is 8x16 bytes => 8 byte address (Map Info) + 8 byte address (Atlas File)
             for (int i = 0; i < 8; ++i, first += 0x10)
             {
                 var map = ReadObject<WorldArea>(first);
