@@ -285,7 +285,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public IList<WorldArea> ShaperElderAreas => new List<WorldArea>();
         #endregion
 
-        private IList<WorldArea> GetAreas(long listAddress) // f7a8
+        private IList<WorldArea> GetAreas(long listAddress)
         {
             var worldAreas = new List<WorldArea>();
             var readCount = 0;
@@ -324,7 +324,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 return maps;
             }
 
-            first += 0x00; // Array is 8x16 bytes => 8 byte address (Map Info) + 8 byte address (Atlas File)
+            //first += 0x00; // Array is 8x16 bytes => 8 byte address (Map Info) + 8 byte address (Atlas File)
             for (int i = 0; i < 8; ++i, first += 0x10)
             {
                 var map = ReadObject<WorldArea>(first);
