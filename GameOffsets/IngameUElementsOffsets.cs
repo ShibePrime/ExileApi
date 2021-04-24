@@ -29,7 +29,7 @@ namespace GameOffsets
         [FieldOffset(0x680)] public long TradeWindow;
         [FieldOffset(0x6B8)] public long MapDeviceWindow;
         [FieldOffset(0x710)] public long IncursionWindow;
-        [FieldOffset(0x738)] public long DelveWindow;
+        [FieldOffset(0x730)] public long DelveWindow;
         [FieldOffset(0x740)] public long ZanaMissionChoice;
         [FieldOffset(0x750)] public long BetrayalWindow;
         [FieldOffset(0x768)] public long CraftBenchWindow;
