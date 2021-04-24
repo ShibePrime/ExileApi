@@ -57,7 +57,7 @@ namespace ExileCore.PoEMemory.Components
             var words = new List<string>();
             if (Address == 0) return string.Empty;
 
-            for (var first = source.First + 8; first < source.Last; first += ModsComponentOffsets.NameRecordSize)
+            for (var first = source.First; first < source.Last; first += ModsComponentOffsets.NameRecordSize)
             {
                 words.Add(M.ReadStringU(M.Read<long>(first, ModsComponentOffsets.NameOffset)).Trim());
             }
