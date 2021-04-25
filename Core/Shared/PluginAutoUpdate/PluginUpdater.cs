@@ -42,7 +42,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             var tasks = new List<Task<List<PluginWrapper>>>();
             if (!PluginsUpdateSettings.Enable)
             {
-                DebugWindow.LogMsg($"Plugin Auto Update is deactivated!");
+                DebugWindow.LogMsg($"PluginUpdater -> Plugin Auto Update is deactivated!");
                 return tasks;
             }
 

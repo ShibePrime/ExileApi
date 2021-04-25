@@ -25,47 +25,68 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
         public void Update(SinglePluginUpdateSettings plugin)
         {
-            if (!plugin.Enable)
-            {
-                DebugWindow.LogMsg($"{plugin.Name?.Value}: Update disabled in settings!");
-                return;
-            }
-            var sw = Stopwatch.StartNew();
-            DebugWindow.LogDebug($"{plugin.Name?.Value}: Start update.");
+            DebugWindow.LogMsg($"{plugin.Name?.Value} -> Update... started");
+
+            var repository = CloneHelper(plugin);
+            if (repository == null) return;
+
+            PullHelper(plugin, repository);
+            CheckOutHelper(plugin, repository);
+
+            DebugWindow.LogMsg($"{plugin.Name?.Value} -> Update... done");
+        }
+
+        private Repository CloneHelper(SinglePluginUpdateSettings plugin)
+        {
             var repositoryPath = Path.Combine(SourceDirectory, plugin.Name?.Value);
 
-            if (!Repository.IsValid(repositoryPath))
-            {
-                DebugWindow.LogMsg($"{plugin.Name?.Value}: No valid repository at: {repositoryPath}. Starting to clone...");
-                try
-                {
-                    Clone(plugin.SourceUrl?.Value, repositoryPath);
-                    sw.Stop();
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Clone successful in {sw.ElapsedMilliseconds} ms, from {plugin.SourceUrl?.Value}.", 5, Color.Green);
-                    return;
-                }
-                catch (Exception e)
-                {
-                    DebugWindow.LogError($"{plugin.Name?.Value} -> Clone failed. Make sure the folder Plugins/Source/{plugin.Name?.Value} does not exist. Skipped!");
-                    DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
-                    return;
-                }
-            }
+            if (Repository.IsValid(repositoryPath)) return new Repository(repositoryPath);
 
-            var repository = new Repository(repositoryPath);
-
+            DebugWindow.LogMsg($"{plugin.Name?.Value} -> No valid repository at: {repositoryPath}. Clone from {plugin.SourceUrl?.Value}... started");
             try
             {
+                Clone(plugin.SourceUrl?.Value, repositoryPath);
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Clone... done", 5, Color.Green);
+                return new Repository(repositoryPath);
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"{plugin.Name?.Value} -> Clone... failed");
+                DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
+                return null;
+            }
+        }
+
+        private void PullHelper(SinglePluginUpdateSettings plugin, Repository repository)
+        {
+            try
+            {
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master branch... started");
+                var masterBranch = repository
+                    .Branches
+                    .Where(b => b.FriendlyName == "master")
+                    .SingleOrDefault();
+
+                if (masterBranch == null)
+                {
+                    DebugWindow.LogError($"{plugin.Name?.Value} -> Master branch does not exist");
+                    return;
+                }
+
+                Commands.Checkout(repository, masterBranch);
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master branch... done", 5, Color.Green);
+
+
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Pull... started");
                 var status = Pull(repository);
-                sw.Stop();
                 if (status == MergeStatus.UpToDate)
                 {
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Already up to date, checked in {sw.ElapsedMilliseconds} ms.");
+                    DebugWindow.LogMsg($"{plugin.Name?.Value} -> Pull... done, already up to date", 5, Color.Green);
                     return;
                 }
                 else if (status == MergeStatus.FastForward || status == MergeStatus.NonFastForward)
                 {
-                    DebugWindow.LogMsg($"{plugin.Name?.Value}: Update successful in {sw.ElapsedMilliseconds} ms.", 5, Color.Green);
+                    DebugWindow.LogMsg($"{plugin.Name?.Value} -> Pull... done", 5, Color.Green);
                     return;
                 }
                 else
@@ -75,9 +96,29 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
             catch (Exception e)
             {
-                DebugWindow.LogError($"{plugin.Name?.Value}: Update failed. Skipped!");
+                DebugWindow.LogError($"{plugin.Name?.Value} -> Pull... failed");
                 DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
             }
+        }
+
+        private void CheckOutHelper(SinglePluginUpdateSettings plugin, Repository repository)
+        {
+            plugin.CommitShaLatest = repository.Head.Tip.Sha;
+            if (!plugin.Enable && plugin.CommitShaCurrentIsValid)
+            {
+                try
+                {
+                    DebugWindow.LogMsg($"{plugin.Name?.Value} -> Check out commit {plugin.CommitShaCurrent?.Value}... started");
+                    Commands.Checkout(repository, plugin.CommitShaCurrent.Value);
+                    DebugWindow.LogMsg($"{plugin.Name?.Value} -> Check out commit {plugin.CommitShaCurrent?.Value}... done", 5, Color.Green);
+                }
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"{plugin.Name?.Value} -> Check out commit {plugin.CommitShaCurrent?.Value}... failed");
+                    DebugWindow.LogDebug($"{plugin.Name?.Value} -> {e.Message}");
+                }
+            }
+            plugin.CommitShaCurrent.Value = repository.Head.Tip.Sha;
         }
 
         private void Clone(string url, string path)

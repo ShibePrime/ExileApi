@@ -311,7 +311,12 @@ namespace ExileCore
 
                     using (new PerformanceTimer("Plugin loader"))
                     {
-                        pluginManager = new PluginManager(GameController, Graphics, MultiThreadManager);
+                        pluginManager = new PluginManager(
+                            GameController, 
+                            Graphics, 
+                            MultiThreadManager,
+                            _settings
+                        );
                     }
                 }
             }

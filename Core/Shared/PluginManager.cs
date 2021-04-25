@@ -31,17 +31,25 @@ namespace ExileCore.Shared
         private readonly GameController _gameController;
         private readonly Graphics _graphics;
         private readonly MultiThreadManager _multiThreadManager;
+        private readonly SettingsContainer _settingsContainer;
 
         private Dictionary<string, string> Directories { get; }
         public bool AllPluginsLoaded { get; private set; }
         public string RootDirectory { get; }
         public List<PluginWrapper> Plugins { get; private set; }
 
-        public PluginManager(GameController gameController, Graphics graphics, MultiThreadManager multiThreadManager)
+        public PluginManager(
+            GameController gameController, 
+            Graphics graphics, 
+            MultiThreadManager multiThreadManager,
+            SettingsContainer settingsContainer
+            )
         {
             _gameController = gameController;
             _graphics = graphics;
             _multiThreadManager = multiThreadManager;
+            _settingsContainer = settingsContainer;
+
             Plugins = new List<PluginWrapper>();
             Directories = new Dictionary<string, string>();
             RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -62,7 +70,7 @@ namespace ExileCore.Shared
             {
                 if (!Directory.Exists(directory.Value))
                 {
-                    DebugWindow.LogMsg($"{directory.Value} doesn't exists, but don't worry i created it for you.");
+                    DebugWindow.LogMsg($"PluginManager -> {directory.Value} doesn't exists, but don't worry i created it for you.");
                     Directory.CreateDirectory(directory.Value);
                 }
             }
@@ -75,7 +83,7 @@ namespace ExileCore.Shared
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
             var forceLoadCompiledOnly = false;
 
-            var pluginUpdateSettings = SettingsContainer.LoadSettingFile<PluginsUpdateSettings>(AutoPluginUpdateSettingsPath);
+            var pluginUpdateSettings = _settingsContainer.PluginsUpdateSettings;
 
             // check for changes in the updateSettings. Delete changed repositories, to make sure all changes are acted upon
             if (pluginUpdateSettings.Enable)
@@ -189,10 +197,9 @@ namespace ExileCore.Shared
         private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings, bool forceLoadCompiledOnly)
         {
             List<string> excludedNames = new List<string>();
-            if (pluginsUpdateSettings != null && pluginsUpdateSettings.Enable && !forceLoadCompiledOnly)
+            if (pluginsUpdateSettings != null && !forceLoadCompiledOnly)
             {
                 var excluded = pluginsUpdateSettings.Plugins?
-                    .Where(p => p.Enable)
                     .Select(p => p.Name?.Value);
                 excludedNames.AddRange(excluded);
             }
