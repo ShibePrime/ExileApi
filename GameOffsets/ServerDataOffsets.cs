@@ -57,10 +57,10 @@ namespace GameOffsets
         [FieldOffset(0x8058 - Skip)] public long GuildNameAddress;
         [FieldOffset(0x8060 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x80B8 - Skip)] public NativePtrArray NearestPlayers;
-        [FieldOffset(0x8108 - Skip)] public NativePtrArray GuildInventories;
         [FieldOffset(0x8220 - Skip)] public NativePtrArray PlayerInventories;
-        [FieldOffset(0x8320 - Skip)] public NativePtrArray NPCInventories;
-        
+        [FieldOffset(0x8358 - Skip)] public NativePtrArray NPCInventories;
+        [FieldOffset(0x8490 - Skip)] public NativePtrArray GuildInventories;
+
         public const int BestiaryBeastsCapturedCounts = 0x8638;
         [FieldOffset(0x85F8 - Skip)] public ushort TradeChatChannel;
         [FieldOffset(0x8600 - Skip)] public ushort GlobalChatChannel;
