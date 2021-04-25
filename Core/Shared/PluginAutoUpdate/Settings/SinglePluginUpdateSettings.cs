@@ -6,6 +6,7 @@ using System.Linq;
 using SharpDX;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Attributes;
+using Newtonsoft.Json;
 
 namespace ExileCore.Shared.PluginAutoUpdate.Settings
 {
@@ -16,11 +17,11 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public TextNode SourceUrl { get; set; } = new TextNode();
         public TextNode CommitShaCurrent { get; set; } = new TextNode();
         
-        [IgnoreMenu]
+        [JsonIgnore]
         public string CommitShaLatest { get; set; } = "";
-        [IgnoreMenu]
+        [JsonIgnore]
         public bool CommitShaCurrentIsValid => CommitShaCurrent?.Value?.Length == 40 || CommitShaCurrent?.Value?.Length == 0;
-        [IgnoreMenu]
+        [JsonIgnore]
         public bool UpdateAvailable => CommitShaLatest != "" && CommitShaCurrent?.Value != CommitShaLatest;
         private Random Random { get; } = new Random();
         private string _uniqueName = "";
