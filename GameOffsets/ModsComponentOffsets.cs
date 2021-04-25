@@ -17,12 +17,12 @@ namespace GameOffsets
         [FieldOffset(0xB0)] public NativePtrArray implicitMods;
         [FieldOffset(0xC8)] public NativePtrArray explicitMods;
         [FieldOffset(0xE0)] public NativePtrArray enchantMods;
-        [FieldOffset(0x1B0)] public NativePtrArray GetImplicitStats;
-        [FieldOffset(0x1C8)] public NativePtrArray GetEnchantedStats;
-        [FieldOffset(0x1E0)] public NativePtrArray GetStats;
-        [FieldOffset(0x1F8)] public NativePtrArray GetCraftedStats;
-        [FieldOffset(0x210)] public NativePtrArray GetFracturedStats;
-        [FieldOffset(0x230)] public NativePtrArray GetSynthesizedStats;
+        [FieldOffset(0x1F0)] public NativePtrArray GetImplicitStats;
+        [FieldOffset(0x208)] public NativePtrArray GetEnchantedStats;
+        [FieldOffset(0x220)] public NativePtrArray GetStats;
+        [FieldOffset(0x238)] public NativePtrArray GetCraftedStats;
+        [FieldOffset(0x250)] public NativePtrArray GetFracturedStats;
+        [FieldOffset(0x260)] public NativePtrArray GetSynthesizedStats;
         [FieldOffset(0x48C)] public int ItemLevel;
         [FieldOffset(0x490)] public int RequiredLevel;
         [FieldOffset(0x47C)] public byte IsUsable;
