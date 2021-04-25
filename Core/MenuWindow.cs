@@ -279,7 +279,13 @@ namespace ExileCore
             }
 
             ImGui.Separator();
-            if (ImGui.Selectable("PluginAutoUpdate", _index == -2))
+            var pluginsWithAvailableUpdateCount = PluginsUpdateSettings?.Plugins.Where(p => p.UpdateAvailable).Count();
+            var autoUpdateText = "PluginAutoUpdate";
+            if (pluginsWithAvailableUpdateCount > 0)
+            {
+                autoUpdateText += $" ({pluginsWithAvailableUpdateCount})";
+            }
+            if (ImGui.Selectable(autoUpdateText, _index == -2))
             {
                 _index = -2;
                 Selected = () => 

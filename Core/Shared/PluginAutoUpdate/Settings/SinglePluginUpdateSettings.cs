@@ -20,6 +20,8 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public string CommitShaLatest { get; set; } = "";
         [IgnoreMenu]
         public bool CommitShaCurrentIsValid => CommitShaCurrent?.Value?.Length == 40 || CommitShaCurrent?.Value?.Length == 0;
+        [IgnoreMenu]
+        public bool UpdateAvailable => CommitShaLatest != "" && CommitShaCurrent?.Value != CommitShaLatest;
         private Random Random { get; } = new Random();
         private string _uniqueName = "";
         private string UniqueName
