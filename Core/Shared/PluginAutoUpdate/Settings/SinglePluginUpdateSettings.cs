@@ -100,39 +100,9 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                 DeleteRequested?.Invoke(this, EventArgs.Empty);
             }
 
-            //ImGui.SameLine();
-            //ImGui.Indent(344);
-            //if (ImGui.Button("Delete"))
-            //{
-            //    DeleteRequested?.Invoke(this, EventArgs.Empty);
-            //}
-            //ImGui.Unindent(344);
-
-
-            //ImGui.Indent(20);
-            //string sourceUrl = SourceUrl?.Value ?? "";
-            //ImGui.InputText(UniqueName + "SourceUrl", ref sourceUrl, 200);
-            //ChangeSourceUrlValue(sourceUrl);
-            //ImGui.Unindent(20);
-
-            //string commitId = CommitId?.Value ?? "";
-            //if (Enable)
-            //{
-            //    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
-            //    ImGui.InputText(UniqueName + "CommitId", ref commitId, 100, ImGuiInputTextFlags.ReadOnly);
-            //    ImGui.PopStyleVar();
-            //}
-            //else
-            //{
-            //    ImGui.InputText(UniqueName + "CommitId", ref commitId, 100);
-            //}
-            //CommitId.Value = commitId;
-
             ImGui.Spacing();
             ImGui.Spacing();
             ImGui.Spacing();
         }
-
-
     }
 }
