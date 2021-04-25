@@ -32,7 +32,6 @@ namespace ExileCore
         private readonly Action OnWindowChange;
         private Windows openWindow;
         private readonly int PluginNameWidth = 200;
-        private List<PluginWrapper> plugins;
         private List<DebugInformation> PluginsDebug = new List<DebugInformation>();
         private Action Selected = () => { };
         private string selectedName = "";
