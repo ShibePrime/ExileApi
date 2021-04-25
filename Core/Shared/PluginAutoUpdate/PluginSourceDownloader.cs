@@ -61,20 +61,20 @@ namespace ExileCore.Shared.PluginAutoUpdate
         {
             try
             {
-                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master branch... started");
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master/main branch... started");
                 var masterBranch = repository
                     .Branches
-                    .Where(b => b.FriendlyName == "master")
+                    .Where(b => b.FriendlyName == "master" || b.FriendlyName == "main")
                     .SingleOrDefault();
 
                 if (masterBranch == null)
                 {
-                    DebugWindow.LogError($"{plugin.Name?.Value} -> Master branch does not exist");
+                    DebugWindow.LogError($"{plugin.Name?.Value} -> master/main branch does not exist");
                     return;
                 }
 
                 Commands.Checkout(repository, masterBranch);
-                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master branch... done", 5, Color.Green);
+                DebugWindow.LogMsg($"{plugin.Name?.Value} -> Checkout master/main branch... done", 5, Color.Green);
 
 
                 DebugWindow.LogMsg($"{plugin.Name?.Value} -> Pull... started");
