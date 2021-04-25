@@ -60,14 +60,21 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
             ImGui.SameLine();
             ImGui.Indent(160);
 
-            bool update = false;
-            if (!Enable && CommitShaCurrent != CommitShaLatest && CommitShaLatest != "") 
-                update = ImGui.Button("Update");
+            if (!Enable && CommitShaCurrent != CommitShaLatest && CommitShaLatest != "")
+            {
+                if(ImGui.Button($"Update{UniqueName}"))
+                {
+                    CommitShaCurrent.Value = CommitShaLatest;
+                }
+            }
 
             ImGui.SameLine();
             ImGui.Indent(160);
 
-            bool delete = ImGui.Button("Delete");
+            if(ImGui.Button($"Delete{UniqueName}"))
+            {
+                DeleteRequested?.Invoke(this, EventArgs.Empty);
+            }
 
             ImGui.Unindent(320);
 
@@ -89,17 +96,6 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
             CommitShaCurrent.Value = commitId;
 
             ImGui.Unindent(30);
-
-
-            // handle buttons
-            if (update)
-            {
-                CommitShaCurrent.Value = CommitShaLatest;
-            }
-            if (delete)
-            {
-                DeleteRequested?.Invoke(this, EventArgs.Empty);
-            }
 
             ImGui.Spacing();
             ImGui.Spacing();
