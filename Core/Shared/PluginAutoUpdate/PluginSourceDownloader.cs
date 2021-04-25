@@ -33,7 +33,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             PullHelper(plugin, repository);
             CheckOutHelper(plugin, repository);
 
-            DebugWindow.LogMsg($"{plugin.Name?.Value} -> Update... done");
+            DebugWindow.LogMsg($"{plugin.Name?.Value} -> Update... done", 5, Color.Green);
         }
 
         private Repository CloneHelper(SinglePluginUpdateSettings plugin)
