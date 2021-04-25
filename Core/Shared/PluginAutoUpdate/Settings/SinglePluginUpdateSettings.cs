@@ -2,10 +2,9 @@
 using ExileCore.Shared.Nodes;
 using ImGuiNET;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SharpDX;
+using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Attributes;
 
 namespace ExileCore.Shared.PluginAutoUpdate.Settings
@@ -15,9 +14,14 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
         public TextNode Name { get; set; } = new TextNode();
         public TextNode SourceUrl { get; set; } = new TextNode();
+        public TextNode CommitShaCurrent { get; set; } = new TextNode();
+        
         [IgnoreMenu]
-        public DateTime LastUpdated { get; set; } = DateTime.MinValue;
-
+        public string CommitShaLatest { get; set; } = "";
+        [IgnoreMenu]
+        public bool CommitShaCurrentIsValid => CommitShaCurrent?.Value?.Length == 40 || CommitShaCurrent?.Value?.Length == 0;
+        [IgnoreMenu]
+        public bool UpdateAvailable => CommitShaLatest != "" && CommitShaCurrent?.Value != CommitShaLatest;
         private Random Random { get; } = new Random();
         private string _uniqueName = "";
         private string UniqueName
@@ -44,30 +48,61 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
 
         public void Draw()
         {
+            ImGui.TextColored(Color.Green.ToImguiVec4(), Name);
+
+            ImGui.Indent(30);
+
             var enable = Enable.Value;
-            ImGui.Checkbox($"{Name?.Value}{UniqueName}", ref enable);
+            ImGui.Checkbox($"Autoupdate{UniqueName}", ref enable);
             Enable.Value = enable;
 
             ImGui.SameLine();
-            ImGui.Indent(344);
-            if (ImGui.Button("Delete"))
+            ImGui.Indent(160);
+
+            bool update = false;
+            if (!Enable && CommitShaCurrent != CommitShaLatest && CommitShaLatest != "") 
+                update = ImGui.Button("Update");
+
+            ImGui.SameLine();
+            ImGui.Indent(160);
+
+            bool delete = ImGui.Button("Delete");
+
+            ImGui.Unindent(320);
+
+            string sourceUrl = SourceUrl?.Value ?? "";
+            ImGui.InputText(UniqueName + "SourceUrl", ref sourceUrl, 200);
+            ChangeSourceUrlValue(sourceUrl);
+
+            string commitId = CommitShaCurrent?.Value ?? "";
+            if (Enable)
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.3f);
+                ImGui.InputText(UniqueName + "CommitId", ref commitId, 40, ImGuiInputTextFlags.ReadOnly);
+                ImGui.PopStyleVar();
+            }
+            else
+            {
+                ImGui.InputText(UniqueName + "CommitId", ref commitId, 100);
+            }
+            CommitShaCurrent.Value = commitId;
+
+            ImGui.Unindent(30);
+
+
+            // handle buttons
+            if (update)
+            {
+                CommitShaCurrent.Value = CommitShaLatest;
+            }
+            if (delete)
             {
                 DeleteRequested?.Invoke(this, EventArgs.Empty);
             }
-            ImGui.Unindent(344);
-
-
-            ImGui.Indent(20);
-            string sourceUrl = SourceUrl.Value;
-            ImGui.InputText(UniqueName + "SourceUrl", ref sourceUrl, 200);
-            ChangeSourceUrlValue(sourceUrl);
-            ImGui.Unindent(20);
 
             ImGui.Spacing();
             ImGui.Spacing();
             ImGui.Spacing();
         }
-
-
     }
 }

@@ -28,7 +28,6 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
             ImGui.Checkbox($"Enable the PluginAutoUpdate mechanismn {UniqueName}", ref enable);
             Enable.Value = enable;
 
-            // TODO error warning when plugin is already in list
             var duplicatedPlugins = GetDuplicatedPlugins(Plugins);
             if (duplicatedPlugins.Count > 0)
             {
@@ -40,6 +39,18 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                 {
                     ImGui.TextColored(Color.Red.ToImguiVec4(), $"{plugin.Name.Value} -> {plugin.SourceUrl.Value}");
                 }
+            }
+
+            var pluginsWithInvalidCommit = Plugins.Where(p => !p.CommitShaCurrentIsValid);
+            if (pluginsWithInvalidCommit.Count() > 0)
+            {
+                ImGui.Spacing();
+                ImGui.Spacing();
+                ImGui.TextColored(Color.Red.ToImguiVec4(), "Error. The following plugins have an invlaid commit sha: ");
+            }
+            foreach (var plugin in pluginsWithInvalidCommit)
+            {
+                ImGui.TextColored(Color.Red.ToImguiVec4(), $"{plugin.Name.Value} -> {plugin.CommitShaCurrent?.Value}");
             }
 
 
@@ -54,7 +65,8 @@ namespace ExileCore.Shared.PluginAutoUpdate.Settings
                     Enable = new ToggleNode(true),
                     Name = new TextNode("new Plugin"),
                     SourceUrl = new TextNode(""),
-                    LastUpdated = DateTime.Now
+                    CommitShaCurrent = new TextNode(""),
+                    CommitShaLatest = "",
                 };
                 Plugins.Reverse();
                 Plugins.Add(newPlugin);
