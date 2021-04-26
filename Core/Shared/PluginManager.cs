@@ -81,9 +81,10 @@ namespace ExileCore.Shared
         private void LoadPlugins(GameController gameController)
         {
             var pluginLoader = new PluginLoader(_gameController, _graphics, this);
-            var forceLoadCompiledOnly = false;
 
             var pluginUpdateSettings = _settingsContainer.PluginsUpdateSettings;
+            var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
+            var stopLoadFromCompiledDirectory = new List<string>();
 
             // check for changes in the updateSettings. Delete changed repositories, to make sure all changes are acted upon
             if (pluginUpdateSettings.Enable)
@@ -97,24 +98,25 @@ namespace ExileCore.Shared
 
                 RemoveChangedPlugins(pluginUpdateSettings, dumpPluginUpdateSettings);
                 SettingsContainer.SaveSettingFile(AutoPluginUpdateSettingsPathDump, pluginUpdateSettings);
-            }
-
-            var loadPluginTasks = new List<Task<List<PluginWrapper>>>();
-            if (pluginUpdateSettings != null)
-            {
                 try
                 {
                     var pluginAutoUpdates = RunPluginAutoUpdate(pluginLoader, pluginUpdateSettings);
                     loadPluginTasks.AddRange(pluginAutoUpdates);
+
+                    stopLoadFromCompiledDirectory = pluginUpdateSettings
+                        .Plugins
+                        .Select(p => p.Name?.Value)
+                        .ToList();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     DebugWindow.LogError("PluginManager -> AutoUpdate failed, load all compiled plugins.");
                     DebugWindow.LogError($"PluginManager -> {e.Message}");
-                    forceLoadCompiledOnly = true;
+                    stopLoadFromCompiledDirectory = new List<string>();
                 }
             }
-            loadPluginTasks.AddRange(LoadCompiledDirPlugins(pluginLoader, pluginUpdateSettings, forceLoadCompiledOnly));
+
+            loadPluginTasks.AddRange(LoadCompiledDirPlugins(pluginLoader, stopLoadFromCompiledDirectory));
 
             Task.WaitAll(loadPluginTasks?.ToArray());
 
@@ -180,7 +182,9 @@ namespace ExileCore.Shared
             }
         }
 
-        private List<Task<List<PluginWrapper>>> RunPluginAutoUpdate(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings)
+        private List<Task<List<PluginWrapper>>> RunPluginAutoUpdate(
+            PluginLoader pluginLoader, 
+            PluginsUpdateSettings pluginsUpdateSettings)
         {
             var pluginUpdater = new PluginUpdater(
                 pluginsUpdateSettings,
@@ -194,18 +198,18 @@ namespace ExileCore.Shared
             return pluginTasks;
         }
 
-        private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(PluginLoader pluginLoader, PluginsUpdateSettings pluginsUpdateSettings, bool forceLoadCompiledOnly)
+        private List<Task<List<PluginWrapper>>> LoadCompiledDirPlugins(
+            PluginLoader pluginLoader,
+            List<string> excludedPluginNames)
         {
-            List<string> excludedNames = new List<string>();
-            if (pluginsUpdateSettings != null && !forceLoadCompiledOnly)
-            {
-                var excluded = pluginsUpdateSettings.Plugins?
-                    .Select(p => p.Name?.Value);
-                excludedNames.AddRange(excluded);
-            }
+            if (excludedPluginNames == null) excludedPluginNames = new List<string>();
+
             var compiledDirectories = new DirectoryInfo(Directories[CompiledPluginsDirectory])
                 .GetDirectories()
-                .Where(di => !excludedNames.Any(excludedName => excludedName.Equals(di.Name, StringComparison.InvariantCultureIgnoreCase)));
+                .Where(di => !excludedPluginNames.Any(
+                    excludedName => excludedName.Equals(di.Name, StringComparison.InvariantCultureIgnoreCase)
+                    )
+                );
 
             var loadTasks = new List<Task<List<PluginWrapper>>>();
             foreach (var compiledDirectory in compiledDirectories)
