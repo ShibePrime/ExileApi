@@ -47,27 +47,34 @@ namespace GameOffsets
         [FieldOffset(0x7E58 - Skip)] public int Latency;
         [FieldOffset(0x7E68 - Skip)] public NativePtrArray PlayerStashTabs;
         [FieldOffset(0x7E80 - Skip)] public NativePtrArray GuildStashTabs;
-        [FieldOffset(0x7EE8 - Skip)] public NativePtrArray GuildList;
-        [FieldOffset(0x7F00 - Skip)] public NativePtrArray FriendsList;
+        [FieldOffset(0x7EE8 - Skip)] public long FriendsList;
+        //[FieldOffset(0x7F00 - Skip)] public long FriendNoteList;
+        //[FieldOffset(0x7F10 - Skip)] public NativePtrArray FriendsArray;
         [FieldOffset(0x7F50 - Skip)] public NativePtrArray PendingInvites;
         [FieldOffset(0x7FD0 - Skip)] public byte PartyStatusType;
         [FieldOffset(0x7FD8 - Skip)] public NativePtrArray CurrentParty;
         [FieldOffset(0x7FF0 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x7FF1 - Skip)] public bool PartyDownscaleDisabled;
+        [FieldOffset(0x8008 - Skip)] public long GuildList;
+        //[FieldOffset(0x8018 - Skip)] public NativePtrArray GuildArray;
         [FieldOffset(0x8058 - Skip)] public long GuildNameAddress;
         [FieldOffset(0x8060 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x80B8 - Skip)] public NativePtrArray NearestPlayers;
+        //[FieldOffset(0x80E8 - Skip)] public NativePtrArray MinimapIcons;
+        //[FieldOffset(0x8108 - Skip)] public NativePtrArray LocalPlayer;
         [FieldOffset(0x8220 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x8358 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x8490 - Skip)] public NativePtrArray GuildInventories;
 
-        public const int BestiaryBeastsCapturedCounts = 0x8638;
         [FieldOffset(0x85F8 - Skip)] public ushort TradeChatChannel;
         [FieldOffset(0x8600 - Skip)] public ushort GlobalChatChannel;
         [FieldOffset(0x8650 - Skip)] public ushort LastActionId;
         
         // Note: Search for a LONG value equal to your current amount of completed maps.
         //       Previous byte is a linked list of maps. Map list will be the next byte.
+        [FieldOffset(0x86A8 - Skip)] public long MavenMapsList;
+        [FieldOffset(0x86B0 - Skip)] public long MavenMapsCount;
+        [FieldOffset(0x86B8 - Skip)] public long MavenMapsArray;
         [FieldOffset(0x86E8 - Skip)] public long CompletedMapsList;
         [FieldOffset(0x86F0 - Skip)] public long CompletedMapsCount;
         [FieldOffset(0x86F8 - Skip)] public long CompletedMapsArray;
@@ -77,8 +84,11 @@ namespace GameOffsets
         [FieldOffset(0x8768 - Skip)] public long AwakenedAreasList;
         [FieldOffset(0x8770 - Skip)] public long AwakenedAreasCount;
         [FieldOffset(0x8778 - Skip)] public long AwakenedAreasArray;
+        //[FieldOffset(0x8988 - Skip)] public long BestiaryCapturedMonsterList;
+
         public const int AtlasRegionUpgrades = 0x87F2;
         public const int AtlasWatchtowerLocations = 0x8800;
+        public const int BestiaryBeastsCapturedCounts = 0x89E8;
 
         [FieldOffset(0x922C - Skip)] public byte MonsterLevel;
         [FieldOffset(0x922D - Skip)] public byte MonstersRemaining;

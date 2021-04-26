@@ -28,6 +28,6 @@ namespace ExileCore.PoEMemory.Components
         public byte Tier => mapBase.Value.Tier;
 
         //   public InventoryTabMapSeries MapSeries => (InventoryTabMapSeries)M.Read<byte>(Address + 0x10, 0x9c);
-        public InventoryTabMapSeries MapSeries => (InventoryTabMapSeries) MapInformation.MapSeries;
+        public InventoryTabMapSeries MapSeries => (InventoryTabMapSeries) mapBase.Value.MapSeries;
     }
 }
