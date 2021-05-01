@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.Elements;
@@ -21,10 +20,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private Element _SynthesisWindow;
         private Element _UnveilWindow;
         private Element _ZanaMissionChoice;
+        private readonly CachedValue<List<QuestState>> _cachedQuestStates;
+
 
         public IngameUIElements()
         {
             _cachedValue = new FrameCache<IngameUElementsOffsets>(() => M.Read<IngameUElementsOffsets>(Address));
+            _cachedQuestStates = new TimeCache<List<QuestState>>(GenerateQuestStates, 1000);
         }
 
         public IngameUElementsOffsets IngameUIElementsStruct => _cachedValue.Value;
@@ -33,9 +35,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public TradeWindow TradeWindow => GetObject<TradeWindow>(IngameUIElementsStruct.TradeWindow);
         public NpcDialog NpcDialog => GetObject<NpcDialog>(IngameUIElementsStruct.NpcDialog);
         public BanditDialog BanditDialog => GetObject<BanditDialog>(IngameUIElementsStruct.BanditDialog);
-        public Element PurchaseWindow => _purchaseWindow ?? (_purchaseWindow = GetObject<Element>(IngameUIElementsStruct.PurchaseWindow));
-        public SubterraneanChart DelveWindow =>
-            _DelveWindow ?? (_DelveWindow = GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow));
+        public Element PurchaseWindow => _purchaseWindow ??= GetObject<Element>(IngameUIElementsStruct.PurchaseWindow);
+        public SubterraneanChart DelveWindow => _DelveWindow ??= GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow);
         public SkillBarElement SkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.SkillBar);
         public SkillBarElement HiddenSkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.HiddenSkillBar);
 
@@ -70,29 +71,23 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element TreePanel => GetObject<Element>(IngameUIElementsStruct.TreePanel);
         public Element AtlasPanel => GetObject<Element>(IngameUIElementsStruct.AtlasPanel);
         public Element Atlas => AtlasPanel; // Required to fit with TehCheats Api, Random Feature uses this field.
-        public Map Map => _map ?? (_map = GetObject<Map>(IngameUIElementsStruct.Map));
-        public ItemsOnGroundLabelElement ItemsOnGroundLabelElement =>
-            GetObject<ItemsOnGroundLabelElement>(IngameUIElementsStruct.itemsOnGroundLabelRoot);
+        public Map Map => _map ??= GetObject<Map>(IngameUIElementsStruct.Map);
+        public ItemsOnGroundLabelElement ItemsOnGroundLabelElement => GetObject<ItemsOnGroundLabelElement>(IngameUIElementsStruct.itemsOnGroundLabelRoot);
         public IList<LabelOnGround> ItemsOnGroundLabels => ItemsOnGroundLabelElement.LabelsOnGround;
-
-        public IList<LabelOnGround> ItemsOnGroundLabelsVisible =>
-            ItemsOnGroundLabelElement.LabelsOnGround.Where(x => x.Address != 0 && x.IsVisible).ToList();
+        public IList<LabelOnGround> ItemsOnGroundLabelsVisible => ItemsOnGroundLabelElement.LabelsOnGround.Where(x => x.Address != 0 && x.IsVisible).ToList();
         public GemLvlUpPanel GemLvlUpPanel => GetObject<GemLvlUpPanel>(IngameUIElementsStruct.GemLvlUpPanel);
         public Element InvitesPanel => GetObject<Element>(IngameUIElementsStruct.InvitesPanel);
         public ItemOnGroundTooltip ItemOnGroundTooltip => GetObject<ItemOnGroundTooltip>(IngameUIElementsStruct.ItemOnGroundTooltip);
         public MapStashTabElement MapStashTab => ReadObject<MapStashTabElement>(IngameUIElementsStruct.MapTabWindowStartPtr);
         public Element Sulphit => GetObject<Element>(IngameUIElementsStruct.Map).GetChildAtIndex(0);
-        public Cursor Cursor => _cursor ?? (_cursor = GetObject<Cursor>(IngameUIElementsStruct.Mouse));
-        public Element BetrayalWindow => _BetrayalWindow ?? (_BetrayalWindow = GetObject<Element>(IngameUIElementsStruct.BetrayalWindow));
+        public Cursor Cursor => _cursor ??= GetObject<Cursor>(IngameUIElementsStruct.Mouse);
+        public Element BetrayalWindow => _BetrayalWindow ??= GetObject<Element>(IngameUIElementsStruct.BetrayalWindow);
         public Element SyndicateTree => GetObject<Element>(M.Read<long>(BetrayalWindow.Address + 0xA50));
-        public Element UnveilWindow => _UnveilWindow ?? (_UnveilWindow = GetObject<Element>(IngameUIElementsStruct.UnveilWindow));
-        public Element ZanaMissionChoice =>
-            _ZanaMissionChoice ?? (_ZanaMissionChoice = GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice));
-        public IncursionWindow IncursionWindow =>
-            _IncursionWindow ?? (_IncursionWindow = GetObject<IncursionWindow>(IngameUIElementsStruct.IncursionWindow));
-        public Element SynthesisWindow =>
-            _SynthesisWindow ?? (_SynthesisWindow = GetObject<Element>(IngameUIElementsStruct.SynthesisWindow));
-        public Element CraftBench => _CraftBench ?? (_CraftBench = GetObject<Element>(IngameUIElementsStruct.CraftBenchWindow));
+        public Element UnveilWindow => _UnveilWindow ??= GetObject<Element>(IngameUIElementsStruct.UnveilWindow);
+        public Element ZanaMissionChoice => _ZanaMissionChoice ??= GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice);
+        public IncursionWindow IncursionWindow => _IncursionWindow ??= GetObject<IncursionWindow>(IngameUIElementsStruct.IncursionWindow);
+        public Element SynthesisWindow => _SynthesisWindow ??= GetObject<Element>(IngameUIElementsStruct.SynthesisWindow);
+        public Element CraftBench => _CraftBench ??= GetObject<Element>(IngameUIElementsStruct.CraftBenchWindow);
         public bool IsDndEnabled => M.Read<byte>(Address + 0xf92) == 1;
         public string DndMessage => M.ReadStringU(M.Read<long>(Address + 0xf98));
         public WorldMapElement AreaInstanceUi => GetObject<WorldMapElement>(IngameUIElementsStruct.AreaInstanceUi);
@@ -102,79 +97,31 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
         public HarvestWindow HarvestWindow => GetObject<HarvestWindow>(IngameUIElementsStruct.HarvestWindow);
 
-        public IList<Tuple<Quest, int>> GetUncompletedQuests
+        public IEnumerable<QuestState> GetUncompletedQuests => GetQuestStates.Where(q => q.QuestStateId != 0);
+        public IEnumerable<QuestState> GetCompletedQuests => GetQuestStates.Where(q => q.QuestStateId == 0);
+        public List<QuestState> GetQuestStates => _cachedQuestStates?.Value;
+
+        private List<QuestState> GenerateQuestStates()
         {
-            get
+            var result = new List<QuestState>();
+            /*
+             * This is definitly not the most performant way to get the quest.
+             * 9 quests are missing (e.g. a10q2). 
+             */
+            for (long i = 0; i < 0xffff; i += 0x8)
             {
-                if (IngameUIElementsStruct.GetQuests == 0) return new List<Tuple<Quest, int>>();
-                var stateListPres = M.ReadDoublePointerIntList(IngameUIElementsStruct.GetQuests);
+                long pointerToQuest = IngameUIElementsStruct.GetQuests + i;
+                var addressOfQuest = M.Read<long>(pointerToQuest);
 
-                return stateListPres.Where(x => x.Item2 > 0)
-                    .Select(x => new Tuple<Quest, int>(TheGame.Files.Quests.GetByAddress(x.Item1), x.Item2)).ToList();
-            }
-        }
-
-        public IList<Tuple<Quest, int>> GetCompletedQuests
-        {
-            get
-            {
-                if (IngameUIElementsStruct.GetQuests == 0) return new List<Tuple<Quest, int>>();
-                var stateListPres = M.ReadDoublePointerIntList(IngameUIElementsStruct.GetQuests);
-
-                return stateListPres.Where(x => x.Item2 == 0)
-                    .Select(x => new Tuple<Quest, int>(TheGame.Files.Quests.GetByAddress(x.Item1), x.Item2)).ToList();
-            }
-        }
-
-        public Dictionary<Quest, QuestState> GetUncompletedQuests2
-        {
-            get
-            {
-                var result = new Dictionary<Quest, QuestState>();
-                var keyValuePairs = GetQuestStates;
-
-                foreach (var keyValuePair in keyValuePairs.Values)
+                var questState = GetObject<QuestState>(addressOfQuest);
+                if (questState?.Quest != null)
                 {
-                    if (keyValuePair.Value.QuestStateId > 0)
-                        result[keyValuePair.Key] = keyValuePair.Value;
+                    if (result.Where(r => r.Quest?.Id == questState.Quest?.Id).Any()) continue; // skip entries which are already in the list
+                    result.Add(questState);
                 }
-
-                return result;
             }
-        }
 
-        public Dictionary<string, KeyValuePair<Quest, QuestState>> GetQuestStates
-        {
-            get
-            {
-                if (IngameUIElementsStruct.GetQuests == 0) return new Dictionary<string, KeyValuePair<Quest, QuestState>>();
-                var dictionary = new Dictionary<string, KeyValuePair<Quest, QuestState>>();
-
-                foreach (var quest in GetQuests)
-                {
-                    if (quest == null) continue;
-                    if (quest.Item1 == null) continue;
-
-                    var value = TheGame.Files.QuestStates.GetQuestState(quest.Item1.Id, quest.Item2);
-
-                    if (value == null) continue;
-
-                    if (!dictionary.ContainsKey(quest.Item1.Id))
-                        dictionary.Add(quest.Item1.Id, new KeyValuePair<Quest, QuestState>(quest.Item1, value));
-                }
-
-                return dictionary.OrderBy(x => x.Key).ToDictionary(Key => Key.Key, Value => Value.Value);
-            }
-        }
-
-        private IList<Tuple<Quest, int>> GetQuests
-        {
-            get
-            {
-                if (IngameUIElementsStruct.GetQuests == 0) return new List<Tuple<Quest, int>>();
-                var stateListPres = M.ReadDoublePointerIntList(IngameUIElementsStruct.GetQuests);
-                return stateListPres.Select(x => new Tuple<Quest, int>(TheGame.Files.Quests.GetByAddress(x.Item1), x.Item2)).ToList();
-            }
+            return result;
         }
     }
 }

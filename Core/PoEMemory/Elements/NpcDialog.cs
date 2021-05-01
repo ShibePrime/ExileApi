@@ -28,7 +28,7 @@ namespace ExileCore.PoEMemory.Elements
                     var npcLine = new NpcLine(line);
                     npcLines.Add(npcLine);
                 }
-                catch (Exception e)
+                catch
                 {
                     continue;
                 }

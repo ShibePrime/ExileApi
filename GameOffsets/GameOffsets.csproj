@@ -85,6 +85,7 @@
     <Compile Include="PlayerComponentOffsets.cs" />
     <Compile Include="PositionedComponentOffsets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestStateOffsets.cs" />
     <Compile Include="RenderComponentOffsets.cs" />
     <Compile Include="ServerDataOffsets.cs" />
     <Compile Include="ServerInventoryOffsets.cs" />
