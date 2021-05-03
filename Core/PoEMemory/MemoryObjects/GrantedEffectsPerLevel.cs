@@ -35,7 +35,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                     result.Add(new Tuple<StatsDat.StatRecord, int>(stat, value));
 
                     pointerToTypes += 16;
-                    pointerToValues += 8;
+                    pointerToValues += 4;
                 }
 
                 return result;
