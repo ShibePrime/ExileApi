@@ -32,6 +32,8 @@ namespace ExileCore.PoEMemory.Components
         public int RequiredLevel => Address != 0 ? ModsStruct.RequiredLevel : 1;
         public bool IsUsable => Address != 0 && ModsStruct.IsUsable == 1;
         public bool IsMirrored => Address != 0 && ModsStruct.IsMirrored == 1;
+        public string IncubatorName => Address != 0 && ModsStruct.IncubatorKey != 0
+            ? M.ReadStringU(M.Read<long>(ModsStruct.IncubatorKey, 0x20)) : null;
 
         public int FracturedCount => (int) ModsStruct.GetFracturedStats.Size / ModsComponentOffsets.StatRecordSize;
         public bool IsFractured => FracturedCount > 0;

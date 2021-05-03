@@ -25,6 +25,7 @@ namespace GameOffsets
         [FieldOffset(0x260)] public NativePtrArray GetSynthesizedStats;
         [FieldOffset(0x48C)] public int ItemLevel;
         [FieldOffset(0x490)] public int RequiredLevel;
+        [FieldOffset(0x498)] public long IncubatorKey;
         [FieldOffset(0x47C)] public byte IsUsable;
         [FieldOffset(0x47D)] public byte IsMirrored;
     }
