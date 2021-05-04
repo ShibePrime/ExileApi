@@ -355,20 +355,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                if (_metadata == null)
-                {
-                    if (Path != null)
-                    {
-                        var splitIndex = Path.IndexOf("@", StringComparison.Ordinal);
+                if (_metadata != null || Path == null) return _metadata;
 
-                        if (splitIndex != -1)
-                            _metadata = Path.Substring(0, splitIndex);
-                        else
-                            return Path;
-                    }
-                }
+                var splitIndex = Path.IndexOf("@", StringComparison.Ordinal);
 
-                return _metadata;
+                return splitIndex != -1 ? _metadata = Path.Substring(0, splitIndex) : Path;
             }
         }
 
@@ -425,26 +416,22 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public bool Check(uint entityId)
         {
-            if (_id != null)
+            if (_id != null && _id != entityId)
             {
-                if (_id != entityId)
-                {
-                    DebugWindow.LogMsg($"Was ID: {Id} New ID: {entityId} To Path: {Path}", 3);
-                    _id = entityId;
-                    _path = null;
-                    _metadata = null;
-                    Type = ParseType();
-                }
+                DebugWindow.LogMsg($"Was ID: {Id} New ID: {entityId} To Path: {Path}", 3);
+                _id = entityId;
+                _path = null;
+                _metadata = null;
+                Type = ParseType();
             }
 
-            if (Type != EntityType.Error)
+            return Type switch
             {
-                if (Type == EntityType.Effect || Type == EntityType.Daemon) return true;
-
-                return CacheComp != null && Id == entityId && CheckRarity();
-            }
-
-            return false;
+                EntityType.Error => false,
+                EntityType.Effect => true,
+                EntityType.Daemon => true,
+                _ => CacheComp != null && Id == entityId && CheckRarity()
+            };
         }
 
         private bool CheckRarity()
@@ -630,15 +617,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             var c = GetComponent<T>();
 
-            if (c.OwnerAddress != Address)
-            {
-                var componentFromMemory = GetComponentFromMemory<T>();
-                if (componentFromMemory.OwnerAddress == Address) return true;
-
-                return false;
-            }
-
-            return true;
+            if (c.OwnerAddress == Address) return true;
+            var componentFromMemory = GetComponentFromMemory<T>();
+            return componentFromMemory.OwnerAddress == Address;
         }
 
         public T GetComponentFromMemory<T>() where T : Component, new()
