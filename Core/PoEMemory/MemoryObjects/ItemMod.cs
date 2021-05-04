@@ -9,12 +9,26 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private int _Level;
         private string _Name;
         private string _RawName;
-        public int Value1 => M.Read<int>(Address, 0);
-        public int Value2 => M.Read<int>(Address, 4);
-        public int Value3 => M.Read<int>(Address, 8);
-        public int Value4 => M.Read<int>(Address, 0xC);
-        public int[] Values => new int[] { Value1, Value2, Value3, Value4 }; // compatibility with private fork
+        public int[] Values => GetValues();
+        public int Value1 => Values[0];
+        public int Value2 => Values[1];
+        public int Value3 => Values[2];
+        public int Value4 => Values[3];
 
+        internal int[] GetValues()
+        {
+            var values = new int[4];
+
+            var first = M.Read<long>(Address);
+            var last = M.Read<long>(Address + 0x8);
+
+            for (var i = 0; i < 4 && first < last; i++, first+=0x4)
+            {
+                values[i] = M.Read<int>(first);
+            }
+
+            return values;
+        }
         public string RawName
         {
             get

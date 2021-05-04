@@ -15,7 +15,7 @@ namespace ExileCore.PoEMemory.Components
 
         internal InventoryVisual ReadVisual(int index)
         {
-            return ReadObject<InventoryVisual>(Address + 0x40 + index * 0x60);
+            return ReadObject<InventoryVisual>(Address + 0x38 + index * 0x70);
         }
     }
 }

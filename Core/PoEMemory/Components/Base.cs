@@ -29,8 +29,7 @@ namespace ExileCore.PoEMemory.Components
         public bool isHunter => (InfluenceFlag & Influence.Hunter) == Influence.Hunter;
         public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
         public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
-        public bool isCorrupted => BaseStruct.isCorrupted;
-        public bool isSynthesized => BaseStruct.isSynthesized;
+        public bool isCorrupted => (BaseStruct.isCorrupted & 0x01) == 0x01;
         // REVISIT: not using Cache.StringCache here.  no profiles
         // point to it being used often enough in a single frame.
         public string PublicPrice => M.Read<NativeStringU>(BaseStruct.PublicPricePtr).ToString(M);

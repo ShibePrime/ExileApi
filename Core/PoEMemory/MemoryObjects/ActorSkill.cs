@@ -21,9 +21,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool CanBeUsed => M.Read<byte>(Address + 0x51) == 0;
         public int Cost => M.Read<byte>(Address + 0x54); 
         public int TotalUses => M.Read<int>(Address + 0x58);
-        public float Cooldown => M.Read<int>(Address + 0x60) / 100f; //Converted milliseconds to seconds 
-        public int SoulsPerUse => M.Read<int>(Address + 0x70);
-        public int TotalVaalUses => M.Read<int>(Address + 0x74);
+        public float Cooldown => M.Read<int>(Address + 0x5C) / 100f; //Converted milliseconds to seconds 
+        public int SoulsPerUse => M.Read<int>(Address + 0x6C);
+        public int TotalVaalUses => M.Read<int>(Address + 0x70);
         public bool IsOnSkillBar => SkillSlotIndex != -1;
         public int SkillSlotIndex => TheGame.IngameState.ServerData.SkillBarIds.IndexOf(Id);
 
@@ -37,43 +37,21 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (effects != null)
                 {
                     var skill = effects.SkillGemWrapper;
-                    var name = skill.Name;
+                    
+                    if (!string.IsNullOrEmpty(skill.Name)) return skill.Name;
 
-                    if (string.IsNullOrEmpty(name))
-                    {
-                        name = skill.ActiveSkill.InternalName;
-
-                        if (string.IsNullOrEmpty(name))
-                            name = Id.ToString(CultureInfo.InvariantCulture);
-                    }
-
-                    return name;
+                    return string.IsNullOrEmpty(skill.ActiveSkill.InternalName)
+                        ? skill.ActiveSkill.InternalName
+                        : Id.ToString(CultureInfo.InvariantCulture);
                 }
-                else
+
+                return id switch
                 {
-                    string name;
-
-                    switch (id)
-                    {
-                        case 0x266:
-                            name = "Interaction";
-                            break;
-
-                        case 0x2909:
-                            name = "Move";
-                            break;
-
-                        default:
-                            if (id != 0x37d9)
-                                name = InternalName;
-                            else
-                                name = "WashedUp";
-
-                            break;
-                    }
-
-                    return name;
-                }
+                    0x266 => "Interaction",
+                    0x2909 => "Move",
+                    0x37d9 => "WashedUp",
+                    _ => InternalName
+                };
             }
         }
 
@@ -82,18 +60,18 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool IsUserSkill => (SlotIdentifier & 0x80) > 0;
         public bool AllowedToCast => CanBeUsedWithWeapon && CanBeUsed;
         public byte SkillUseStage => M.Read<byte>(Address + 0x8);
-        public bool IsUsing => SkillUseStage > 2; //GetStat(PlayerStats.CastingSpell) > 0;
-        public bool PrepareForUsage => SkillUseStage == 1; //GetStat(PlayerStats.CastingSpell) > 0;
+        public bool IsUsing => SkillUseStage > 2;
+        public bool PrepareForUsage => SkillUseStage == 1;
         public TimeSpan CastTime => TimeSpan.FromMilliseconds((int) Math.Ceiling(1000f / (HundredTimesAttacksPerSecond / 100f)));
         public float Dps => GetStat(GameStat.HundredTimesDamagePerSecond + (IsUsing ? 4 : 0)) / 100f;
         public int HundredTimesAttacksPerSecond =>
             GetStat(IsUsing ? GameStat.HundredTimesCastsPerSecond : GameStat.HundredTimesAttacksPerSecond);
+        public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
         public bool IsTotem => GetStat(GameStat.IsTotem) == 1 || GetStat(GameStat.SkillIsTotemified) == 1;
         public bool IsTrap => GetStat(GameStat.IsTrap) == 1 || GetStat(GameStat.SkillIsTrapped) == 1;
         public bool IsVaalSkill => SoulsPerUse >= 1 && TotalVaalUses >= 1;
 
-        private bool IsMine => true; //TODO
-
+        
         private readonly CachedValue<long> _skillUiState;
 
         public bool IsOnCooldown
@@ -143,18 +121,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (effects != null)
                     return effects.SkillGemWrapper.ActiveSkill.InternalName;
 
-                switch (Id)
+                return Id switch
                 {
-                    case 0x266:
-                        return "Interaction";
-                    case 0x2909:
-                        return "Move";
-                    default:
-                        if (Id != 0x37d9)
-                            return Id.ToString(CultureInfo.InvariantCulture);
-                        else
-                            return "WashedUp";
-                }
+                    0x266 => "Interaction",
+                    0x2909 => "Move",
+                    0x3D79 => "WashedUp",
+                    _ => Id.ToString(CultureInfo.InvariantCulture)
+                };
             }
         }
 
@@ -167,9 +140,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
                 ReadStats(result, statsPtr);
 
-                //var additionalStatsPtr = M.Read<long>(Address + 0x60);
-                //ReadStats(result, additionalStatsPtr);
-                //And one more additional pointer in 0x10 -> 0x78 that I don't want to read
                 return result;
             }
         }
@@ -179,13 +149,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var statPtrStart = M.Read<long>(address + 0xE8);
             var statPtrEnd = M.Read<long>(address + 0xF0);
 
-            var key = 0;
-            var value = 0;
-            var total_stats = (int) (statPtrEnd - statPtrStart);
-            var bytes = M.ReadMem(statPtrStart, total_stats);
+            var totalStats = (int) (statPtrEnd - statPtrStart);
+            var bytes = M.ReadMem(statPtrStart, totalStats);
 
             for (var i = 0; i < bytes.Length; i += 8)
             {
+                var key = 0;
+                var value = 0;
                 try
                 {
                     key = BitConverter.ToInt32(bytes, i);
@@ -204,8 +174,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public int GetStat(GameStat stat)
         {
-            if (!Stats.TryGetValue(stat, out var num)) return 0;
-            return num;
+            return !Stats.TryGetValue(stat, out var num) ? 0 : num;
         }
 
         public override string ToString()

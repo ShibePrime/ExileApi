@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Enums;
@@ -14,10 +15,10 @@ namespace ExileCore.PoEMemory.Models
         public ItemStats(Entity item)
         {
             this.item = item;
-            if (translate == null) translate = new StatTranslator();
+            translate ??= new StatTranslator();
             stats = new float[Enum.GetValues(typeof(ItemStatEnum)).Length];
-            ParseSockets();
-            ParseExplicitMods();
+            if (item.HasComponent<Sockets>()) ParseSockets();
+            if (item.HasComponent<Mods>()) ParseExplicitMods();
             if (item.HasComponent<Weapon>()) ParseWeaponStats();
         }
 

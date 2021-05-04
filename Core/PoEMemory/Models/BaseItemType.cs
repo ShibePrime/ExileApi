@@ -10,6 +10,8 @@ namespace ExileCore.PoEMemory.Models
         public int Height { get; set; }
         public int DropLevel { get; set; }
         public string BaseName { get; set; }
+        public bool IsBlessing { get; set; }
+        public bool IsCorrupted { get; set; }
         public string[] Tags { get; set; }
         public string[] MoreTagsFromPath { get; set; }
 

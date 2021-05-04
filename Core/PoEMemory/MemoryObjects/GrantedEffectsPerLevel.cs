@@ -15,6 +15,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public int EffectivenessOfAddedDamage => M.Read<int>(Address + 0x90);
         public int Cooldown => M.Read<int>(Address + 0x98);
+        public float VaalSoulGainPreventionTime => M.Read<int>(Address + 0xE1) / 100.0f;
 
         public IEnumerable<Tuple<StatsDat.StatRecord, int>> Costs
         {
