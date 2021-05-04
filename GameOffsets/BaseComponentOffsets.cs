@@ -11,7 +11,6 @@ namespace GameOffsets
         [FieldOffset(0x60)] public long PublicPricePtr;
 
         [FieldOffset(0xD6)] public byte InfluenceFlag;
-        [FieldOffset(0xD7)] public bool isCorrupted; // wrong?
-        [FieldOffset(0xD8)] public bool isSynthesized; // wrong?
+        [FieldOffset(0xD7)] public byte isCorrupted;
     }
 }
