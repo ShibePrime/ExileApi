@@ -222,7 +222,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (!IsValid)
                     return _isDead;
 
-                _isDead = !_isAlive;
+                _isDead = !IsAlive;
                 return _isDead;
             }
         }
