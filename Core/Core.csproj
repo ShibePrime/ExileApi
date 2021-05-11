@@ -495,9 +495,6 @@
     <Compile Include="Shared\Nodes\TextNode.cs" />
     <Compile Include="Shared\Nodes\ToggleNode.cs" />
     <Compile Include="Shared\Nodes\ToggleNodeConverter.cs" />
-    <Compile Include="Shared\PInvoke\ClientID.cs" />
-    <Compile Include="Shared\PInvoke\DynamicImport.cs" />
-    <Compile Include="Shared\PInvoke\ObjectAttributes.cs" />
     <Compile Include="Shared\PluginAutoUpdate\IPluginCompiler.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCompiler.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCopyFiles.cs" />
