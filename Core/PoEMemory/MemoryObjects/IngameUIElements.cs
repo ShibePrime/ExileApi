@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.Elements;
@@ -39,28 +40,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public SubterraneanChart DelveWindow => _DelveWindow ??= GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow);
         public SkillBarElement SkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.SkillBar);
         public SkillBarElement HiddenSkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.HiddenSkillBar);
-
-        // Structure of Chatbox is
-        //Root > [x] ChatBox Root Panel > [0] Toggle Panel     > [0] Channel Bar Panel
-        //                                                     > [1] Hide ChatBox Button Panel
-        //                              > [1] History Panel    > [0] Feature Placeholder
-        //                                                     > [1] Feature Placeholder
-        //                                                     > [2] Chat Body Panel  > [0] Feature Placeholder
-        //                                                                            > [1] Chat History Panel
-        //                                                     > [3] Chat Scroll Panel
-        //                              > [2] Target Channel Panel
-        //                              > [3] Text Input Panel
-        //                              > [4] Autocomplete Panel
-        //
-        // For backward compability, ChatBox points to the nested Chat Body Panel instead of the root panel. 
-
-        // This offset points to the chat box panel that is a direct child of root.
-        public PoeChatElement ChatBoxRoot => GetObject<PoeChatElement>(IngameUIElementsStruct.ChatPanel);
-
-        // This offset points to the chat body panel that is a grandchild of the previous element.
-        // Chatbox.Parent.Parent.Parent is equivalent to ChatBoxRoot.
-        private long? _chatBoxAddress => ChatBoxRoot?.GetChildAtIndex(1)?.GetChildAtIndex(2)?.GetChildAtIndex(1)?.Address;
-        public PoeChatElement ChatBox => _chatBoxAddress.HasValue ? GetObject<PoeChatElement>(_chatBoxAddress.Value) : null;
+        public ChatElement ChatBoxRoot => GetObject<ChatElement>(IngameUIElementsStruct.ChatPanel);
+        [Obsolete("Use ChatBoxRoot?.MessageBox instead")]
+        public Element ChatBox => ChatBoxRoot?.MessageBox;
+        [Obsolete("Use ChatBoxRoot?.MessageBox?.Children.Select(x => x.Text).ToList() instead")]
         public IList<string> ChatMessages => ChatBox?.Children.Select(x => x.Text).ToList();
         public Element QuestTracker => GetObject<Element>(IngameUIElementsStruct.QuestTracker);
         public QuestRewardWindow QuestRewardWindow => GetObject<QuestRewardWindow>(IngameUIElementsStruct.QuestRewardWindow);

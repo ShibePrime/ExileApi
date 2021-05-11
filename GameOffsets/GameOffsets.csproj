@@ -48,6 +48,7 @@
     <Compile Include="CursorOffsets.cs" />
     <Compile Include="DiagnosticElementArrayOffsets.cs" />
     <Compile Include="DiagnosticElementOffsets.cs" />
+    <Compile Include="ChatElementOffsets.cs" />
     <Compile Include="ElementOffsets.cs" />
     <Compile Include="EntityLabelMapOffsets.cs" />
     <Compile Include="EntityListOffsets.cs" />

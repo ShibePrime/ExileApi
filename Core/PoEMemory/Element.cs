@@ -36,11 +36,7 @@ namespace ExileCore.PoEMemory
 
         public ElementOffsets Elem => _cacheElement.Value;
         public bool IsValid => Elem.SelfPointer == Address;
-
-        //public int vTable => Elem.vTable;
         public long ChildCount => (Elem.ChildEnd - Elem.ChildStart) / 8;
-
-        //public bool IsVisibleLocal => Address!=0 && _cacheElementIsVisibleLocal.Value;
         public bool IsVisibleLocal => (Elem.IsVisibleLocal & 8) == 8;
         public Element Root => TheGame.IngameState.UIRoot;
         public Element Parent => Elem.Parent == 0 ? null : _parent ?? (_parent = GetObject<Element>(Elem.Parent));
@@ -73,24 +69,10 @@ namespace ExileCore.PoEMemory
             }
         }
 
-        /*public virtual string Text
-        {
-            get
-            {
-                var text = Elem.TestString.ToString(M);
-                if (!string.IsNullOrWhiteSpace(text))
-                {
-                    return text.Replace("\u00A0\u00A0\u00A0\u00A0","{{icon}}");
-                }
-                return null;
-            }
-        }*/
-
         public bool IsVisible
         {
             get
             {
-                //998
                 if (Address >= 1770350607106052 || Address <= 0) return false;
                 return IsVisibleLocal && GetParentChain().All(current => current.IsVisibleLocal);
             }
