@@ -77,7 +77,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
                 var settingsTasks = PluginCopyFiles.CopySettings(sourcePluginDirectory, compiledPluginDirectory);
                 var staticFilesTasks = PluginCopyFiles.CopyStaticFiles(sourcePluginDirectory, compiledPluginDirectory);
                 var txtJsonFilesTask = PluginCopyFiles.CopyTxtAndJsonFromRoot(sourcePluginDirectory, compiledPluginDirectory);
-
+                var txtJsonDefaultFilesTask = PluginCopyFiles.CopyTxtAndJsonDefaultFiles(sourcePluginDirectory, compiledPluginDirectory);
+                
                 if (dependencyTasks != null) Task.WaitAll(dependencyTasks.ToArray());
 
                 var csProjFiles = sourcePluginDirectory
@@ -92,10 +93,13 @@ namespace ExileCore.Shared.PluginAutoUpdate
                         );
                 }
 
+                var remainingTasks = new List<Task>();
+                remainingTasks.AddRange(settingsTasks);
+                remainingTasks.AddRange(staticFilesTasks);
+                remainingTasks.AddRange(txtJsonFilesTask);
+                remainingTasks.AddRange(txtJsonDefaultFilesTask);
 
-                if (settingsTasks != null) Task.WaitAll(settingsTasks.ToArray());
-                if (staticFilesTasks != null) Task.WaitAll(staticFilesTasks.ToArray());
-                if (txtJsonFilesTask != null) Task.WaitAll(txtJsonFilesTask.ToArray());
+                if (remainingTasks != null) Task.WaitAll(remainingTasks.ToArray());
             } 
             catch (Exception e)
             {
