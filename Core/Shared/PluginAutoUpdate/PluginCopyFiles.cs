@@ -48,8 +48,9 @@ namespace ExileCore.Shared.PluginAutoUpdate
             {
                 var relativeSourcePath = file.FullName.Remove(0, sourceDirectory.FullName.Length + 1);
                 var compiledFilePath = Path.Combine(compiledDirectory.FullName, relativeSourcePath);
+
                 var compiledFile = new FileInfo(compiledFilePath);
-                if (compiledFile.Exists) continue;
+                if (compiledFile.Exists && !overwrite) continue;
 
                 var task = Task.Run(() => file.CopyTo(compiledFilePath, overwrite));
                 tasks.Add(task);
