@@ -42,8 +42,6 @@ namespace ExileCore
         public ToggleNode ShowDebugWindow { get; set; } = new ToggleNode(false);
         [Menu("Debug Information", "With this option you can check how much every plugin works.", 6, 2000)]
         public ToggleNode CollectDebugInformation { get; set; } = new ToggleNode(false);
-        [Menu("Log Read Memory Errors", 7, 2000)]
-        public ToggleNode LogReadMemoryError { get; set; } = new ToggleNode(false);
         #endregion
 
         #region performance

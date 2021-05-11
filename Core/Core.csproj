@@ -510,16 +510,6 @@
     <Compile Include="Shared\PluginManager.cs" />
     <Compile Include="Shared\PluginWrapper.cs" />
     <Compile Include="Shared\Runner.cs" />
-    <Compile Include="Shared\SomeMagic\Imports.cs" />
-    <Compile Include="Shared\SomeMagic\LocalAllocation.cs" />
-    <Compile Include="Shared\SomeMagic\MarshalType.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryBasicInformation.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryLiterate.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryProtection.cs" />
-    <Compile Include="Shared\SomeMagic\NativeMethods.cs" />
-    <Compile Include="Shared\SomeMagic\Pointer.cs" />
-    <Compile Include="Shared\SomeMagic\SafeMemoryHandle.cs" />
-    <Compile Include="Shared\SomeMagic\TypeConverter.cs" />
     <Compile Include="Shared\Static\HudSkin.cs" />
     <Compile Include="Shared\Static\ItemClasses.cs" />
     <Compile Include="Shared\VersionChecker\AutoUpdate.cs" />
