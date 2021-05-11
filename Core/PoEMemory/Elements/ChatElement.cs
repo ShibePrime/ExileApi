@@ -27,7 +27,7 @@ namespace ExileCore.PoEMemory.Elements
 
         public new bool IsVisibleLocal => (_cacheChatElementOffsets.Value.IsVisibleLocal & 8) == 8;
         public new bool IsVisible => base.IsVisible && IsVisibleLocal;
-        public new bool isHighlighted => false; // chat is never highlighted
+        public new bool IsHighlighted => false; // chat is never highlighted
         public bool IsActive => _cacheChatElementOffsets.Value.IsActive;
 
         public Element MessageBox => GetChildAtIndex(1)?.GetChildAtIndex(2)?.GetChildAtIndex(1);
