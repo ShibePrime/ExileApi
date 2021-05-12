@@ -6,8 +6,7 @@ namespace GameOffsets
     public struct IngameStateOffsets
     {
 	    [FieldOffset(0x30)] public long Data;
-	    [FieldOffset(0xA0)] public long IngameUi;
-		[FieldOffset(0xC0)] public long EntityLabelMap;
+		  [FieldOffset(0xC0)] public long EntityLabelMap;
 	    [FieldOffset(0x420)] public long ServerData;
 	    [FieldOffset(0x548)] public long UIRoot;
 	    [FieldOffset(0x580)] public long UIHoverElement;
@@ -23,6 +22,7 @@ namespace GameOffsets
 	    [FieldOffset(0x848)] public long LatencyRectangle;
 	    [FieldOffset(0xCE8)] public long FrameTimeRectangle;
 	    [FieldOffset(0xF38)] public long FPSRectangle;
-	    [FieldOffset(0x1080)] public int Camera;
+	    [FieldOffset(0x1088)] public int Camera;
+	    [FieldOffset(0x1478)] public long IngameUi;
     }
 }
