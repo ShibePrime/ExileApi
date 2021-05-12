@@ -55,13 +55,12 @@ namespace ExileCore.PoEMemory.Components
         public int FracturedCount => HumanFracturedStats.Count;
         public bool IsFractured => FracturedCount > 0;
         public bool IsSynthesized => ItemMods != null && 
-                                     ItemMods.Take(HumanImpStats.Count).Any(x => x.RawName.StartsWith("SynthesisImplicit"));
+                                     ItemMods.Any(x => x.RawName.StartsWith("SynthesisImplicit"));
         public int SynthesizedCount => IsSynthesized ? HumanImpStats.Count : 0;
         public bool IsTalisman => ItemMods != null &&
-                                  ItemMods.Take(HumanImpStats.Count).Any(x => x.RawName.StartsWith("Talisman"));
+                                  ItemMods.Any(x => x.RawName.StartsWith("Talisman"));
         public int TalismanCount => IsTalisman ? HumanImpStats.Count : 0;
-        public int VeiledCount => ItemMods != null ?
-                                  ItemMods.Skip(HumanImpStats.Count).Count(x => x.RawName.StartsWith("Veiled")) : 0;
+        public int VeiledCount => ItemMods?.Count(x => x.RawName.StartsWith("Veiled")) ?? 0;
         public bool IsVeiled => VeiledCount > 0;
         
         private string GetUniqueName(NativePtrArray source)

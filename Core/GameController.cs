@@ -177,27 +177,28 @@ namespace ExileCore
             var diagnosticElement = ingameState.LatencyRectangle;
             var ingameUiSulphit = ingameState.IngameUi.Sulphit;
 
+            
             switch (ingameState.DiagnosticInfoType)
             {
                 case DiagnosticInfoType.Off:
-
                     if (ingameUiSulphit != null && ingameUiSulphit.IsVisibleLocal)
+                    {
                         clientRect.X -= ingameUiSulphit.GetClientRectCache.Width;
-
+                    }
                     break;
                 case DiagnosticInfoType.Short:
-                    clientRect.X -= diagnosticElement.X + 30;
-                    break;
-
-                case DiagnosticInfoType.Full:
-
                     if (ingameUiSulphit != null && ingameUiSulphit.IsVisibleLocal)
+                    {
                         clientRect.X -= ingameUiSulphit.GetClientRectCache.Width;
-
+                        
+                    }
+                    else
+                    {
+                        clientRect.Y += diagnosticElement.Y + diagnosticElement.Height;
+                    }
+                    break;
+                case DiagnosticInfoType.Full:
                     clientRect.Y += diagnosticElement.Y + diagnosticElement.Height;
-                    var fpsRectangle = ingameState.FPSRectangle;
-
-                    // clientRect.X -= fpsRectangle.X + fpsRectangle.Width + 6;
                     break;
             }
 
