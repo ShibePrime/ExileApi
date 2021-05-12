@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.Elements;
@@ -20,7 +21,7 @@ namespace ExileCore.PoEMemory
         // 16 dup <128-bytes structure>
         // then the rest is
         private readonly CachedValue<ElementOffsets> _cacheElement;
-        private CachedValue<bool> _cacheElementIsVisibleLocal;
+        private readonly CachedValue<bool> _cacheElementIsVisibleLocal;
         private readonly List<Element> _childrens = new List<Element>();
         private CachedValue<RectangleF> _getClientRect;
 
@@ -36,14 +37,10 @@ namespace ExileCore.PoEMemory
 
         public ElementOffsets Elem => _cacheElement.Value;
         public bool IsValid => Elem.SelfPointer == Address;
-
-        //public int vTable => Elem.vTable;
         public long ChildCount => (Elem.ChildEnd - Elem.ChildStart) / 8;
-
-        //public bool IsVisibleLocal => Address!=0 && _cacheElementIsVisibleLocal.Value;
         public bool IsVisibleLocal => (Elem.IsVisibleLocal & 8) == 8;
         public Element Root => TheGame.IngameState.UIRoot;
-        public Element Parent => Elem.Parent == 0 ? null : _parent ?? (_parent = GetObject<Element>(Elem.Parent));
+        public Element Parent => Elem.Parent == 0 ? null : (_parent ??= GetObject<Element>(Elem.Parent));
         public Vector2 Position => Elem.Position;
         public float X => Elem.X;
         public float Y => Elem.Y;
@@ -51,7 +48,9 @@ namespace ExileCore.PoEMemory
         public float Scale => Elem.Scale;
         public float Width => Elem.Width;
         public float Height => Elem.Height;
-        public bool isHighlighted => Elem.isHighlighted;
+        public bool IsHighlighted => Elem.isHighlighted;
+        [Obsolete("Use IsHighlighted instead of isHighlighted, this will be removed for 3.15")] // remove this property at end of 3.14
+        public bool isHighlighted => IsHighlighted;
 
         public virtual string Text
         {
@@ -73,24 +72,10 @@ namespace ExileCore.PoEMemory
             }
         }
 
-        /*public virtual string Text
-        {
-            get
-            {
-                var text = Elem.TestString.ToString(M);
-                if (!string.IsNullOrWhiteSpace(text))
-                {
-                    return text.Replace("\u00A0\u00A0\u00A0\u00A0","{{icon}}");
-                }
-                return null;
-            }
-        }*/
-
         public bool IsVisible
         {
             get
             {
-                //998
                 if (Address >= 1770350607106052 || Address <= 0) return false;
                 return IsVisibleLocal && GetParentChain().All(current => current.IsVisibleLocal);
             }

@@ -14,20 +14,45 @@ namespace ExileCore.Shared.PluginAutoUpdate
         public static List<string> StaticFilesNames => new List<string> { "images", "Images", "img", "Img", "static", "Static", "textures", "Textures", "texture", "Texture" };
 
 
-        public static List<Task> CopyTxtAndJsonFromRoot(DirectoryInfo sourceDirectory, DirectoryInfo compiledDirectory)
+        public static List<Task> CopyTxtAndJsonFromRoot(
+            DirectoryInfo sourceDirectory, 
+            DirectoryInfo compiledDirectory)
         {
-            var tasks = new List<Task>();
             var files = new List<FileInfo>();
             files.AddRange(sourceDirectory.GetFiles("*.txt", SearchOption.TopDirectoryOnly).ToList());
             files.AddRange(sourceDirectory.GetFiles("*.json", SearchOption.TopDirectoryOnly).ToList());
 
+            return CopyListOfFiles(sourceDirectory, compiledDirectory, files, false);
+        }
+
+        public static List<Task> CopyTxtAndJsonDefaultFiles(
+            DirectoryInfo sourceDirectory, 
+            DirectoryInfo compiledDirectory)
+        {
+            var files = new List<FileInfo>();
+            files.AddRange(sourceDirectory.GetFiles("*default*.txt", SearchOption.AllDirectories).ToList());
+            files.AddRange(sourceDirectory.GetFiles("*default*.json", SearchOption.AllDirectories).ToList());
+
+            return CopyListOfFiles(sourceDirectory, compiledDirectory, files, true);
+        }
+
+        public static List<Task> CopyListOfFiles(
+            DirectoryInfo sourceDirectory, 
+            DirectoryInfo compiledDirectory,
+            List<FileInfo> files,
+            bool overwrite)
+        {
+            var tasks = new List<Task>();
+
             foreach (var file in files)
             {
-                var compiledFilePath = Path.Combine(compiledDirectory.FullName, file.Name);
-                var compiledFile = new FileInfo(compiledFilePath);
-                if (compiledFile.Exists) continue; 
+                var relativeSourcePath = file.FullName.Remove(0, sourceDirectory.FullName.Length + 1);
+                var compiledFilePath = Path.Combine(compiledDirectory.FullName, relativeSourcePath);
 
-                var task = Task.Run(() => file.CopyTo(compiledFilePath));
+                var compiledFile = new FileInfo(compiledFilePath);
+                if (compiledFile.Exists && !overwrite) continue;
+
+                var task = Task.Run(() => file.CopyTo(compiledFilePath, overwrite));
                 tasks.Add(task);
             }
 

@@ -8,7 +8,6 @@ using ExileCore.Shared;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Interfaces;
-using ExileCore.Shared.SomeMagic;
 using SharpDX;
 
 namespace ExileCore
@@ -85,11 +84,6 @@ namespace ExileCore
             };*/
 
             debDeltaTime = Core.DebugInformations.FirstOrDefault(x => x.Name == "Delta Time");
-
-            NativeMethods.LogError = _settings.LogReadMemoryError;
-
-            _settings.LogReadMemoryError.OnValueChanged +=
-                (obj, b) => NativeMethods.LogError = _settings.LogReadMemoryError;
 
             LeftCornerMap = new TimeCache<Vector2>(GetLeftCornerMap, 500);
             UnderCornerMap = new TimeCache<Vector2>(GetUnderCornerMap, 500);

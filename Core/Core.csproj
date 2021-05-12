@@ -277,7 +277,7 @@
     <Compile Include="PoEMemory\Elements\Map.cs" />
     <Compile Include="PoEMemory\Elements\MapStashTabElementQ.cs" />
     <Compile Include="PoEMemory\Elements\NpcDialog.cs" />
-    <Compile Include="PoEMemory\Elements\PoeChatElement.cs" />
+    <Compile Include="PoEMemory\Elements\ChatElement.cs" />
     <Compile Include="PoEMemory\Elements\SkillBarElement.cs" />
     <Compile Include="PoEMemory\Elements\SkillElement.cs" />
     <Compile Include="PoEMemory\Elements\StashElement.cs" />
@@ -495,9 +495,6 @@
     <Compile Include="Shared\Nodes\TextNode.cs" />
     <Compile Include="Shared\Nodes\ToggleNode.cs" />
     <Compile Include="Shared\Nodes\ToggleNodeConverter.cs" />
-    <Compile Include="Shared\PInvoke\ClientID.cs" />
-    <Compile Include="Shared\PInvoke\DynamicImport.cs" />
-    <Compile Include="Shared\PInvoke\ObjectAttributes.cs" />
     <Compile Include="Shared\PluginAutoUpdate\IPluginCompiler.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCompiler.cs" />
     <Compile Include="Shared\PluginAutoUpdate\PluginCopyFiles.cs" />
@@ -510,16 +507,6 @@
     <Compile Include="Shared\PluginManager.cs" />
     <Compile Include="Shared\PluginWrapper.cs" />
     <Compile Include="Shared\Runner.cs" />
-    <Compile Include="Shared\SomeMagic\Imports.cs" />
-    <Compile Include="Shared\SomeMagic\LocalAllocation.cs" />
-    <Compile Include="Shared\SomeMagic\MarshalType.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryBasicInformation.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryLiterate.cs" />
-    <Compile Include="Shared\SomeMagic\MemoryProtection.cs" />
-    <Compile Include="Shared\SomeMagic\NativeMethods.cs" />
-    <Compile Include="Shared\SomeMagic\Pointer.cs" />
-    <Compile Include="Shared\SomeMagic\SafeMemoryHandle.cs" />
-    <Compile Include="Shared\SomeMagic\TypeConverter.cs" />
     <Compile Include="Shared\Static\HudSkin.cs" />
     <Compile Include="Shared\Static\ItemClasses.cs" />
     <Compile Include="Shared\VersionChecker\AutoUpdate.cs" />
