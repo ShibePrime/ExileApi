@@ -73,10 +73,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                var statPtrStart = M.Read<long>(Address + 0x4B4);
-                var statPtrEnd = M.Read<long>(Address + 0x4BC);
+                return new List<PortalObject>();
 
-                return M.ReadStructsArray<PortalObject>(statPtrStart, statPtrEnd, PortalObject.StructSize, TheGame);
+                // TODO: Moved/Removed in 3.14.1c, shouldn't read until offsets updated anyway.
+                //var statPtrStart = M.Read<long>(Address + 0x4B4);
+                //var statPtrEnd = M.Read<long>(Address + 0x4BC);
+
+                //return M.ReadStructsArray<PortalObject>(statPtrStart, statPtrEnd, PortalObject.StructSize, TheGame);
             }
         }
 

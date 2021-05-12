@@ -6,9 +6,9 @@ namespace GameOffsets
     public struct DiagnosticElementOffsets
     {
         [FieldOffset(0x0)] public long DiagnosticArray;
-        [FieldOffset(0x10)] public int X;
-        [FieldOffset(0x14)] public int Y;
-        [FieldOffset(0x18)] public int Width;
-        [FieldOffset(0x1C)] public int Height;
+        [FieldOffset(0x08)] public int X;
+        [FieldOffset(0x0C)] public int Y;
+        [FieldOffset(0x10)] public int Width;
+        [FieldOffset(0x14)] public int Height;
     }
 }

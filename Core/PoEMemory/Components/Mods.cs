@@ -60,8 +60,7 @@ namespace ExileCore.PoEMemory.Components
         public bool IsTalisman => ItemMods != null &&
                                   ItemMods.Any(x => x.RawName.StartsWith("Talisman"));
         public int TalismanCount => IsTalisman ? HumanImpStats.Count : 0;
-        public int VeiledCount => ItemMods != null ?
-                                  ItemMods.Count(x => x.RawName.StartsWith("Veiled")) : 0;
+        public int VeiledCount => ItemMods?.Count(x => x.RawName.StartsWith("Veiled")) ?? 0;
         public bool IsVeiled => VeiledCount > 0;
         
         private string GetUniqueName(NativePtrArray source)
