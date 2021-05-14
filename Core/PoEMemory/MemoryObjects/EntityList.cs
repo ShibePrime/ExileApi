@@ -26,7 +26,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public IEnumerator CollectEntities(
             bool parseServerEntities,
-            Action<Entity> entityRemoved)
+            Action<Entity> entityRemoved,
+            Action<Entity> entityAdded)
         {
             if (Address == 0)
             {
@@ -60,6 +61,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 {
                     DebugWindow.LogError($"Unable to add entity to list, id: {entityId}");
                 }
+                entityAdded?.Invoke(entity);
             }
 
             GatherEntityIdsToDelete();
@@ -74,7 +76,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (!EntityCache.TryRemove(entityIdToDelete, out Entity removedEntity))
                 {
                     DebugWindow.LogError($"Unable to remove entity from list, id: {entityIdToDelete}");
-                    return;
+                    continue;
                 };
                 entityRemoved?.Invoke(removedEntity);
             }
@@ -90,6 +92,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 }
                 else
                 {
+                    entity.Value.IsValid = false;
                     _entityIdsToDelete.Enqueue(entity.Key);
                 }
 

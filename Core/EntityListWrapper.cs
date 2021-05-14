@@ -12,203 +12,148 @@ namespace ExileCore
 {
     public class EntityListWrapper
     {
+        public event Action<Entity> EntityAdded;
+        public event Action<Entity> EntityRemoved;
+        public event EventHandler<Entity> PlayerUpdate;
+
         private readonly CoreSettings _settings;
         private readonly GameController _gameController;
-        private readonly Queue<uint> keysForDelete = new Queue<uint>(24);
-
-        private readonly Coroutine parallelUpdateDictionary;
-        private readonly Stack<Entity> Simple = new Stack<Entity>(512);
+        private readonly Coroutine _parallelUpdateDictionary;
         private static EntityListWrapper _instance;
+
+        public Entity Player { get; private set; }
+        public IDictionary<uint, Entity> EntityCache => _gameController.Game.IngameState.Data.EntityList.EntityCache;
+        public ICollection<Entity> Entities => EntityCache.Values;
+        public IDictionary<EntityType, List<Entity>> ValidEntitiesByType { get; private set; }
+        public IDictionary<uint, Entity> OnlyValidEntitiesWithId { get; private set; }
+        public ICollection<Entity> OnlyValidEntities => OnlyValidEntitiesWithId.Values;
+        public IDictionary<uint, Entity> NotValidEntitiesWithId { get; private set; }
+        public ICollection<Entity> NotValidEntities => NotValidEntitiesWithId.Values;
+
+        [Obsolete("Use 'EntityAdded' instead. Going to be removed in 3.15")]
+        public event Action<Entity> EntityAddedAny;
+        [Obsolete("Going to be removed in 3.15")]
+        public event Action<Entity> EntityIgnored;
+        [Obsolete("Use 'NotValidEntitiesWithId' instead. Going to be removed in 3.15")]
+        public Dictionary<uint, Entity> NotValidDict => (Dictionary<uint, Entity>)NotValidEntitiesWithId;
+        [Obsolete("Going to be removed in 3.15")]
+        public List<Entity> NotOnlyValidEntities { get; private set; } = new List<Entity>(500);
+
+
         public EntityListWrapper(GameController gameController, CoreSettings settings, MultiThreadManager multiThreadManager)
         {
             _instance = this;
             _gameController = gameController;
             _settings = settings;
+            _gameController.Area.OnAreaChange += AreaChanged;
+            _parallelUpdateDictionary = new Coroutine(CollectEntities(), null, "Collect Entities") {SyncModWork = true};
 
-            gameController.Area.OnAreaChange += AreaChanged;
-
-            //updateEntity = new Coroutine(RefreshState, new WaitTime(coroutineTimeWait), null, "Update Entity")
-            //        {Priority = CoroutinePriority.High, SyncModWork = true};
-
-            var collectEntitiesDebug = new DebugInformation("Collect Entities");
-
-            IEnumerator Test()
-            {
-                while (true)
-                {
-                    yield return gameController.IngameState.Data.EntityList.CollectEntities(
-                        _settings.ParseServerEntities?.Value ?? false
-                        );
-                    UpdateEntityCollections();
-                    yield return new WaitTime(1000 / settings.EntitiesUpdate);
-                    parallelUpdateDictionary.UpdateTicks((uint) (parallelUpdateDictionary.Ticks + 1));
-
-                }
-            }
-
-            parallelUpdateDictionary = new Coroutine(Test(), null, "Collect entites") {SyncModWork = true};
-            UpdateCondition(1000 / settings.EntitiesUpdate);
-
-            settings.EntitiesUpdate.OnValueChanged += (sender, i) => { UpdateCondition(1000 / i); };
-
-            var enumValues = typeof(EntityType).GetEnumValues();
-            ValidEntitiesByType = new Dictionary<EntityType, List<Entity>>(enumValues.Length);
-
-            foreach (EntityType enumValue in enumValues)
-            {
-                ValidEntitiesByType[enumValue] = new List<Entity>(8);
-            }
+            _settings.EntitiesUpdate.OnValueChanged += (sender, i) => { UpdateCondition(1000 / i); };
+            UpdateCondition(1000 / _settings.EntitiesUpdate);
 
             PlayerUpdate += (sender, entity) => Entity.Player = entity;
+
+            InitializeCollections();
         }
 
-        public IDictionary<uint, Entity> EntityCache => _gameController.Game.IngameState.Data.EntityList.EntityCache;
-        public ICollection<Entity> Entities => EntityCache.Values;
-        public Entity Player { get; private set; }
-        public List<Entity> OnlyValidEntities { get; } = new List<Entity>(500);
-        public List<Entity> NotOnlyValidEntities { get; } = new List<Entity>(500);
-        public Dictionary<uint, Entity> NotValidDict { get; } = new Dictionary<uint, Entity>(500);
-        public Dictionary<EntityType, List<Entity>> ValidEntitiesByType { get; }
+        private IEnumerator CollectEntities()
+        {
+            while (true)
+            {
+                yield return _gameController.IngameState.Data.EntityList.CollectEntities(
+                    _settings.ParseServerEntities?.Value ?? false,
+                    EntityRemoved,
+                    EntityAdded
+                    );
+                UpdateEntityCollections();
+                yield return new WaitTime(1000 / _settings.EntitiesUpdate);
+                _parallelUpdateDictionary.UpdateTicks((uint)(_parallelUpdateDictionary.Ticks + 1));
+
+            }
+        }
 
         public void StartWork()
         {
-            Core.ParallelRunner.Run(parallelUpdateDictionary);
+            Core.ParallelRunner.Run(_parallelUpdateDictionary);
         }
 
         private void UpdateCondition(int coroutineTimeWait = 50)
         {
-            parallelUpdateDictionary.UpdateCondtion(new WaitTime(coroutineTimeWait));
+            _parallelUpdateDictionary.UpdateCondtion(new WaitTime(coroutineTimeWait));
         }
-
-#pragma warning disable CS0067
-        public event Action<Entity> EntityAdded;
-        public event Action<Entity> EntityAddedAny;
-        public event Action<Entity> EntityIgnored;
-        public event Action<Entity> EntityRemoved;
-#pragma warning restore CS0067
 
         private void AreaChanged(AreaInstance area)
         {
             try
             {
+                ClearGeneratedColletions();
+                EntityCache.Clear();
+
                 var dataLocalPlayer = _gameController.Game.IngameState.Data.LocalPlayer;
 
-                if (Player == null)
-                {
-                    if (dataLocalPlayer.Path.StartsWith("Meta"))
-                    {
-                        Player = dataLocalPlayer;
-                        Player.IsValid = true;
-                        PlayerUpdate?.Invoke(this, Player);
-                    }
-                }
-                else
-                {
-                    if (Player.Address != dataLocalPlayer.Address)
-                    {
-                        if (dataLocalPlayer.Path.StartsWith("Meta"))
-                        {
-                            Player = dataLocalPlayer;
-                            Player.IsValid = true;
-                            PlayerUpdate?.Invoke(this, Player);
-                        }
-                    }
-                }
-
-                OnlyValidEntities.Clear();
-                NotOnlyValidEntities.Clear();
-
-                foreach (var e in ValidEntitiesByType)
-                {
-                    e.Value.Clear();
-                }
+                if (Player != null && Player.Address == dataLocalPlayer.Address) return;
+                if (!dataLocalPlayer.Path.StartsWith("Meta")) return;
+             
+                Player = dataLocalPlayer;
+                Player.IsValid = true;
+                PlayerUpdate?.Invoke(this, Player);
             }
             catch (Exception e)
             {
-                DebugWindow.LogError($"{nameof(EntityListWrapper)} -> {e}");
+                DebugWindow.LogError($"EntityListWrapper.AreaChanged -> {e}");
+            }
+        }
+
+        private void InitializeCollections()
+        {
+            var enumValues = typeof(EntityType).GetEnumValues();
+            ValidEntitiesByType = new Dictionary<EntityType, List<Entity>>(enumValues.Length);
+            OnlyValidEntitiesWithId = new Dictionary<uint, Entity>(2048);
+            NotValidEntitiesWithId = new Dictionary<uint, Entity>(2048);
+
+            foreach (EntityType enumValue in enumValues)
+            {
+                ValidEntitiesByType[enumValue] = new List<Entity>(8);
             }
         }
 
         private void UpdateEntityCollections()
         {
-            OnlyValidEntities.Clear();
-            NotOnlyValidEntities.Clear();
-            NotValidDict.Clear();
-
-            foreach (var e in ValidEntitiesByType)
-            {
-                e.Value.Clear();
-            }
-
-            while (keysForDelete.Count > 0)
-            {
-                var key = keysForDelete.Dequeue();
-
-                if (EntityCache.TryGetValue(key, out var entity))
-                {
-                    EntityRemoved?.Invoke(entity);
-                    EntityCache.Remove(key);
-                }
-            }
+            ClearGeneratedColletions();
 
             foreach (var entity in EntityCache)
             {
-                var entityValue = entity.Value;
-
-                if (entityValue.IsValid)
+                if (entity.Value == null) continue;
+                if (entity.Value.IsValid)
                 {
-                    OnlyValidEntities.Add(entityValue);
-                    ValidEntitiesByType[entityValue.Type].Add(entityValue);
+                    OnlyValidEntitiesWithId.Add(entity);
+                    ValidEntitiesByType[entity.Value.Type].Add(entity.Value);
                 }
                 else
                 {
-                    NotOnlyValidEntities.Add(entityValue);
-                    NotValidDict[entityValue.Id] = entityValue;
-
+                    NotValidEntitiesWithId.Add(entity);
                 }
             }
         }
 
-        public void RefreshState()
+        private void ClearGeneratedColletions()
         {
-            if (_gameController.Area.CurrentArea == null) return;
-            if (Player == null || !Player.IsValid) return;
+            OnlyValidEntitiesWithId?.Clear();
+            NotValidEntitiesWithId?.Clear();
 
-            while (Simple.Count > 0)
+            foreach (var e in ValidEntitiesByType)
             {
-                var entity = Simple.Pop();
-
-                if (entity == null)
-                {
-                    DebugWindow.LogError($"{nameof(EntityListWrapper)}.{nameof(RefreshState)} entity is null. (Very strange).");
-                    continue;
-                }
-
-                var entityId = entity.Id;
-                if (EntityCache.TryGetValue(entityId, out _)) continue;
-
-                if (entityId >= int.MaxValue && !_settings.ParseServerEntities)
-                    continue;
-
-                if (entity.Type == EntityType.Error)
-                    continue;
-
-                EntityAddedAny?.Invoke(entity);
-                if ((int) entity.Type >= 100) EntityAdded?.Invoke(entity);
-
-                EntityCache[entityId] = entity;
+                e.Value?.Clear();
             }
-
-            UpdateEntityCollections();
         }
-
-        public event EventHandler<Entity> PlayerUpdate;
 
         public static Entity GetEntityById(uint id)
         {
             return _instance.EntityCache.TryGetValue(id, out var result) ? result : null;
         }
 
+        // TODO why is this here?
+        [Obsolete("I dont see any reason to keep this, probably removed in 3.15")]
         public string GetLabelForEntity(Entity entity)
         {
             var hashSet = new HashSet<long>();
