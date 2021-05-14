@@ -113,8 +113,9 @@ namespace ExileCore
                     var parent = GetAllDrawers(draws).Find(x => x.ID == id);
                     if (parent != null)
                     {
-                        DebugWindow.LogDebug(
-                            $"SettingsParser => Index collision. '[Menu(\"{menuAttribute.MenuName}\", ..., {id}, ...)] added as sub-setting of \"{parent.Name}\".");
+                        // debug log spam during startup due to HealthBars, temporarly disabled for now
+                        //DebugWindow.LogDebug(
+                        //    $"SettingsParser => Index collision. '[Menu(\"{menuAttribute.MenuName}\", ..., {id}, ...)] added as sub-setting of \"{parent.Name}\".");
                         parent.Children.Add(holder);
                     }
                     else
