@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using ExileCore.Shared;
-using ExileCore.Shared.Enums;
 using GameOffsets;
 using JM.LinqFaster;
 
@@ -15,9 +14,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public ConcurrentDictionary<uint, Entity> EntityCache { get; } 
         private readonly Queue<uint> _entityIdsToDelete = new Queue<uint>(128);
 
-        private readonly List<long> _entityListAddresses = new List<long>();
-        private readonly List<long> _entityAddresses = new List<long>();
-        private readonly List<long> _entityIds = new List<long>();
+        private readonly List<long> _entityListAddresses = new List<long>(2048);
+        private readonly List<long> _entityAddresses = new List<long>(2048);
+        private ConcurrentBag<long> _entityIds = new ConcurrentBag<long>();
 
         public EntityList()
         {
@@ -26,6 +25,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public IEnumerator CollectEntities(
             bool parseServerEntities,
+            ParallelOptions parallelOptions,
             Action<Entity> entityRemoved,
             Action<Entity> entityAdded)
         {
@@ -36,7 +36,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
             _entityListAddresses.Clear();
             _entityAddresses.Clear();
-            _entityIds.Clear();
+            _entityIds = new ConcurrentBag<long>();
 
             var address = M.Read<long>(Address + 0x8);
             _entityListAddresses.Add(address);
@@ -44,25 +44,25 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var node = M.Read<EntityListOffsets>(address);
             GatherEntityAddressesRecursive(node);
 
-            foreach (var entityAddress in _entityAddresses)
+            Parallel.ForEach(_entityAddresses, parallelOptions, entityAddress =>
             {
                 var entityId = M.Read<uint>(entityAddress + 0x60);
-                if (entityId <= 0) continue;
-                if (entityId >= int.MaxValue && !parseServerEntities) continue;
+                if (entityId <= 0) return;
+                if (entityId >= int.MaxValue && !parseServerEntities) return;
                 _entityIds.Add(entityId);
                 if (EntityCache.ContainsKey(entityId))
                 {
                     EntityCache[entityId].IsValid = true;
-                    continue;
+                    return;
                 }
 
                 var entity = GetObject<Entity>(entityAddress);
-                if(!EntityCache.TryAdd(entityId, entity))
+                if (!EntityCache.TryAdd(entityId, entity))
                 {
                     DebugWindow.LogError($"Unable to add entity to list, id: {entityId}");
                 }
                 entityAdded?.Invoke(entity);
-            }
+            });
 
             GatherEntityIdsToDelete();
             RemoveEntities(entityRemoved);
@@ -84,9 +84,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         private void GatherEntityIdsToDelete()
         {
+            var entityIdsSnapshot = _entityIds.ToArray();
             foreach (var entity in EntityCache)
             {
-                if (_entityIds.Contains(entity.Key))
+                if (entityIdsSnapshot.ContainsF(entity.Key))
                 {
                     entity.Value.IsValid = true;
                 }

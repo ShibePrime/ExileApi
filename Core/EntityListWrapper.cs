@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ExileCore.PoEMemory.Elements;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared;
 using ExileCore.Shared.Enums;
-using ExileCore.Shared.Nodes;
+using JM.LinqFaster;
 
 namespace ExileCore
 {
@@ -22,20 +24,17 @@ namespace ExileCore
         private static EntityListWrapper _instance;
 
         public Entity Player { get; private set; }
-        public IDictionary<uint, Entity> EntityCache => _gameController.Game.IngameState.Data.EntityList.EntityCache;
-        public ICollection<Entity> Entities => EntityCache.Values;
-        public IDictionary<EntityType, List<Entity>> ValidEntitiesByType { get; private set; }
-        public IDictionary<uint, Entity> OnlyValidEntitiesWithId { get; private set; }
-        public ICollection<Entity> OnlyValidEntities => OnlyValidEntitiesWithId.Values;
-        public IDictionary<uint, Entity> NotValidEntitiesWithId { get; private set; }
-        public ICollection<Entity> NotValidEntities => NotValidEntitiesWithId.Values;
+        public ConcurrentDictionary<uint, Entity> EntityCache => _gameController.Game.IngameState.Data.EntityList.EntityCache;
+        public List<Entity> Entities => EntityCache.ToArray().SelectF(e => e.Value).ToList();
+        public ConcurrentDictionary<EntityType, ConcurrentBag<Entity>> ValidEntitiesByType { get; private set; }
+        public List<Entity> OnlyValidEntities => Entities.WhereF(e => e.IsValid).ToList();
 
         [Obsolete("Use 'EntityAdded' instead. Going to be removed in 3.15")]
         public event Action<Entity> EntityAddedAny;
         [Obsolete("Going to be removed in 3.15")]
         public event Action<Entity> EntityIgnored;
-        [Obsolete("Use 'NotValidEntitiesWithId' instead. Going to be removed in 3.15")]
-        public Dictionary<uint, Entity> NotValidDict => (Dictionary<uint, Entity>)NotValidEntitiesWithId;
+        [Obsolete("Going to be removed in 3.15")]
+        public Dictionary<uint, Entity> NotValidDict => new Dictionary<uint, Entity>();
         [Obsolete("Going to be removed in 3.15")]
         public List<Entity> NotOnlyValidEntities { get; private set; } = new List<Entity>(500);
 
@@ -62,6 +61,7 @@ namespace ExileCore
             {
                 yield return _gameController.IngameState.Data.EntityList.CollectEntities(
                     _settings.ParseServerEntities?.Value ?? false,
+                    new ParallelOptions { MaxDegreeOfParallelism = _settings.Threads },
                     EntityRemoved,
                     EntityAdded
                     );
@@ -107,13 +107,11 @@ namespace ExileCore
         private void InitializeCollections()
         {
             var enumValues = typeof(EntityType).GetEnumValues();
-            ValidEntitiesByType = new Dictionary<EntityType, List<Entity>>(enumValues.Length);
-            OnlyValidEntitiesWithId = new Dictionary<uint, Entity>(2048);
-            NotValidEntitiesWithId = new Dictionary<uint, Entity>(2048);
+            ValidEntitiesByType = new ConcurrentDictionary<EntityType, ConcurrentBag<Entity>>(8, enumValues.Length);
 
             foreach (EntityType enumValue in enumValues)
             {
-                ValidEntitiesByType[enumValue] = new List<Entity>(8);
+                ValidEntitiesByType[enumValue] = new ConcurrentBag<Entity>();
             }
         }
 
@@ -126,25 +124,23 @@ namespace ExileCore
                 if (entity.Value == null) continue;
                 if (entity.Value.IsValid)
                 {
-                    OnlyValidEntitiesWithId.Add(entity);
                     ValidEntitiesByType[entity.Value.Type].Add(entity.Value);
-                }
-                else
-                {
-                    NotValidEntitiesWithId.Add(entity);
                 }
             }
         }
 
         private void ClearGeneratedColletions()
         {
-            OnlyValidEntitiesWithId?.Clear();
-            NotValidEntitiesWithId?.Clear();
-
-            foreach (var e in ValidEntitiesByType)
+            var enumValues = typeof(EntityType).GetEnumValues();
+            foreach (EntityType enumValue in enumValues)
             {
-                e.Value?.Clear();
+                ValidEntitiesByType[enumValue] = new ConcurrentBag<Entity>();
             }
+
+            //foreach (var e in ValidEntitiesByType)
+            //{
+            //    e.Value?.Clear();
+            //}
         }
 
         public static Entity GetEntityById(uint id)
