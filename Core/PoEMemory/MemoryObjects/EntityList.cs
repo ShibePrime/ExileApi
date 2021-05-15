@@ -95,9 +95,14 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 {
                     entity.Value.IsValid = false;
                     _entityIdsToDelete.Enqueue(entity.Key);
+                    continue;
                 }
 
-                if (entity.Value.DistancePlayer > 1000) _entityIdsToDelete.Enqueue(entity.Key);
+                if (entity.Value.DistancePlayer > 1000)
+                {
+                    _entityIdsToDelete.Enqueue(entity.Key);
+                    continue;
+                }
             }
         }
 
