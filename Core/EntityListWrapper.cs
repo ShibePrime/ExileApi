@@ -26,8 +26,8 @@ namespace ExileCore
         public Entity Player { get; private set; }
         public ConcurrentDictionary<uint, Entity> EntityCache => _gameController.Game.IngameState.Data.EntityList.EntityCache;
         public List<Entity> Entities => EntityCache.ToArray().SelectF(e => e.Value).ToList();
-        public ConcurrentDictionary<EntityType, ConcurrentBag<Entity>> ValidEntitiesByType { get; private set; }
         public List<Entity> OnlyValidEntities => Entities.WhereF(e => e.IsValid).ToList();
+        public ConcurrentDictionary<EntityType, ConcurrentBag<Entity>> ValidEntitiesByType { get; private set; }
 
         [Obsolete("Use 'EntityAdded' instead. Going to be removed in 3.15")]
         public event Action<Entity> EntityAddedAny;
@@ -51,8 +51,7 @@ namespace ExileCore
             UpdateCondition(1000 / _settings.EntitiesUpdate);
 
             PlayerUpdate += (sender, entity) => Entity.Player = entity;
-
-            InitializeCollections();
+            ValidEntitiesByType = NewValidEntitiesByType();
         }
 
         private IEnumerator CollectEntities()
@@ -65,7 +64,7 @@ namespace ExileCore
                     EntityRemoved,
                     EntityAdded
                     );
-                UpdateEntityCollections();
+                ValidEntitiesByType = UpdateValidEntitiesByType();
                 yield return new WaitTime(1000 / _settings.EntitiesUpdate);
                 _parallelUpdateDictionary.UpdateTicks((uint)(_parallelUpdateDictionary.Ticks + 1));
 
@@ -86,7 +85,7 @@ namespace ExileCore
         {
             try
             {
-                ClearGeneratedColletions();
+                ValidEntitiesByType = NewValidEntitiesByType();
                 EntityCache.Clear();
 
                 var dataLocalPlayer = _gameController.Game.IngameState.Data.LocalPlayer;
@@ -104,43 +103,32 @@ namespace ExileCore
             }
         }
 
-        private void InitializeCollections()
+        private ConcurrentDictionary<EntityType, ConcurrentBag<Entity>> NewValidEntitiesByType()
         {
             var enumValues = typeof(EntityType).GetEnumValues();
-            ValidEntitiesByType = new ConcurrentDictionary<EntityType, ConcurrentBag<Entity>>(8, enumValues.Length);
+            var validEntitiesByType = new ConcurrentDictionary<EntityType, ConcurrentBag<Entity>>(8, enumValues.Length);
 
             foreach (EntityType enumValue in enumValues)
             {
-                ValidEntitiesByType[enumValue] = new ConcurrentBag<Entity>();
+                validEntitiesByType[enumValue] = new ConcurrentBag<Entity>();
             }
+            return validEntitiesByType;
         }
 
-        private void UpdateEntityCollections()
+        private ConcurrentDictionary<EntityType, ConcurrentBag<Entity>> UpdateValidEntitiesByType()
         {
-            ClearGeneratedColletions();
+            var validEntitiesByType = NewValidEntitiesByType();
 
             foreach (var entity in EntityCache)
             {
                 if (entity.Value == null) continue;
                 if (entity.Value.IsValid)
                 {
-                    ValidEntitiesByType[entity.Value.Type].Add(entity.Value);
+                    validEntitiesByType[entity.Value.Type].Add(entity.Value);
                 }
             }
-        }
 
-        private void ClearGeneratedColletions()
-        {
-            var enumValues = typeof(EntityType).GetEnumValues();
-            foreach (EntityType enumValue in enumValues)
-            {
-                ValidEntitiesByType[enumValue] = new ConcurrentBag<Entity>();
-            }
-
-            //foreach (var e in ValidEntitiesByType)
-            //{
-            //    e.Value?.Clear();
-            //}
+            return validEntitiesByType;
         }
 
         public static Entity GetEntityById(uint id)
