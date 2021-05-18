@@ -10,14 +10,29 @@ namespace ExileCore.Threads
 {
     public class ThreadUnit
     {
-        public Job Job { get; set; }
         private readonly Thread _thread;
+        private readonly ManualResetEventSlim _waitEvent;
+        private Job _job;
+
         public ThreadUnit(string name)
         {
+            _waitEvent = new ManualResetEventSlim(true, 1000);
             _thread = new Thread(DoWork);
             _thread.Name = name;
             _thread.IsBackground = true;
             _thread.Start();
+        }
+        public Job Job
+        {
+            get
+            {
+                return _job;
+            }
+            set
+            {
+                _job = value;
+                if (!_job.IsCompleted) _waitEvent.Set();
+            }
         }
 
         private void DoWork()
@@ -26,7 +41,8 @@ namespace ExileCore.Threads
             {
                 if (Job == null || Job.IsCompleted)
                 {
-                    Thread.Sleep(10);
+                    _waitEvent.Reset();
+                    _waitEvent.Wait();
                     continue;
                 }
                 Job.Run();
