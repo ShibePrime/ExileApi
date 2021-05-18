@@ -16,6 +16,11 @@ namespace ExileCore.Threads
             _threads = new ConcurrentDictionary<string, ThreadUnit>();
         }
 
+        public bool AddOrUpdateJob(Job job)
+        {
+            return AddOrUpdateJob(job.Name, job);
+        }
+
         public bool AddOrUpdateJob(string name, Job job)
         {
             if (!_threads.ContainsKey(name))
@@ -29,16 +34,16 @@ namespace ExileCore.Threads
             return true;
         }
 
-        public void AbortLongRunningThreads(int criticalMs)
+        public void AbortLongRunningThreads()
         {
             foreach (var thread in _threads)
             {
                 var job = thread.Value?.Job;
                 if (job == null) continue;
-                if (job.ElapsedMs < criticalMs) continue;
+                if (job.ElapsedMs < job.TimeoutMs) continue;
 
                 thread.Value.Abort();
-                DebugWindow.LogError($"ThreadManager -> Thread aborted jobname: {thread.Key}, after {job.ElapsedMs}");
+                DebugWindow.LogError($"ThreadManager -> Thread aborted: {thread.Key}, timeout: {job.TimeoutMs}ms, elapsed: {job.ElapsedMs}ms");
             }
         }
     }

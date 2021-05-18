@@ -401,7 +401,7 @@ namespace ExileCore
 
                 if (ForeGroundTime <= 150 && pluginManager != null)
                 {
-                    ThreadManager.AbortLongRunningThreads(500);
+                    ThreadManager.AbortLongRunningThreads();
 
                     // Plugin Tick
                     foreach (var plugin in pluginManager?.Plugins)
@@ -415,7 +415,6 @@ namespace ExileCore
                             : plugin.Tick();
 
                         if (job == null) continue;
-                        // TODO use only Threads.Job
                         ThreadManager.AddOrUpdateJob($"Plugin_Tick_{plugin.Name}", job);
                     }
 
@@ -534,10 +533,11 @@ namespace ExileCore
 
                 if (CoroutineRunner.IsRunning)
                 {
-                    if (_coreSettings.CoroutineMultiThreading)
-                        CoroutineRunner.ParallelUpdate();
-                    else
-                        CoroutineRunner.Update();
+                    ThreadManager.AddOrUpdateJob(new Job("CoroutineRunner", CoroutineRunner.Update));
+                    //if (_coreSettings.CoroutineMultiThreading)
+                    //    CoroutineRunner.ParallelUpdate();
+                    //else
+                    //    CoroutineRunner.Update();
                 }
 
                 _tickEnd = _sw.Elapsed.TotalMilliseconds;

@@ -13,16 +13,18 @@ namespace ExileCore
         public Action Work { get; set; }
         public string Name { get; set; }
         public double ElapsedMs { get; set; }
+        public double TimeoutMs { get; set; }
 
         public volatile bool IsCompleted;
         public volatile bool IsFailed;
         public volatile bool IsStarted;
 
         private readonly Stopwatch _stopwatch;
-        public Job(string name, Action work)
+        public Job(string name, Action work, double timeoutMs = 500)
         {
             Name = name;
             Work = work;
+            TimeoutMs = timeoutMs;
             _stopwatch = new Stopwatch();
         }       
 
