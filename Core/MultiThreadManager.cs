@@ -7,25 +7,6 @@ using JM.LinqFaster;
 
 namespace ExileCore
 {
-    [DebuggerDisplay("Name: {Name}, Elapsed: {ElapsedMs}, Completed: {IsCompleted}, Failed: {IsFailed}")]
-    public class Job
-    {
-        public volatile bool IsCompleted;
-        public volatile bool IsFailed;
-        public volatile bool IsStarted;
-
-        public Job(string name, Action work)
-        {
-            Name = name;
-            Work = work;
-        }
-
-        public Action Work { get; set; }
-        public string Name { get; set; }
-        public ThreadUnit WorkingOnThread { get; set; }
-        public double ElapsedMs { get; set; }
-    }
-
     public class MultiThreadManager
     {
         private const long CriticalWorkTimeMs = 750;
@@ -350,7 +331,6 @@ namespace ExileCore
 
         public bool AddJob(Job job)
         {
-            job.WorkingOnThread = this;
             var jobSetted = false;
 
             if (Job.IsCompleted)

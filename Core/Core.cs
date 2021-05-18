@@ -15,6 +15,7 @@ using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Nodes;
 using ExileCore.Shared.VersionChecker;
+using ExileCore.Threads;
 using ImGuiNET;
 using JM.LinqFaster;
 using Serilog;
@@ -332,6 +333,8 @@ namespace ExileCore
                 WinApi.SetForegroundWindow(_memory.Process.MainWindowHandle);
         }
 
+        public ThreadManager ThreadManager { get; } = new ThreadManager();
+
         public void Tick()
         {
             try
@@ -340,10 +343,7 @@ namespace ExileCore
                 _tickStartCore = _sw.Elapsed.TotalMilliseconds;
                 FramesCount++;
 
-                if (!IsForeground)
-                    ForeGroundTime += _deltaTimeDebugInformation.Tick;
-                else
-                    ForeGroundTime = 0;
+                ForeGroundTime = IsForeground ? 0 : ForeGroundTime + _deltaTargetPcFrameTime;
 
                 if (ForeGroundTime <= 100)
                 {
@@ -401,98 +401,40 @@ namespace ExileCore
 
                 if (ForeGroundTime <= 150 && pluginManager != null)
                 {
-                    WaitingJobs.Clear();
+                    ThreadManager.AbortLongRunningThreads();
+                    var pluginTickJobs = new List<Job>();
 
-                    if (_coreSettings.CollectDebugInformation)
+                    // Plugin Tick
+                    foreach (var plugin in pluginManager?.Plugins)
                     {
-                        foreach (var plugin in pluginManager?.Plugins)
-                        {
-                            if (!plugin.IsEnable) continue;
-                            if (!GameController.InGame && !plugin.Force) continue;
-                            plugin.CanRender = true;
-                            var job = plugin.PerfomanceTick();
-                            if (job == null) continue;
+                        if (!plugin.IsEnable) continue;
+                        if (!GameController.InGame && !plugin.Force) continue;
+                        plugin.CanRender = true;
 
-                            if (MultiThreadManager.ThreadsCount > 0)
-                            {
-                                if (!job.IsStarted)
-                                    MultiThreadManager.AddJob(job);
+                        var job = (_coreSettings.CollectDebugInformation?.Value == true) 
+                            ? plugin.PerfomanceTick() 
+                            : plugin.Tick();
 
-                                WaitingJobs.Add((plugin, job));
-                            }
-                            else
-                                plugin.TickDebugInformation.TickAction(job.Work);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var plugin in pluginManager?.Plugins)
-                        {
-                            if (!plugin.IsEnable) continue;
-                            if (!GameController.InGame && !plugin.Force) continue;
-                            plugin.CanRender = true;
-                            var job = plugin.Tick();
-                            if (job == null) continue;
-
-                            if (MultiThreadManager.ThreadsCount > 0)
-                            {
-                                if (!job.IsStarted)
-                                    MultiThreadManager.AddJob(job);
-
-                                WaitingJobs.Add((plugin, job));
-                            }
-                            else
-                                job.Work();
-                        }
+                        if (job == null) continue;
+                        pluginTickJobs.Add(job);
+                        ThreadManager.AddOrUpdateJob($"Plugin_Tick_{plugin.Name}", job);
                     }
 
-                    if (WaitingJobs.Count > 0)
+                    SpinWait.SpinUntil(() => pluginTickJobs.AllF(job => job.IsCompleted), JOB_TIMEOUT_MS);
+
+                    // Plugin Render
+                    foreach (var plugin in pluginManager?.Plugins)
                     {
-                        MultiThreadManager.Process(this);
-                        SpinWait.SpinUntil(() => WaitingJobs.AllF(x => x.job.IsCompleted), JOB_TIMEOUT_MS);
+                        if (!plugin.IsEnable) continue;
+                        if (!plugin.CanRender) continue;
+                        if (!GameController.InGame && !plugin.Force) continue;
 
-                        if (_coreSettings.CollectDebugInformation)
+                        if (_coreSettings.CollectDebugInformation?.Value == true)
                         {
-                            foreach (var waitingJob in WaitingJobs)
-                            {
-                                waitingJob.plugin.TickDebugInformation.CorrectAfterTick(
-                                    (float) waitingJob.job.ElapsedMs);
-
-                                if (waitingJob.job.IsFailed && waitingJob.job.IsCompleted)
-                                {
-                                    waitingJob.plugin.CanRender = false;
-
-                                    DebugWindow.LogMsg(
-                                        $"{waitingJob.plugin.Name} job timeout: {waitingJob.job.ElapsedMs} ms. Thread# {waitingJob.job.WorkingOnThread}");
-                                }
-                            }
+                            plugin.PerfomanceRender();
                         }
                         else
                         {
-                            foreach (var waitingJob in WaitingJobs)
-                            {
-                                if (waitingJob.job.IsFailed)
-                                    waitingJob.plugin.CanRender = false;
-                            }
-                        }
-                    }
-
-                    if (_coreSettings.CollectDebugInformation)
-                    {
-                        foreach (var plugin in pluginManager?.Plugins)
-                        {
-                            if (!plugin.IsEnable) continue;
-                            if (!plugin.CanRender) continue;
-                            if (!GameController.InGame && !plugin.Force) continue;
-                            plugin.PerfomanceRender();
-                        }
-                    }
-                    else
-                    {
-                        foreach (var plugin in pluginManager?.Plugins)
-                        {
-                            if (!plugin.IsEnable) continue;
-                            if (!GameController.InGame && !plugin.Force) continue;
                             plugin.Render();
                         }
                     }
@@ -595,10 +537,11 @@ namespace ExileCore
 
                 if (CoroutineRunner.IsRunning)
                 {
-                    if (_coreSettings.CoroutineMultiThreading)
-                        CoroutineRunner.ParallelUpdate();
-                    else
-                        CoroutineRunner.Update();
+                    ThreadManager.AddOrUpdateJob(new Job("CoroutineRunner", CoroutineRunner.Update));
+                    //if (_coreSettings.CoroutineMultiThreading)
+                    //    CoroutineRunner.ParallelUpdate();
+                    //else
+                    //    CoroutineRunner.Update();
                 }
 
                 _tickEnd = _sw.Elapsed.TotalMilliseconds;

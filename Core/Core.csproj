@@ -516,6 +516,9 @@
     <Compile Include="Shared\VersionChecker\VersionResult.cs" />
     <Compile Include="Shared\WinApi.cs" />
     <Compile Include="SoundController.cs" />
+    <Compile Include="Threads\ThreadManager.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="Threads\ThreadUnit.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="WorldPositionExtensions.cs" />
   </ItemGroup>
