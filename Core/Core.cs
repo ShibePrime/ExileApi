@@ -402,6 +402,7 @@ namespace ExileCore
                 if (ForeGroundTime <= 150 && pluginManager != null)
                 {
                     ThreadManager.AbortLongRunningThreads();
+                    var pluginTickJobs = new List<Job>();
 
                     // Plugin Tick
                     foreach (var plugin in pluginManager?.Plugins)
@@ -415,8 +416,11 @@ namespace ExileCore
                             : plugin.Tick();
 
                         if (job == null) continue;
+                        pluginTickJobs.Add(job);
                         ThreadManager.AddOrUpdateJob($"Plugin_Tick_{plugin.Name}", job);
                     }
+
+                    SpinWait.SpinUntil(() => pluginTickJobs.AllF(job => job.IsCompleted), JOB_TIMEOUT_MS);
 
                     // Plugin Render
                     foreach (var plugin in pluginManager?.Plugins)
