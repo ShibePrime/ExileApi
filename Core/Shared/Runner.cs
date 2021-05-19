@@ -137,112 +137,47 @@ namespace ExileCore.Shared
         {
             if (Coroutines.Count <= 0) return;
 
-            for (var i = 0; i < Coroutines.Count; i++)
+            for (var i = Coroutines.Count-1; i >= 0; i--)
             {
                 var coroutine = Coroutines[i];
 
-                if (!coroutine.IsDone)
+                if (coroutine.IsDone)
                 {
-                    if (!coroutine.Running) continue;
-
-                    try
-                    {
-                        time = sw.Elapsed.TotalMilliseconds;
-                        double delta = 0;
-
-                        var moveNext = coroutine.MoveNext();
-                        if (!moveNext) coroutine.Done();
-                        delta = sw.Elapsed.TotalMilliseconds - time;
-                        CoroutinePerformance[coroutine.Name] += delta;
-
-                        if (delta > CriticalTimeWork)
-                        {
-                            Console.WriteLine(
-                                $"Coroutine {coroutine.Name} ({coroutine.OwnerName}) [{Name}] {delta} $Performance coroutine");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        CoroutinePerformance[$"{coroutine.Name} | ({DateTime.Now})"] =
-                            CoroutinePerformance[coroutine.Name] + (sw.Elapsed.TotalMilliseconds - time);
-
-                        CoroutinePerformance[coroutine.Name] = 0;
-                        Console.WriteLine($"Coroutine {coroutine.Name} ({coroutine.OwnerName}) error: {e}");
-                    }
-                }
-                else
-                {
-                    _finishedCoroutines.Add(new CoroutineDetails(coroutine.Name, coroutine.OwnerName, coroutine.Ticks, coroutine.Started,
+                    _finishedCoroutines.Add(new CoroutineDetails(coroutine.Name, coroutine.OwnerName, coroutine.Ticks,
+                        coroutine.Started,
                         DateTime.Now));
 
                     FinishedCoroutineCount++;
                     Coroutines.Remove(coroutine);
+                    continue;
                 }
-            }
-        }
 
-        public void ParallelUpdate()
-        {
-            if (MultiThreadManager == null || MultiThreadManager.ThreadsCount < 1)
-            {
-                Update();
-                return;
-            }
+                if (!coroutine.Running) continue;
 
-            if (Coroutines.Count <= 0) return;
-            jobs.Clear();
-
-            for (var i = 0; i < Coroutines.Count; i++)
-            {
-                var coroutine = Coroutines[i];
-
-                if (!coroutine.IsDone)
+                try
                 {
-                    if (!coroutine.Running) continue;
+                    time = sw.Elapsed.TotalMilliseconds;
+                    double delta = 0;
 
-                    if (coroutine.NextIterRealWork && !coroutine.SyncModWork)
+                    var moveNext = coroutine.MoveNext();
+                    if (!moveNext) coroutine.Done();
+                    delta = sw.Elapsed.TotalMilliseconds - time;
+                    CoroutinePerformance[coroutine.Name] += delta;
+
+                    if (delta > CriticalTimeWork)
                     {
-                        var addJob = MultiThreadManager.AddJob(() =>
-                        {
-                            var moveNext = coroutine.MoveNext();
-                            if (!moveNext) coroutine.Done();
-                        }, coroutine.Name);
-
-                        jobs.Add(addJob);
-                    }
-                    else
-                    {
-                        time = sw.Elapsed.TotalMilliseconds;
-                        double delta = 0;
-
-                        var moveNext = coroutine.MoveNext();
-                        if (!moveNext) coroutine.Done();
-                        delta = sw.Elapsed.TotalMilliseconds - time;
-                        CoroutinePerformance[coroutine.Name] += delta;
-
-                        if (delta > CriticalTimeWork)
-                        {
-                            Console.WriteLine(
-                                $"Coroutine {coroutine.Name} ({coroutine.OwnerName}) [{Name}] {delta} $Performance coroutine");
-                        }
+                        Console.WriteLine(
+                            $"Coroutine {coroutine.Name} ({coroutine.OwnerName}) [{Name}] {delta} $Performance coroutine");
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    _finishedCoroutines.Add(new CoroutineDetails(coroutine.Name, coroutine.OwnerName, coroutine.Ticks, coroutine.Started,
-                        DateTime.Now));
+                    CoroutinePerformance[$"{coroutine.Name} | ({DateTime.Now})"] =
+                        CoroutinePerformance[coroutine.Name] + (sw.Elapsed.TotalMilliseconds - time);
 
-                    FinishedCoroutineCount++;
-                    Coroutines.Remove(coroutine);
+                    CoroutinePerformance[coroutine.Name] = 0;
+                    Console.WriteLine($"Coroutine {coroutine.Name} ({coroutine.OwnerName}) error: {e}");
                 }
-            }
-
-            MultiThreadManager.Process(this);
-            SpinWait.SpinUntil(() => jobs.AllF(job => job.IsCompleted), 500);
-
-            foreach (var job in jobs)
-            {
-                CoroutinePerformance[job.Name] += job.ElapsedMs;
             }
         }
     }
