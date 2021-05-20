@@ -52,6 +52,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public ServerPlayerData PlayerInformation => _PlayerData.Value;
         public ushort TradeChatChannel => ServerDataStruct.TradeChatChannel;
         public ushort GlobalChatChannel => ServerDataStruct.GlobalChatChannel;
+        public int DialogDepth => ServerDataStruct.DialogDepth;
         public byte MonsterLevel => ServerDataStruct.MonsterLevel;
         public CharacterClass PlayerClass => PlayerInformation.Class;
 

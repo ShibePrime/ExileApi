@@ -90,6 +90,7 @@ namespace GameOffsets
         public const int AtlasWatchtowerLocations = 0x8800;
         public const int BestiaryBeastsCapturedCounts = 0x89E8;
 
+        [FieldOffset(0x9228 - Skip)] public int DialogDepth;
         [FieldOffset(0x922C - Skip)] public byte MonsterLevel;
         [FieldOffset(0x922D - Skip)] public byte MonstersRemaining;
         [FieldOffset(0x92D8 - Skip)] public int CurrentAzuriteAmount;
