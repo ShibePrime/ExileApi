@@ -53,6 +53,8 @@ namespace ExileCore.PoEMemory.Elements
                     return EquippedItems.GetChildAtIndex(18);
                 case InventoryIndex.Flask:
                     return EquippedItems.GetChildAtIndex(17);
+                case InventoryIndex.Trinket:
+                    return EquippedItems.GetChildAtIndex(19);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(inventoryIndex));
             }

@@ -65,6 +65,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element Sulphit => GetObject<Element>(IngameUIElementsStruct.Map).GetChildAtIndex(0);
         public Cursor Cursor => _cursor ??= GetObject<Cursor>(IngameUIElementsStruct.Mouse);
         public Element BetrayalWindow => _BetrayalWindow ??= GetObject<Element>(IngameUIElementsStruct.BetrayalWindow);
+        public Element SyndicatePanel => BetrayalWindow; // Required for TehCheats Api, BroodyHen uses this.
         public Element SyndicateTree => GetObject<Element>(M.Read<long>(BetrayalWindow.Address + 0xA50));
         public Element UnveilWindow => _UnveilWindow ??= GetObject<Element>(IngameUIElementsStruct.UnveilWindow);
         public Element ZanaMissionChoice => _ZanaMissionChoice ??= GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice);
@@ -77,9 +78,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public WorldMapElement WorldMap => GetObject<WorldMapElement>(IngameUIElementsStruct.WorldMap);
         public MetamorphWindowElement MetamorphWindow => GetObject<MetamorphWindowElement>(IngameUIElementsStruct.MetamorphWindow);
         public RitualWindow RitualWindow => GetObject<RitualWindow>(IngameUIElementsStruct.RitualWindow);
+        public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourPanel);
+        public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressPanel);
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
         public HarvestWindow HarvestWindow => GetObject<HarvestWindow>(IngameUIElementsStruct.HarvestWindow);
-
+        
         public IEnumerable<QuestState> GetUncompletedQuests => GetQuestStates.Where(q => q.QuestStateId != 0);
         public IEnumerable<QuestState> GetCompletedQuests => GetQuestStates.Where(q => q.QuestStateId == 0);
         public List<QuestState> GetQuestStates => _cachedQuestStates?.Value;

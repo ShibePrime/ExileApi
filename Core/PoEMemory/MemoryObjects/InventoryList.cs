@@ -6,7 +6,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class InventoryList : RemoteMemoryObject
     {
-        public static int InventoryCount => 15;
+        public static int InventoryCount => 37;
 
         public Inventory this[InventoryIndex inv]
         {
@@ -27,13 +27,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             var list = new List<Inventory>();
 
-            foreach (var inx in Enum.GetValues(typeof(InventoryIndex)))
+            for (var num = 0; num < InventoryCount; ++num)
             {
-                var num = (int) inx;
-
-                if (num < 0 || num >= InventoryCount)
-                    return null;
-
                 list.Add(ReadObjectAt<Inventory>(num * 8));
             }
 

@@ -38,6 +38,8 @@ namespace GameOffsets
         [FieldOffset(0x7A0)] public long MetamorphWindow;
         [FieldOffset(0x7B0)] public long HarvestWindow;
         [FieldOffset(0x7E8)] public long RitualWindow;
+        [FieldOffset(0x7F0)] public long RitualFavourPanel;
+        [FieldOffset(0x7F8)] public long UltimatumProgressPanel;
         [FieldOffset(0x848)] public long DelveDarkness;
         [FieldOffset(0x858)] public long AreaInstanceUi;
         [FieldOffset(0x950)] public long InvitesPanel;
@@ -161,7 +163,7 @@ namespace GameOffsets
         //[FieldOffset(0x7E0)] public long HeistLockerPanel;
         //[FieldOffset(0x7E8)] public long RitualWindow;
         //[FieldOffset(0x7F0)] public long RitualFavourPanel;
-        //[FieldOffset(0x7F8)] public long UltimatumPanel;
+        //[FieldOffset(0x7F8)] public long UltimatumProgressPanel;
         //[FieldOffset(0x800)] public long UI[25][10];
 
         //[FieldOffset(0x820)] public long UI[24]; Guild Perms
