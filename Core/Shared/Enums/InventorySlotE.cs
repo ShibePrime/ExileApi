@@ -47,7 +47,7 @@ namespace ExileCore.Shared.Enums
         MetamorphConstruct,
         AtlasWatchtower,
         AtlasTray,
-        Harvest1, // TODO: Check inventory items to see if Harvest enums are actually Harvest
+        Harvest1,
         Harvest2,
         Harvest3,
         HeistBlueprint,
@@ -63,6 +63,15 @@ namespace ExileCore.Shared.Enums
         Trinket1,
         HeistBlueprintPlanner,
         GrandHeist,
-        HeistLocker
+        HeistLocker,
+        Unknown58,
+        Unknown59,
+        Unknown60,
+        Unknown61,
+        Unknown62,
+        Unknown63,
+        Unknown64,
+        Unknown65,
+        UltimatumSacrifice
     }
 }
