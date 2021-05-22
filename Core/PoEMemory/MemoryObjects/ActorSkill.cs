@@ -18,7 +18,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x18);
         public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x50) > 0; 
         public bool CanBeUsed => M.Read<byte>(Address + 0x51) == 0;
-        public int TotalUses => M.Read<int>(Address + 0x58); 
+        public int TotalUses => M.Read<int>(Address + 0x54); 
         public float Cooldown => M.Read<int>(Address + 0x5C) / 100f; //Converted milliseconds to seconds 
         public int SoulsPerUse => M.Read<int>(Address + 0x6C);
         public int TotalVaalUses => M.Read<int>(Address + 0x70);
