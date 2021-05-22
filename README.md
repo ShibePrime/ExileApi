@@ -1,5 +1,6 @@
 # ExileApi
-Forum Thread discussing this repository and a list of possible plugin repositories can be found here https://www.ownedcore.com/forums/mmo/path-of-exile/poe-bots-programs/902969-exileapi-fork-3-11-release.html
+An introduction can be found in the forum thread:
+https://www.ownedcore.com/forums/mmo/path-of-exile/poe-bots-programs/940986-exileapi-3-14-release.html#post4300263
 
 # Release
 https://github.com/Queuete/ExileApi/releases
