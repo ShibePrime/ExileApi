@@ -19,5 +19,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public int VaalMaxSouls => M.Read<int>(Address + MAX_VAAL_SOULS_OFFSET);
         public int VaalSoulsPerUse => M.Read<int>(Address + VAAL_SOULS_PER_USE_OFFSET);
         public int CurrVaalSouls => M.Read<int>(Address + CURRENT_VAAL_SOULS_OFFSET);
+
+        public override string ToString()
+        {
+            return VaalSkillDisplayName;
+        }
     }
 }

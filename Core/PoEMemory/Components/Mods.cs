@@ -35,6 +35,7 @@ namespace ExileCore.PoEMemory.Components
         public bool IsSplit => Address != 0 && ModsStruct.IsSplit == 1;
         public string IncubatorName => Address != 0 && ModsStruct.IncubatorKey != 0
             ? M.ReadStringU(M.Read<long>(ModsStruct.IncubatorKey, 0x20)) : null;
+        public short IncubatorKills => ModsStruct.IncubatorKillCount;
 
         public List<ItemMod> ItemMods
         {
@@ -60,7 +61,7 @@ namespace ExileCore.PoEMemory.Components
         public bool IsTalisman => ItemMods != null &&
                                   ItemMods.Any(x => x.RawName.StartsWith("Talisman"));
         public int TalismanCount => IsTalisman ? HumanImpStats.Count : 0;
-        public int VeiledCount => ItemMods?.Count(x => x.RawName.StartsWith("Veiled")) ?? 0;
+        public int VeiledCount => ItemMods?.Count(x => x.Group.StartsWith("Veiled")) ?? 0;
         public bool IsVeiled => VeiledCount > 0;
         
         private string GetUniqueName(NativePtrArray source)

@@ -27,6 +27,7 @@ namespace GameOffsets
         [FieldOffset(0x48C)] public int ItemLevel;
         [FieldOffset(0x490)] public int RequiredLevel;
         [FieldOffset(0x498)] public long IncubatorKey;
+        [FieldOffset(0x4A8)] public short IncubatorKillCount;
         [FieldOffset(0x4AC)] public byte IsUsable;
     }
 }

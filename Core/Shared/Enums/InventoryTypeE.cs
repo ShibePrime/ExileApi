@@ -35,7 +35,7 @@ namespace ExileCore.Shared.Enums
         CraftingSpreeItem,
         NormalOrQuad,
         AtlasWatchtower,
-        Harvest1, // TODO: Check inventory items to see if Harvest enums are actually Harvest
+        Harvest1,
         Unknown30, // TODO: Check if these are 3.11 3-pack league tabs
         Unknown31,
         Harvest2,
@@ -43,6 +43,13 @@ namespace ExileCore.Shared.Enums
         HeistAllyEquipment,
         Trinket,
         HeistLocker,
-        StashRegularTab
+        StashRegularTab,
+        Unknown38,
+        Unknown39,
+        Unknown40,
+        Unknown41,
+        Unknown42,
+        Unknown43,
+        UtzaalUltimatum
     }
 }

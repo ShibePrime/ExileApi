@@ -16,9 +16,28 @@ namespace ExileCore.Shared.Enums
         Belt,
         Boots,
         PlayerInventory,
-        Flask
-
-        //Stash1 = 24,
-        //Stash2
+        Flask,
+        Trinket,
+        LWeaponSkin,
+        LWeaponEffect,
+        LWeaponAddedEffect,
+        RWeaponSkin,
+        RWeaponEffect,
+        RWeaponAddedEffect,
+        HelmSkin,
+        HelmAttachment1,
+        BodySkin,
+        BodyAttachment,
+        GlovesSkin,
+        BootsSkin,
+        Footprints,
+        Apparition,
+        CharacterEffect,
+        Portrait,
+        PortraitFrame,
+        Pet1,
+        Pet2,
+        Portal,
+        HelmAttachment2
     }
 }
