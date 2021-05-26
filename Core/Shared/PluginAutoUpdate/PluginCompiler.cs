@@ -140,7 +140,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
 
             var packageReferences = lines
-                .Where(lines => lines.TrimStart().StartsWith("<PackageReference Include="))
+                .Where(line => line.TrimStart().StartsWith("<PackageReference Include="))
                 .Where(line => line.TrimEnd().EndsWith("\">"))
                 .ToList();
 
