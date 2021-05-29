@@ -31,7 +31,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             if (Address == 0)
             {
-                DebugWindow.LogError($"{nameof(EntityList)} -> Address is 0;");
+                if(pTheGame.InGame) {
+                    DebugWindow.LogError($"{nameof(EntityList)} -> Address is 0;");
+                }
                 yield return new WaitTime(100);
             }
             _entityListAddresses.Clear();
