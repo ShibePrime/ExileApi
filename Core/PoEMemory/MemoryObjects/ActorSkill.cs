@@ -68,7 +68,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             :TimeSpan.FromMilliseconds((int)Math.Ceiling(1000f / (HundredTimesAttacksPerSecond / 100f)));
         public int HundredTimesAttacksPerSecond => GetStat(IsSpell ? GameStat.HundredTimesCastsPerSecond 
             : IsAttack ? GameStat.HundredTimesAttacksPerSecond
-            : IsCry ? GameStat.VirtualBaseSpellCastTimeMs:0);
+            : IsCry ? GameStat.VirtualBaseSpellCastTimeMs:60);
         public bool IsSpell => GetStat(GameStat.CastingSpell) == 1;
         public bool IsAttack => GetStat(GameStat.SkillIsAttack) == 1;
         public bool IsCry => InternalName.EndsWith("_cry");
