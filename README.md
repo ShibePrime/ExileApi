@@ -38,7 +38,7 @@ Probably one of your other plugins is very performance intense. Currently EliteB
 8. The Hud and SlimTrade wont work together
 Slimtrade has the option to show a Config Button on the screen for easy configuration. If you disable the config button then the focus does not get stolen. (Thanks @Smartillian)
 
-Nothing worked
+## Troubleshooting did not solve my issue
 Create an issue with a detailed error description. Post the full error log (PoeHelper/Logs/Verbose-[date].log)
 -> Posts about problems which dont do this will be ignored by me.
 
