@@ -30,7 +30,7 @@ namespace ExileCore.PoEMemory
 
         public Element()
         {
-            _cacheElement = new FrameCache<ElementOffsets>(() => Address != 0 ? default : M.Read<ElementOffsets>(Address));
+            _cacheElement = new FrameCache<ElementOffsets>(() => Address == 0 ? default : M.Read<ElementOffsets>(Address));
             _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address != 0 && M.Read<bool>(Address + IsVisibleLocalOff));
         }
 
@@ -103,7 +103,9 @@ namespace ExileCore.PoEMemory
             var pointers = M.ReadPointersArray(e.ChildStart, e.ChildEnd);
 
             if (pointers.Count != ChildCount) return _childrens;
-            _childrens.AddRange(pointers.Select(GetObject<Element>).ToList()); 
+            _childrens.Clear();
+
+            _childrens.AddRange(pointers.Select(GetObject<Element>).ToList());
             childHashCache = ChildHash;
             return _childrens;
         }
@@ -205,24 +207,24 @@ namespace ExileCore.PoEMemory
         {
             return index >= ChildCount ? null : GetObject<Element>(M.Read<long>(Address + ChildStartOffset, index * 8));
         }
-
-        public void GetAllStrings(List<string> res) {
-            if(Text?.Length > 0) {
+        public void GetAllStrings(List<string> res)
+        {
+            if (Text?.Length > 0)
+            {
                 res.Add(Text);
             }
-            foreach(var ch in Children)
+            foreach (var ch in Children)
                 ch.GetAllStrings(res);
         }
-
-        public void GetAllTextElements(List<Element> res) {
-            if(Text?.Length > 0) {
+        public void GetAllTextElements(List<Element> res)
+        {
+            if (Text?.Length > 0)
+            {
                 res.Add(this);
             }
-
-            foreach(var ch in Children)
+            foreach (var ch in Children)
                 ch.GetAllTextElements(res);
         }
-
         public Element GetElementByString(string str)
         {
             return Text == str ? this : Children.Select(child => child.GetElementByString(str)).FirstOrDefault(element => element != null);
