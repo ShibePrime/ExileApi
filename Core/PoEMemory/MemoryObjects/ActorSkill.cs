@@ -61,18 +61,28 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool IsUsing => SkillUseStage > 2;
         public bool PrepareForUsage => SkillUseStage == 1;
         public float Dps => GetStat(GameStat.HundredTimesDamagePerSecond + (IsUsing ? 4 : 0)) / 100f;
-	
-        public TimeSpan CastTime => IsInstant? TimeSpan.FromMilliseconds(0)
-            :TimeSpan.FromMilliseconds((int)Math.Ceiling(1000f / (HundredTimesAttacksPerSecond / 100f)));
-        public int HundredTimesAttacksPerSecond => GetStat(IsSpell ? GameStat.HundredTimesCastsPerSecond 
-            : IsAttack ? GameStat.HundredTimesAttacksPerSecond
-            : IsCry ? GameStat.VirtualBaseSpellCastTimeMs:60);
+        public TimeSpan CastTime => IsInstant
+            ? TimeSpan.FromMilliseconds(0)
+            : TimeSpan.FromMilliseconds((int)Math.Ceiling(1000f / (HundredTimesAttacksPerSecond / 100f)));
+        public int HundredTimesAttacksPerSecond
+        {
+            get
+            {
+                if (IsCry) return 60;
+                if (IsInstant) return 0;
+
+                return GetStat(
+                    IsSpell 
+                    ? GameStat.HundredTimesCastsPerSecond 
+                    : GameStat.HundredTimesAttacksPerSecond
+                );
+            }
+        }
         public bool IsSpell => GetStat(GameStat.CastingSpell) == 1;
         public bool IsAttack => GetStat(GameStat.SkillIsAttack) == 1;
         public bool IsCry => InternalName.EndsWith("_cry");
         public bool IsInstant => GetStat(GameStat.SkillIsInstant) == 1;
-	
-	public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
+	    public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
         public bool IsTotem => GetStat(GameStat.IsTotem) == 1 || GetStat(GameStat.SkillIsTotemified) == 1;
         public bool IsTrap => GetStat(GameStat.IsTrap) == 1 || GetStat(GameStat.SkillIsTrapped) == 1;
         public bool IsVaalSkill => SoulsPerUse >= 1 && TotalVaalUses >= 1;
