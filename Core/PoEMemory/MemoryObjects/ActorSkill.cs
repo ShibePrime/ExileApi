@@ -64,10 +64,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
 	
         public TimeSpan CastTime => IsInstant? TimeSpan.FromMilliseconds(0)
             :TimeSpan.FromMilliseconds((int)Math.Ceiling(1000f / (HundredTimesAttacksPerSecond / 100f)));
-        public int HundredTimesAttacksPerSecond =>
-            GetStat(IsSpell ? GameStat.HundredTimesCastsPerSecond : GameStat.HundredTimesAttacksPerSecond);
+        public int HundredTimesAttacksPerSecond => GetStat(IsSpell ? GameStat.HundredTimesCastsPerSecond 
+            : IsAttack ? GameStat.HundredTimesAttacksPerSecond
+            : IsCry ? GameStat.VirtualBaseSpellCastTimeMs:60);
         public bool IsSpell => GetStat(GameStat.CastingSpell) == 1;
         public bool IsAttack => GetStat(GameStat.SkillIsAttack) == 1;
+        public bool IsCry => InternalName.EndsWith("_cry");
         public bool IsInstant => GetStat(GameStat.SkillIsInstant) == 1;
 	
 	public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
