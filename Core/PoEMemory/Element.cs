@@ -25,14 +25,13 @@ namespace ExileCore.PoEMemory
         private readonly List<Element> _childrens = new List<Element>();
         private CachedValue<RectangleF> _getClientRect;
 
-        // public Element Root => Elem.Root==0 ?null: GetObject<Element>(M.Read<long>(Elem.Root+0xE8));
         private Element _parent;
         private long childHashCache;
 
         public Element()
         {
             _cacheElement = new FrameCache<ElementOffsets>(() => Address == 0 ? default : M.Read<ElementOffsets>(Address));
-            _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address == 0 ? default : M.Read<bool>(Address + IsVisibleLocalOff));
+            _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address != 0 && M.Read<bool>(Address + IsVisibleLocalOff));
         }
 
         public ElementOffsets Elem => _cacheElement.Value;
@@ -44,7 +43,7 @@ namespace ExileCore.PoEMemory
         public Vector2 Position => Elem.Position;
         public float X => Elem.X;
         public float Y => Elem.Y;
-        public Element Tooltip => Address == 0 ? null : GetObject<Element>(M.Read<long>(Address + 0x338)); //0x7F0
+        public Element Tooltip => Address == 0 ? null : GetObject<Element>(M.Read<long>(Address + 0x338));
         public float Scale => Elem.Scale;
         public float Width => Elem.Width;
         public float Height => Elem.Height;
@@ -52,13 +51,20 @@ namespace ExileCore.PoEMemory
         [Obsolete("Use IsHighlighted instead of isHighlighted, this will be removed for 3.15")] // remove this property at end of 3.14
         public bool isHighlighted => IsHighlighted;
 
+        public ColorBGRA BorderColor => new ColorBGRA(Elem.ElementBorderColor);
+        public ColorBGRA BackgroundColor => new ColorBGRA(Elem.ElementBackgroundColor);
+        public ColorBGRA OverlayColor => new ColorBGRA(Elem.ElementOverlayColor);
+
+        public ColorBGRA TextBoxBorderColor => new ColorBGRA(Elem.TextBoxBorderColor);
+        public ColorBGRA TextBoxBackgroundColor => new ColorBGRA(Elem.TextBoxBackgroundColor);
+        public ColorBGRA TextBoxOverlayColor => new ColorBGRA(Elem.TextBoxOverlayColor);
+
         public virtual string Text
         {
             get
             {
                 var text = AsObject<EntityLabel>().Text2;
-                if (!string.IsNullOrWhiteSpace(text)) return text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}");
-                return null;
+                return !string.IsNullOrWhiteSpace(text) ? text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}") : null;
             }
         }
 
@@ -67,8 +73,7 @@ namespace ExileCore.PoEMemory
             get
             {
                 var text = AsObject<EntityLabel>().Text3;
-                if (!string.IsNullOrWhiteSpace(text)) return text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}");
-                return null;
+                return !string.IsNullOrWhiteSpace(text) ? text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}") : null;
             }
         }
 
@@ -100,11 +105,7 @@ namespace ExileCore.PoEMemory
             if (pointers.Count != ChildCount) return _childrens;
             _childrens.Clear();
 
-            foreach (var pointer in pointers)
-            {
-                _childrens.Add(GetObject<Element>(pointer));
-            }
-
+            _childrens.AddRange(pointers.Select(GetObject<Element>).ToList());
             childHashCache = ChildHash;
             return _childrens;
         }
@@ -116,17 +117,7 @@ namespace ExileCore.PoEMemory
 
             var pointers = M.ReadPointersArray(e.ChildStart, e.ChildEnd);
 
-            if (pointers.Count != ChildCount)
-                return new List<T>();
-
-            var results = new List<T>();
-
-            foreach (var pointer in pointers)
-            {
-                results.Add(GetObject<T>(pointer));
-            }
-
-            return results;
+            return pointers.Count != ChildCount ? new List<T>() : pointers.Select(GetObject<T>).ToList();
         }
 
         private IList<Element> GetParentChain()
@@ -140,17 +131,14 @@ namespace ExileCore.PoEMemory
             var root = Root;
             var parent = Parent;
 
-            if (root == null || parent == null)
+            if (root == null)
                 return list;
 
-            while (!hashSet.Contains(parent) && root.Address != parent.Address && parent.Address != 0)
+            while (parent != null && !hashSet.Contains(parent) && root.Address != parent.Address && parent.Address != 0)
             {
                 list.Add(parent);
                 hashSet.Add(parent);
                 parent = parent.Parent;
-
-                if (parent == null)
-                    break;
             }
 
             return list;
@@ -189,13 +177,13 @@ namespace ExileCore.PoEMemory
 
         public Element GetChildFromIndices(params int[] indices)
         {
-            var poe_UElement = this;
+            var currentElement = this;
 
             foreach (var index in indices)
             {
-                poe_UElement = poe_UElement.GetChildAtIndex(index);
+                currentElement = currentElement.GetChildAtIndex(index);
 
-                if (poe_UElement == null)
+                if (currentElement == null)
                 {
                     var str = "";
                     indices.ForEach(i => str += $"[{i}] ");
@@ -203,7 +191,7 @@ namespace ExileCore.PoEMemory
                     return null;
                 }
 
-                if (poe_UElement.Address == 0)
+                if (currentElement.Address == 0)
                 {
                     var str = "";
                     indices.ForEach(i => str += $"[{i}] ");
@@ -212,36 +200,34 @@ namespace ExileCore.PoEMemory
                 }
             }
 
-            return poe_UElement;
+            return currentElement;
         }
 
         public Element GetChildAtIndex(int index)
         {
             return index >= ChildCount ? null : GetObject<Element>(M.Read<long>(Address + ChildStartOffset, index * 8));
         }
-        public void GetAllStrings(List<string> res) {
-            if(Text?.Length > 0) {
+        public void GetAllStrings(List<string> res)
+        {
+            if (Text?.Length > 0)
+            {
                 res.Add(Text);
             }
-            foreach(var ch in Children)
+            foreach (var ch in Children)
                 ch.GetAllStrings(res);
         }
-        public void GetAllTextElements(List<Element> res) {
-            if(Text?.Length > 0) {
+        public void GetAllTextElements(List<Element> res)
+        {
+            if (Text?.Length > 0)
+            {
                 res.Add(this);
             }
-            foreach(var ch in Children)
+            foreach (var ch in Children)
                 ch.GetAllTextElements(res);
         }
-        public Element GetElementByString(string str) {
-            if(Text == str) {
-                return this;
-            }
-            foreach(var child in Children) {
-                var element = child.GetElementByString(str);
-                if(element != null) return element;
-            }
-            return null;
+        public Element GetElementByString(string str)
+        {
+            return Text == str ? this : Children.Select(child => child.GetElementByString(str)).FirstOrDefault(element => element != null);
         }
     }
 }
