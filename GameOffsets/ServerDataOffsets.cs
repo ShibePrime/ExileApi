@@ -69,7 +69,9 @@ namespace GameOffsets
         [FieldOffset(0x8678 - Skip)] public ushort TradeChatChannel;
         [FieldOffset(0x8680 - Skip)] public ushort GlobalChatChannel;
         [FieldOffset(0x86D0 - Skip)] public ushort LastActionId;
-        
+
+        //[FieldOffset(0x8708 - Skip)] public long InstanceLeagueInfo;
+
         // Note: Search for a LONG value equal to your current amount of completed maps.
         //       Previous byte is a linked list of maps. Map list will be the next byte.
         [FieldOffset(0x8728 - Skip)] public long MavenMapsList;
@@ -93,7 +95,12 @@ namespace GameOffsets
         [FieldOffset(0x9228 - Skip)] public int DialogDepth;
         [FieldOffset(0x92AC - Skip)] public byte MonsterLevel;
         [FieldOffset(0x92AD - Skip)] public byte MonstersRemaining;
+        //[FieldOffset(0x9328 - Skip)] public long LeftIncursionArchitectKey;
+        //[FieldOffset(0x9338 - Skip)] public long RightIncursionArchitectKey;
         [FieldOffset(0x9358 - Skip)] public int CurrentAzuriteAmount;
         [FieldOffset(0x9368 - Skip)] public ushort CurrentSulphiteAmount;
+
+        //[FieldOffset(0x9590 - Skip)] public long DeliriumRewardInfo;
+        //[FieldOffset(0x95A8 - Skip)] public long BlueprintRevealInfo;
     }
 }

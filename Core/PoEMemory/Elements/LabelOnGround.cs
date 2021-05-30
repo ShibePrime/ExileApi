@@ -13,12 +13,9 @@ namespace ExileCore.PoEMemory.Elements
         {
             labelInfo = new Lazy<long>(GetLabelInfo);
 
-            debug = new Lazy<string>(() =>
-            {
-                return ItemOnGround.HasComponent<WorldItem>()
-                    ? ItemOnGround.GetComponent<WorldItem>().ItemEntity?.GetComponent<Base>()?.Name
-                    : ItemOnGround.Path;
-            });
+            debug = new Lazy<string>(() => ItemOnGround.HasComponent<WorldItem>()
+                ? ItemOnGround.GetComponent<WorldItem>().ItemEntity?.GetComponent<Base>()?.Name
+                : ItemOnGround.Path);
         }
 
         public bool IsVisible => Label?.IsVisible ?? false;

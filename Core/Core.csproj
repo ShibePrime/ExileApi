@@ -209,6 +209,7 @@
     <Compile Include="PoEMemory\Components\HeistBlueprint.cs" />
     <Compile Include="PoEMemory\Components\HeistContract.cs" />
     <Compile Include="PoEMemory\Components\HeistEquipment.cs" />
+    <Compile Include="PoEMemory\Components\HeistRewardDisplay.cs" />
     <Compile Include="PoEMemory\Components\HideoutDoodad.cs" />
     <Compile Include="PoEMemory\Components\Inventories.cs" />
     <Compile Include="PoEMemory\Components\InventoryVisual.cs" />
