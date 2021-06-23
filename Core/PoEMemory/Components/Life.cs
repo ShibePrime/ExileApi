@@ -21,12 +21,12 @@ namespace ExileCore.PoEMemory.Components
         private LifeComponentOffsets LifeComponentOffsetsStruct => _life.Value;
         public int MaxHP => Address != 0 ? LifeComponentOffsetsStruct.MaxHP : 1;
         public int CurHP => Address != 0 ? LifeComponentOffsetsStruct.CurHP : 0;
-        public double ReservedPercentHP => LifeComponentOffsetsStruct.ReservedPercentHP / 100;
-        public int ReservedFlatHP => (int)(MaxHP * ReservedPercentHP / 100);
+        public double ReservedPercentHP => LifeComponentOffsetsStruct.ReservedPercentHP / 100d;
+        public int ReservedFlatHP => (int)Math.Round(MaxHP * ReservedPercentHP / 100);
         public int MaxMana => Address != 0 ? LifeComponentOffsetsStruct.MaxMana : 1;
         public int CurMana => Address != 0 ? LifeComponentOffsetsStruct.CurMana : 1;
-        public double ReservedPercentMana => LifeComponentOffsetsStruct.ReservedPercentMana / 100;
-        public int ReservedFlatMana => (int)(MaxMana * ReservedPercentMana / 100);
+        public double ReservedPercentMana => LifeComponentOffsetsStruct.ReservedPercentMana / 100d;
+        public int ReservedFlatMana => (int)Math.Round(MaxMana * ReservedPercentMana / 100);
         public int MaxES => LifeComponentOffsetsStruct.MaxES;
         public int CurES => LifeComponentOffsetsStruct.CurES;
         public float HPPercentage => CurHP / (float) (MaxHP - ReservedFlatHP);
