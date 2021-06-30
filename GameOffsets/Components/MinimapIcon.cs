@@ -7,7 +7,7 @@ namespace GameOffsets.Components
     {
         [FieldOffset(0x0000)] public ComponentHeader Header;
         //// Pointer to Data/MinimapIcons.dat row
-        [FieldOffset(0x0028)] public long MinimapIconInternalPtr;
+        [FieldOffset(0x0020)] public long MinimapIconInternalPtr;
         [FieldOffset(0x0034)] public byte IsHidden;
     }
 
