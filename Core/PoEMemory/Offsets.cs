@@ -6,10 +6,8 @@ namespace ExileCore.PoEMemory
 {
     public class Offsets
     {
-        public static Offsets Regular = new Offsets {IgsOffset = 0, IgsDelta = 0, ExeName = "PathOfExile_x64"};
-        public static Offsets Korean = new Offsets {IgsOffset = 0, IgsDelta = 0, ExeName = "Pathofexile_x64_KG"};
-
-        public static Offsets Steam = new Offsets {IgsOffset = 0x28, IgsDelta = 0, ExeName = "PathOfExile_x64Steam"};
+        public static Offsets Regular = new Offsets {IgsOffset = 0, IgsDelta = 0, ExeName = "PathOfExile"};
+        public static Offsets Korean = new Offsets {IgsOffset = 0, IgsDelta = 0, ExeName = "Pathofexile_KG"};
 
         /* FileRoot Pointer
         00007FF6C47EED01  | 48 8D 0D A8 23 7F 00               | lea rcx,qword ptr ds:[7FF6C4FE10B0]        | <--FileRootPtr
@@ -59,17 +57,22 @@ namespace ExileCore.PoEMemory
                 }, "x????x????xx", "Area change", 9430000);
 
         /*
-        PathOfExile_x64.exe+118FD9 - 4C 8B 35 48255B01     - mov r14,[PathOfExile_x64.exe+16CB528] { [C6151734A0] }<<here
-        PathOfExile_x64.exe+118FE0 - 4D 85 F6              - test r14,r14
-        PathOfExile_x64.exe+118FE3 - 0F94 C0               - sete al
-        PathOfExile_x64.exe+118FE6 - 84 C0                 - test al,al
+       140094573 48 83 ec 20     SUB        RSP,0x20
+       140094577 48 8b f1        MOV        RSI,RCX
+       14009457a 33 ed           XOR        EBP,EBP
+       14009457c 48 39 2d        CMP        qword ptr [DAT_1425189d0],RBP                    = ??
+                 4d 44 48 02
+       140094583 0f 85 5a        JNZ        LAB_1400946e3
+                 01 00 00
+       140094589 41 be 4c        MOV        R14D,0x14c
+                 01 00 00
         */
 
         private static readonly Pattern GameStatePattern = new Pattern(
             new byte[]
             {
-	            0x48, 0x8b, 0xf9, 0x33, 0xed, 0x48, 0x39, 0x2d , 0x00, 0x00, 0x00, 0x00, 0x0f, 0x85, 0x1a,
-            }, "xxxxxxxx????xxx", "Game State", 1240000);
+                0x48, 0x8b, 0xf1, 0x33, 0xed, 0x48, 0x39, 0x2d
+            }, "xxxxxxxx", "Game State", 0x90000);
 
         public long AreaChangeCount { get; private set; }
         public long Base { get; private set; }
@@ -87,19 +90,14 @@ namespace ExileCore.PoEMemory
 
             var result = new Dictionary<OffsetsName, long>();
 
-            //  System.Console.WriteLine("Base Pattern: " + (m.AddressOfProcess + array[0]).ToString("x8"));
-
             var index = 0;
             var baseAddress = m.Process.MainModule.BaseAddress.ToInt64();
 
             FileRoot = m.Read<int>(baseAddress + array[index] + 6) + array[index] + 10;
             index++;
-            //FileRoot = 0x362CCC0; 3.11.0c
 
             AreaChangeCount = m.Read<int>(baseAddress + array[index] + 0xC) + array[index] + 0x10;
             index++;
-            //AreaChangeCount = 0x336AA88; 3.11.0f
-
 
             GameStateOffset = m.Read<int>(baseAddress + array[index] + 8) + array[index] + 12;
 
