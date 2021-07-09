@@ -62,7 +62,7 @@ namespace GameOffsets
         [FieldOffset(0x8138 - Skip)] public NativePtrArray NearestPlayers;
         //[FieldOffset(0x8168 - Skip)] public NativePtrArray MinimapIcons;
         //[FieldOffset(0x8188 - Skip)] public NativePtrArray LocalPlayer;
-        [FieldOffset(0x82A0 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x82A8 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x83D8 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x8510 - Skip)] public NativePtrArray GuildInventories;
 
