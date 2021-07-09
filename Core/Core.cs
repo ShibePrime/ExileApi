@@ -60,7 +60,6 @@ namespace ExileCore
         private double _tickStart;
         private double _tickStartCore;
         private double _timeSec;
-        private double ForeGroundTime;
         private int frameCounter;
         private Rectangle lastClientBound;
         private double lastCounterTime;
@@ -224,9 +223,11 @@ namespace ExileCore
         public Runner CoroutineRunner { get; set; }
         public Runner CoroutineRunnerParallel { get; set; }
         public GameController GameController { get; private set; }
-        public bool GameStarted { get; private set; }
         public Graphics Graphics { get; }
-        public bool IsForeground { get; private set; }
+        public bool IsForeground => WinApi.IsForegroundWindow(_memory.Process.MainWindowHandle)
+            || WinApi.IsForegroundWindow(FormHandle)
+            || _coreSettings.ForceForeground;
+
 
         public void Dispose()
         {
@@ -273,15 +274,10 @@ namespace ExileCore
                     GameController.Dispose();
                     GameController = null;
                     _memory = null;
-                    _dx11.ImGuiRender.LostFocus -= LostFocus;
                 }
                 else
                 {
-                    var isForegroundWindow = WinApi.IsForegroundWindow(_memory.Process.MainWindowHandle) ||
-                                                          WinApi.IsForegroundWindow(FormHandle) || _coreSettings.ForceForeground;
-
-                    IsForeground = isForegroundWindow;
-                    GameController.IsForeGroundCache = isForegroundWindow;
+                    GameController.IsForeGroundCache = IsForeground;
                 }
 
                 yield return _mainControl2;
@@ -306,7 +302,6 @@ namespace ExileCore
             {
                 if (_memory != null)
                 {
-                    _dx11.ImGuiRender.LostFocus += LostFocus;
                     GameController = new GameController(_memory, _soundController, _settings, MultiThreadManager);
                     lastClientBound = _form.Bounds;
 
@@ -327,12 +322,6 @@ namespace ExileCore
             }
         }
 
-        private void LostFocus(object sender, EventArgs eventArgs)
-        {
-            if (!WinApi.IsIconic(_memory.Process.MainWindowHandle))
-                WinApi.SetForegroundWindow(_memory.Process.MainWindowHandle);
-        }
-
         public ThreadManager ThreadManager { get; } = new ThreadManager();
 
         public void Tick()
@@ -343,31 +332,28 @@ namespace ExileCore
                 _tickStartCore = _sw.Elapsed.TotalMilliseconds;
                 FramesCount++;
 
-                ForeGroundTime = IsForeground ? 0 : ForeGroundTime + _deltaTargetPcFrameTime;
+                if (!IsForeground) return;
 
-                if (ForeGroundTime <= 100)
+                try
                 {
-                    try
-                    {
-                        _debugWindow.Render();
-                    }
-                    catch (Exception e)
-                    {
-                        DebugWindow.LogError($"DebugWindow Tick -> {e}");
-                    }
-
-                    try
-                    {
-                        _mainMenu.Render(GameController, pluginManager?.Plugins);
-                    }
-                    catch (Exception e)
-                    {
-                        DebugWindow.LogError($"Core Tick Menu -> {e}");
-                    }
-
-                    _tickEnd = _sw.Elapsed.TotalMilliseconds;
-                    _menuDebugInformation.Tick = _tickEnd - _tickStartCore;
+                    _debugWindow.Render();
                 }
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"DebugWindow Tick -> {e}");
+                }
+
+                try
+                {
+                    _mainMenu.Render(GameController, pluginManager?.Plugins);
+                }
+                catch (Exception e)
+                {
+                    DebugWindow.LogError($"Core Tick Menu -> {e}");
+                }
+
+                _tickEnd = _sw.Elapsed.TotalMilliseconds;
+                _menuDebugInformation.Tick = _tickEnd - _tickStartCore;
 
                 if (GameController == null || pluginManager == null || !pluginManager.AllPluginsLoaded)
                 {
@@ -399,7 +385,7 @@ namespace ExileCore
 
                 _tickStart = _sw.Elapsed.TotalMilliseconds;
 
-                if (ForeGroundTime <= 150 && pluginManager != null)
+                if (pluginManager != null)
                 {
                     ThreadManager.AbortLongRunningThreads();
                     var pluginTickJobs = new List<Job>();
