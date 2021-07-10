@@ -58,7 +58,7 @@ namespace GameOffsets
         [FieldOffset(0x8088 - Skip)] public long GuildList;
         //[FieldOffset(0x8098 - Skip)] public NativePtrArray GuildArray;
         [FieldOffset(0x80D8 - Skip)] public long GuildNameAddress;
-        [FieldOffset(0x80E0 - Skip)] public SkillBarIdsStruct SkillBarIds;
+        [FieldOffset(0x80E8 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x8138 - Skip)] public NativePtrArray NearestPlayers;
         //[FieldOffset(0x8168 - Skip)] public NativePtrArray MinimapIcons;
         //[FieldOffset(0x8188 - Skip)] public NativePtrArray LocalPlayer;
