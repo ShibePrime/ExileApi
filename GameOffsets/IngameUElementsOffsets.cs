@@ -19,14 +19,14 @@ namespace GameOffsets
         [FieldOffset(0x560)] public long TreePanel;
         [FieldOffset(0x568)] public long AtlasPanel;
         [FieldOffset(0x598)] public long WorldMap;
-        [FieldOffset(0x5B8)] public long Map;
-        [FieldOffset(0x5C0)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x5D0)] public long BanditDialog;
-        [FieldOffset(0x648)] public long NpcDialog;
-        [FieldOffset(0x660)] public long QuestRewardWindow;
-        [FieldOffset(0x668)] public long PurchaseWindow;
-        [FieldOffset(0x670)] public long SellWindow;
-        [FieldOffset(0x678)] public long TradeWindow;
+        [FieldOffset(0x638)] public long Map;
+        [FieldOffset(0x640)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x650)] public long BanditDialog;
+        [FieldOffset(0x6C8)] public long NpcDialog;
+        [FieldOffset(0x6E0)] public long QuestRewardWindow;
+        [FieldOffset(0x6E8)] public long PurchaseWindow; // 68 -> E8 (patch 16.7.21)
+        [FieldOffset(0x6F0)] public long SellWindow; // wrong (patch 16.7.21)
+        [FieldOffset(0x6F0)] public long TradeWindow; // 78 -> F0 (patch 16.7.21)
         [FieldOffset(0x6B0)] public long MapDeviceWindow;
         [FieldOffset(0x708)] public long IncursionWindow;
         [FieldOffset(0x728)] public long DelveWindow;
