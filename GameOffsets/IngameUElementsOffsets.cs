@@ -12,21 +12,22 @@ namespace GameOffsets
         [FieldOffset(0x390)] public long HiddenSkillBar; 
         [FieldOffset(0x410)] public long ChatPanel; 
         [FieldOffset(0x490)] public long QuestTracker;
-        [FieldOffset(0x4F8)] public long OpenLeftPanel;
-        [FieldOffset(0x500)] public long OpenRightPanel;
-        [FieldOffset(0x530)] public long InventoryPanel;
-        [FieldOffset(0x538)] public long StashElement;
-        [FieldOffset(0x560)] public long TreePanel;
-        [FieldOffset(0x568)] public long AtlasPanel;
-        [FieldOffset(0x598)] public long WorldMap;
-        [FieldOffset(0x638)] public long Map;
+        [FieldOffset(0x518)] public long OpenLeftPanel;
+        [FieldOffset(0x520)] public long OpenRightPanel;
+        [FieldOffset(0x540)] public long InventoryPanel;
+        [FieldOffset(0x508)] public long StashElement; // correct? it moved
+        [FieldOffset(0x570)] public long TreePanel;
+        [FieldOffset(0x578)] public long AtlasPanel;
+        [FieldOffset(0x5A8)] public long WorldMap;
+        [FieldOffset(0x648)] public long Map;
         [FieldOffset(0x640)] public long itemsOnGroundLabelRoot;
         [FieldOffset(0x650)] public long BanditDialog;
         [FieldOffset(0x6C8)] public long NpcDialog;
         [FieldOffset(0x6E0)] public long QuestRewardWindow;
-        [FieldOffset(0x6E8)] public long PurchaseWindow; // 68 -> E8 (patch 16.7.21)
-        [FieldOffset(0x6F0)] public long SellWindow; // wrong (patch 16.7.21)
-        [FieldOffset(0x6F0)] public long TradeWindow; // 78 -> F0 (patch 16.7.21)
+        [FieldOffset(0x6f8)] public long PurchaseWindow; // 68 -> E8 (patch 16.7.21)
+        [FieldOffset(0x708)] public long SellWindow; // wrong (patch 16.7.21)
+        [FieldOffset(0x710)] public long TradeWindow; // 78 -> F0 (patch 16.7.21)
+
         [FieldOffset(0x6B0)] public long MapDeviceWindow;
         [FieldOffset(0x708)] public long IncursionWindow;
         [FieldOffset(0x728)] public long DelveWindow;
@@ -43,7 +44,7 @@ namespace GameOffsets
         [FieldOffset(0x848)] public long DelveDarkness;
         [FieldOffset(0x858)] public long AreaInstanceUi;
         [FieldOffset(0x950)] public long InvitesPanel;
-        [FieldOffset(0x9A0)] public long GemLvlUpPanel;
+        [FieldOffset(0xA28)] public long GemLvlUpPanel;
         [FieldOffset(0xA60)] public long ItemOnGroundTooltip;
         [FieldOffset(0xAA0)] public long MapTabWindowStartPtr;
 

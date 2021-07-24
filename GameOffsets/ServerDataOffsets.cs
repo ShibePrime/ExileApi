@@ -40,18 +40,18 @@ namespace GameOffsets
     {
         public const int Skip = 0x7000;
 
-        [FieldOffset(0x7D98 - Skip)] public long PlayerRelatedData;
-        [FieldOffset(0x7E38 - Skip)] public byte NetworkState;
-        [FieldOffset(0x7E50 - Skip)] public NativeStringU League;
-        [FieldOffset(0x7ED0 - Skip)] public float TimeInGame;
-        [FieldOffset(0x7ED8 - Skip)] public int Latency;
-        [FieldOffset(0x7EE8 - Skip)] public NativePtrArray PlayerStashTabs;
-        [FieldOffset(0x7F00 - Skip)] public NativePtrArray GuildStashTabs;
-        [FieldOffset(0x7F68 - Skip)] public long FriendsList;
+        [FieldOffset(0x8219 - Skip)] public long PlayerRelatedData;
+        [FieldOffset(0x82b8 - Skip)] public byte NetworkState;
+        [FieldOffset(0x82d0 - Skip)] public NativeStringU League;
+        [FieldOffset(0x8350 - Skip)] public float TimeInGame;
+        [FieldOffset(0x8358 - Skip)] public int Latency;
+        [FieldOffset(0x8370 - Skip)] public NativePtrArray PlayerStashTabs;
+        [FieldOffset(0x8378 - Skip)] public NativePtrArray GuildStashTabs;
+        [FieldOffset(0x83F0 - Skip)] public long FriendsList;
         //[FieldOffset(0x7F80 - Skip)] public long FriendNoteList;
         //[FieldOffset(0x7F90 - Skip)] public NativePtrArray FriendsArray;
-        [FieldOffset(0x7FD0 - Skip)] public NativePtrArray PendingInvites;
-        [FieldOffset(0x8050 - Skip)] public byte PartyStatusType;
+        [FieldOffset(0x8458 - Skip)] public NativePtrArray PendingInvites;
+        [FieldOffset(0x8500 - Skip)] public byte PartyStatusType;
         [FieldOffset(0x8058 - Skip)] public NativePtrArray CurrentParty;
         [FieldOffset(0x8070 - Skip)] public byte PartyAllocationType;
         [FieldOffset(0x8071 - Skip)] public bool PartyDownscaleDisabled;
@@ -62,7 +62,7 @@ namespace GameOffsets
         [FieldOffset(0x8138 - Skip)] public NativePtrArray NearestPlayers;
         //[FieldOffset(0x8168 - Skip)] public NativePtrArray MinimapIcons;
         //[FieldOffset(0x8188 - Skip)] public NativePtrArray LocalPlayer;
-        [FieldOffset(0x83A8 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x8758 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x83D8 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x8510 - Skip)] public NativePtrArray GuildInventories;
 

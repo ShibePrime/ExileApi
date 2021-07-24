@@ -32,6 +32,9 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
+                // TODO remove this line once the offset for labelsOnGround is fixed
+                return new List<LabelOnGround>();
+
                 var address = M.Read<long>(Address + 0x2A0);
 
                 var result = new List<LabelOnGround>();
