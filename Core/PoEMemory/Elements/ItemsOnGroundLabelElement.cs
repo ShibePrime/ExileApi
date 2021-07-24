@@ -9,7 +9,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var readObjectAt = ReadObjectAt<Element>(0x248);
+                var readObjectAt = ReadObjectAt<Element>(0x250);
                 return readObjectAt.Address == 0 ? null : readObjectAt;
             }
         }
@@ -18,24 +18,21 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var readObjectAt = ReadObjectAt<Entity>(0x250);
+                var readObjectAt = ReadObjectAt<Entity>(0x258);
                 return readObjectAt.Address == 0 ? null : readObjectAt;
             }
         }
 
         public string ItemOnHoverPath => ItemOnHover != null ? ItemOnHover.Path : "Null";
         public string LabelOnHoverText => LabelOnHover != null ? LabelOnHover.Text : "Null";
-        public int CountLabels => M.Read<int>(Address + 0x268);
-        public int CountLabels2 => M.Read<int>(Address + 0x2A8);
+        public int CountLabels => M.Read<int>(Address + 0x270);
+        public int CountLabels2 => M.Read<int>(Address + 0x2B0);
 
         public List<LabelOnGround> LabelsOnGround
         {
             get
             {
-                // TODO remove this line once the offset for labelsOnGround is fixed
-                return new List<LabelOnGround>();
-
-                var address = M.Read<long>(Address + 0x2A0);
+                var address = M.Read<long>(Address + 0x2A8);
 
                 var result = new List<LabelOnGround>();
 

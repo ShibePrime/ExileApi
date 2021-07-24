@@ -20,7 +20,7 @@ namespace GameOffsets
         [FieldOffset(0x578)] public long AtlasPanel;
         [FieldOffset(0x5A8)] public long WorldMap;
         [FieldOffset(0x648)] public long Map;
-        [FieldOffset(0x640)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x650)] public long itemsOnGroundLabelRoot;
         [FieldOffset(0x650)] public long BanditDialog;
         [FieldOffset(0x6C8)] public long NpcDialog;
         [FieldOffset(0x6E0)] public long QuestRewardWindow;
