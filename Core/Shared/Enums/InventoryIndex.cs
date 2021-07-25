@@ -3,7 +3,7 @@ namespace ExileCore.Shared.Enums
     public enum InventoryIndex
     {
         None,
-        Helm,
+        Helm = 2,
         Amulet,
         Chest,
         LWeapon,
