@@ -9,8 +9,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
     public class IngameState : GameState
     {
         private readonly CachedValue<Camera> _camera;
-        private readonly CachedValue<float> _CurrentUElementPosX;
-        private readonly CachedValue<float> _CurrentUElementPosY;
+        private readonly CachedValue<float> _UIHoverPosX;
+        private readonly CachedValue<float> _UIHoverPosY;
         private readonly CachedValue<float> _MousePosX;
         private readonly CachedValue<float> _MousePosY;
         private readonly CachedValue<DiagnosticInfoType> _DiagnosticInfoType;
@@ -43,8 +43,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _UIRoot = new AreaCache<Element>(() => GetObject<Element>(_ingameState.Value.UIRoot));
             _UIHover = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHover));
             _UIHoverElement = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverElement));
-            _CurrentUElementPosX = new FrameCache<float>(() => _ingameState.Value.CurentUElementPosX);
-            _CurrentUElementPosY = new FrameCache<float>(() => _ingameState.Value.CurentUElementPosY);
+            _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value._UIHoverPosX);
+            _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value._UIHoverPosY);
             _MousePosX = new FrameCache<float>(() => _ingameState.Value.MousePosX);
             _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePosY);
             _DiagnosticInfoType = new FrameCache<DiagnosticInfoType>(() => (DiagnosticInfoType) _ingameState.Value.DiagnosticInfoType);
@@ -73,8 +73,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UIRoot => _UIRoot.Value;
         public Element UIHover => _UIHover.Value;
         public Element UIHoverElement => _UIHoverElement.Value;
-        public float CurentUElementPosX => _CurrentUElementPosX.Value;
-        public float CurentUElementPosY => _CurrentUElementPosY.Value;
+        public float UIHoverPosX => _UIHoverPosX.Value;
+        public float UIHoverPosY => _UIHoverPosY.Value;
         public float MousePosX => _MousePosX.Value;
         public float MousePosY => _MousePosY.Value;
         public long EntityLabelMap => _EntityLabelMap.Value.EntityLabelMap;
