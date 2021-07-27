@@ -43,8 +43,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _UIRoot = new AreaCache<Element>(() => GetObject<Element>(_ingameState.Value.UIRoot));
             _UIHover = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHover));
             _UIHoverElement = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverElement));
-            _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value._UIHoverPosX);
-            _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value._UIHoverPosY);
+            _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value.UIHoverPosX);
+            _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value.UIHoverPosY);
             _MousePosX = new FrameCache<float>(() => _ingameState.Value.MousePosX);
             _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePosY);
             _DiagnosticInfoType = new FrameCache<DiagnosticInfoType>(() => (DiagnosticInfoType) _ingameState.Value.DiagnosticInfoType);
