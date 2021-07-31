@@ -15,10 +15,9 @@ namespace GameOffsets
         [FieldOffset(0x518)] public long OpenLeftPanel;
         [FieldOffset(0x520)] public long OpenRightPanel;
         [FieldOffset(0x540)] public long InventoryPanel;
-        [FieldOffset(0x508)] public long StashElement; // correct? it moved
-        [FieldOffset(0x570)] public long TreePanel;
-        [FieldOffset(0x578)] public long AtlasPanel;
-        [FieldOffset(0x5A8)] public long WorldMap;
+        [FieldOffset(0x508)] public long StashElement;
+        [FieldOffset(0x5F8)] public long AtlasPanel;
+        [FieldOffset(0x628)] public long WorldMap;
         [FieldOffset(0x648)] public long Map;
         [FieldOffset(0x650)] public long itemsOnGroundLabelRoot;
         [FieldOffset(0x650)] public long BanditDialog;
@@ -28,22 +27,22 @@ namespace GameOffsets
         [FieldOffset(0x708)] public long SellWindow; // wrong (patch 16.7.21)
         [FieldOffset(0x710)] public long TradeWindow; // 78 -> F0 (patch 16.7.21)
 
-        [FieldOffset(0x6B0)] public long MapDeviceWindow;
-        [FieldOffset(0x708)] public long IncursionWindow;
-        [FieldOffset(0x728)] public long DelveWindow;
-        [FieldOffset(0x738)] public long ZanaMissionChoice;
-        [FieldOffset(0x748)] public long BetrayalWindow;
-        [FieldOffset(0x760)] public long CraftBenchWindow;
-        [FieldOffset(0x768)] public long UnveilWindow;
-        [FieldOffset(0x790)] public long SynthesisWindow;
-        [FieldOffset(0x7A0)] public long MetamorphWindow;
-        [FieldOffset(0x7B0)] public long HarvestWindow;
-        [FieldOffset(0x7E8)] public long RitualWindow;
-        [FieldOffset(0x7F0)] public long RitualFavourPanel;
-        [FieldOffset(0x7F8)] public long UltimatumProgressPanel;
-        [FieldOffset(0x848)] public long DelveDarkness;
-        [FieldOffset(0x858)] public long AreaInstanceUi;
-        [FieldOffset(0x950)] public long InvitesPanel;
+        [FieldOffset(0x750)] public long MapDeviceWindow;
+        [FieldOffset(0x7A8)] public long IncursionWindow;
+        [FieldOffset(0x7C8)] public long DelveWindow;
+        [FieldOffset(0x7D8)] public long ZanaMissionChoice;
+        [FieldOffset(0x7E8)] public long BetrayalWindow;
+        [FieldOffset(0x800)] public long CraftBenchWindow;
+        [FieldOffset(0x808)] public long UnveilWindow;
+        [FieldOffset(0x830)] public long SynthesisWindow;
+        [FieldOffset(0x840)] public long MetamorphWindow;
+        [FieldOffset(0x850)] public long HarvestWindow;
+        [FieldOffset(0x888)] public long RitualWindow;
+        [FieldOffset(0x890)] public long RitualFavourPanel;
+        [FieldOffset(0x898)] public long UltimatumProgressPanel;
+        [FieldOffset(0x9E8)] public long DelveDarkness;
+        [FieldOffset(0x9F8)] public long AreaInstanceUi;
+        [FieldOffset(0x9F0)] public long InvitesPanel;
         [FieldOffset(0xA28)] public long GemLvlUpPanel;
         [FieldOffset(0xA60)] public long ItemOnGroundTooltip;
         [FieldOffset(0xAA0)] public long MapTabWindowStartPtr;
