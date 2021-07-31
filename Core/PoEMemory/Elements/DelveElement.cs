@@ -17,13 +17,9 @@ namespace ExileCore.PoEMemory.Elements
         {
             _cachedValue = new ConditionalCache<IList<DelveBigCell>>(() => Children.Select(x => x.AsObject<DelveBigCell>()).ToList(), () =>
             {
-                if (GetClientRect() != rect)
-                {
-                    rect = GetClientRect();
-                    return true;
-                }
-
-                return false;
+                if (GetClientRect() == rect) return false;
+                rect = GetClientRect();
+                return true;
             });
         }
 
@@ -34,8 +30,8 @@ namespace ExileCore.PoEMemory.Elements
     {
         private readonly CachedValue<IList<DelveCell>> _cachedValue;
         private RectangleF rect = RectangleF.Empty;
-        private string text;
-        private long? type;
+        //private string text;
+        //private long? type;
 
         public DelveBigCell()
         {
@@ -52,21 +48,24 @@ namespace ExileCore.PoEMemory.Elements
         }
 
         public IList<DelveCell> Cells => _cachedValue.Value;
-        public long TypePtr => type ?? (type = M.Read<long>(Address + 0x150)).Value;
-        public override string Text => text = text ?? M.ReadStringU(M.Read<long>(TypePtr + 0x0));
+        //public long TypePtr => type ?? (type = M.Read<long>(Address + 0x150)).Value;
+        //public override string Text => text = text ?? M.ReadStringU(M.Read<long>(TypePtr + 0x0));
     }
 
     public class DelveCell : Element
     {
         private DelveCellInfoStrings info;
-        private NativeStringU mods => M.Read<NativeStringU>(Address + 0x498);
+        private NativeStringU mods => M.Read<NativeStringU>(Address + 0x520);
         public string Mods => mods.ToString(M);
-        private NativeStringU mines => M.Read<NativeStringU>(M.Read<long>(Address + 0x150) + 0x38);
-        public string MinesText => mines.ToString(M);
-        public DelveCellInfoStrings Info => info = info ?? ReadObjectAt<DelveCellInfoStrings>(0x640);
-        public string Type => M.ReadStringU(M.Read<long>(Address + 0x650, 0x0));
-        public string TypeHuman => M.ReadStringU(M.Read<long>(Address + 0x650, 0x8));
+        //private NativeStringU mines => M.Read<NativeStringU>(M.Read<long>(Address + 0x150) + 0x38);
+        //public string MinesText => mines.ToString(M);
+        public DelveCellInfoStrings Info => info = info ?? ReadObjectAt<DelveCellInfoStrings>(0x6C0);
+        public string Type => M.ReadStringU(M.Read<long>(Address + 0x6D0, 0x0));
+        public string TypeHuman => M.ReadStringU(M.Read<long>(Address + 0x6D0, 0x8));
         public override string Text => $"{Info.TestString} [{Info.TestString5}]";
+        public bool IsFeatureHovered => M.Read<bool>(Address + 0x70F);
+        public bool IsCellHovered => M.Read<bool>(Address + 0x710);
+        public bool IsCellVisible => M.Read<bool>(Address + 0x711);
     }
 
     public class DelveCellInfoStrings : RemoteMemoryObject
@@ -81,8 +80,8 @@ namespace ExileCore.PoEMemory.Elements
         public string TestString => _testString = _testString ?? M.ReadStringU(M.Read<long>(Address));
         public string TestStringGood => _testStringGood = _testStringGood ?? _testString.InsertBeforeUpperCase(Environment.NewLine);
         public string TestString2 => _testString2 = _testString2 ?? M.ReadStringU(M.Read<long>(Address + 0x8));
-        public string TestString3 => _testString3 = _testString3 ?? M.ReadStringU(M.Read<long>(Address + 0x40));
-        public string TestString4 => _testString4 = _testString4 ?? M.ReadStringU(M.Read<long>(Address + 0x58));
+        public string TestString3 => _testString3 = _testString3 ?? M.ReadStringU(M.Read<long>(Address + 0x30));
+        public string TestString4 => _testString4 = _testString4 ?? M.ReadStringU(M.Read<long>(Address + 0x60));
 
         public string TestString5
         {
@@ -91,7 +90,7 @@ namespace ExileCore.PoEMemory.Elements
                 var s = _testString5;
                 if (s != null) return s;
 
-                _testString5 = M.ReadStringU(M.Read<long>(Address + 0x60));
+                _testString5 = M.ReadStringU(M.Read<long>(Address + 0x68));
 
                 return _testString5;
             }
@@ -101,16 +100,13 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                if (_testString5 == null)
-                {
-                    var testString5 = TestString5;
+                if (_testString5 != null) return _interesting;
+                var testString5 = TestString5;
 
-                    if (testString5.Length > 1 && !testString5.EndsWith("Azurite") && !TestString.StartsWith("Azurite3") &&
-                        !testString5.EndsWith("Weapons") && !testString5.EndsWith("Armour") && !testString5.EndsWith("Jewellery") &&
-                        !testString5.EndsWith("Items"))
-                        _interesting = true;
-                    else if (TestString.StartsWith("Obstruction")) _interesting = true;
-                }
+                _interesting = testString5.Length > 1 && !testString5.EndsWith("Azurite") &&
+                    !TestString.StartsWith("Azurite3") && !testString5.EndsWith("Weapons") &&
+                    !testString5.EndsWith("Armour") && !testString5.EndsWith("Jewellery") &&
+                    !testString5.EndsWith("Items") || TestString.StartsWith("Obstruction");
 
                 return _interesting;
             }
