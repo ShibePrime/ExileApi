@@ -4,6 +4,6 @@
     {
         private DelveElement _grid;
         public DelveElement GridElement =>
-            Address != 0 ? _grid ?? (_grid = GetObject<DelveElement>(M.Read<long>(Address + 0x1C0, 0x690))) : null;
+            Address != 0 ? _grid ?? (_grid = GetObject<DelveElement>(M.Read<long>(Address + 0x1C8, 0x698))) : null;
     }
 }
