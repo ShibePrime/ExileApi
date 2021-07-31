@@ -16,7 +16,6 @@ namespace GameOffsets
         [FieldOffset(0x510)] public long OpenRightPanel;
         [FieldOffset(0x540)] public long InventoryPanel;
         [FieldOffset(0x548)] public long StashElement;
-        // [FieldOffset(0x570)] public long TreePanel; Removed from UI Struct, access through children index.
         [FieldOffset(0x5F8)] public long AtlasPanel;
         [FieldOffset(0x628)] public long WorldMap;
         [FieldOffset(0x648)] public long Map;
@@ -29,7 +28,6 @@ namespace GameOffsets
         [FieldOffset(0x708)] public long SellWindow;
         [FieldOffset(0x710)] public long ExpeditionSellWindow;
         [FieldOffset(0x718)] public long TradeWindow;
-
         [FieldOffset(0x750)] public long MapDeviceWindow;
         [FieldOffset(0x7A8)] public long IncursionWindow;
         [FieldOffset(0x7C8)] public long DelveWindow;
