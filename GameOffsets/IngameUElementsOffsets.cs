@@ -50,6 +50,8 @@ namespace GameOffsets
 
         //[FieldOffset(0x218)] public long GetQuests;
         //[FieldOffset(0x240)] public long GameUI;
+        //[FieldOffset(0x248)] public long LeftGameUI;
+        //[FieldOffset(0x250)] public long RightGameUI;
         //[FieldOffset(0x258)] public long HealthPanel;
         //[FieldOffset(0x260)] public long ManaPanel;
         //[FieldOffset(0x280)] public long FlaskPanel;
@@ -57,21 +59,37 @@ namespace GameOffsets
         //[FieldOffset(0x298)] public long MenuPanel;
         //[FieldOffset(0x2A0)] public long MenuButton;
         //[FieldOffset(0x2B8)] public long ClockPanel;
+        //[FieldOffset(0x2C0)] public long MenuOptionOptions;
+        //[FieldOffset(0x2C8)] public long MenuOptionSocial;
+        //[FieldOffset(0x2D0)] public long MenuOptionCharacter;
+        //[FieldOffset(0x2D8)] public long MenuOptionPassiveTree;
+        //[FieldOffset(0x2E0)] public long MenuOptionInventory;
+        //[FieldOffset(0x2E8)] public long MenuOptionCosmetics;
+        //[FieldOffset(0x2F0)] public long MenuOptionMTX;
+        //[FieldOffset(0x2F8)] public long MenuOptionChallenges;
+        //[FieldOffset(0x300)] public long MenuOptionEvents;
+        //[FieldOffset(0x308)] public long MenuOptionWorld;
+        //[FieldOffset(0x310)] public long MenuOptionSocial;
+        //[FieldOffset(0x318)] public long MenuOptionOverlay;
         //[FieldOffset(0x338)] public long MTXShopButton;
         //[FieldOffset(0x340)] public long HelpButton;
         //[FieldOffset(0x358)] public long SkillPointAvailableButton;
+        //[FieldOffset(0x360)] public long QuestNotificationButton;
         //[FieldOffset(0x368)] public long SkipTutorialButton;
         //[FieldOffset(0x380)] public long ToggleChatButton;
-
         //[FieldOffset(0x390)] public long Mouse;
         //[FieldOffset(0x398)] public long SkillBar;
         //[FieldOffset(0x3A0)] public long HiddenSkillBar;
         //[FieldOffset(0x3B0)] public long Child19;
         //[FieldOffset(0x3B8)] public long Child18;
+        //[FieldOffset(0x3C0)] public long PvpLeaveWithdrawPanel;
+        //[FieldOffset(0x3C8)] public long PvpTimerPanel;
         //[FieldOffset(0x3D0)] public long PvpFightNotifyPanel;
+        //[FieldOffset(0x3D8)] public long PvpNextRoundPanel;
+        //[FieldOffset(0x3E0)] public long PvpStopSpectatingPanel;
         //[FieldOffset(0x3E8)] public long Child51;
+        //[FieldOffset(0x3F0)] public long PvpTimers;
         //[FieldOffset(0x400)] public long PvpSpectatingPanel;
-
         //[FieldOffset(0x408)] public long Child109;
         //[FieldOffset(0x410)] public long EditingNotifyPanel;
         //[FieldOffset(0x420)] public long ChatPanel;
@@ -87,21 +105,17 @@ namespace GameOffsets
         //[FieldOffset(0x4A0)] public long QuestTracker;
         //[FieldOffset(0x4A8)] public long BenchCraftNewRecipeNotifyPanel;
         //[FieldOffset(0x4C8)] public long HideoutUnlockNotifyPanel;
-
         //[FieldOffset(0x508)] public long OpenLeftPanel;
         //[FieldOffset(0x510)] public long OpenRightPanel;
         //[FieldOffset(0x518)] public long OpenLeftPanel2; // Holds same address as above.
         //[FieldOffset(0x520)] public long OpenRightPanel2; // Holds same address as above.
-
         //[FieldOffset(0x530)] public long MtxStashPanel;
         //[FieldOffset(0x538)] public long MtxShopPanel;
         //[FieldOffset(0x540)] public long InventoryPanel;
         //[FieldOffset(0x548)] public long StashElement;
-
         //[FieldOffset(0x558)] public long GuildStashPanel;
         //[FieldOffset(0x560)] public long HideoutStashPanel; // Hideout stash panels from before rework.
         //[FieldOffset(0x568)] public long SocialPanel;
-        //[FieldOffset(0x000)] public long TreePanel; // No longer in UI struct, access via children (24 - regular, 25 - royale)
         //[FieldOffset(0x5F8)] public long AtlasPanel;
         //[FieldOffset(0x600)] public long CharacterPanel;
         //[FieldOffset(0x608)] public long OptionsPanel;
@@ -181,7 +195,14 @@ namespace GameOffsets
         //[FieldOffset(0x8A8)] public long ExpeditionLogbookPanel;
         //[FieldOffset(0x8B0)] public long ExpeditionLockerPanel;
         //[FieldOffset(0x8B8)] public long ItemBoxPanel;
-        //[FieldOffset(0x8E0)] public long Child21;
+        //[FieldOffset(0x8C0)] public long PvpNewPanel;
+        //[FieldOffset(0x8C8)] public long BuffsDeployedObjectsPanel;
+        //[FieldOffset(0x8D0)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
+        //[FieldOffset(0x8D8)] public long BuffsOnlyPanel;
+        //[FieldOffset(0x8E0)] public long DelveDarkness;
+        //[FieldOffset(0x8E8)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
+        //[FieldOffset(0x8F0)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
+        //[FieldOffset(0x8F8)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
         //[FieldOffset(0x900)] public long MapSettingsPanel;
         //[FieldOffset(0x908)] public long Child106;
         //[FieldOffset(0x910)] public long Child139;
@@ -195,8 +216,15 @@ namespace GameOffsets
         //[FieldOffset(0x958)] public long ReportPlayerPanel;
         //[FieldOffset(0x960)] public long Child136;
         //[FieldOffset(0x970)] public long DeadNotifyPanel;
+        //[FieldOffset(0x978)] public long ResurrectInTownButton;
+        //[FieldOffset(0x980)] public long ResurrectAtCheckpointButton;
+        //[FieldOffset(0x988)] public long ReviveAtCheckpointButton;
+        //[FieldOffset(0x990)] public long UnknownResurrectionButton;
         //[FieldOffset(0x998)] public long SkipAheadButton;
+        //[FieldOffset(0x9A0)] public long BetrayalHelpButton;
+        //[FieldOffset(0x9F0)] public long ExpeditionInteractButton;
         //[FieldOffset(0x9F8)] public long Child1;
+        //[FieldOffset(0xA00)] public long HideoutEditPanel;
         //[FieldOffset(0xA08)] public long HideoutMusicPanel;
         //[FieldOffset(0xA18)] public long ZoneTravelNotifyPanel;
         //[FieldOffset(0xA20)] public long Child126;
@@ -221,6 +249,6 @@ namespace GameOffsets
         //[FieldOffset(0xB48)] public long MissionRewardNotifyPanel;
         //[FieldOffset(0xB50)] public long ItemOnGroundTooltip;
         //[FieldOffset(0xB58)] public long Child138;
-        //[FieldOffset(0xAA0)] public long MapTabWindowStartPtr;
+        //[FieldOffset(0xAA0)] public long MapTabWindowStartPtr; // AA0 is incorrect.
     }
 }
