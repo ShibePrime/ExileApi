@@ -16,18 +16,19 @@ namespace GameOffsets
         [FieldOffset(0xAC)] public int ItemRarity;
         [FieldOffset(0xB8)] public NativePtrArray ImplicitModsArray;
         [FieldOffset(0xD0)] public NativePtrArray ExplicitModsArray;
-        [FieldOffset(0xE0)] public NativePtrArray EnchantedModsArray;
+        [FieldOffset(0xE8)] public NativePtrArray EnchantedModsArray;
         [FieldOffset(0x1C0)] public NativePtrArray ImplicitStatsArray;
         [FieldOffset(0x1D8)] public NativePtrArray EnchantedStatsArray;
         [FieldOffset(0x1F0)] public NativePtrArray ExplicitStatsArray;
         [FieldOffset(0x208)] public NativePtrArray CraftedStatsArray;
         [FieldOffset(0x220)] public NativePtrArray FracturedStatsArray;
+        [FieldOffset(0x480)] public int ItemLevel;
+        [FieldOffset(0x484)] public int RequiredLevel;
+        [FieldOffset(0x488)] public long IncubatorKey;
+        [FieldOffset(0x498)] public short IncubatorKillCount;
+
         [FieldOffset(0x489)] public byte IsMirrored;
         [FieldOffset(0x48A)] public byte IsSplit;
-        [FieldOffset(0x48C)] public int ItemLevel;
-        [FieldOffset(0x490)] public int RequiredLevel;
-        [FieldOffset(0x498)] public long IncubatorKey;
-        [FieldOffset(0x4A8)] public short IncubatorKillCount;
         [FieldOffset(0x4AC)] public byte IsUsable;
     }
 }
