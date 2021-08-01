@@ -24,11 +24,11 @@ namespace GameOffsets
         [FieldOffset(0x220)] public NativePtrArray FracturedStatsArray;
         [FieldOffset(0x480)] public int ItemLevel;
         [FieldOffset(0x484)] public int RequiredLevel;
-        
+        [FieldOffset(0x488)] public long IncubatorKey;
+        [FieldOffset(0x498)] public short IncubatorKillCount;
+
         [FieldOffset(0x489)] public byte IsMirrored;
         [FieldOffset(0x48A)] public byte IsSplit;
-        [FieldOffset(0x498)] public long IncubatorKey;
-        [FieldOffset(0x4A8)] public short IncubatorKillCount;
         [FieldOffset(0x4AC)] public byte IsUsable;
     }
 }
