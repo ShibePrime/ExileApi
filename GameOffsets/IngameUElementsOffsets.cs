@@ -184,9 +184,9 @@ namespace GameOffsets
         //[FieldOffset(0x850)] public long HarvestWindow;
         //[FieldOffset(0x858)] public long HorticraftingStationPanel;
         //[FieldOffset(0x860)] public long HeistContractPanel;
-        //[FieldOffset(0x868)] public long HeistBlueprintPanel;
+        //[FieldOffset(0x868)] public long HeistRevealPanel;
         //[FieldOffset(0x870)] public long HeistAllyEquipmentPanel;
-        //[FieldOffset(0x878)] public long HeistGrandHeistPanel;
+        //[FieldOffset(0x878)] public long HeistBlueprintPanel;
         //[FieldOffset(0x880)] public long HeistLockerPanel;
         //[FieldOffset(0x888)] public long RitualWindow;
         //[FieldOffset(0x890)] public long RitualFavourPanel;
@@ -196,13 +196,13 @@ namespace GameOffsets
         //[FieldOffset(0x8B0)] public long ExpeditionLockerPanel;
         //[FieldOffset(0x8B8)] public long ItemBoxPanel;
         //[FieldOffset(0x8C0)] public long PvpNewPanel;
-        //[FieldOffset(0x8C8)] public long BuffsDeployedObjectsPanel;
-        //[FieldOffset(0x8D0)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
+        //[FieldOffset(0x8C8)] public long BuffsMinionsPanel; // Golems
+        //[FieldOffset(0x8D0)] public long BuffsDeployedObjectsPanel; // Brands
         //[FieldOffset(0x8D8)] public long BuffsOnlyPanel;
-        //[FieldOffset(0x8E0)] public long DelveDarkness;
-        //[FieldOffset(0x8E8)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
-        //[FieldOffset(0x8F0)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
-        //[FieldOffset(0x8F8)] public long BuffsRelatedPanel; // Still figuring these out. One is definitely heist.
+        //[FieldOffset(0x8E0)] public long DelveDarkness; // Debuffs
+        //[FieldOffset(0x8E8)] public long BuffsHeistAlliesPanel; // Heist Allies
+        //[FieldOffset(0x8F0)] public long BuffsRelatedPanel; // Still figuring these out.
+        //[FieldOffset(0x8F8)] public long BuffsRelatedPanel; // Still figuring these out.
         //[FieldOffset(0x900)] public long MapSettingsPanel;
         //[FieldOffset(0x908)] public long Child106;
         //[FieldOffset(0x910)] public long Child139;

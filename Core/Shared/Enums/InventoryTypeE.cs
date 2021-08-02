@@ -33,13 +33,13 @@ namespace ExileCore.Shared.Enums
         UniqueStashInv,
         CraftingSpreeCurrency,
         CraftingSpreeItem,
-        NormalOrQuad,
+        DelveTab,
         AtlasWatchtower,
-        Harvest1,
-        Unknown30, // TODO: Check if these are 3.11 3-pack league tabs
-        Unknown31,
+        ExpeditionLocker,
+        DeliriumStashInv,
+        BlightStashInv,
         Harvest2,
-        Unknown33,
+        MetamorphStashInv,
         HeistAllyEquipment,
         Trinket,
         HeistLocker,
@@ -50,6 +50,7 @@ namespace ExileCore.Shared.Enums
         Unknown41,
         Unknown42,
         Unknown43,
-        UtzaalUltimatum
+        UtzaalUltimatum,
+        NormalOrQuad
     }
 }

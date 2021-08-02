@@ -100,7 +100,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         private MapType SubInventoryMapType(int index)
         {
-            return (MapType) M.Read<int>(mapListStartPtr + index * 0x10, 0x10);
+            return (MapType) M.Read<int>(mapListStartPtr + index * 0x10, 0x10); 
         }
 
         private string SubInventoryMapPath(int index)
