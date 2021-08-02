@@ -10,7 +10,7 @@ namespace GameOffsets
         [FieldOffset(0x10)] public long ItemCellsPtr;
         [FieldOffset(0x60)] public long PublicPricePtr;
 
-        [FieldOffset(0xD6)] public byte InfluenceFlag;
-        [FieldOffset(0xD7)] public byte isCorrupted;
+        [FieldOffset(0xC6)] public byte InfluenceFlag;
+        [FieldOffset(0xC7)] public byte isCorrupted;
     }
 }
