@@ -25,6 +25,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<float> _TimeInGameF;
         private readonly CachedValue<Element> _UIHover;
         private readonly CachedValue<Element> _UIHoverElement;
+        private readonly CachedValue<Element> _UIHoverTooltip;
         private readonly CachedValue<Element> _UIRoot;
 
         public IngameState(long address)
@@ -45,6 +46,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _UIHoverElement = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverElement));
             _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value.UIHoverPosX);
             _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value.UIHoverPosY);
+            _UIHoverTooltip = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverTooltip));
             _MousePosX = new FrameCache<float>(() => _ingameState.Value.MousePosX);
             _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePosY);
             _DiagnosticInfoType = new FrameCache<DiagnosticInfoType>(() => (DiagnosticInfoType) _ingameState.Value.DiagnosticInfoType);
@@ -75,6 +77,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UIHoverElement => _UIHoverElement.Value;
         public float UIHoverPosX => _UIHoverPosX.Value;
         public float UIHoverPosY => _UIHoverPosY.Value;
+        public Element UIHoverTooltip => _UIHoverTooltip.Value;
         public float MousePosX => _MousePosX.Value;
         public float MousePosY => _MousePosY.Value;
         public long EntityLabelMap => _EntityLabelMap.Value.EntityLabelMap;
