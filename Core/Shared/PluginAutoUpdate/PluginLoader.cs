@@ -60,7 +60,7 @@ namespace ExileCore.Shared.PluginAutoUpdate
 
                 if (dll == null)
                 {
-                    DebugWindow.LogError($"PluginLoader -> Not found plugin dll in {dir.FullName}.");
+                    DebugWindow.LogError($"PluginLoader -> No found plugin dll in \"{dir.FullName}\".");
                     DebugWindow.LogError("PluginLoader -> Dll should be named like folder or only dll in folder.");                    
                     return null;
                 }
@@ -70,7 +70,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
             }
             catch (Exception e)
             {
-                DebugWindow.LogError($"{nameof(LoadAssembly)} -> {e}");
+                DebugWindow.LogDebug($"{nameof(LoadAssembly)} -> Failed to load \"{dir.FullName}\".");
+                DebugWindow.LogError($"{nameof(LoadAssembly)}() -> {e}");
                 return null;
             }
         }

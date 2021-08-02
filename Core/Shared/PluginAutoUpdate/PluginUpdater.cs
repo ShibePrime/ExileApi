@@ -103,8 +103,8 @@ namespace ExileCore.Shared.PluginAutoUpdate
             } 
             catch (Exception e)
             {
-                DebugWindow.LogError($"PluginUpdater -> {plugin} UpdateSinglePlugin failed.");
-                DebugWindow.LogDebug($"PluginUpdater -> {e.Message}");
+                DebugWindow.LogError($"PluginUpdater -> UpdateSinglePlugin \"{plugin.Name?.Value}\" failed.");
+                DebugWindow.LogError($"PluginUpdater -> {e}");
             }
 
             var pluginWrapper = pluginLoader.Load(compiledPluginDirectory);
