@@ -30,7 +30,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             M.Read<int>(Address + 0xB1)
         };
 
-        public string FlavourText => text ?? (text = M.ReadStringU(M.Read<long>(M.Read<long>(Address + 0x31) + 0x0C)));
+        public string FlavourText => text ??= M.ReadStringU(M.Read<long>(M.Read<long>(Address + 0x31) + 0x0C));
 
         public AtlasRegion AtlasRegion => TheGame.Files.AtlasRegions.GetByAddress(M.Read<long>(Address + 0x41));
 

@@ -92,20 +92,18 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             var result = new List<QuestState>();
             /*
-             * This is definitly not the most performant way to get the quest.
+             * This is definitely not the most performant way to get the quest.
              * 9 quests are missing (e.g. a10q2). 
              */
             for (long i = 0; i < 0xffff; i += 0x8)
             {
-                long pointerToQuest = IngameUIElementsStruct.GetQuests + i;
+                var pointerToQuest = IngameUIElementsStruct.GetQuests + i;
                 var addressOfQuest = M.Read<long>(pointerToQuest);
 
                 var questState = GetObject<QuestState>(addressOfQuest);
-                if (questState?.Quest != null)
-                {
-                    if (result.Where(r => r.Quest?.Id == questState.Quest?.Id).Any()) continue; // skip entries which are already in the list
-                    result.Add(questState);
-                }
+                if (questState?.Quest == null) continue;
+                if (result.Any(r => r.Quest?.Id == questState.Quest?.Id)) continue; // skip entries which are already in the list
+                result.Add(questState);
             }
 
             return result;
