@@ -28,7 +28,7 @@ namespace ExileCore.PoEMemory.Elements
             {
                 try
                 {
-                    return (ToolTipType) (toolTip ?? (toolTip = GetToolTipType()));
+                    return toolTip ??= GetToolTipType();
                 }
                 catch (Exception e)
                 {
@@ -42,18 +42,13 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                switch (ToolTipType)
+                return ToolTipType switch
                 {
-                    case ToolTipType.ItemOnGround:
-                        return ToolTipOnGround.Tooltip;
-
-                    case ToolTipType.InventoryItem:
-                        return InventoryItemTooltip;
-                    case ToolTipType.ItemInChat:
-                        return ItemInChatTooltip.Children[1];
-                }
-
-                return null;
+                    ToolTipType.ItemOnGround => ToolTipOnGround.Tooltip,
+                    ToolTipType.InventoryItem => InventoryItemTooltip,
+                    ToolTipType.ItemInChat => ItemInChatTooltip.Children[1],
+                    _ => null,
+                };
             }
         }
 
@@ -61,15 +56,12 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                switch (ToolTipType)
+                return ToolTipType switch
                 {
-                    case ToolTipType.ItemOnGround:
-                        return ToolTipOnGround.ItemFrame;
-                    case ToolTipType.ItemInChat:
-                        return ItemInChatTooltip.Children[0];
-                    default:
-                        return null;
-                }
+                    ToolTipType.ItemOnGround => ToolTipOnGround.ItemFrame,
+                    ToolTipType.ItemInChat => ItemInChatTooltip.Children[0],
+                    _ => null,
+                };
             }
         }
 
@@ -82,11 +74,7 @@ namespace ExileCore.PoEMemory.Elements
                     case ToolTipType.ItemOnGround:
                         // This offset is same as Game.IngameState.IngameUi.ItemsOnGroundLabels offset.
                         var le = TheGame.IngameState.IngameUi.ReadObjectAt<ItemsOnGroundLabelElement>(ItemsOnGroundLabelElementOffset);
-
-                        if (le == null)
-                            return null;
-
-                        var e = le.ItemOnHover;
+                        var e = le?.ItemOnHover;
                         return e?.GetComponent<WorldItem>()?.ItemEntity;
                     case ToolTipType.InventoryItem:
                         return ReadObject<Entity>(Address + 0x390);
