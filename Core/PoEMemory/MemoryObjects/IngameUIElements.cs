@@ -83,6 +83,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressPanel);
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
         public HarvestWindow HarvestWindow => GetObject<HarvestWindow>(IngameUIElementsStruct.HarvestWindow);
+
+        public DivineFont LabyrinthDivineFontPanel =>
+            GetObject<DivineFont>(IngameUIElementsStruct.LabyrinthDivineFontPanel);
         
         public IEnumerable<QuestState> GetUncompletedQuests => GetQuestStates.Where(q => q.QuestStateId != 0);
         public IEnumerable<QuestState> GetCompletedQuests => GetQuestStates.Where(q => q.QuestStateId == 0);

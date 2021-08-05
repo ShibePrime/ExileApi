@@ -257,6 +257,7 @@
     <Compile Include="PoEMemory\Elements\BanditDialog.cs" />
     <Compile Include="PoEMemory\Elements\DelveDarknessElement.cs" />
     <Compile Include="PoEMemory\Elements\DelveElement.cs" />
+    <Compile Include="PoEMemory\Elements\DivineFont.cs" />
     <Compile Include="PoEMemory\Elements\EntityLabel.cs" />
     <Compile Include="PoEMemory\Elements\HarvestCraft.cs" />
     <Compile Include="PoEMemory\Elements\HoverItemIcon.cs" />
