@@ -46,7 +46,7 @@ namespace ExileCore.PoEMemory.Elements
                 var label = Label;
 
                 if (label != null)
-                    return M.Read<long>(label.Address + 0x420) == 0;
+                    return M.Read<long>(label.Address + 0x428) == 0;
 
                 return true;
             }
