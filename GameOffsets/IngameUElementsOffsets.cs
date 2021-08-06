@@ -44,8 +44,8 @@ namespace GameOffsets
         [FieldOffset(0x898)] public long UltimatumProgressPanel;
         [FieldOffset(0x8E0)] public long DelveDarkness;
         [FieldOffset(0x920)] public long AreaInstanceUi;
+        [FieldOffset(0xA20)] public long InvitesPanel;
         [FieldOffset(0xA70)] public long GemLvlUpPanel;
-        [FieldOffset(0xA78)] public long InvitesPanel;
         [FieldOffset(0xB50)] public long ItemOnGroundTooltip;
         [FieldOffset(0xAA0)] public long MapTabWindowStartPtr;
 
@@ -223,15 +223,18 @@ namespace GameOffsets
         //[FieldOffset(0x990)] public long UnknownResurrectionButton;
         //[FieldOffset(0x998)] public long SkipAheadButton;
         //[FieldOffset(0x9A0)] public long BetrayalHelpButton;
-        //[FieldOffset(0x9F0)] public long ExpeditionInteractButton;
+        //[FieldOffset(0x9D0)] public long ParentLeagueInteractPanel;
+        //[FieldOffset(0x9D8)] public long MetamorphInteractPanel;
+        //[FieldOffset(0x9E0)] public long RitualInteractButton;
+        //[FieldOffset(0x9F0)] public long ExpeditionInteractPanel;
         //[FieldOffset(0x9F8)] public long Child1;
         //[FieldOffset(0xA00)] public long HideoutEditPanel;
         //[FieldOffset(0xA08)] public long HideoutMusicPanel;
         //[FieldOffset(0xA18)] public long ZoneTravelNotifyPanel;
-        //[FieldOffset(0xA20)] public long Child126;
+        //[FieldOffset(0xA20)] public long InvitesPanel;
         //[FieldOffset(0xA28)] public long Child5;
         //[FieldOffset(0xA70)] public long GemLvlUpPanel;
-        //[FieldOffset(0xA78)] public long Child114;
+        //[FieldOffset(0xA78)] public long GameUI2;
         //[FieldOffset(0xA88)] public long SkillBarMessagePanel;
         //[FieldOffset(0xAC8)] public long Child0;
         //[FieldOffset(0xAD0)] public long RampageKillCountPanel;
