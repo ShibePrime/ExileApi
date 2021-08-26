@@ -206,6 +206,7 @@
     <Compile Include="PoEMemory\Components\DeployedObject.cs" />
     <Compile Include="PoEMemory\Components\DiesAfterTime.cs" />
     <Compile Include="PoEMemory\Components\Flask.cs" />
+    <Compile Include="PoEMemory\Components\Functions.cs" />
     <Compile Include="PoEMemory\Components\HeistBlueprint.cs" />
     <Compile Include="PoEMemory\Components\HeistContract.cs" />
     <Compile Include="PoEMemory\Components\HeistEquipment.cs" />

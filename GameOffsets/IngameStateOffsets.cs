@@ -17,8 +17,8 @@ namespace GameOffsets
         [FieldOffset(0x608)] public long UIHoverTooltip;
         [FieldOffset(0x644)] public float MousePosX;
         [FieldOffset(0x648)] public float MousePosY;
-        [FieldOffset(0x66C)] public float TimeInGame; // total time in game in seconds
         [FieldOffset(0x674)] public float TimeInGameF; // time since last frame in seconds
+        [FieldOffset(0x770)] public float TimeInGame; // total time in game in seconds
         [FieldOffset(0x618)] public int DiagnosticInfoType;
         [FieldOffset(0x848)] public long LatencyRectangle;
         [FieldOffset(0xCE8)] public long FrameTimeRectangle;
