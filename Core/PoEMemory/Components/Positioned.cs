@@ -26,5 +26,7 @@ namespace ExileCore.PoEMemory.Components
         public float WorldY => PositionedStruct.WorldY;
         public float RotationDeg => Rotation * (180 / MathUtil.Pi);
         public byte Reaction => PositionedStruct.Reaction;
+        public int Size => PositionedStruct.Size;
+        public float Scale => PositionedStruct.Scale;
     }
 }
