@@ -51,8 +51,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element OpenRightPanel => GetObject<Element>(IngameUIElementsStruct.OpenRightPanel);
         public StashElement StashElement => GetObject<StashElement>(IngameUIElementsStruct.StashElement);
         public InventoryElement InventoryPanel => GetObject<InventoryElement>(IngameUIElementsStruct.InventoryPanel);
-        public Element TreePanel => GetChildAtIndex(24);
-        public Element PVPTreePanel => GetChildAtIndex(25);
+        public Element TreePanel => GetChildAtIndex(25);
+        public Element PVPTreePanel => GetChildAtIndex(26);
         public AtlasElement AtlasPanel => GetObject<AtlasElement>(IngameUIElementsStruct.AtlasPanel);
         public AtlasElement Atlas => AtlasPanel; // Required to fit with TehCheats Api, Random Feature uses this field.
         public Map Map => _map ??= GetObject<Map>(IngameUIElementsStruct.Map);

@@ -124,6 +124,21 @@ namespace ExileCore
             return ReadMem(addr, (int) size);
         }
 
+        public T[] ReadAsArray<T>(long addr, int nsize) where T : struct
+        {
+            T[] buffer = new T[nsize];
+            try
+            {
+                ProcessMemory.ReadProcessMemoryArray(OpenProcessHandle, new IntPtr(addr), buffer, 0, nsize);
+                return buffer;
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"ReadAsArray-> A: {addr} Size: {nsize}. {e}");
+                throw;
+            }
+        }
+
         public List<T> ReadStructsArray<T>(long startAddress, long endAddress, int structSize, RemoteMemoryObject game)
             where T : RemoteMemoryObject, new()
         {

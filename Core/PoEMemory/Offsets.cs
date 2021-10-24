@@ -49,12 +49,12 @@ namespace ExileCore.PoEMemory
             new Pattern(
                 new byte[]
                 {
-                    0xE8, 
-                    0x00, 0x00, 0x00, 0x00, 
-                    0xE8, 
-                    0x00, 0x00, 0x00, 0x00, 
+                    0xFF,
+                    0x00, 0x00, 0x00, 0x00, 0x00,
+                    0xE8,
+                    0x00, 0x00, 0x00, 0x00,
                     0xFF, 0x05
-                }, "x????x????xx", "Area change", 9430000);
+                }, "x?????x????xx", "Area change", 9430000);
 
         /*
        140094573 48 83 ec 20     SUB        RSP,0x20
@@ -96,7 +96,7 @@ namespace ExileCore.PoEMemory
             FileRoot = m.Read<int>(baseAddress + array[index] + 6) + array[index] + 10;
             index++;
 
-            AreaChangeCount = m.Read<int>(baseAddress + array[index] + 0xC) + array[index] + 0x10;
+            AreaChangeCount = m.Read<int>(baseAddress + array[index] + 0xD) + array[index] + 0x11;
             index++;
 
             GameStateOffset = m.Read<int>(baseAddress + array[index] + 8) + array[index] + 12;

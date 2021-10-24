@@ -44,9 +44,9 @@ namespace GameOffsets
         [FieldOffset(0x82B8 - Skip)] public byte NetworkState;
         [FieldOffset(0x82D0 - Skip)] public NativeStringU League;
         [FieldOffset(0x8350 - Skip)] public float TimeInGame;
-        [FieldOffset(0x8368 - Skip)] public int Latency;
-        [FieldOffset(0x8370 - Skip)] public NativePtrArray PlayerStashTabs;
-        [FieldOffset(0x8388 - Skip)] public NativePtrArray GuildStashTabs;
+        [FieldOffset(0x87B0 - Skip)] public int Latency;
+        [FieldOffset(0x87B8 - Skip)] public NativePtrArray PlayerStashTabs;
+        [FieldOffset(0x8800 - Skip)] public NativePtrArray GuildStashTabs;
         [FieldOffset(0x8418 - Skip)] public long FriendsList;
         //[FieldOffset(0x8430 - Skip)] public long FriendNoteList;
         //[FieldOffset(0x8440 - Skip)] public NativePtrArray FriendsArray;
@@ -62,7 +62,7 @@ namespace GameOffsets
         [FieldOffset(0x85E8 - Skip)] public NativePtrArray NearestPlayers;
         //[FieldOffset(0x8168 - Skip)] public NativePtrArray MinimapIcons;
         //[FieldOffset(0x8188 - Skip)] public NativePtrArray LocalPlayer;
-        [FieldOffset(0x8758 - Skip)] public NativePtrArray PlayerInventories;
+        [FieldOffset(0x8BE8 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x8898 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x89D8 - Skip)] public NativePtrArray GuildInventories;
 

@@ -6,20 +6,20 @@ namespace GameOffsets
     public struct IngameUElementsOffsets
     {
         [FieldOffset(0x218)] public long GetQuests;
-        [FieldOffset(0x240)] public long GameUI;
+        [FieldOffset(0x6F0)] public long GameUI;
         [FieldOffset(0x390)] public long Mouse;
         [FieldOffset(0x398)] public long SkillBar;
-        [FieldOffset(0x3A0)] public long HiddenSkillBar; 
-        [FieldOffset(0x420)] public long ChatPanel; 
+        [FieldOffset(0x3A0)] public long HiddenSkillBar;
+        [FieldOffset(0x478)] public long ChatPanel;
         [FieldOffset(0x4A0)] public long QuestTracker;
-        [FieldOffset(0x508)] public long OpenLeftPanel;
-        [FieldOffset(0x510)] public long OpenRightPanel;
-        [FieldOffset(0x540)] public long InventoryPanel;
-        [FieldOffset(0x548)] public long StashElement;
+        [FieldOffset(0x570)] public long OpenLeftPanel;
+        [FieldOffset(0x578)] public long OpenRightPanel;
+        [FieldOffset(0x5A8)] public long InventoryPanel;
+        [FieldOffset(0x5B0)] public long StashElement;
         [FieldOffset(0x5F8)] public long AtlasPanel;
         [FieldOffset(0x628)] public long WorldMap;
-        [FieldOffset(0x648)] public long Map;
-        [FieldOffset(0x650)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x6B0)] public long Map;
+        [FieldOffset(0x6B8)] public long itemsOnGroundLabelRoot;
         [FieldOffset(0x658)] public long BanditDialog;
         [FieldOffset(0x6D8)] public long NpcDialog;
         [FieldOffset(0x6F0)] public long QuestRewardWindow;

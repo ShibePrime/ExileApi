@@ -54,6 +54,7 @@ namespace ExileCore.Shared.Interfaces
         T Read<T>(Pointer addr) where T : struct;
         T Read<T>(IntPtr addr) where T : struct;
         T Read<T>(long addr) where T : struct;
+        T[] ReadAsArray<T>(long addr, int size) where T : struct;
         IList<T> ReadNativeArray<T>(INativePtrArray ptrArray, int offset = 8) where T : struct;
         IList<Tuple<long, int>> ReadDoublePointerIntList(long address);
         IList<T> ReadList<T>(IntPtr head) where T : struct;

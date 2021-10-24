@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
@@ -34,17 +35,17 @@ namespace ExileCore.PoEMemory.MemoryObjects
             Address = m.Read<long>(m.BaseOffsets[OffsetsName.GameStateOffset] + m.AddressOfProcess);
             _AreaChangeCount = new TimeCache<int>(() => M.Read<int>(M.AddressOfProcess + M.BaseOffsets[OffsetsName.AreaChangeCount]), 50);
 
-            AllGameStates = ReadHashMap(Address + 0x48);
+            AllGameStates = ReadHashMap(Address + 0x50);
 
             PreGameStatePtr = AllGameStates["PreGameState"].Address;
             LoginStatePtr = AllGameStates["LoginState"].Address;
             SelectCharacterStatePtr = AllGameStates["SelectCharacterState"].Address;
             WaitingStatePtr = AllGameStates["WaitingState"].Address;
-            InGameStatePtr = AllGameStates["InGameState"].Address;
             LoadingStatePtr = AllGameStates["LoadingState"].Address;
             EscapeStatePtr = AllGameStates["EscapeState"].Address;
-            LoadingState = new AreaLoadingState(AllGameStates["AreaLoadingState"].Address);
-            IngameState = new IngameState(InGameStatePtr);
+            LoadingState = new AreaLoadingState(AllGameStates["AreaLoadingState"]);
+            InGameStatePtr = AllGameStates["InGameState"].Address;
+            IngameState = new IngameState(AllGameStates["InGameState"]);
 
             _inGame = new FrameCache<bool>(
                 () => IngameState.Address != 0 && IngameState.Data.Address != 0 && IngameState.ServerData.Address != 0 && !IsLoading /*&&
@@ -92,10 +93,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var address = Instance.Address + 0x20;
             var start = M.Read<long>(address);
 
-            //var end = Read<long>(address + 0x8);
-            var last = M.Read<long>(address + 0x10);
+            //var end = Read<long>(address + 0x10);
+            var last = M.Read<long>(address + 0x8);
 
-            var length = (int) (last - start);
+            var length = (int)(last - start);
             var bytes = M.ReadMem(start, length);
 
             for (var readOffset = 0; readOffset < length; readOffset += 16)
@@ -111,72 +112,66 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             var result = new Dictionary<string, GameState>();
 
-            var stack = new Stack<GameStateHashNode>();
-            var startNode = ReadObject<GameStateHashNode>(pointer);
-            var item = startNode.Root;
-            stack.Push(item);
+            var header = M.Read<GameStateHashNode>(pointer).Next;
+            var currentNodeAddress = M.Read<long>(header);
 
-            while (stack.Count != 0)
+            while (currentNodeAddress != header)
             {
-                var node = stack.Pop();
+                var currentNode = M.Read<GameStateHashNode>(currentNodeAddress);
 
-                if (!node.IsNull)
-                    result[node.Key] = node.Value1;
+                if (currentNodeAddress == 0)
+                {
+                    break;
+                }
 
-                var prev = node.Previous;
+                var gameState = new GameState(currentNode.StateAddress)
+                {
+                    StateName = ((GameStateTypes)currentNode.StateNameEnumByte).ToString()
+                };
 
-                if (!prev.IsNull)
-                    stack.Push(prev);
+                result[gameState.StateName] = gameState;
 
-                var next = node.Next;
-
-                if (!next.IsNull)
-                    stack.Push(next);
+                currentNodeAddress = currentNode.Next;
             }
 
             return result;
         }
 
-        private class GameStateHashNode : RemoteMemoryObject
+        [StructLayout(LayoutKind.Explicit, Pack = 1)]
+        private struct GameStateHashNode
         {
-            public GameStateHashNode Previous => ReadObject<GameStateHashNode>(Address);
-            public GameStateHashNode Root => ReadObject<GameStateHashNode>(Address + 0x8);
-            public GameStateHashNode Next => ReadObject<GameStateHashNode>(Address + 0x10);
+            [FieldOffset(0)]
+            public long Next;
 
-            //public readonly byte Unknown;
-            public bool IsNull => M.Read<byte>(Address + 0x19) != 0;
+            [FieldOffset(0x8)]
+            public long Previous;
 
-            //private readonly byte byte_0;
-            //private readonly byte byte_1;
-            public string Key => M.ReadNativeString(Address + 0x20);
+            [FieldOffset(0x10)]
+            public byte StateNameEnumByte;
 
-            //public readonly int Useless;
-            public GameState Value1 => ReadObject<GameState>(Address + 0x40);
-
-            //public readonly long Value2;
+            [FieldOffset(0x18)]
+            public long StateAddress;
         }
     }
 
     public class GameState : RemoteMemoryObject
     {
-        private string stateName;
-        public string StateName => stateName ?? (stateName = M.ReadNativeString(Address + 0x10));
-        public void ReloadStateName()
+        public string StateName;
+
+        public GameState() : base() { }
+
+        public GameState(long address) : base()
         {
-            stateName = M.ReadNativeString(Address + 0x10);
-        }
-        public override string ToString()
-        {
-            return StateName;
+            Address = address;
         }
     }
 
     public class AreaLoadingState : GameState
     {
-        public AreaLoadingState(long address)
+        public AreaLoadingState(GameState parent)
         {
-            Address = address;
-            ReloadStateName();
+            Address = parent.Address;
+            StateName = parent.StateName;
         }
         //This is actualy pointer to loading screen stuff (image, etc), but should works fine.
         public bool IsLoading => M.Read<long>(Address + 0xD8) == 1;
@@ -186,5 +181,21 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             return $"{AreaName}, IsLoading: {IsLoading}";
         }
+    }
+
+    public enum GameStateTypes
+    {
+        AreaLoadingState,
+        WaitingState,
+        CreditsState,
+        EscapeState,
+        InGameState,
+        ChangePasswordState,
+        LoginState,
+        PreGameState,
+        CreateCharacterState,
+        SelectCharacterState,
+        DeleteCharacterState,
+        LoadingState
     }
 }
