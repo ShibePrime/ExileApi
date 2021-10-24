@@ -45,6 +45,9 @@
     <Compile Include="BuffStringOffsets.cs" />
     <Compile Include="CameraOffsets.cs" />
     <Compile Include="ChestComponentOffsets.cs" />
+    <Compile Include="ComponentArrayStructure.cs" />
+    <Compile Include="ComponentLookup.cs" />
+    <Compile Include="ComponentNameAndIndexStruct.cs" />
     <Compile Include="Components\Actor.cs" />
     <Compile Include="Components\AreaTransition.cs" />
     <Compile Include="Components\Armour.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="DiagnosticElementOffsets.cs" />
     <Compile Include="ChatElementOffsets.cs" />
     <Compile Include="ElementOffsets.cs" />
+    <Compile Include="EntityDetails.cs" />
     <Compile Include="EntityLabelMapOffsets.cs" />
     <Compile Include="EntityListOffsets.cs" />
     <Compile Include="EntityOffsets.cs" />
@@ -115,7 +119,6 @@
     <Compile Include="Native\NativeStringU.cs" />
     <Compile Include="Native\Vector2i.cs" />
     <Compile Include="NormalInventoryItemOffsets.cs" />
-    <Compile Include="ObjectHeaderOffsets.cs" />
     <Compile Include="ObjectMagicPropertiesOffsets.cs" />
     <Compile Include="PathEntityOffsets.cs" />
     <Compile Include="PathfindingComponentOffsets.cs" />

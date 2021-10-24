@@ -28,10 +28,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<Element> _UIHoverTooltip;
         private readonly CachedValue<Element> _UIRoot;
 
-        public IngameState(long address)
+        public IngameState(GameState parent)
         {
-            Address = address;
-            ReloadStateName();
+            Address = parent.Address;
+            StateName = parent.StateName;
 
             _ingameState = new FrameCache<IngameStateOffsets>(() => M.Read<IngameStateOffsets>(Address /*+M.offsets.IgsOffsetDelta*/));
 

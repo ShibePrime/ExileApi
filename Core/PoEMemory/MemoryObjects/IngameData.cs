@@ -15,6 +15,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<WorldArea> _CurrentWorldArea;
         private readonly CachedValue<long> _EntitiesCount;
         private readonly CachedValue<Entity> _LocalPlayer;
+        private readonly CachedValue<ServerData> _serverData;
         private readonly Dictionary<GameStat, int> _MapStats = new Dictionary<GameStat, int>();
         private EntityList _EntityList { get; set; }
         private NativePtrArray _CacheStats { get; set; }
@@ -23,6 +24,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             _IngameData = new AreaCache<IngameDataOffsets>(() => M.Read<IngameDataOffsets>(Address));
             _LocalPlayer = new AreaCache<Entity>(() => GetObject<Entity>(_IngameData.Value.LocalPlayer));
+            _serverData = new AreaCache<ServerData>(() => GetObject<ServerData>(_IngameData.Value.ServerData));
             _CurrentArea = new AreaCache<AreaTemplate>(() => GetObject<AreaTemplate>(_IngameData.Value.CurrentArea));
             _CurrentWorldArea = new AreaCache<WorldArea>(() => TheGame.Files.WorldAreas.GetByAddress(CurrentArea.Address));
             var offset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.EntitiesCount));
@@ -36,6 +38,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public int CurrentAreaLevel => _IngameData.Value.CurrentAreaLevel;
         public uint CurrentAreaHash => _IngameData.Value.CurrentAreaHash;
         public Entity LocalPlayer => _LocalPlayer.Value;
+        public ServerData ServerData => _serverData.Value;
         public long EntitiesTest => DataStruct.EntityList;
         public EntityList EntityList => _EntityList ?? (_EntityList = GetObject<EntityList>(DataStruct.EntityList));
         private long LabDataPtr => _IngameData.Value.LabDataPtr;

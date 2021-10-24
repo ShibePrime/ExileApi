@@ -62,7 +62,7 @@ namespace ExileCore.Shared.Helpers
 
         public static string ToString(this PathEntityOffsets str, IMemory mem)
         {
-            return mem.ReadStringU(str.Path.Ptr, (int) str.Length * 2);
+            return mem.ReadStringU(str.Path, (int) str.Length * 2);
         }
 
         public static T ToEnum<T>(this string value)

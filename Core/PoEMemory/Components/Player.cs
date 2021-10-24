@@ -21,7 +21,7 @@ namespace ExileCore.PoEMemory.Components
                 Address == 0 ? default : M.Read<PlayerComponentOffsets>(Address));
         }
 
-        public string PlayerName => NativeStringReader.ReadString(Address + 0x158, M);
+        public string PlayerName => NativeStringReader.ReadString(Address + 0x160, M);
         public uint XP => Address != 0 ? _player.Value.XP : 0;
         public int Strength => Address != 0 ? _player.Value.Strength : 0;
         public int Dexterity => Address != 0 ? _player.Value.Dexterity : 0;
