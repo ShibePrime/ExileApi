@@ -6,7 +6,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class InventoryList : RemoteMemoryObject
     {
-        public static int InventoryCount => 37;
+        public static int InventoryCount => 53;
 
         public Inventory this[InventoryIndex inv]
         {
