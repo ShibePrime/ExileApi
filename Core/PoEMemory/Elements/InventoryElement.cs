@@ -55,6 +55,8 @@ namespace ExileCore.PoEMemory.Elements
                     return EquippedItems.GetChildAtIndex(19);
                 case InventoryIndex.Trinket:
                     return EquippedItems.GetChildAtIndex(20);
+                case InventoryIndex.BloodCrucible:
+                    return EquippedItems.GetChildAtIndex(1);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(inventoryIndex));
             }
