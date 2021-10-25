@@ -10,7 +10,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ServerStashTab : RemoteMemoryObject
     {
-        public const int StructSize = 0x40;
+        public const int StructSize = 0x48;
         private const int ColorOffset = 0x2c;
         private readonly CachedValue<ServerStashTabOffsets> _cachedValue;
 
@@ -20,22 +20,18 @@ namespace ExileCore.PoEMemory.MemoryObjects
         }
 
         public ServerStashTabOffsets ServerStashTabOffsets => _cachedValue.Value;
-        public string Name => ServerStashTabOffsets.Name.ToString(M); 
+        public string Name => ServerStashTabOffsets.Name.ToString(M);
         public string VisibleName => Name + (RemoveOnly ? " (Remove-only)" : string.Empty);
-
-        [Obsolete("Use VisibleName instead.", false)]
-        public string NameOld => VisibleName;
-        public uint Color => ServerStashTabOffsets.Color;
-
-        //NOTE: Color is laid out BBGGRRAA in memory (3.12.3)
+        public uint Color => ServerStashTabOffsets.Color; // Color format is BBGGRRAA
         public Color Color2 =>
             new Color(M.Read<byte>(Address + ColorOffset + 2), M.Read<byte>(Address + ColorOffset + 1),
                 M.Read<byte>(Address + ColorOffset), M.Read<byte>(Address + ColorOffset + 3));
-        public InventoryTabPermissions MemberFlags => (InventoryTabPermissions) ServerStashTabOffsets.MemberFlags;
-        public InventoryTabPermissions OfficerFlags => (InventoryTabPermissions) ServerStashTabOffsets.OfficerFlags;
-        public InventoryTabType TabType => (InventoryTabType) ServerStashTabOffsets.TabType;
+        public InventoryTabPermissions MemberFlags => (InventoryTabPermissions)ServerStashTabOffsets.MemberFlags;
+        public InventoryTabPermissions OfficerFlags => (InventoryTabPermissions)ServerStashTabOffsets.OfficerFlags;
+        public InventoryTabType TabType => (InventoryTabType)ServerStashTabOffsets.TabType;
         public ushort VisibleIndex => ServerStashTabOffsets.DisplayIndex;
-        public InventoryTabFlags Flags => (InventoryTabFlags) ServerStashTabOffsets.Flags;
+        public InventoryTabAffinityFlags TabAffinityFlags => (InventoryTabAffinityFlags)ServerStashTabOffsets.AffinityFlags;
+        public InventoryTabFlags Flags => (InventoryTabFlags)ServerStashTabOffsets.Flags;
         public bool RemoveOnly => (Flags & InventoryTabFlags.RemoveOnly) == InventoryTabFlags.RemoveOnly;
         public bool IsHidden => (Flags & InventoryTabFlags.Hidden) == InventoryTabFlags.Hidden;
 

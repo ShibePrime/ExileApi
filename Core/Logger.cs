@@ -8,11 +8,10 @@ namespace ExileCore
     {
         private static ILogger _instance;
         public static ILogger Log =>
-            _instance ?? (_instance = new LoggerConfiguration()
+            _instance ??= new LoggerConfiguration()
                 .MinimumLevel
                 .ControlledBy(new LoggingLevelSwitch(LogEventLevel.Verbose))
                 .WriteTo
-                .File(@"Logs\Verbose-.log", rollingInterval: RollingInterval.Day).CreateLogger()
-            );
+                .File(@"Logs\Verbose-.log", rollingInterval: RollingInterval.Day).CreateLogger();
     }
 }

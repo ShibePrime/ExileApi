@@ -26,23 +26,15 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var LabelLen = Length;
+                var length = Length;
 
-                if (LabelLen <= 0 || LabelLen > 1024)
+                if (length <= 0 || length > 1024)
                 {
                     return string.Empty;
-
-                    // return null;
                 }
 
-                if (Capacity >= 8)
-                {
-                    var read = M.Read<long>(Address + 0xC88);
-
-                    return M.ReadStringU(read, LabelLen * 2, false);
-                }
-
-                return M.ReadStringU(Address + 0xC88, LabelLen * 2, false);
+                var address = Capacity < 8 ? Address + 0xC88 : M.Read<long>(Address + 0xC88);
+                return M.ReadStringU(address, length * 2, false);
             }
         }
 

@@ -45,7 +45,7 @@ namespace ExileCore
             _gameController = gameController;
             _settings = settings;
             _gameController.Area.OnAreaChange += AreaChanged;
-            _parallelUpdateDictionary = new Coroutine(CollectEntities(), null, "Collect Entities") {SyncModWork = true};
+            _parallelUpdateDictionary = new Coroutine(CollectEntities(), null, "Collect Entities") { SyncModWork = true };
 
             _settings.EntitiesUpdate.OnValueChanged += (sender, i) => { UpdateCondition(1000 / i); };
             UpdateCondition(1000 / _settings.EntitiesUpdate);
@@ -78,7 +78,7 @@ namespace ExileCore
 
         private void UpdateCondition(int coroutineTimeWait = 50)
         {
-            _parallelUpdateDictionary.UpdateCondtion(new WaitTime(coroutineTimeWait));
+            _parallelUpdateDictionary.UpdateCondition(new WaitTime(coroutineTimeWait));
         }
 
         private void AreaChanged(AreaInstance area)
@@ -92,7 +92,7 @@ namespace ExileCore
 
                 if (Player != null && Player.Address == dataLocalPlayer.Address) return;
                 if (!dataLocalPlayer.Path.StartsWith("Meta")) return;
-             
+
                 Player = dataLocalPlayer;
                 Player.IsValid = true;
                 PlayerUpdate?.Invoke(this, Player);

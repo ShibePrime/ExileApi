@@ -39,11 +39,11 @@ namespace ExileCore
 
         public static string GetTimeString(TimeSpan timeSpent)
         {
-            var allsec = (int) timeSpent.TotalSeconds;
+            var allsec = (int)timeSpent.TotalSeconds;
             var secs = allsec % 60;
             var mins = allsec / 60;
             var hours = mins / 60;
-            mins = mins % 60;
+            mins %= 60;
             return string.Format(hours > 0 ? "{0}:{1:00}:{2:00}" : "{1}:{2:00}", hours, mins, secs);
         }
     }

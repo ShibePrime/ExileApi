@@ -17,17 +17,12 @@ namespace ExileCore.Threads
         public ThreadUnit(string name)
         {
             _waitEvent = new ManualResetEventSlim(true, 1000);
-            _thread = new Thread(DoWork);
-            _thread.Name = name;
-            _thread.IsBackground = true;
+            _thread = new Thread(DoWork) { Name = name, IsBackground = true };
             _thread.Start();
         }
         public Job Job
         {
-            get
-            {
-                return _job;
-            }
+            get => _job;
             set
             {
                 _job = value;
@@ -37,7 +32,7 @@ namespace ExileCore.Threads
 
         private void DoWork()
         {
-            while(true)
+            while (true)
             {
                 if (Job == null || Job.IsCompleted)
                 {

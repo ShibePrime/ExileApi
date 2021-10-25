@@ -5,7 +5,6 @@ using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using GameOffsets;
-using GameOffsets.Native;
 using SharpDX;
 
 namespace ExileCore.PoEMemory.MemoryObjects
@@ -425,69 +424,69 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 var result = new Dictionary<string, long>();
 
                 var entityComponent = M.ReadPointersArray(EntityOffsets.ComponentListPtr.First, EntityOffsets.ComponentListPtr.Last);
-                EntityDetails entityDetails = M.Read<EntityDetails>(EntityOffsets.EntityDetailsPtr);
-                ComponentLookup lookupPtr = M.Read<ComponentLookup>(entityDetails.ComponentLookUpPtr);
-                foreach (ComponentArrayStructure bucket in M.ReadAsArray<ComponentArrayStructure>(lookupPtr.ComponentArray, ((int)lookupPtr.Capacity + 1) / 8))
+                var entityDetails = M.Read<EntityDetails>(EntityOffsets.EntityDetailsPtr);
+                var lookupPtr = M.Read<ComponentLookup>(entityDetails.ComponentLookupPtr);
+                foreach (var bucket in M.ReadAsArray<ComponentArrayStructure>(lookupPtr.ComponentArray, ((int)lookupPtr.Capacity + 1) / 8))
                 {
-                    if (bucket.Flag0 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag0 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name = M.ReadString(bucket.Pointer0.NamePtr);
+                        var name = M.ReadString(bucket.Pointer0.NamePtr);
                         if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer0.Index >= 0 && bucket.Pointer0.Index < entityComponent.Count)
                         {
                             result.Add(name, entityComponent[bucket.Pointer0.Index]);
                         }
                     }
-                    if (bucket.Flag1 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag1 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name2 = M.ReadString(bucket.Pointer1.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name2) && !result.ContainsKey(name2) && bucket.Pointer1.Index >= 0 && bucket.Pointer1.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer1.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer1.Index >= 0 && bucket.Pointer1.Index < entityComponent.Count)
                         {
-                            result.Add(name2, entityComponent[bucket.Pointer1.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer1.Index]);
                         }
                     }
-                    if (bucket.Flag2 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag2 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name3 = M.ReadString(bucket.Pointer2.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name3) && !result.ContainsKey(name3) && bucket.Pointer2.Index >= 0 && bucket.Pointer2.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer2.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer2.Index >= 0 && bucket.Pointer2.Index < entityComponent.Count)
                         {
-                            result.Add(name3, entityComponent[bucket.Pointer2.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer2.Index]);
                         }
                     }
-                    if (bucket.Flag3 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag3 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name4 = M.ReadString(bucket.Pointer3.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name4) && !result.ContainsKey(name4) && bucket.Pointer3.Index >= 0 && bucket.Pointer3.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer3.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer3.Index >= 0 && bucket.Pointer3.Index < entityComponent.Count)
                         {
-                            result.Add(name4, entityComponent[bucket.Pointer3.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer3.Index]);
                         }
                     }
-                    if (bucket.Flag4 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag4 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name5 = M.ReadString(bucket.Pointer4.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name5) && !result.ContainsKey(name5) && bucket.Pointer4.Index >= 0 && bucket.Pointer4.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer4.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer4.Index >= 0 && bucket.Pointer4.Index < entityComponent.Count)
                         {
-                            result.Add(name5, entityComponent[bucket.Pointer4.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer4.Index]);
                         }
                     }
-                    if (bucket.Flag5 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag5 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name6 = M.ReadString(bucket.Pointer5.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name6) && !result.ContainsKey(name6) && bucket.Pointer5.Index >= 0 && bucket.Pointer5.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer5.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer5.Index >= 0 && bucket.Pointer5.Index < entityComponent.Count)
                         {
-                            result.Add(name6, entityComponent[bucket.Pointer5.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer5.Index]);
                         }
                     }
-                    if (bucket.Flag6 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag6 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name7 = M.ReadString(bucket.Pointer6.NamePtr);
-                        if (!string.IsNullOrWhiteSpace(name7) && !result.ContainsKey(name7) && bucket.Pointer6.Index >= 0 && bucket.Pointer6.Index < entityComponent.Count)
+                        var name = M.ReadString(bucket.Pointer6.NamePtr);
+                        if (!string.IsNullOrWhiteSpace(name) && !result.ContainsKey(name) && bucket.Pointer6.Index >= 0 && bucket.Pointer6.Index < entityComponent.Count)
                         {
-                            result.Add(name7, entityComponent[bucket.Pointer6.Index]);
+                            result.Add(name, entityComponent[bucket.Pointer6.Index]);
                         }
                     }
-                    if (bucket.Flag7 != ComponentArrayStructure.InValidPointerFlagValue)
+                    if (bucket.Flag7 != ComponentArrayStructure.InvalidPointerFlagValue)
                     {
-                        string name8 = M.ReadString(bucket.Pointer7.NamePtr);
+                        var name8 = M.ReadString(bucket.Pointer7.NamePtr);
                         if (!string.IsNullOrWhiteSpace(name8) && !result.ContainsKey(name8) && bucket.Pointer7.Index >= 0 && bucket.Pointer7.Index < entityComponent.Count)
                         {
                             result.Add(name8, entityComponent[bucket.Pointer7.Index]);

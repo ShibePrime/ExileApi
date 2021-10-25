@@ -1,5 +1,5 @@
-﻿using GameOffsets.Native;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using GameOffsets.Native;
 
 namespace GameOffsets
 {

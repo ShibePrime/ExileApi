@@ -9,21 +9,21 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ActorSkill : RemoteMemoryObject
     {
-	    public ActorSkill()
-	    {
-		    _skillUiState = new AreaCache<long>(GetSkillUiStatePtr);
-		}
+        public ActorSkill()
+        {
+            _skillUiState = new AreaCache<long>(GetSkillUiStatePtr);
+        }
 
         public ushort Id => M.Read<ushort>(Address + 0x10);
         public GrantedEffectsPerLevel EffectsPerLevel => ReadObject<GrantedEffectsPerLevel>(Address + 0x18);
-        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x50) > 0; 
+        public bool CanBeUsedWithWeapon => M.Read<byte>(Address + 0x50) > 0;
         public bool CanBeUsed => M.Read<byte>(Address + 0x51) == 0;
-        public int TotalUses => M.Read<int>(Address + 0x54); 
+        public int TotalUses => M.Read<int>(Address + 0x54);
         public float Cooldown => M.Read<int>(Address + 0x5C) / 100f; //Converted milliseconds to seconds 
         public int SoulsPerUse => M.Read<int>(Address + 0x6C);
         public int TotalVaalUses => M.Read<int>(Address + 0x70);
         public bool IsOnSkillBar => SkillSlotIndex != -1;
-        public int SkillSlotIndex => TheGame.IngameState.ServerData.SkillBarIds.IndexOf(Id);
+        public int SkillSlotIndex => TheGame.IngameState.Data.ServerData.SkillBarIds.IndexOf(Id);
 
         public string Name
         {
@@ -35,7 +35,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (effects != null)
                 {
                     var skill = effects.SkillGemWrapper;
-                    
+
                     if (!string.IsNullOrEmpty(skill.Name)) return skill.Name;
 
                     return string.IsNullOrEmpty(skill.ActiveSkill.InternalName)
@@ -72,8 +72,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 if (IsInstant) return 0;
 
                 return GetStat(
-                    IsSpell 
-                    ? GameStat.HundredTimesCastsPerSecond 
+                    IsSpell
+                    ? GameStat.HundredTimesCastsPerSecond
                     : GameStat.HundredTimesAttacksPerSecond
                 );
             }
@@ -82,49 +82,49 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool IsAttack => GetStat(GameStat.SkillIsAttack) == 1;
         public bool IsCry => InternalName.EndsWith("_cry");
         public bool IsInstant => GetStat(GameStat.SkillIsInstant) == 1;
-	    public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
+        public bool IsMine => GetStat(GameStat.IsRemoteMine) == 1 || GetStat(GameStat.SkillIsMined) == 1;
         public bool IsTotem => GetStat(GameStat.IsTotem) == 1 || GetStat(GameStat.SkillIsTotemified) == 1;
         public bool IsTrap => GetStat(GameStat.IsTrap) == 1 || GetStat(GameStat.SkillIsTrapped) == 1;
         public bool IsVaalSkill => SoulsPerUse >= 1 && TotalVaalUses >= 1;
 
-        
+
         private readonly CachedValue<long> _skillUiState;
 
         public bool IsOnCooldown
         {
-	        get
-	        {
-		        var ptr = _skillUiState.Value;
+            get
+            {
+                var ptr = _skillUiState.Value;
                 if (ptr == long.MaxValue)
-			        return false;
-		        var state = M.Read<SkillUiStateOffsets>(ptr);
-		        return (state.CooldownHigh - state.CooldownLow) >> 4 >= state.NumberOfUses;
-	        }
+                    return false;
+                var state = M.Read<SkillUiStateOffsets>(ptr);
+                return (state.CooldownHigh - state.CooldownLow) >> 4 >= state.NumberOfUses;
+            }
         }
         public int RemainingUses
         {
-	        get
-	        {
-		        var ptr = _skillUiState.Value;
-		        if (ptr == long.MaxValue)
-					return 0;
-		        var state = M.Read<SkillUiStateOffsets>(ptr);
-		        return state.NumberOfUses - ((int)(state.CooldownHigh - state.CooldownLow) >> 4);
-	        }
+            get
+            {
+                var ptr = _skillUiState.Value;
+                if (ptr == long.MaxValue)
+                    return 0;
+                var state = M.Read<SkillUiStateOffsets>(ptr);
+                return state.NumberOfUses - ((int)(state.CooldownHigh - state.CooldownLow) >> 4);
+            }
         }
 
         long GetSkillUiStatePtr()
         {
-            var listStart = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x85B8, 0x540, 0x150);
-            var listEnd = M.Read<long>(pTheGame.IngameState.ServerData.Address + 0x85B8, 0x540, 0x158);
+            var listStart = M.Read<long>(pTheGame.IngameState.Data.ServerData.Address + 0x85B8, 0x540, 0x150);
+            var listEnd = M.Read<long>(pTheGame.IngameState.Data.ServerData.Address + 0x85B8, 0x540, 0x158);
             int maxCount = 100;
-	        for (var ptr = listStart; ptr < listEnd && maxCount > 0; ptr += 0x48, maxCount--)
-	        {
-		        var state = M.Read<SkillUiStateOffsets>(ptr);
-		        if (state.SkillId == Id)
-			        return ptr;
-	        }
-	        return long.MaxValue;
+            for (var ptr = listStart; ptr < listEnd && maxCount > 0; ptr += 0x48, maxCount--)
+            {
+                var state = M.Read<SkillUiStateOffsets>(ptr);
+                if (state.SkillId == Id)
+                    return ptr;
+            }
+            return long.MaxValue;
         }
 
 
@@ -165,7 +165,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var statPtrStart = M.Read<long>(address + 0xE8);
             var statPtrEnd = M.Read<long>(address + 0xF0);
 
-            var totalStats = (int) (statPtrEnd - statPtrStart);
+            var totalStats = (int)(statPtrEnd - statPtrStart);
             var bytes = M.ReadMem(statPtrStart, totalStats);
 
             for (var i = 0; i < bytes.Length; i += 8)
@@ -176,7 +176,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 {
                     key = BitConverter.ToInt32(bytes, i);
                     value = BitConverter.ToInt32(bytes, i + 0x04);
-                } 
+                }
                 catch (Exception e)
                 {
                     DebugWindow.LogError($"ActorSkill.ReadStats -> BitConverter failed, i: {i}");
@@ -184,7 +184,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                     continue;
                 }
 
-                stats[(GameStat) key] = value;
+                stats[(GameStat)key] = value;
             }
         }
 

@@ -2,11 +2,11 @@
 
 namespace GameOffsets
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct ComponentNameAndIndexStruct
-	{
-		public long NamePtr;
-		public int Index;
-		public int padding;
-	}
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ComponentNameAndIndexStruct
+    {
+        public long NamePtr;
+        public int Index;
+        public int Padding;
+    }
 }

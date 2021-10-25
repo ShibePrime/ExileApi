@@ -12,7 +12,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                var num = (int) inv;
+                var num = (int)inv;
 
                 if (num < 0 || num >= InventoryCount)
                     return null;

@@ -121,24 +121,23 @@ namespace ExileCore
 
         public byte[] ReadBytes(long addr, long size)
         {
-            return ReadMem(addr, (int) size);
+            return ReadMem(addr, (int)size);
         }
 
-        public T[] ReadAsArray<T>(long addr, int nsize) where T : struct
+        public T[] ReadAsArray<T>(long addr, int size) where T : struct
         {
-            T[] buffer = new T[nsize];
+            T[] buffer = new T[size];
             try
             {
-                ProcessMemory.ReadProcessMemoryArray(OpenProcessHandle, new IntPtr(addr), buffer, 0, nsize);
+                ProcessMemory.ReadProcessMemoryArray(OpenProcessHandle, new IntPtr(addr), buffer, 0, size);
                 return buffer;
             }
             catch (Exception e)
             {
-                DebugWindow.LogError($"ReadAsArray-> A: {addr} Size: {nsize}. {e}");
+                DebugWindow.LogError($"ReadAsArray-> A: {addr} Size: {size}. {e}");
                 throw;
             }
         }
-
         public List<T> ReadStructsArray<T>(long startAddress, long endAddress, int structSize, RemoteMemoryObject game)
             where T : RemoteMemoryObject, new()
         {
@@ -175,9 +174,9 @@ namespace ExileCore
             var start = Read<long>(address);
 
             //var end = ReadLong(address + 0x8);
-            var last = Read<long>(address + 0x10);
+            var last = Read<long>(address + 0x8);
 
-            var length = (int) (last - start);
+            var length = (int)(last - start);
             var bytes = ReadMem(new IntPtr(start), length);
             var result = new List<T>();
             var sw = Stopwatch.StartNew();
@@ -211,8 +210,8 @@ namespace ExileCore
                 return result;
 
             sw.Restart();
-            result = new List<long>((int) (length / offset) + 1);
-            var bytes = ReadMem(startAddress, (int) length);
+            result = new List<long>((int)(length / offset) + 1);
+            var bytes = ReadMem(startAddress, (int)length);
 
             for (var i = 0; i < length; i += offset)
             {
@@ -425,7 +424,7 @@ namespace ExileCore
             //For me ~1400 vs ~800ms
 
             if (MultiThreading)
-                Parallel.For((long) 0, patterns.Length, FindPattern);
+                Parallel.For((long)0, patterns.Length, FindPattern);
             else
             {
                 for (var index = 0; index < patterns.Length; index++)
@@ -448,7 +447,7 @@ namespace ExileCore
             if (ptrArray.First == IntPtr.Zero)
                 return new List<T>();
 
-            var Length = (int) (ptrArray.Last.ToInt64() - ptrArray.First.ToInt64()) / offset;
+            var Length = (int)(ptrArray.Last.ToInt64() - ptrArray.First.ToInt64()) / offset;
             var result = new List<T>(Length);
             var pointers = ReadPointersArray(ptrArray.First.ToInt64(), ptrArray.Last.ToInt64(), offset);
 

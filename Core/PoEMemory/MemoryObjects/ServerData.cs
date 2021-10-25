@@ -326,7 +326,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
 
             //first += 0x00; // Array is 8x16 bytes => 8 byte address (Map Info) + 8 byte address (Atlas File)
-            for (int i = 0; i < 8; ++i, first += 0x10)
+            for (int i = 0; i < 4; ++i, first += 0x10)
             {
                 var map = ReadObject<WorldArea>(first);
                 maps[(AtlasRegionE) i] = map ?? new WorldArea();
