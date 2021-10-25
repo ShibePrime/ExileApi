@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using GameOffsets;
@@ -51,7 +50,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var result = new Dictionary<int, InventSlotItem>();
 
             var stack = new Stack<HashNode>();
-            var startNode = GetObject<HashNode>(pointer); // ReadObject<HashNode>(pointer);
+            var startNode = GetObject<HashNode>(pointer);
             var item = startNode.Root;
             stack.Push(item);
 

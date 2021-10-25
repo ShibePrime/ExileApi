@@ -9,7 +9,7 @@ namespace ExileCore.PoEMemory.Elements
     {
         public long TotalStashes => StashInventoryPanel?.ChildCount ?? 0;
         public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8)) : null;
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address  + 0x2D0)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2E0)) : null;
         private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x980)) : null;
         public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x988)) : null;
         public Element ViewAllStashPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x990)) : null;
@@ -86,7 +86,7 @@ namespace ExileCore.PoEMemory.Elements
             {
                 return string.Empty;
             }
-            
+
             var stashTab = ViewAllStashPanelChildren.ElementAt(index);
             var stashTabTextElement = stashTab?.GetChildAtIndex(0).Children?.Last();
             return stashTabTextElement?.Text ?? string.Empty;
