@@ -14,7 +14,7 @@ namespace ExileCore.PoEMemory.Elements
         public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x988)) : null;
         public Element ViewAllStashPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x990)) : null;
         public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x998)) : null;
-        public int IndexVisibleStash => M.Read<int>(Address + 0x2F0, 0x278, 0x9A8);
+        public int IndexVisibleStash => M.Read<int>(Address + 0x2F0, 0x278, 0x9E8);
         public Inventory VisibleStash => GetVisibleStash();
         public IList<string> AllStashNames => GetAllStashNames();
         public IList<Inventory> AllInventories => GetAllInventories();
