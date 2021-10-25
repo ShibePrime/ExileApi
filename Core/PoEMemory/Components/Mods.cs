@@ -81,7 +81,7 @@ namespace ExileCore.PoEMemory.Components
         {
             var mods = new List<ItemMod>();
             if (Address == 0) return mods;
-            if (source.Size / ModsComponentOffsets.ItemModRecordSize > 12) return mods;
+            if (source.Size / ModsComponentOffsets.ItemModRecordSize > 24) return mods;
 
             for (var modAddress = source.First;
                 modAddress < source.Last;
