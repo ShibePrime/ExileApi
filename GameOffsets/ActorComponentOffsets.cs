@@ -22,6 +22,7 @@ namespace GameOffsets
         // [FieldOffset(0x128)] public Vector2 SkillDestination;
         [FieldOffset(0x690)] public NativePtrArray ActorSkillsArray;
         [FieldOffset(0x6C0)] public NativePtrArray ActorVaalSkills;
-        [FieldOffset(0x6D8)] public NativePtrArray DeployedObjectArray; 
+        [FieldOffset(0x6D8)] public NativePtrArray DeployedObjectArray;
+        [FieldOffset(0x538+0x170)] public NativePtrArray SkillUiStateOffsetsArray;
     }
 }

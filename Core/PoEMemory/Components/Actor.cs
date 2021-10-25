@@ -91,7 +91,7 @@ namespace ExileCore.PoEMemory.Components
                     addr < skillsEndPointer;
                     addr += 16) //16 because we are reading each second pointer (pointer vectors)
                 {
-                    result.Add(ReadObject<ActorSkill>(addr));
+                    result.Add(ReadObject<ActorSkill>(addr).SetActor(this));
                 }
 
                 return result;
@@ -116,6 +116,20 @@ namespace ExileCore.PoEMemory.Components
                 }
 
                 return result;
+            }
+        }
+
+        public IEnumerable<long> SkillUiStateOffsets
+        {
+            get
+            {
+                var start = Struct.SkillUiStateOffsetsArray.First;
+                var end = Struct.SkillUiStateOffsetsArray.Last;
+                int maxCount = 100;
+                for (var ptr = start; ptr < end && maxCount > 0; ptr += 0x48, maxCount--)
+                {
+                    yield return ptr;
+                }
             }
         }
 
