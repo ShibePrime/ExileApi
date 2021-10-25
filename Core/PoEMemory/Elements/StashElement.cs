@@ -8,18 +8,18 @@ namespace ExileCore.PoEMemory.Elements
     public class StashElement : Element
     {
         public long TotalStashes => StashInventoryPanel != null ? StashInventoryPanel.ChildCount : 0;
-        public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0)) : null;
+        public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x48)) : null;
 
         // Nice struct starts at 0xB80 till 0xBD0 and all are 8 byte long pointers.
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address  + 0x2B8)) : null;
-        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x940)) : null;
-        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x948)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2E0)) : null;
+        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x980)) : null;
+        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x988)) : null;
         public Element ViewAllStashPanel =>
-            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x950)) : null; // going extra inside.
+            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x990)) : null; // going extra inside.
 
         //Not fixed
-        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8L, 0x238, 0x958)) : null;
-        public int IndexVisibleStash => M.Read<int>(Address + 0x2C8L, 0x238, 0x9A8);
+        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x998)) : null;
+        public int IndexVisibleStash => M.Read<int>(Address + 0x2F0, 0x278, 0x9E8);
         public Inventory VisibleStash => GetVisibleStash();
         public IList<string> AllStashNames => GetAllStashNames();
         public IList<Inventory> AllInventories => GetAllInventories();
