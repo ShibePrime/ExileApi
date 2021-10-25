@@ -192,7 +192,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             get
             {
                 var invAddr = M.Read<long>(Address + 0x410, 0x640, 0x38);
-                y = y * xLength;
+                y *= xLength;
                 var itmAddr = M.Read<long>(invAddr + (x + y) * 8);
 
                 if (itmAddr <= 0)
@@ -214,7 +214,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             // Orriginal Value of ChildCount should be 0x18
             for (var j = 1; j < InventoryList.InventoryCount; j++)
             {
-                if (TheGame.IngameState.IngameUi.InventoryPanel[(InventoryIndex) j].Address == Address)
+                if (TheGame.IngameState.IngameUi.InventoryPanel[(InventoryIndex)j].Address == Address)
                 {
                     _cacheInventoryType = InventoryType.PlayerInventory;
                     return _cacheInventoryType;

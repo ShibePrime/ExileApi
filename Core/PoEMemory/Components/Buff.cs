@@ -11,26 +11,26 @@ namespace ExileCore.PoEMemory.Components
         public Buff()
         {
             _name = new Lazy<string>(() =>
-            {
-                var formattableString = $"{nameof(Buff)}{BuffOffsets.Name}";
-                string read;
-                var tries = 0;
-
-                do
                 {
-                    read = Cache.StringCache.Read(formattableString,
-                        () => M.ReadStringU(M.Read<BuffStringOffsets>(BuffOffsets.Name).String));
+                    var formattableString = $"{nameof(Buff)}{BuffOffsets.Name}";
+                    string read;
+                    var tries = 0;
 
-                    if (read == string.Empty) Cache.StringCache.Remove(formattableString);
+                    do
+                    {
+                        read = Cache.StringCache.Read(formattableString,
+                            () => M.ReadStringU(M.Read<BuffStringOffsets>(BuffOffsets.Name).String));
 
-                    tries++;
-                } while (read == string.Empty && tries < 7);
+                        if (read == string.Empty) Cache.StringCache.Remove(formattableString);
 
-                return read;
-            });
+                        tries++;
+                    } while (read == string.Empty && tries < 7);
+
+                    return read;
+                });
         }
 
-        public BuffOffsets BuffOffsets => (BuffOffsets) (_offsets = _offsets ?? M.Read<BuffOffsets>(Address));
+        public BuffOffsets BuffOffsets => (BuffOffsets)(_offsets ??= M.Read<BuffOffsets>(Address));
         public string Name => _name.Value;
         public byte Charges => BuffOffsets.Charges;
 

@@ -32,15 +32,6 @@ namespace ExileCore.PoEMemory.Elements
 
         public Element MessageBox => GetChildAtIndex(1)?.GetChildAtIndex(2)?.GetChildAtIndex(1);
         public long TotalMessageCount => MessageBox?.ChildCount ?? 0;
-        public new EntityLabel this[int index]
-        {
-            get
-            {
-                if (index < TotalMessageCount)
-                    return MessageBox.GetChildAtIndex(index).AsObject<EntityLabel>();
-
-                return null;
-            }
-        }
+        public new EntityLabel this[int index] => index < TotalMessageCount ? MessageBox.GetChildAtIndex(index).AsObject<EntityLabel>() : null;
     }
 }

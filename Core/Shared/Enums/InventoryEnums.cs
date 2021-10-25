@@ -3,38 +3,59 @@ using System;
 namespace ExileCore.Shared.Enums
 {
     [Flags]
-    public enum InventoryTabPermissions : uint
+    public enum InventoryTabPermissions : byte
     {
-        Add = 2,
         None = 0,
-        Remove = 4,
-        View = 1
+        View = 1,
+        Add = 2,
+        Remove = 4
     }
 
     public enum InventoryTabType : uint
     {
-        Currency = 3,
-        Divination = 6,
-        Essence = 8,
-        Fragment = 9,
-        Map = 5,
-        Normal = 0,
-        Premium = 1,
-        Quad = 7,
-        Todo2 = 2,
-        Todo4 = 4
+        Normal,
+        Premium,
+        Todo2,
+        Currency,
+        Todo4,
+        Map,
+        Divination,
+        Quad,
+        Essence,
+        Fragment,
+        Todo10,
+        Todo11,
+        Delve,
+        Blight,
+        Metamorph,
+        Delirium
     }
 
     [Flags]
     public enum InventoryTabFlags : byte
     {
-        Hidden = 0x80,
-        MapSeries = 0x40,
-        Premium = 4,
-        Public = 0x20,
         RemoveOnly = 1,
-        Unknown1 = 0x10,
         Unknown2 = 2,
-        Unknown3 = 8
+        Premium = 4,
+        Unknown3 = 8,
+        Unknown1 = 0x10,
+        Public = 0x20,
+        MapSeries = 0x40,
+        Hidden = 0x80
+    }
+
+    [Flags]
+    public enum InventoryTabAffinityFlags : ushort
+    {
+        Currency = 0x0008,
+        Unique = 0x0010,
+        Map = 0x0020,
+        Divination = 0x0040,
+        Essence = 0x0100,
+        Fragment = 0x0200,
+        Delve = 0x1000,
+        Blight = 0x2000,
+        Meta = 0x3000,
+        Delirium = 0x4000
     }
 }

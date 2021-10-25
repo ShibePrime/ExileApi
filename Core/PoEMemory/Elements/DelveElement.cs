@@ -77,11 +77,11 @@ namespace ExileCore.PoEMemory.Elements
         private string _testString4;
         private string _testString5;
         private string _testStringGood;
-        public string TestString => _testString = _testString ?? M.ReadStringU(M.Read<long>(Address));
-        public string TestStringGood => _testStringGood = _testStringGood ?? _testString.InsertBeforeUpperCase(Environment.NewLine);
-        public string TestString2 => _testString2 = _testString2 ?? M.ReadStringU(M.Read<long>(Address + 0x8));
-        public string TestString3 => _testString3 = _testString3 ?? M.ReadStringU(M.Read<long>(Address + 0x30));
-        public string TestString4 => _testString4 = _testString4 ?? M.ReadStringU(M.Read<long>(Address + 0x60));
+        public string TestString => _testString ??= M.ReadStringU(M.Read<long>(Address));
+        public string TestStringGood => _testStringGood ??= _testString.InsertBeforeUpperCase(Environment.NewLine);
+        public string TestString2 => _testString2 ??= M.ReadStringU(M.Read<long>(Address + 0x8));
+        public string TestString3 => _testString3 ??= M.ReadStringU(M.Read<long>(Address + 0x30));
+        public string TestString4 => _testString4 ??= M.ReadStringU(M.Read<long>(Address + 0x60));
 
         public string TestString5
         {

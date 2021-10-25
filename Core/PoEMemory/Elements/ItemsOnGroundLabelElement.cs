@@ -37,7 +37,7 @@ namespace ExileCore.PoEMemory.Elements
                 var result = new List<LabelOnGround>();
 
                 if (address <= 0)
-                    return null;
+                    return new List<LabelOnGround>();
 
                 var limit = 0;
 
@@ -51,7 +51,7 @@ namespace ExileCore.PoEMemory.Elements
                     limit++;
 
                     if (limit > 100000)
-                        return null;
+                        return new List<LabelOnGround>();
                 }
 
                 return result;

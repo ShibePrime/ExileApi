@@ -41,14 +41,15 @@ namespace ExileCore.PoEMemory.MemoryObjects
             LoginStatePtr = AllGameStates["LoginState"].Address;
             SelectCharacterStatePtr = AllGameStates["SelectCharacterState"].Address;
             WaitingStatePtr = AllGameStates["WaitingState"].Address;
+            InGameStatePtr = AllGameStates["InGameState"].Address;
             LoadingStatePtr = AllGameStates["LoadingState"].Address;
             EscapeStatePtr = AllGameStates["EscapeState"].Address;
+
             LoadingState = new AreaLoadingState(AllGameStates["AreaLoadingState"]);
-            InGameStatePtr = AllGameStates["InGameState"].Address;
             IngameState = new IngameState(AllGameStates["InGameState"]);
 
             _inGame = new FrameCache<bool>(
-                () => IngameState.Address != 0 && IngameState.Data.Address != 0 && IngameState.ServerData.Address != 0 && !IsLoading /*&&
+                () => IngameState.Address != 0 && IngameState.Data.Address != 0 && IngameState.Data.ServerData.Address != 0 && !IsLoading /*&&
                                                  IngameState.ServerData.IsInGame*/);
 
             Files = new FilesContainer(m);
@@ -91,10 +92,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
             if (gameStateController == null) return false;
             var M = gameStateController.M;
             var address = Instance.Address + 0x20;
-            var start = M.Read<long>(address);
 
-            //var end = Read<long>(address + 0x10);
+            var start = M.Read<long>(address);
             var last = M.Read<long>(address + 0x8);
+            //var end = Read<long>(address + 0x10);
 
             var length = (int)(last - start);
             var bytes = M.ReadMem(start, length);
@@ -115,14 +116,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
             var header = M.Read<GameStateHashNode>(pointer).Next;
             var currentNodeAddress = M.Read<long>(header);
 
-            while (currentNodeAddress != header)
+            while (currentNodeAddress != header && currentNodeAddress != 0)
             {
                 var currentNode = M.Read<GameStateHashNode>(currentNodeAddress);
-
-                if (currentNodeAddress == 0)
-                {
-                    break;
-                }
 
                 var gameState = new GameState(currentNode.StateAddress)
                 {
@@ -173,9 +169,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
             Address = parent.Address;
             StateName = parent.StateName;
         }
-        //This is actualy pointer to loading screen stuff (image, etc), but should works fine.
+        //This is actually pointer to loading screen stuff (image, etc), but should works fine.
         public bool IsLoading => M.Read<long>(Address + 0xD8) == 1;
-        public string AreaName => M.ReadStringU(M.Read<long>(Address + 0x1F0));
+        public string AreaName => M.ReadStringU(M.Read<long>(Address + 0x380));
 
         public override string ToString()
         {

@@ -1,6 +1,6 @@
 namespace ExileCore.Shared
 {
-    public class CoroutineTask<T> : ICoroutine
+    public class CoroutineTask : ICoroutine
     {
         public void Continue()
         {

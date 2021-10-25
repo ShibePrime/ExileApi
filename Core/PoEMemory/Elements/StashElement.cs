@@ -7,19 +7,14 @@ namespace ExileCore.PoEMemory.Elements
 {
     public class StashElement : Element
     {
-        public long TotalStashes => StashInventoryPanel != null ? StashInventoryPanel.ChildCount : 0;
-        public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C0)) : null;
-
-        // Nice struct starts at 0xB80 till 0xBD0 and all are 8 byte long pointers.
-        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address  + 0x2B8)) : null;
-        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x940)) : null;
-        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x948)) : null;
-        public Element ViewAllStashPanel =>
-            Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8, 0x238, 0x950)) : null; // going extra inside.
-
-        //Not fixed
-        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2C8L, 0x238, 0x958)) : null;
-        public int IndexVisibleStash => M.Read<int>(Address + 0x2C8L, 0x238, 0x9A8);
+        public long TotalStashes => StashInventoryPanel?.ChildCount ?? 0;
+        public Element ExitButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2D8)) : null;
+        private Element StashTitlePanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address  + 0x2D0)) : null;
+        private Element StashInventoryPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x980)) : null;
+        public Element ViewAllStashButton => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x988)) : null;
+        public Element ViewAllStashPanel => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x990)) : null;
+        public Element ButtonStashTabListPin => Address != 0 ? GetObject<Element>(M.Read<long>(Address + 0x2F0, 0x278, 0x998)) : null;
+        public int IndexVisibleStash => M.Read<int>(Address + 0x2F0, 0x278, 0x9A8);
         public Inventory VisibleStash => GetVisibleStash();
         public IList<string> AllStashNames => GetAllStashNames();
         public IList<Inventory> AllInventories => GetAllInventories();
@@ -80,50 +75,21 @@ namespace ExileCore.PoEMemory.Elements
             var listChild = ViewAllStashPanel.Children.FirstOrDefault(x => x.ChildCount == TotalStashes);
             return listChild?.Children ?? new List<Element>();
         }
-        
-        public IList<Element> ViewAllStashPanelChildren
-        {
-            get
-            {
-                Element viewAllStashPanel = ViewAllStashPanel;
-                if (viewAllStashPanel == null)
-                {
-                    return null;
-                }
-                return viewAllStashPanel.Children.Last(x => x.ChildCount == TotalStashes).Children.Where(delegate(Element x)
-                {
-                    IList<Element> children = x.Children;
-                    return children != null && children.Count > 0;
-                }).ToList();
-            }
-        }
+
+        public IList<Element> ViewAllStashPanelChildren => ViewAllStashPanel?
+                    .Children.Last(x => x.ChildCount == TotalStashes)
+                    .Children?.Where(y => y.Children.Any()).ToList();
 
         public string GetStashName(int index)
         {
-            if (index >= TotalStashes || index < 0)
+            if (index >= TotalStashes || index < 0 || ViewAllStashPanelChildren == null)
             {
                 return string.Empty;
             }
-            var viewAllStashPanelChildren = this.ViewAllStashPanelChildren;
-            Element element;
-            if (viewAllStashPanelChildren == null)
-            {
-                element = null;
-            }
-            else
-            {
-                var element2 = viewAllStashPanelChildren.ElementAt(index);
-                IList<Element> children = element2.GetChildAtIndex(0).Children;
-                if (element2 == null)
-                {
-                    element = null;
-                }
-                else
-                {
-                    element = children?.Last();
-                }
-            }
-            return element == null ? string.Empty : element.Text;
+            
+            var stashTab = ViewAllStashPanelChildren.ElementAt(index);
+            var stashTabTextElement = stashTab?.GetChildAtIndex(0).Children?.Last();
+            return stashTabTextElement?.Text ?? string.Empty;
         }
     }
 }

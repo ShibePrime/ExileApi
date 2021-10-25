@@ -52,7 +52,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
                 {
                     var enumValue = GetNameFromId(stat.Value.Key);
                     if (!enumValues.Add(enumValue))
-                        enumValue = enumValue + "2";
+                        enumValue += "2";
                     sb.AppendFormat("\t\t/// <summary>\n\t\t/// {0}\n\t\t/// </summary>\n\t\t{1} = {2},\n\n",
                         stat.Value.Key, enumValue, stat.Key);
                 }
@@ -101,11 +101,11 @@ namespace ExileCore.PoEMemory.FilesInMemory
                 Key = RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{addr + 0}",
                     () => m.ReadStringU(m.Read<long>(addr + 0), 255));
 
-				Flag0 = m.Read<byte>(addr + 0x8) != 0;
-				IsLocal = m.Read<byte>(addr + 0x9) != 0;
-				IsWeaponLocal = m.Read<byte>(addr + 0xA) != 0;
-                Type = Key.Contains("%") ? StatType.Percents : (StatType) m.Read<int>(addr + 0xB);
-				Flag3 = m.Read<byte>(addr + 0xF) != 0;
+                Flag0 = m.Read<byte>(addr + 0x8) != 0;
+                IsLocal = m.Read<byte>(addr + 0x9) != 0;
+                IsWeaponLocal = m.Read<byte>(addr + 0xA) != 0;
+                Type = Key.Contains("%") ? StatType.Percents : (StatType)m.Read<int>(addr + 0xB);
+                Flag3 = m.Read<byte>(addr + 0xF) != 0;
 
                 UserFriendlyName =
                     RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{addr + 0x10}",

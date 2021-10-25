@@ -18,19 +18,13 @@ namespace ExileCore.PoEMemory.Components
         public float X => Pos.X;
         public float Y => Pos.Y;
         public float Z => Pos.Z;
-        public Vector3 Pos
-        {
-            get
-            {
-                return new Vector3(RenderStruct.Pos.X, RenderStruct.Pos.Y, -RenderStruct.Pos.Z);
-            }
-        }
+        public Vector3 Pos => RenderStruct.Pos;
         public Vector3 InteractCenter => Pos + Bounds / 2;
-        public float Height => -RenderStruct.Height > 0.01f ? -RenderStruct.Height : 0f;
+        public float Height => RenderStruct.Height > 0.01f ? RenderStruct.Height : 0f;
         public string Name => Cache.StringCache.Read($"{nameof(Render)}{RenderStruct.Name.buf}", () => RenderStruct.Name.ToString(M));
         public Vector3 Rotation => RenderStruct.Rotation;
         public Vector3 Bounds => RenderStruct.Bounds;
-        public Vector3 MeshRoration => RenderStruct.Rotation;
+        public Vector3 MeshRotation => RenderStruct.Rotation;
         public float TerrainHeight => Height;
     }
 }

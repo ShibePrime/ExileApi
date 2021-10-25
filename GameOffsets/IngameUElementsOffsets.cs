@@ -5,58 +5,59 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct IngameUElementsOffsets
     {
-        [FieldOffset(0x218)] public long GetQuests;
-        [FieldOffset(0x6F0)] public long GameUI;
-        [FieldOffset(0x390)] public long Mouse;
-        [FieldOffset(0x398)] public long SkillBar;
-        [FieldOffset(0x3A0)] public long HiddenSkillBar;
+        [FieldOffset(0x258)] public long GetQuests;
+        [FieldOffset(0x280)] public long GameUI;
+        [FieldOffset(0x3C0)] public long Mouse;
+        [FieldOffset(0x3C8)] public long SkillBar;
+        [FieldOffset(0x3D0)] public long HiddenSkillBar;
         [FieldOffset(0x478)] public long ChatPanel;
-        [FieldOffset(0x4A0)] public long QuestTracker;
+        [FieldOffset(0x508)] public long QuestTracker;
         [FieldOffset(0x570)] public long OpenLeftPanel;
         [FieldOffset(0x578)] public long OpenRightPanel;
         [FieldOffset(0x5A8)] public long InventoryPanel;
         [FieldOffset(0x5B0)] public long StashElement;
-        [FieldOffset(0x5F8)] public long AtlasPanel;
-        [FieldOffset(0x628)] public long WorldMap;
+        [FieldOffset(0x658)] public long AtlasPanel;
+        [FieldOffset(0x688)] public long WorldMap;
         [FieldOffset(0x6B0)] public long Map;
         [FieldOffset(0x6B8)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x658)] public long BanditDialog;
-        [FieldOffset(0x6D8)] public long NpcDialog;
-        [FieldOffset(0x6F0)] public long QuestRewardWindow;
-        [FieldOffset(0x6F8)] public long PurchaseWindow;
-        [FieldOffset(0x700)] public long ExpeditionPurchaseWindow;
-        [FieldOffset(0x708)] public long SellWindow;
-        [FieldOffset(0x710)] public long ExpeditionSellWindow;
-        [FieldOffset(0x718)] public long TradeWindow;
-        [FieldOffset(0x730)] public long LabyrinthDivineFontPanel;
-        [FieldOffset(0x750)] public long MapDeviceWindow;
-        [FieldOffset(0x7A8)] public long IncursionWindow;
-        [FieldOffset(0x7C8)] public long DelveWindow;
-        [FieldOffset(0x7D8)] public long ZanaMissionChoice;
-        [FieldOffset(0x7E8)] public long BetrayalWindow;
-        [FieldOffset(0x800)] public long CraftBenchWindow;
-        [FieldOffset(0x808)] public long UnveilWindow;
-        [FieldOffset(0x830)] public long SynthesisWindow;
-        [FieldOffset(0x840)] public long MetamorphWindow;
-        [FieldOffset(0x850)] public long HarvestWindow;
-        [FieldOffset(0x888)] public long RitualWindow;
-        [FieldOffset(0x890)] public long RitualFavourPanel;
-        [FieldOffset(0x898)] public long UltimatumProgressPanel;
-        [FieldOffset(0x8E0)] public long DelveDarkness;
-        [FieldOffset(0x920)] public long AreaInstanceUi;
-        [FieldOffset(0xA20)] public long InvitesPanel;
-        [FieldOffset(0xA70)] public long GemLvlUpPanel;
-        [FieldOffset(0xB50)] public long ItemOnGroundTooltip;
-        [FieldOffset(0xAA0)] public long MapTabWindowStartPtr;
+        [FieldOffset(0x6C0)] public long BanditDialog;
+        [FieldOffset(0x748)] public long NpcDialog;
+        //[FieldOffset(0x750)] public long LeagueNpcDialog;
+        [FieldOffset(0x760)] public long QuestRewardWindow;
+        [FieldOffset(0x768)] public long PurchaseWindow;
+        [FieldOffset(0x770)] public long ExpeditionPurchaseWindow;
+        [FieldOffset(0x778)] public long SellWindow;
+        [FieldOffset(0x780)] public long ExpeditionSellWindow;
+        [FieldOffset(0x788)] public long TradeWindow;
+        [FieldOffset(0x790)] public long LabyrinthDivineFontPanel;
+        [FieldOffset(0x7C0)] public long MapDeviceWindow;
+        [FieldOffset(0x818)] public long IncursionWindow;
+        [FieldOffset(0x838)] public long DelveWindow;
+        [FieldOffset(0x848)] public long ZanaMissionChoice;
+        [FieldOffset(0x858)] public long BetrayalWindow;
+        [FieldOffset(0x870)] public long CraftBenchWindow;
+        [FieldOffset(0x878)] public long UnveilWindow;
+        [FieldOffset(0x8A0)] public long SynthesisWindow;
+        [FieldOffset(0x840)] public long MetamorphWindow; // TODO
+        [FieldOffset(0x8C8)] public long HarvestWindow;
+        [FieldOffset(0x888)] public long RitualWindow; // TODO
+        [FieldOffset(0x890)] public long RitualFavourPanel; // TODO
+        [FieldOffset(0x898)] public long UltimatumProgressPanel; // TODO
+        [FieldOffset(0x8E0)] public long DelveDarkness; // Is actually debuff panel.
+        [FieldOffset(0x990)] public long AreaInstanceUi;
+        [FieldOffset(0xA98)] public long InvitesPanel; // TODO
+        [FieldOffset(0xAE8)] public long GemLvlUpPanel;
+        [FieldOffset(0xBC0)] public long ItemOnGroundTooltip; // TODO
+        [FieldOffset(0xAA0)] public long MapTabWindowStartPtr; // TODO
 
-        //[FieldOffset(0x218)] public long GetQuests;
-        //[FieldOffset(0x240)] public long GameUI;
-        //[FieldOffset(0x248)] public long LeftGameUI;
-        //[FieldOffset(0x250)] public long RightGameUI;
-        //[FieldOffset(0x258)] public long HealthPanel;
-        //[FieldOffset(0x260)] public long ManaPanel;
-        //[FieldOffset(0x280)] public long FlaskPanel;
-        //[FieldOffset(0x288)] public long ExperienceBarPanel;
+        //[FieldOffset(0x258)] public long GetQuests;
+        //[FieldOffset(0x280)] public long GameUI;
+        //[FieldOffset(0x288)] public long LeftGameUI;
+        //[FieldOffset(0x290)] public long RightGameUI;
+        //[FieldOffset(0x298)] public long HealthPanel;
+        //[FieldOffset(0x2A0)] public long ManaPanel;
+        //[FieldOffset(0x2C0)] public long FlaskPanel;
+        //[FieldOffset(0x2C8)] public long ExperienceBarPanel;
         //[FieldOffset(0x298)] public long MenuPanel;
         //[FieldOffset(0x2A0)] public long MenuButton;
         //[FieldOffset(0x2B8)] public long ClockPanel;

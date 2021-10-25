@@ -8,27 +8,27 @@ namespace ExileCore.PoEMemory.FilesInMemory
     public class PassiveSkills : UniversalFileWrapper<PassiveSkill>
     {
         private List<PassiveSkill> _EntriesList;
-        private bool loaded;
+        private bool _Loaded;
 
         public PassiveSkills(IMemory m, Func<long> address) : base(m, address)
         {
         }
 
         public Dictionary<int, PassiveSkill> PassiveSkillsDictionary { get; } = new Dictionary<int, PassiveSkill>();
-        public new IList<PassiveSkill> EntriesList => _EntriesList ?? (_EntriesList = base.EntriesList.ToList());
+        public new IList<PassiveSkill> EntriesList => _EntriesList ??= base.EntriesList.ToList();
 
         public PassiveSkill GetPassiveSkillByPassiveId(int index)
         {
             CheckCache();
 
-            if (!loaded)
+            if (!_Loaded)
             {
                 foreach (var passiveSkill in EntriesList)
                 {
                     EntryAdded(passiveSkill.Address, passiveSkill);
                 }
 
-                loaded = true;
+                _Loaded = true;
             }
 
             PassiveSkillsDictionary.TryGetValue(index, out var result);

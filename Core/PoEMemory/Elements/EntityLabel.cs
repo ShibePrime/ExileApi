@@ -8,7 +8,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var num = (int) M.Read<long>(Address + 0xC60);
+                var num = (int)M.Read<long>(Address + 0x3B0);
                 return num <= 0 || num > 1024 ? 0 : num;
             }
         }
@@ -17,7 +17,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var num = (int) M.Read<long>(Address + 0xC68);
+                var num = (int)M.Read<long>(Address + 0x3B8);
                 return num <= 0 || num > 1024 ? 0 : num;
             }
         }
@@ -26,28 +26,20 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var LabelLen = Length;
+                var length = Length;
 
-                if (LabelLen <= 0 || LabelLen > 1024)
+                if (length <= 0 || length > 1024)
                 {
                     return string.Empty;
-
-                    // return null;
                 }
 
-                if (Capacity >= 8)
-                {
-                    var read = M.Read<long>(Address + 0xC50);
-
-                    return M.ReadStringU(read, LabelLen * 2, false);
-                }
-
-                return M.ReadStringU(Address + 0xC50, LabelLen * 2, false);
+                var address = Capacity < 8 ? Address + 0x3A0 : M.Read<long>(Address + 0x3A0);
+                return M.ReadStringU(address, length * 2, false);
             }
         }
 
-        public string Text2 => NativeStringReader.ReadString(Address + 0x2E8+8, M);
+        public string Text2 => NativeStringReader.ReadString(Address + 0x3A0, M);
 
-        public string Text3 => NativeStringReader.ReadStringLong(Address + 0x2E8+8, M);
+        public string Text3 => NativeStringReader.ReadStringLong(Address + 0x3A0, M);
     }
 }

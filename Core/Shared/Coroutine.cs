@@ -15,7 +15,7 @@ namespace ExileCore.Shared
         {
             Name = name ?? MathHepler.GetRandomWord(13);
 
-            OwnerName = Owner == null ? "Free" : Owner.GetType().Namespace;
+            OwnerName = owner == null ? "Free" : owner.GetType().Namespace;
         }
 
         public Coroutine(Action action, IYieldBase condition, IPlugin owner, string name = null, bool infinity = true,
@@ -24,21 +24,14 @@ namespace ExileCore.Shared
             Running = autoStart;
             Started = DateTime.Now;
             Owner = owner;
-            switch (condition)
+            TimeoutForAction = condition switch
             {
-                case WaitTime _:
-                    TimeoutForAction = ((WaitTime) condition).Milliseconds.ToString();
-                    break;
-                case WaitRender _:
-                    TimeoutForAction = ((WaitRender) condition).HowManyRenderCountWait.ToString();
-                    break;
-                case WaitRandom _:
-                    TimeoutForAction = ((WaitRandom) condition).Timeout;
-                    break;
-                case WaitFunction _:
-                    TimeoutForAction = "Function -1";
-                    break;
-            }
+                WaitTime time => time.Milliseconds.ToString(),
+                WaitRender render => render.HowManyRenderCountWait.ToString(),
+                WaitRandom random => random.Timeout,
+                WaitFunction _ => "Function -1",
+                _ => TimeoutForAction
+            };
 
             Action = action;
             Condition = condition;
@@ -112,7 +105,7 @@ namespace ExileCore.Shared
         public event Action OnAutoRestart;
         public event EventHandler WhenDone;
 
-        public void UpdateCondtion(IYieldBase condition)
+        public void UpdateCondition(IYieldBase condition)
         {
             switch (condition)
             {
@@ -211,7 +204,7 @@ namespace ExileCore.Shared
             Current = GetEnumerator();
         }
 
-        public string Timeout => $"{_minWait.ToString()}-{_maxWait.ToString()}";
+        public string Timeout => $"{_minWait}-{_maxWait}";
 
         public sealed override IEnumerator GetEnumerator()
         {
@@ -346,7 +339,7 @@ namespace ExileCore.Shared
 
         public bool MoveNext()
         {
-            if (((IEnumerator) Current).MoveNext()) return true;
+            if ((Current as IEnumerator).MoveNext()) return true;
 
             Current = GetEnumerator();
             return false;

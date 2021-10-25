@@ -19,7 +19,7 @@ namespace ExileCore.PoEMemory.Components
 
         //x20 - some strings about item
         private string _name;
-        public string Name => _name ?? (_name = M.Read<NativeStringU>(Address + 0x10, 0x18).ToString(M));
+        public string Name => _name ??= M.Read<NativeStringU>(Address + 0x10, 0x18).ToString(M);
         public byte ItemCellsSizeX => M.Read<byte>(Address + 0x10, 0x10);
         public byte ItemCellsSizeY => M.Read<byte>(Address + 0x10, 0x11);
         private Influence InfluenceFlag => (Influence)BaseStruct.InfluenceFlag;

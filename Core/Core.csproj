@@ -339,7 +339,7 @@
     <Compile Include="PoEMemory\MemoryObjects\DeployedObject.cs" />
     <Compile Include="PoEMemory\MemoryObjects\DiagnosticElement.cs" />
     <Compile Include="PoEMemory\MemoryObjects\EntityList.cs" />
-    <Compile Include="PoEMemory\MemoryObjects\GameStateContoller.cs" />
+    <Compile Include="PoEMemory\MemoryObjects\GameStateController.cs" />
     <Compile Include="PoEMemory\MemoryObjects\GameUi.cs" />
     <Compile Include="PoEMemory\MemoryObjects\GemLvlUpPanel.cs" />
     <Compile Include="PoEMemory\MemoryObjects\GrantedEffectsPerLevel.cs" />

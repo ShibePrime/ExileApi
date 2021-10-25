@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using GameOffsets;
@@ -18,8 +19,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         }
 
         private ServerInventoryOffsets Struct => cachedValue.Value;
-        public InventoryTypeE InventType => (InventoryTypeE) Struct.InventType;
-        public InventorySlotE InventSlot => (InventorySlotE) Struct.InventSlot;
+        public InventoryTypeE InventType => (InventoryTypeE)Struct.InventType;
+        public InventorySlotE InventSlot => (InventorySlotE)Struct.InventSlot;
         public int Columns => Struct.Columns;
         public int Rows => Struct.Rows;
         public bool IsRequested => Struct.IsRequested == 1;
@@ -35,7 +36,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             get
             {
                 var invAddr = Struct.InventoryItemsPtr;
-                y = y * Columns;
+                y *= Columns;
                 var itmAddr = M.Read<long>(invAddr + (x + y) * 0x08);
 
                 if (itmAddr <= 0)

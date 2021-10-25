@@ -3,7 +3,7 @@ namespace ExileCore.Shared.Enums
     public enum InventoryIndex
     {
         None,
-        Helm = 2,
+        Helm = 7,
         Amulet,
         Chest,
         LWeapon,
@@ -38,6 +38,7 @@ namespace ExileCore.Shared.Enums
         Pet1,
         Pet2,
         Portal,
-        HelmAttachment2
+        HelmAttachment2,
+        BloodCrucible = 52
     }
 }

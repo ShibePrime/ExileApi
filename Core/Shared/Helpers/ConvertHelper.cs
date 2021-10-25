@@ -29,7 +29,7 @@ namespace ExileCore.Shared.Helpers
 
         public static Color? ConfigColorValueExtractor(this string[] line, int index)
         {
-            return IsNotNull(line, index) ? (Color?) line[index].ToBGRAColor() : null;
+            return IsNotNull(line, index) ? (Color?)line[index].ToBGRAColor() : null;
         }
 
         public static string ConfigValueExtractor(this string[] line, int index)
@@ -73,7 +73,7 @@ namespace ExileCore.Shared.Helpers
             var hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             var f = hue / 60 - Math.Floor(hue / 60);
 
-            value = value * 255;
+            value *= 255;
             var v = Convert.ToByte(value);
             var p = Convert.ToByte(value * (1 - saturation));
             var q = Convert.ToByte(value * (1 - f * saturation));

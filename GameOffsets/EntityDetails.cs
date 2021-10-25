@@ -9,11 +9,11 @@ namespace GameOffsets
         public PathEntityOffsets PathName;
 
         [FieldOffset(0x30)]
-        public long ComponentLookUpPtr;
+        public long ComponentLookupPtr;
 
         public override string ToString()
         {
-            return $"PathName: {PathName} ComponentLookUpPtr: {ComponentLookUpPtr}";
+            return $"PathName: {PathName} ComponentLookupPtr: {ComponentLookupPtr}";
         }
     }
 }

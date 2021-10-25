@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.Elements;
@@ -48,8 +47,6 @@ namespace ExileCore.PoEMemory
         public float Width => Elem.Width;
         public float Height => Elem.Height;
         public bool IsHighlighted => Elem.isHighlighted;
-        [Obsolete("Use IsHighlighted instead of isHighlighted, this will be removed for 3.15")] // remove this property at end of 3.14
-        public bool isHighlighted => IsHighlighted;
 
         public ColorBGRA BorderColor => new ColorBGRA(Elem.ElementBorderColor);
         public ColorBGRA BackgroundColor => new ColorBGRA(Elem.ElementBackgroundColor);
@@ -59,22 +56,13 @@ namespace ExileCore.PoEMemory
         public ColorBGRA TextBoxBackgroundColor => new ColorBGRA(Elem.TextBoxBackgroundColor);
         public ColorBGRA TextBoxOverlayColor => new ColorBGRA(Elem.TextBoxOverlayColor);
 
-        public virtual string Text
-        {
-            get
-            {
-                var text = AsObject<EntityLabel>().Text2;
-                return !string.IsNullOrWhiteSpace(text) ? text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}") : null;
-            }
-        }
+        public virtual string Text => Sanitize(AsObject<EntityLabel>().Text);
 
-        public virtual string LongText
+        public virtual string LongText => Sanitize(AsObject<EntityLabel>().Text3);
+
+        private static string Sanitize(string text)
         {
-            get
-            {
-                var text = AsObject<EntityLabel>().Text3;
-                return !string.IsNullOrWhiteSpace(text) ? text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}") : null;
-            }
+            return !string.IsNullOrWhiteSpace(text) ? text.Replace("\u00A0\u00A0\u00A0\u00A0", "{{icon}}") : string.Empty;
         }
 
         public bool IsVisible

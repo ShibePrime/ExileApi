@@ -52,7 +52,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public StashElement StashElement => GetObject<StashElement>(IngameUIElementsStruct.StashElement);
         public InventoryElement InventoryPanel => GetObject<InventoryElement>(IngameUIElementsStruct.InventoryPanel);
         public Element TreePanel => GetChildAtIndex(25);
-        public Element PVPTreePanel => GetChildAtIndex(26);
+        public Element PVPPanel => GetChildAtIndex(26);
         public AtlasElement AtlasPanel => GetObject<AtlasElement>(IngameUIElementsStruct.AtlasPanel);
         public AtlasElement Atlas => AtlasPanel; // Required to fit with TehCheats Api, Random Feature uses this field.
         public Map Map => _map ??= GetObject<Map>(IngameUIElementsStruct.Map);
@@ -86,7 +86,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public DivineFont LabyrinthDivineFontPanel =>
             GetObject<DivineFont>(IngameUIElementsStruct.LabyrinthDivineFontPanel);
-        
+
         public IEnumerable<QuestState> GetUncompletedQuests => GetQuestStates.Where(q => q.QuestStateId != 0);
         public IEnumerable<QuestState> GetCompletedQuests => GetQuestStates.Where(q => q.QuestStateId == 0);
         public List<QuestState> GetQuestStates => _cachedQuestStates?.Value;
