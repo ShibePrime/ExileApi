@@ -305,7 +305,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                         return CachePath;
                     }
 
-                    _path = Cache.StringCache.Read($"{entityDetails.PathName}{entityDetails.PathName.Length}", () => entityDetails.PathName.ToString(M));
+                    _path = Cache.StringCache.Read($"{entityDetails.PathName.Path}{entityDetails.PathName.Length}", () => entityDetails.PathName.ToString(M));
 
                     //  _path = p.ToString(M);
                     //_path= M.Read<PathEntityOffsets>(EntityOffsets.Head.MainObject).ToString(M);
@@ -314,7 +314,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                         _path = entityDetails.PathName.ToString(M);
 
                         // Cache.StringCache.Remove($"{nameof(Entity)}{EntityOffsets.Head.MainObject}");
-                        Cache.StringCache.Remove($"{entityDetails.PathName}{entityDetails.PathName.Length}");
+                        Cache.StringCache.Remove($"{entityDetails.PathName.Path}{entityDetails.PathName.Length}");
                     }
 
                     if (_path.Length > 0 && _path[0] != 'M')
