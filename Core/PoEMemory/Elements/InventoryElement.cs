@@ -8,7 +8,7 @@ namespace ExileCore.PoEMemory.Elements
     public class InventoryElement : Element
     {
         private InventoryList _allInventories;
-        private InventoryList AllInventories => _allInventories = _allInventories ?? GetObjectAt<InventoryList>(0x340);
+        private InventoryList AllInventories => _allInventories = _allInventories ?? GetObjectAt<InventoryList>(0x370);
         public Inventory this[InventoryIndex k] => AllInventories[k];
 
         public IList<Element> GetItemsInInventory()
@@ -26,35 +26,37 @@ namespace ExileCore.PoEMemory.Elements
                 case InventoryIndex.None:
                     throw new ArgumentOutOfRangeException(nameof(inventoryIndex));
                 case InventoryIndex.Helm:
-                    return EquippedItems.GetChildAtIndex(5);
-                case InventoryIndex.Amulet:
                     return EquippedItems.GetChildAtIndex(6);
-                case InventoryIndex.Chest:
+                case InventoryIndex.Amulet:
                     return EquippedItems.GetChildAtIndex(7);
-                case InventoryIndex.LWeapon:
-                    return EquippedItems.GetChildAtIndex(9);
-                case InventoryIndex.RWeapon:
+                case InventoryIndex.Chest:
                     return EquippedItems.GetChildAtIndex(8);
-                case InventoryIndex.LWeaponSwap:
-                    return EquippedItems.GetChildAtIndex(11);
-                case InventoryIndex.RWeaponSwap:
+                case InventoryIndex.LWeapon:
                     return EquippedItems.GetChildAtIndex(10);
-                case InventoryIndex.LRing:
+                case InventoryIndex.RWeapon:
+                    return EquippedItems.GetChildAtIndex(9);
+                case InventoryIndex.LWeaponSwap:
                     return EquippedItems.GetChildAtIndex(12);
-                case InventoryIndex.RRing:
+                case InventoryIndex.RWeaponSwap:
+                    return EquippedItems.GetChildAtIndex(11);
+                case InventoryIndex.LRing:
                     return EquippedItems.GetChildAtIndex(13);
-                case InventoryIndex.Gloves:
+                case InventoryIndex.RRing:
                     return EquippedItems.GetChildAtIndex(14);
-                case InventoryIndex.Belt:
+                case InventoryIndex.Gloves:
                     return EquippedItems.GetChildAtIndex(15);
-                case InventoryIndex.Boots:
+                case InventoryIndex.Belt:
                     return EquippedItems.GetChildAtIndex(16);
+                case InventoryIndex.Boots:
+                    return EquippedItems.GetChildAtIndex(17);
                 case InventoryIndex.PlayerInventory:
                     return EquippedItems.GetChildAtIndex(18);
                 case InventoryIndex.Flask:
-                    return EquippedItems.GetChildAtIndex(17);
-                case InventoryIndex.Trinket:
                     return EquippedItems.GetChildAtIndex(19);
+                case InventoryIndex.Trinket:
+                    return EquippedItems.GetChildAtIndex(20);
+                case InventoryIndex.BloodCrucible:
+                    return EquippedItems.GetChildAtIndex(1);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(inventoryIndex));
             }
