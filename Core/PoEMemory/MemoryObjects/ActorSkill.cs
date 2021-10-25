@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using ExileCore.PoEMemory.Components;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using GameOffsets;
@@ -86,7 +88,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public bool IsTotem => GetStat(GameStat.IsTotem) == 1 || GetStat(GameStat.SkillIsTotemified) == 1;
         public bool IsTrap => GetStat(GameStat.IsTrap) == 1 || GetStat(GameStat.SkillIsTrapped) == 1;
         public bool IsVaalSkill => SoulsPerUse >= 1 && TotalVaalUses >= 1;
+        public Actor Actor { get; private set; }
 
+        public ActorSkill SetActor(Actor actor)
+        {
+            Actor = actor;
+            return this;
+        }
 
         private readonly CachedValue<long> _skillUiState;
 
@@ -115,10 +123,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         long GetSkillUiStatePtr()
         {
-            var listStart = M.Read<long>(pTheGame.IngameState.Data.ServerData.Address + 0x85B8, 0x540, 0x150);
-            var listEnd = M.Read<long>(pTheGame.IngameState.Data.ServerData.Address + 0x85B8, 0x540, 0x158);
-            int maxCount = 100;
-            for (var ptr = listStart; ptr < listEnd && maxCount > 0; ptr += 0x48, maxCount--)
+            foreach(var ptr in Actor.SkillUiStateOffsets)
             {
                 var state = M.Read<SkillUiStateOffsets>(ptr);
                 if (state.SkillId == Id)
@@ -126,7 +131,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
             }
             return long.MaxValue;
         }
-
 
         public string InternalName
         {
