@@ -225,44 +225,44 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             switch (parentChildCount)
             {
-                case 0x6F:
+                case 111:
                     _cacheInventoryType = InventoryType.EssenceStash;
                     break;
-                case 0x4B:
+                case 76:
                     _cacheInventoryType = InventoryType.CurrencyStash;
                     break;
-                case 0x86:
+                case 149:
                     _cacheInventoryType = InventoryType.FragmentStash;
                     break;
-                case 0x5:
+                case 5:
                     _cacheInventoryType = InventoryType.DivinationStash;
                     break;
-                case 0x6:
-                    if (AsObject<Element>().Parent.Children[0].ChildCount == 9)
+                case 6:
+                    if (Parent.Children[0].ChildCount == 9)
                     {
                         _cacheInventoryType = InventoryType.MapStash;
                         break;
                     }
                     _cacheInventoryType = InventoryType.InvalidInventory;
                     break;
-                case 0x01:
+                case 1:
                     // Normal Stash and Quad Stash is same.
                     if (TotalBoxesInInventoryRow == 24) _cacheInventoryType = InventoryType.QuadStash;
                     _cacheInventoryType = InventoryType.NormalStash;
                     break;
-                case 0x23:
+                case 35:
                     _cacheInventoryType = InventoryType.DelveStash;
                     break;
-                case 0x52:
+                case 82:
                     _cacheInventoryType = InventoryType.BlightStash;
                     break;
-                case 0x1C:
+                case 28:    // TODO: Need recheck, I don't have this
                     _cacheInventoryType = InventoryType.DeliriumStash;
                     break;
-                case 0x11:
+                case 17:
                     _cacheInventoryType = InventoryType.MetamorphStash;
                     break;
-                case 0x9:
+                case 9:     // TODO: Need recheck, I don't have this
                     _cacheInventoryType = InventoryType.UniqueStash;
                     break;
                 default:
