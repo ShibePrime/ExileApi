@@ -3,7 +3,7 @@ namespace ExileCore.Shared.Enums
     public enum InventoryIndex
     {
         None,
-        Helm = 7,
+        Helm,
         Amulet,
         Chest,
         LWeapon,
@@ -39,6 +39,21 @@ namespace ExileCore.Shared.Enums
         Pet2,
         Portal,
         HelmAttachment2,
-        BloodCrucible = 52
+        Unknown37,
+        Cursor,
+        LeveledGems,
+        LWeaponSwapTabPanel,
+        RWeaponSwapTabPanel,
+        Unknown42,
+        Unknown43,
+        LWeaponSwap2,
+        RWeaponSwap2,
+        GemMTXScrollPanel,
+        InventoryTabPanel,
+        CosmeticTabPanel,
+        GemMTX,
+        FullInventoryPanel,
+        FullCosmeticPanel,
+        BloodCrucible
     }
 }
