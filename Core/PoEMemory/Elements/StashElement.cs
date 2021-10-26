@@ -59,7 +59,7 @@ namespace ExileCore.PoEMemory.Elements
 
             try
             {
-                stashInventoryByIndex = StashInventoryPanel.Children[index].Children[0].AsObject<Inventory>();
+                stashInventoryByIndex = StashInventoryPanel.Children[index].Children[0].Children[0].AsObject<Inventory>();
             }
             catch
             {
