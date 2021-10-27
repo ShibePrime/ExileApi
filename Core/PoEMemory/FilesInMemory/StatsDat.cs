@@ -68,6 +68,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
             var sb = new StringBuilder();
             var uppercase = true;
+            int index = 0;
             foreach (var ch in id)
             {
                 switch (ch)
@@ -76,6 +77,8 @@ namespace ExileCore.PoEMemory.FilesInMemory
                         uppercase = true;
                         break;
                     case '+':
+                        if (index == 0)
+                            sb.Append("Plus");
                         break;
                     case '-':
                         sb.Append('_');
@@ -88,6 +91,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
                         uppercase = false;
                         break;
                 }
+                index++;
             }
             return sb.ToString();
         }
