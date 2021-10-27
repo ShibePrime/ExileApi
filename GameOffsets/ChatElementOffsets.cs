@@ -7,7 +7,6 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ChatElementOffsets
     {
-        [FieldOffset(0x112)] public byte IsVisibleLocal;
-        [FieldOffset(0x17F)] public bool IsActive; // This is true when the chat is open
+        [FieldOffset(0x1C7)] public bool IsActive; // This is true when the chat is open
     }
 }
