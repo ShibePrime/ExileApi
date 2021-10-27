@@ -11,7 +11,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
     {
         public StatsDat(IMemory m, Func<long> address) : base(m, address)
         {
-            loadItems();
+            LoadItems();
         }
 
         public IDictionary<string, StatRecord> records { get; } = new Dictionary<string, StatRecord>(StringComparer.OrdinalIgnoreCase);
@@ -22,13 +22,13 @@ namespace ExileCore.PoEMemory.FilesInMemory
             return records.Values.ToList().Find(x => x.Address == address);
         }
 
-        private void loadItems()
+        private void LoadItems()
         {
             var iCounter = 1;
 
-            foreach (var addr in RecordAddresses())
+            foreach (var address in RecordAddresses())
             {
-                var r = new StatRecord(M, addr, iCounter++);
+                var r = new StatRecord(M, address, iCounter++);
                 records[r.Key] = r;
                 recordsById[r.ID] = r;
             }
@@ -94,24 +94,23 @@ namespace ExileCore.PoEMemory.FilesInMemory
 
         public class StatRecord
         {
-            public StatRecord(IMemory m, long addr, int iCounter)
+            private static string ReadCache(string address, Func<string> func)
             {
-                Address = addr;
+                return RemoteMemoryObject.Cache.StringCache.Read($"{nameof(ModsDat)}{address}", func);
+            }
 
-                Key = RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{addr + 0}",
-                    () => m.ReadStringU(m.Read<long>(addr + 0), 255));
+            public StatRecord(IMemory m, long address, int currentRecordId)
+            {
+                Address = address;
 
-                Flag0 = m.Read<byte>(addr + 0x8) != 0;
-                IsLocal = m.Read<byte>(addr + 0x9) != 0;
-                IsWeaponLocal = m.Read<byte>(addr + 0xA) != 0;
-                Type = Key.Contains("%") ? StatType.Percents : (StatType)m.Read<int>(addr + 0xB);
-                Flag3 = m.Read<byte>(addr + 0xF) != 0;
-
-                UserFriendlyName =
-                    RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{addr + 0x10}",
-                        () => m.ReadStringU(m.Read<long>(addr + 0x10), 255));
-
-                ID = iCounter;
+                Key = ReadCache($"{address}", () => m.ReadStringU(m.Read<long>(address), 512));
+                Flag0 = m.Read<byte>(address + 0x8) != 0;
+                IsLocal = m.Read<byte>(address + 0x9) != 0;
+                IsWeaponLocal = m.Read<byte>(address + 0xA) != 0;
+                Type = Key.Contains("%") ? StatType.Percents : (StatType)m.Read<int>(address + 0xB);
+                Flag3 = m.Read<byte>(address + 0xF) != 0;
+                UserFriendlyName = ReadCache($"{address + 0x10}", () => m.ReadStringU(m.Read<long>(address + 0x10), 512));
+                ID = currentRecordId;
             }
 
             public string Key { get; }

@@ -51,17 +51,17 @@ namespace ExileCore.PoEMemory.FilesInMemory
                     Height = M.Read<int>(i + 0x1C),
                     BaseName = M.ReadStringU(M.Read<long>(i + 0x20)),
                     DropLevel = M.Read<int>(i + 0x30),
-                    IsCorrupted = M.Read<byte>(i + 0x139) != 0,
-                    IsBlessing = M.Read<byte>(i + 0x172) != 0,
-                    Tags = new string[M.Read<long>(i + 0xA8)]
+                    IsCorrupted = M.Read<byte>(i + 0xB9) != 0,
+                    IsBlessing = M.Read<byte>(i + 0xF2) != 0,
+                    Tags = new string[M.Read<long>(i + 0x68)]
                 };
 
-                var ta = M.Read<long>(i + 0xB0);
+                var firstTag = M.Read<long>(i + 0x70);
 
                 for (var k = 0; k < baseItemType.Tags.Length; k++)
                 {
-                    var ii = ta + 0x10 * k;
-                    baseItemType.Tags[k] = M.ReadStringU(M.Read<long>(ii, 0), 255);
+                    var tagAddress = firstTag + 0x10 * k;
+                    baseItemType.Tags[k] = M.ReadStringU(M.Read<long>(tagAddress, 0), 255);
                 }
 
                 var tmpTags = key.Split('/');
