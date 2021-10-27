@@ -43,7 +43,7 @@ namespace GameOffsets
         [FieldOffset(0x8F8)] public long RitualWindow;
         [FieldOffset(0x900)] public long RitualFavourPanel;
         [FieldOffset(0x898)] public long UltimatumProgressPanel; // TODO
-        [FieldOffset(0x8E0)] public long DelveDarkness; // Is actually debuff panel.
+        [FieldOffset(0x950)] public long DelveDarkness; // Is actually debuff panel.
         [FieldOffset(0x990)] public long AreaInstanceUi;
         [FieldOffset(0xA98)] public long InvitesPanel; // TODO
         [FieldOffset(0xAE8)] public long GemLvlUpPanel;

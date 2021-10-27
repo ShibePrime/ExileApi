@@ -42,7 +42,7 @@ namespace ExileCore.PoEMemory
         public Vector2 Position => Elem.Position;
         public float X => Elem.X;
         public float Y => Elem.Y;
-        public Element Tooltip => Address == 0 ? null : GetObject<Element>(M.Read<long>(Address + 0x340));
+        public Element Tooltip => Address == 0 ? null : GetObject<Element>(Elem.Tooltip);
         public float Scale => Elem.Scale;
         public float Width => Elem.Width;
         public float Height => Elem.Height;

@@ -18,17 +18,18 @@ namespace ExileCore.PoEMemory.Elements
         //                              > [4] Autocomplete Panel
         //
 
-        private readonly CachedValue<ChatElementOffsets> _cacheChatElementOffsets;
+        private readonly CachedValue<ChatElementOffsets> _ChatElement;
 
         public ChatElement()
         {
-            _cacheChatElementOffsets = new FrameCache<ChatElementOffsets>(() => Address == 0 ? default : M.Read<ChatElementOffsets>(Address));
+            _ChatElement = new FrameCache<ChatElementOffsets>(() => Address == 0 ? default : M.Read<ChatElementOffsets>(Address));
         }
 
-        public new bool IsVisibleLocal => (_cacheChatElementOffsets.Value.IsVisibleLocal & 8) == 8;
-        public new bool IsVisible => base.IsVisible && IsVisibleLocal;
+
+        public new bool IsVisibleLocal => GetChildAtIndex(0).IsVisibleLocal;
+        public new bool IsVisible => GetChildAtIndex(0).IsVisible;
         public new bool IsHighlighted => false; // chat is never highlighted
-        public bool IsActive => _cacheChatElementOffsets.Value.IsActive;
+        public bool IsActive => _ChatElement.Value.IsActive;
 
         public Element MessageBox => GetChildAtIndex(1)?.GetChildAtIndex(2)?.GetChildAtIndex(1);
         public long TotalMessageCount => MessageBox?.ChildCount ?? 0;
