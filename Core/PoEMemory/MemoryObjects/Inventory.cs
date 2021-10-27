@@ -256,7 +256,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 case 82:
                     _cacheInventoryType = InventoryType.BlightStash;
                     break;
-                case 28:    // TODO: Need recheck, I don't have this
+                case 88:
                     _cacheInventoryType = InventoryType.DeliriumStash;
                     break;
                 case 17:
