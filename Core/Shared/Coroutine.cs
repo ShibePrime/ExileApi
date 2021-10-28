@@ -105,6 +105,11 @@ namespace ExileCore.Shared
         public event Action OnAutoRestart;
         public event EventHandler WhenDone;
 
+        [Obsolete("Coroutine.UpdateCondtion(...) => Use UpdateCondition()", false)]
+        public void UpdateCondtion(IYieldBase condition)
+        {
+            UpdateCondition(condition);
+        }
         public void UpdateCondition(IYieldBase condition)
         {
             switch (condition)
