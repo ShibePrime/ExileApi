@@ -15,8 +15,11 @@ namespace ExileCore.PoEMemory.FilesInMemory
             LoadItems(sDat, tagsDat);
         }
 
-        public IDictionary<string, ModRecord> records { get; } = new Dictionary<string, ModRecord>(StringComparer.OrdinalIgnoreCase);
+        public IDictionary<string, ModRecord> records { get; } =
+            new Dictionary<string, ModRecord>(StringComparer.OrdinalIgnoreCase);
+
         public IDictionary<long, ModRecord> DictionaryRecords { get; } = new Dictionary<long, ModRecord>();
+
         public IDictionary<Tuple<string, ModType>, List<ModRecord>> recordsByTier { get; } =
             new Dictionary<Tuple<string, ModType>, List<ModRecord>>();
 
@@ -33,12 +36,18 @@ namespace ExileCore.PoEMemory.FilesInMemory
                 var r = new ModRecord(M, sDat, tagsDat, address);
 
                 if (records.ContainsKey(r.Key))
+                {
                     continue;
+                }
 
                 DictionaryRecords.Add(address, r);
                 records.Add(r.Key, r);
-                
-                if (r.Domain == ModDomain.Monster) continue;
+
+                if (r.Domain == ModDomain.Monster)
+                {
+                    continue;
+                }
+
                 var byTierKey = Tuple.Create(r.Group, r.AffixType);
 
                 if (!recordsByTier.TryGetValue(byTierKey, out var groupMembers))
@@ -83,10 +92,10 @@ namespace ExileCore.PoEMemory.FilesInMemory
 
                 var statAddresses = new long[NumberOfStats]
                 {
-                        modRecord.StatNames1,
-                        modRecord.StatNames2,
-                        modRecord.StatNames3,
-                        modRecord.StatName4
+                    modRecord.StatNames1,
+                    modRecord.StatNames2,
+                    modRecord.StatNames3,
+                    modRecord.StatName4
                 };
 
                 StatNames = new StatsDat.StatRecord[NumberOfStats];
@@ -107,7 +116,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
                         continue;
                     }
 
-                    var key = RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{statAddresses[i]}", 
+                    var key = RemoteMemoryObject.Cache.StringCache.Read($"{nameof(StatsDat)}{statAddresses[i]}",
                         () => m.ReadStringU(statId, 512));
 
                     if (!sDat.records.TryGetValue(key, out StatNames[i]))
@@ -117,14 +126,17 @@ namespace ExileCore.PoEMemory.FilesInMemory
                 }
 
                 Domain = (ModDomain)modRecord.Domain;
-                UserFriendlyName = ReadCache($"{modRecord.UserFriendlyName}", () => m.ReadStringU(modRecord.UserFriendlyName));
+                UserFriendlyName = ReadCache($"{modRecord.UserFriendlyName}",
+                    () => m.ReadStringU(modRecord.UserFriendlyName));
                 AffixType = (ModType)modRecord.AffixType;
                 Group = ReadCache($"{modRecord.Group}", () => m.ReadStringU(modRecord.Group));
 
                 StatRange = new[]
                 {
-                    new IntRange(modRecord.StatRange1, modRecord.StatRange2), new IntRange(modRecord.StatRange3, modRecord.StatRange4),
-                    new IntRange(modRecord.StatRange5, modRecord.StatRange6), new IntRange(modRecord.StatRange7, modRecord.StatRange8)
+                    new IntRange(modRecord.StatRange1, modRecord.StatRange2),
+                    new IntRange(modRecord.StatRange3, modRecord.StatRange4),
+                    new IntRange(modRecord.StatRange5, modRecord.StatRange6),
+                    new IntRange(modRecord.StatRange7, modRecord.StatRange8)
                 };
 
                 Tags = new TagsDat.TagRecord[modRecord.Tags];
