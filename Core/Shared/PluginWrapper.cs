@@ -103,7 +103,11 @@ namespace ExileCore.Shared
                         else if (isEnabled)
                         {
                             Plugin.Initialized = PluginInitialise();
-                            if (!Plugin.Initialized)
+                            if (Plugin.Initialized)
+                            {
+                                Plugin.AreaChange(_gameController.Area.CurrentArea);
+                            }
+                            else
                             {
                                 Plugin._Settings.Enable.Value = false;
                             }
