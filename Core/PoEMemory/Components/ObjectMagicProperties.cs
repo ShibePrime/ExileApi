@@ -39,7 +39,7 @@ namespace ExileCore.PoEMemory.Components
 
         public long ModsHash => ObjectMagicPropertiesOffsets.Mods.GetHashCode();
 
-        public List<string> Mods
+        public List<string> ModNames
         {
             get
             {
