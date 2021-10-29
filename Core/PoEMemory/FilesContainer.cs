@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.FilesInMemory;
 using ExileCore.PoEMemory.FilesInMemory.Atlas;
 using ExileCore.PoEMemory.FilesInMemory.Metamorph;

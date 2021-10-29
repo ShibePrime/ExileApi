@@ -63,7 +63,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element InvitesPanel => GetObject<Element>(IngameUIElementsStruct.InvitesPanel);
         public ItemOnGroundTooltip ItemOnGroundTooltip => GetObject<ItemOnGroundTooltip>(IngameUIElementsStruct.ItemOnGroundTooltip);
         public MapStashTabElement MapStashTab => ReadObject<MapStashTabElement>(IngameUIElementsStruct.MapTabWindowStartPtr);
-        public Element Sulphit => GetObject<Element>(IngameUIElementsStruct.Map).GetChildAtIndex(0);
+        public Element Sulphit => GetObject<Element>(IngameUIElementsStruct.Map).GetChildAtIndex(3);
         public Cursor Cursor => _cursor ??= GetObject<Cursor>(IngameUIElementsStruct.Mouse);
         public Element BetrayalWindow => _BetrayalWindow ??= GetObject<Element>(IngameUIElementsStruct.BetrayalWindow);
         public Element SyndicatePanel => BetrayalWindow; // Required for TehCheats Api, BroodyHen uses this.

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
@@ -8,16 +9,20 @@ namespace ExileCore.PoEMemory.Components
 {
     public class ObjectMagicProperties : Component
     {
-        private readonly CachedValue<ObjectMagicPropertiesOffsets> _cachedValue;
-        private long _modsHash;
-        private readonly List<string> modsList = new List<string>();
+        private readonly CachedValue<ObjectMagicPropertiesOffsets> _CachedValue;
+        private long _ModsHash;
+        private readonly List<string> _ModNamesList = new List<string>();
+        private const int MOD_RECORDS_OFFSET = 0x18;
+        private const int MOD_RECORD_SIZE = 0x38;
+        private const int MOD_RECORD_KEY_OFFSET = 0x10;
 
         public ObjectMagicProperties()
         {
-            _cachedValue = new FrameCache<ObjectMagicPropertiesOffsets>(() => M.Read<ObjectMagicPropertiesOffsets>(Address));
+            _CachedValue =
+                new FrameCache<ObjectMagicPropertiesOffsets>(() => M.Read<ObjectMagicPropertiesOffsets>(Address));
         }
 
-        public ObjectMagicPropertiesOffsets ObjectMagicPropertiesOffsets => _cachedValue.Value;
+        public ObjectMagicPropertiesOffsets ObjectMagicPropertiesOffsets => _CachedValue.Value;
 
         public MonsterRarity Rarity
         {
@@ -25,8 +30,7 @@ namespace ExileCore.PoEMemory.Components
             {
                 if (Address != 0)
                 {
-                    // return (MonsterRarity)M.Read<int>(Address + 0x7C);
-                    return (MonsterRarity) ObjectMagicPropertiesOffsets.Rarity;
+                    return (MonsterRarity)ObjectMagicPropertiesOffsets.Rarity;
                 }
 
                 return MonsterRarity.Error;
@@ -39,31 +43,41 @@ namespace ExileCore.PoEMemory.Components
         {
             get
             {
-                if (Address == 0) return null;
-
-                if (_modsHash == ModsHash) return modsList;
-
-                var begin = ObjectMagicPropertiesOffsets.Mods.First;
-                var end = ObjectMagicPropertiesOffsets.Mods.Last;
-                if (begin == 0 || end == 0) return new List<string>();
-                var j = 0;
-
-                for (var i = begin; i < end; i += 0x28)
+                if (Address == 0)
                 {
-                    var read = M.Read<long>(i + 0x18, 0);
-                    var mod = Cache.StringCache.Read($"{nameof(ObjectMagicProperties)}{read}", () => M.ReadStringU(read));
-                    modsList.Add(mod);
-                    j++;
-
-                    if (j > 256)
-                    {
-                        DebugWindow.LogMsg($"{nameof(ObjectMagicProperties)} read mods error address", 2, Color.OrangeRed);
-                        break;
-                    }
+                    return null;
                 }
 
-                _modsHash = ModsHash;
-                return modsList;
+                if (_ModsHash == ModsHash)
+                {
+                    return _ModNamesList;
+                }
+
+                var first = ObjectMagicPropertiesOffsets.Mods.First;
+                var last = ObjectMagicPropertiesOffsets.Mods.Last;
+                var end = ObjectMagicPropertiesOffsets.Mods.First + 256 * MOD_RECORD_SIZE;
+
+                if (first == 0 || last == 0 || last < first)
+                {
+                    return new List<string>();
+                }
+
+                last = Math.Min(last, end);
+                for (var i = first + MOD_RECORDS_OFFSET; i < last; i += MOD_RECORD_SIZE)
+                {
+                    var read = M.Read<long>(i + MOD_RECORD_KEY_OFFSET, 0);
+                    var mod = Cache.StringCache.Read($"{nameof(ObjectMagicProperties)}{read}",
+                        () => M.ReadStringU(read));
+                    _ModNamesList.Add(mod);
+                }
+
+                if (first == end)
+                {
+                    DebugWindow.LogMsg($"{nameof(ObjectMagicProperties)} read mods error address", 2, Color.OrangeRed);
+                }
+
+                _ModsHash = ModsHash;
+                return _ModNamesList;
             }
         }
     }
