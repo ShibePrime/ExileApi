@@ -66,17 +66,27 @@ namespace ExileCore.Shared
                 {
                     throw new InvalidOperationException($"Already initialized.");
                 }
-                Plugin._Settings.Enable.OnValueChanged += (obj, value) =>
+
+                if (Plugin._Settings.Enable)
+                {
+                    Plugin.Initialized = PluginInitialise();
+                    if (!Plugin.Initialized)
+                    {
+                        Plugin._Settings.Enable.Value = false;
+                    }
+                }
+
+                Plugin._Settings.Enable.OnValueChanged += (obj, isEnabled) =>
                 {
                     try
                     {
                         if (Plugin.Initialized)
                         {
-                            var coroutines = Core.MainRunner.Coroutines.Concat(Core.ParallelRunner.Coroutines).ToList();
-                            coroutines.Where(x => x.Owner == Plugin).ToList();
-                            if (value)
+                            var coroutines = Core.MainRunner.Coroutines.Concat(Core.ParallelRunner.Coroutines)
+                                .Where(x => x.OwnerName == Plugin.InternalName).ToList();
+
+                            if (isEnabled)
                             {
-                               
                                 foreach (var coroutine in coroutines)
                                 {
                                     coroutine.Resume();
@@ -90,15 +100,17 @@ namespace ExileCore.Shared
                                 }
                             }
                         }
-                        if (value && !Plugin.Initialized)
+                        else if (isEnabled)
                         {
-                            Plugin.Initialized = pluginInitialise();
-                            if (Plugin.Initialized) Plugin.AreaChange(_gameController.Area.CurrentArea);
-                        }
-
-                        if (value && !Plugin.Initialized)
-                        {
-                            Plugin._Settings.Enable.Value = false;
+                            Plugin.Initialized = PluginInitialise();
+                            if (Plugin.Initialized)
+                            {
+                                Plugin.AreaChange(_gameController.Area.CurrentArea);
+                            }
+                            else
+                            {
+                                Plugin._Settings.Enable.Value = false;
+                            }
                         }
                     }
                     catch (Exception e)
@@ -106,18 +118,6 @@ namespace ExileCore.Shared
                         LogError(e);
                     }
                 };
-                if (Plugin._Settings.Enable)
-                {
-                    if (Plugin.Initialized)
-                    {
-                        throw new InvalidOperationException($"Already initialized.");
-                    }
-                    Plugin.Initialized = pluginInitialise();
-                    if (!Plugin.Initialized)
-                    {
-                        Plugin._Settings.Enable.Value = false;
-                    }
-                }
             }
             catch (Exception e)
             {
@@ -125,7 +125,7 @@ namespace ExileCore.Shared
             }
         }
 
-        bool pluginInitialise()
+        private bool PluginInitialise()
         {
             var sw = Stopwatch.StartNew();
             var initialise = Plugin.Initialise();

@@ -15,7 +15,7 @@ namespace ExileCore.Shared
         {
             Name = name ?? MathHepler.GetRandomWord(13);
 
-            OwnerName = owner == null ? "Free" : owner.GetType().Namespace;
+            OwnerName = owner == null ? "Free" : owner.InternalName;
         }
 
         public Coroutine(Action action, IYieldBase condition, IPlugin owner, string name = null, bool infinity = true,
