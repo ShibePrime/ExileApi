@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExileCore.PoEMemory.Elements;
@@ -47,7 +48,8 @@ namespace ExileCore.PoEMemory
         public float Width => Elem.Width;
         public float Height => Elem.Height;
         public bool IsHighlighted => Elem.isHighlighted;
-
+        [Obsolete("Element.isHighlighted is deprecated. Use IsHighlighted.", false)]
+        public bool isHighlighted => IsHighlighted;
         public ColorBGRA BorderColor => new ColorBGRA(Elem.ElementBorderColor);
         public ColorBGRA BackgroundColor => new ColorBGRA(Elem.ElementBackgroundColor);
         public ColorBGRA OverlayColor => new ColorBGRA(Elem.ElementOverlayColor);
