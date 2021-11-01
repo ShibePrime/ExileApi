@@ -14,5 +14,7 @@ namespace ExileCore.Shared.Enums
         Heist,
         Ritual,
         Ultimatum,
+        Expedition,
+        Scourge
     }
 }

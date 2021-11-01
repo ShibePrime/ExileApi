@@ -76,7 +76,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UIHoverElement => _UIHoverElement.Value;
         public float UIHoverPosX => _UIHoverPosX.Value;
         public float UIHoverPosY => _UIHoverPosY.Value;
-        public Element UIHoverTooltip => _UIHoverTooltip.Value;
+        public Element UIHoverTooltip => UIHoverElement.Tooltip;
         public float MousePosX => _MousePosX.Value;
         public float MousePosY => _MousePosY.Value;
         public long EntityLabelMap => _EntityLabelMap.Value.EntityLabelMap;

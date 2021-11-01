@@ -41,7 +41,7 @@ namespace GameOffsets
     public struct ServerDataOffsets
     {
         public const int Skip = 0x8000;
-        //
+        
         [FieldOffset(0x8698 - Skip)] public long PlayerRelatedData;
         [FieldOffset(0x8700 - Skip)] public byte NetworkState;
         [FieldOffset(0x8718 - Skip)] public NativeStringU League;
@@ -62,44 +62,44 @@ namespace GameOffsets
         [FieldOffset(0x8A10 - Skip)] public long GuildNameAddress;
         [FieldOffset(0x8A18 - Skip)] public SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x8A70 - Skip)] public NativePtrArray NearestPlayers;
-        ////[FieldOffset(0x8168 - Skip)] public NativePtrArray MinimapIcons;
-        ////[FieldOffset(0x8188 - Skip)] public NativePtrArray LocalPlayer;
+        ////[FieldOffset(0x8AA0 - Skip)] public NativePtrArray MinimapIcons;
+        ////[FieldOffset(0x8AC0 - Skip)] public NativePtrArray LocalPlayer;
         [FieldOffset(0x8BE8 - Skip)] public NativePtrArray PlayerInventories;
         [FieldOffset(0x8D30 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x8E78 - Skip)] public NativePtrArray GuildInventories;
-        [FieldOffset(0x8FE0 - Skip)] public ushort TradeChatChannel;
-        [FieldOffset(0x8FE8 - Skip)] public ushort GlobalChatChannel;
-        [FieldOffset(0x9088 - Skip)] public ushort LastActionId;
+        [FieldOffset(0x8FF8 - Skip)] public ushort TradeChatChannel;
+        [FieldOffset(0x9000 - Skip)] public ushort GlobalChatChannel;
+        [FieldOffset(0x90A0 - Skip)] public ushort LastActionId;
 
         //[FieldOffset(0x90C0 - Skip)] public long InstanceLeagueInfo;
 
         // Note: Search for a LONG value equal to your current amount of completed maps.
         //       Previous byte is a linked list of maps. Map list will be the next byte.
-        [FieldOffset(0x90E0 - Skip)] public long MavenMapsList;
-        [FieldOffset(0x90E8 - Skip)] public long MavenMapsCount;
-        [FieldOffset(0x90F0 - Skip)] public long MavenMapsArray;
-        [FieldOffset(0x9120 - Skip)] public long CompletedMapsList;
-        [FieldOffset(0x9128 - Skip)] public long CompletedMapsCount;
-        [FieldOffset(0x9130 - Skip)] public long CompletedMapsArray;
-        [FieldOffset(0x9160 - Skip)] public long BonusCompletedAreasList;
-        [FieldOffset(0x9168 - Skip)] public long BonusCompletedAreasCount;
-        [FieldOffset(0x9170 - Skip)] public long BonusCompletedAreasArray;
-        [FieldOffset(0x91A0 - Skip)] public long AwakenedAreasList;
-        [FieldOffset(0x91A8 - Skip)] public long AwakenedAreasCount;
-        [FieldOffset(0x91B0 - Skip)] public long AwakenedAreasArray;
+        [FieldOffset(0x90F8 - Skip)] public long MavenMapsList;
+        [FieldOffset(0x9100 - Skip)] public long MavenMapsCount;
+        [FieldOffset(0x9108 - Skip)] public long MavenMapsArray;
+        [FieldOffset(0x9138 - Skip)] public long CompletedMapsList;
+        [FieldOffset(0x9140 - Skip)] public long CompletedMapsCount;
+        [FieldOffset(0x9148 - Skip)] public long CompletedMapsArray;
+        [FieldOffset(0x9178 - Skip)] public long BonusCompletedAreasList;
+        [FieldOffset(0x9180 - Skip)] public long BonusCompletedAreasCount;
+        [FieldOffset(0x9188 - Skip)] public long BonusCompletedAreasArray;
+        [FieldOffset(0x91B8 - Skip)] public long AwakenedAreasList;
+        [FieldOffset(0x91C0 - Skip)] public long AwakenedAreasCount;
+        [FieldOffset(0x91C8 - Skip)] public long AwakenedAreasArray;
         ////[FieldOffset(0x8A08 - Skip)] public long BestiaryCapturedMonsterList;
 
-        public const int AtlasRegionUpgrades = 0x9222;
-        public const int AtlasWatchtowerLocations = 0x9230;
+        public const int AtlasRegionUpgrades = 0x923A;
+        public const int AtlasWatchtowerLocations = 0x9240;
         public const int BestiaryBeastsCapturedCounts = 0x8A68; //
 
-        [FieldOffset(0x98D0 - Skip)] public int DialogDepth;
-        [FieldOffset(0x98D4 - Skip)] public byte MonsterLevel;
-        [FieldOffset(0x98D5 - Skip)] public byte MonstersRemaining;
+        [FieldOffset(0x9BE8 - Skip)] public int DialogDepth;
+        [FieldOffset(0x9BEC - Skip)] public byte MonsterLevel;
+        [FieldOffset(0x9BED - Skip)] public byte MonstersRemaining;
         //[FieldOffset(0x9328 - Skip)] public long LeftIncursionArchitectKey;
         //[FieldOffset(0x9338 - Skip)] public long RightIncursionArchitectKey;
-        [FieldOffset(0x9C80 - Skip)] public int CurrentAzuriteAmount;
-        [FieldOffset(0x9C90 - Skip)] public ushort CurrentSulphiteAmount;
+        [FieldOffset(0x9C98 - Skip)] public int CurrentAzuriteAmount;
+        [FieldOffset(0x9CA8 - Skip)] public ushort CurrentSulphiteAmount;
 
         //[FieldOffset(0x9590 - Skip)] public long DeliriumRewardInfo;
         //[FieldOffset(0x95A8 - Skip)] public long BlueprintRevealInfo;

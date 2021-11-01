@@ -270,9 +270,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         #region Atlas
 
-        public IList<WorldArea> CompletedAreas => GetAreas(ServerDataStruct.CompletedMapsList);
-        public IList<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreasList);
-        public IList<WorldArea> AwakenedCompletedAreas => GetAreas(ServerDataStruct.AwakenedAreasList);
+        public List<WorldArea> CompletedAreas => GetAreas(ServerDataStruct.CompletedMapsList).ToList();
+        public List<WorldArea> BonusCompletedAreas => GetAreas(ServerDataStruct.BonusCompletedAreasList).ToList();
+        public List<WorldArea> AwakenedCompletedAreas => GetAreas(ServerDataStruct.AwakenedAreasList).ToList();
+        public List<WorldArea> MavenCompletedAreas => GetAreas(ServerDataStruct.MavenMapsList).ToList();
         public Dictionary<AtlasRegionE, WorldArea> WatchtowerMaps => GetWatchtowerMaps(Address + ServerDataOffsets.AtlasWatchtowerLocations);
 
         #region Features removed from 3.9 patch

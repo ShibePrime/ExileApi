@@ -9,12 +9,12 @@ namespace GameOffsets
     {
         public const int OffsetBuffers = 0x6EC;
 
-        [FieldOffset(0x28)] public long SelfPointer; // Useful for valid check
+        [FieldOffset(0x28)] public long SelfPointer;
         [FieldOffset(0x30)] public long ChildStart;
         [FieldOffset(0x30)] public NativePtrArray Childs;
         [FieldOffset(0x38)] public long ChildEnd;
         [FieldOffset(0xD8)] public long Root;
-        [FieldOffset(0xE0)] public long Parent; // Works for Items only.
+        [FieldOffset(0xE0)] public long Parent;
         [FieldOffset(0xE8)] public Vector2 Position;
         [FieldOffset(0xE8)] public float X;
         [FieldOffset(0xEC)] public float Y;
@@ -33,11 +33,6 @@ namespace GameOffsets
         [FieldOffset(0x190)] public uint TextBoxBackgroundColor;
         [FieldOffset(0x194)] public uint TextBoxOverlayColor;
 
-        [FieldOffset(0x340)] public long Tooltip;
-
-        //[FieldOffset(0x3CB)] public byte isShadow; // 0
-        //[FieldOffset(0x3C9)] public byte isShadow2; // 1
-
-        //[FieldOffset(0x3B0)] public NativeStringU TestString;
+        [FieldOffset(0x3E8)] public long Tooltip;
     }
 }
