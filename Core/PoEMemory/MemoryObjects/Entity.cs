@@ -426,6 +426,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 var entityComponent = M.ReadPointersArray(EntityOffsets.ComponentListPtr.First, EntityOffsets.ComponentListPtr.Last);
                 var entityDetails = M.Read<EntityDetails>(EntityOffsets.EntityDetailsPtr);
                 var lookupPtr = M.Read<ComponentLookup>(entityDetails.ComponentLookupPtr);
+                if (lookupPtr.Capacity < 1)
+                {
+                    return result;
+                }
+
                 foreach (var bucket in M.ReadAsArray<ComponentArrayStructure>(lookupPtr.ComponentArray, ((int)lookupPtr.Capacity + 1) / 8))
                 {
                     if (bucket.Flag0 != ComponentArrayStructure.InvalidPointerFlagValue)
