@@ -65,8 +65,8 @@ namespace GameOffsets
         ////[FieldOffset(0x8AA0 - Skip)] public NativePtrArray MinimapIcons;
         ////[FieldOffset(0x8AC0 - Skip)] public NativePtrArray LocalPlayer;
         [FieldOffset(0x8BE8 - Skip)] public NativePtrArray PlayerInventories;
-        [FieldOffset(0x8D30 - Skip)] public NativePtrArray NPCInventories;
-        [FieldOffset(0x8E78 - Skip)] public NativePtrArray GuildInventories;
+        [FieldOffset(0x8D38 - Skip)] public NativePtrArray NPCInventories;
+        [FieldOffset(0x8E88 - Skip)] public NativePtrArray GuildInventories;
         [FieldOffset(0x8FF8 - Skip)] public ushort TradeChatChannel;
         [FieldOffset(0x9000 - Skip)] public ushort GlobalChatChannel;
         [FieldOffset(0x90A0 - Skip)] public ushort LastActionId;
