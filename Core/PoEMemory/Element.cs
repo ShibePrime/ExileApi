@@ -35,7 +35,7 @@ namespace ExileCore.PoEMemory
         }
 
         public ElementOffsets Elem => _cacheElement.Value;
-        public bool IsValid => Elem.SelfPointer == Address;
+        public bool IsValid => Address != 0 && Elem.SelfPointer == Address;
         public long ChildCount => (Elem.ChildEnd - Elem.ChildStart) / 8;
         public bool IsVisibleLocal => (Elem.IsVisibleLocal & 8) == 8;
         public Element Root => TheGame.IngameState.UIRoot;
@@ -43,7 +43,7 @@ namespace ExileCore.PoEMemory
         public Vector2 Position => Elem.Position;
         public float X => Elem.X;
         public float Y => Elem.Y;
-        public Element Tooltip => Address == 0 ? null : GetObject<Element>(Elem.Tooltip);
+        public Element Tooltip => Address == 0 ? null : AsObject<HoverItemIcon>().Tooltip;
         public float Scale => Elem.Scale;
         public float Width => Elem.Width;
         public float Height => Elem.Height;
