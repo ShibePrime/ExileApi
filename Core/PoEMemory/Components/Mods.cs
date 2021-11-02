@@ -38,18 +38,26 @@ namespace ExileCore.PoEMemory.Components
             ? M.ReadStringU(M.Read<long>(ModsStruct.IncubatorKey, 0x20)) : null;
         public short IncubatorKills => ModsStruct.IncubatorKillCount;
 
-        public List<ItemMod> ItemMods
-        {
-            get
-            {
-                var scourgedMods = GetMods(ModsStruct.ScourgeModsArray);
-                var enchantedMods = GetMods(ModsStruct.EnchantedModsArray);
-                var implicitMods = GetMods(ModsStruct.ImplicitModsArray);
-                var explicitMods = GetMods(ModsStruct.ExplicitModsArray);
+        private Lazy<List<ItemMod>> _ScourgedMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ScourgeModsArray).ToList());
 
-                return scourgedMods.Concat(enchantedMods, implicitMods, explicitMods).ToList();
-            }
-        }
+        public IList<ItemMod> ScourgedMods => _ScourgedMods.Value;
+
+        private Lazy<List<ItemMod>> _EnchantedMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.EnchantedModsArray).ToList());
+
+        public IList<ItemMod> EnchantedMods => _EnchantedMods.Value;
+
+        private Lazy<List<ItemMod>> _ImplicitMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ImplicitModsArray).ToList());
+
+        public IList<ItemMod> ImplicitMods => _ImplicitMods.Value;
+
+        private Lazy<List<ItemMod>> _ExplicitMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ExplicitModsArray).ToList());
+        public IList<ItemMod> ExplicitMods => _ExplicitMods.Value;
+
+        public List<ItemMod> ItemMods => ScourgedMods.Concat(EnchantedMods, ImplicitMods, ExplicitMods).ToList();
         public ItemStats ItemStats => new ItemStats(Owner);
         public List<string> HumanImpStats => GetStats(ModsStruct.ImplicitStatsArray);
         public List<string> HumanEnchantedStats => GetStats(ModsStruct.EnchantedStatsArray);

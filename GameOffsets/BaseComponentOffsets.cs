@@ -22,7 +22,7 @@ namespace GameOffsets
         [FieldOffset(0x60)] public long PublicPricePtr;
         [FieldOffset(0xC6)] public byte InfluenceFlag;
         [FieldOffset(0xC7)] public byte isCorrupted;
-        [FieldOffset(0xC8)] public int AbsorbedCorruption;
-        [FieldOffset(0xCC)] public int ScourgeLevel;
+        [FieldOffset(0xC8)] public int UnspentAbsorbedCorruption;
+        [FieldOffset(0xCC)] public int ScourgedTier;
     }
 }

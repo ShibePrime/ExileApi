@@ -34,8 +34,8 @@ namespace ExileCore.PoEMemory.Components
         public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
         public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
         public bool isCorrupted => (ComponentStruct.isCorrupted & 0x01) == 0x01;
-        public int AbsorbedCorruption => ComponentStruct.AbsorbedCorruption;
-        public int ScourgeLevel => ComponentStruct.ScourgeLevel;
+        public int UnspentAbsorbedCorruption => ComponentStruct.UnspentAbsorbedCorruption;
+        public int ScourgedTier => ComponentStruct.ScourgedTier;
         public string PublicPrice => M.ReadStringU(ComponentStruct.PublicPricePtr);
         // public bool isFractured => M.Read<byte>(Address + 0x98) == 0; // TODO: 3.12.2
     }
