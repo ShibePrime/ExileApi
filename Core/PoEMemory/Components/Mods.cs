@@ -5,6 +5,7 @@ using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.PoEMemory.Models;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
+using ExileCore.Shared.Helpers;
 using GameOffsets;
 using GameOffsets.Native;
 
@@ -37,22 +38,33 @@ namespace ExileCore.PoEMemory.Components
             ? M.ReadStringU(M.Read<long>(ModsStruct.IncubatorKey, 0x20)) : null;
         public short IncubatorKills => ModsStruct.IncubatorKillCount;
 
-        public List<ItemMod> ItemMods
-        {
-            get
-            {
-                var implicitMods = GetMods(ModsStruct.ImplicitModsArray);
-                var explicitMods = GetMods(ModsStruct.ExplicitModsArray);
-                var enchantMods = GetMods(ModsStruct.EnchantedModsArray);
-                return implicitMods.Concat(explicitMods).Concat(enchantMods).ToList();
-            }
-        }
+        private Lazy<List<ItemMod>> _ScourgedMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ScourgeModsArray).ToList());
+
+        public IList<ItemMod> ScourgedMods => _ScourgedMods.Value;
+
+        private Lazy<List<ItemMod>> _EnchantedMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.EnchantedModsArray).ToList());
+
+        public IList<ItemMod> EnchantedMods => _EnchantedMods.Value;
+
+        private Lazy<List<ItemMod>> _ImplicitMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ImplicitModsArray).ToList());
+
+        public IList<ItemMod> ImplicitMods => _ImplicitMods.Value;
+
+        private Lazy<List<ItemMod>> _ExplicitMods =>
+            new Lazy<List<ItemMod>>(() => GetMods(ModsStruct.ExplicitModsArray).ToList());
+        public IList<ItemMod> ExplicitMods => _ExplicitMods.Value;
+
+        public List<ItemMod> ItemMods => ScourgedMods.Concat(EnchantedMods, ImplicitMods, ExplicitMods).ToList();
         public ItemStats ItemStats => new ItemStats(Owner);
+        public List<string> HumanImpStats => GetStats(ModsStruct.ImplicitStatsArray);
+        public List<string> HumanEnchantedStats => GetStats(ModsStruct.EnchantedStatsArray);
+        public List<string> HumanScourgeStats => GetStats(ModsStruct.ScourgeStatsArray);
         public List<string> HumanStats => GetStats(ModsStruct.ExplicitStatsArray);
         public List<string> HumanCraftedStats => GetStats(ModsStruct.CraftedStatsArray);
-        public List<string> HumanImpStats => GetStats(ModsStruct.ImplicitStatsArray);
         public List<string> HumanFracturedStats => GetStats(ModsStruct.FracturedStatsArray);
-        public List<string> HumanEnchantedStats => GetStats(ModsStruct.EnchantedStatsArray);
         public int FracturedCount => HumanFracturedStats.Count;
         public bool IsFractured => FracturedCount > 0;
         public bool IsSynthesized => ItemMods != null && 
@@ -77,7 +89,7 @@ namespace ExileCore.PoEMemory.Components
             return Cache.StringCache.Read($"{nameof(Mods)}{source.First}", () => string.Join(" ", words.ToArray()));
         }
 
-        private List<ItemMod> GetMods(NativePtrArray source)
+        private IEnumerable<ItemMod> GetMods(NativePtrArray source)
         {
             var mods = new List<ItemMod>();
             if (Address == 0) return mods;

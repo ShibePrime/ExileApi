@@ -58,6 +58,8 @@ namespace ExileCore.PoEMemory
         public ColorBGRA TextBoxBackgroundColor => new ColorBGRA(Elem.TextBoxBackgroundColor);
         public ColorBGRA TextBoxOverlayColor => new ColorBGRA(Elem.TextBoxOverlayColor);
 
+        public ColorBGRA HighlightBorderColor => new ColorBGRA(Elem.HighlightBorderColor);
+
         public virtual string Text => Sanitize(AsObject<EntityLabel>().Text);
 
         public virtual string LongText => Sanitize(AsObject<EntityLabel>().Text3);

@@ -8,39 +8,35 @@ namespace ExileCore.PoEMemory.Components
 {
     public class Base : Component
     {
-        private readonly CachedValue<BaseComponentOffsets> _cachedValue;
+        private readonly CachedValue<BaseComponentOffsets> _CachedComponent;
+        private readonly CachedValue<BaseInfoOffsets> _CachedInfo;
+
+        private string _Name;
 
         public Base()
         {
-            _cachedValue = new FrameCache<BaseComponentOffsets>(() => M.Read<BaseComponentOffsets>(Address));
+            _CachedComponent = new FrameCache<BaseComponentOffsets>(() => M.Read<BaseComponentOffsets>(Address));
+            _CachedInfo =
+                new FrameCache<BaseInfoOffsets>(() => M.Read<BaseInfoOffsets>(_CachedComponent.Value.BaseInfoKey));
         }
 
-        public BaseComponentOffsets BaseStruct => _cachedValue.Value;
+        private BaseComponentOffsets ComponentStruct => _CachedComponent.Value;
+        private BaseInfoOffsets InfoStruct => _CachedInfo.Value;
 
-        //x20 - some strings about item
-        private string _name;
-        public string Name => _name ??= M.Read<NativeStringU>(Address + 0x10, 0x18).ToString(M);
-        public byte ItemCellsSizeX => M.Read<byte>(Address + 0x10, 0x10);
-        public byte ItemCellsSizeY => M.Read<byte>(Address + 0x10, 0x11);
-        private Influence InfluenceFlag => (Influence)BaseStruct.InfluenceFlag;
+        public string Name => _Name ??= M.ReadStringU(InfoStruct.NameKey);
+        public byte ItemCellsSizeX => InfoStruct.ItemCellSizeX;
+        public byte ItemCellsSizeY => InfoStruct.ItemCellSizeY;
+        private Influence InfluenceFlag => (Influence)ComponentStruct.InfluenceFlag;
         public bool isShaper => (InfluenceFlag & Influence.Shaper) == Influence.Shaper;
         public bool isElder => (InfluenceFlag & Influence.Elder) == Influence.Elder;
         public bool isCrusader => (InfluenceFlag & Influence.Crusader) == Influence.Crusader;
         public bool isHunter => (InfluenceFlag & Influence.Hunter) == Influence.Hunter;
         public bool isRedeemer => (InfluenceFlag & Influence.Redeemer) == Influence.Redeemer;
         public bool isWarlord => (InfluenceFlag & Influence.Warlord) == Influence.Warlord;
-        public bool isCorrupted => (BaseStruct.isCorrupted & 0x01) == 0x01;
-        // REVISIT: not using Cache.StringCache here.  no profiles
-        // point to it being used often enough in a single frame.
-        public string PublicPrice => M.Read<NativeStringU>(BaseStruct.PublicPricePtr).ToString(M);
-
+        public bool isCorrupted => (ComponentStruct.isCorrupted & 0x01) == 0x01;
+        public int UnspentAbsorbedCorruption => ComponentStruct.UnspentAbsorbedCorruption;
+        public int ScourgedTier => ComponentStruct.ScourgedTier;
+        public string PublicPrice => M.ReadStringU(ComponentStruct.PublicPricePtr);
         // public bool isFractured => M.Read<byte>(Address + 0x98) == 0; // TODO: 3.12.2
-
-        // 0x8 - link to base item
-        // +0x10 - Name
-        // +0x30 - Use hint
-        // +0x50 - Link to Data/BaseItemTypes.dat
-
-        // 0xC (+4) fileref to visual identity
     }
 }

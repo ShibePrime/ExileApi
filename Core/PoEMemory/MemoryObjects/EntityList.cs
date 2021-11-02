@@ -79,7 +79,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 {
                     DebugWindow.LogError($"Unable to remove entity from list, id: {entityIdToDelete}");
                     continue;
-                };
+                }
                 entityRemoved?.Invoke(removedEntity);
             }
         }

@@ -4,104 +4,107 @@ using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using GameOffsets;
 
-namespace ExileCore.PoEMemory.Elements;
-
-public class HoverItemIcon : Element
+namespace ExileCore.PoEMemory.Elements
 {
-    private static readonly int InventPosXOff =
-        Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosX));
-
-    private static readonly int InventPosYOff =
-        Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosY));
-
-    private static readonly int InventItemTooltipOff =
-        Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Tooltip));
-
-    private static readonly int InventItemOff =
-        Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Item));
-
-    private static readonly int ItemsOnGroundLabelElementOffset =
-        Extensions.GetOffset<IngameUElementsOffsets>(nameof(IngameUElementsOffsets.itemsOnGroundLabelRoot));
-
-
-    private ToolTipType? _ToolTip;
-    public Element InventoryItemTooltip => ReadObject<Element>(Address + InventItemTooltipOff);
-    public Element ItemInChatTooltip => ReadObject<Element>(Address + 0x1F0);
-    public ItemOnGroundTooltip ToolTipOnGround => TheGame.IngameState.IngameUi.ItemOnGroundTooltip;
-    public int InventPosX => M.Read<int>(Address + InventPosXOff);
-    public int InventPosY => M.Read<int>(Address + InventPosYOff);
-
-    public ToolTipType ToolTipType
+    public class HoverItemIcon : Element
     {
-        get { return _ToolTip ??= GetToolTipType(); }
-    }
+        private static readonly int InventPosXOff =
+            Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosX));
 
-    public new Element Tooltip
-    {
-        get
+        private static readonly int InventPosYOff =
+            Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosY));
+
+        private static readonly int InventItemTooltipOff =
+            Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Tooltip));
+
+        private static readonly int InventItemOff =
+            Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Item));
+
+        private static readonly int ItemsOnGroundLabelElementOffset =
+            Extensions.GetOffset<IngameUElementsOffsets>(nameof(IngameUElementsOffsets.itemsOnGroundLabelRoot));
+
+
+        private ToolTipType? _ToolTip;
+        public Element InventoryItemTooltip => ReadObject<Element>(Address + InventItemTooltipOff);
+        public Element ItemInChatTooltip => ReadObject<Element>(Address + 0x1F0);
+        public ItemOnGroundTooltip ToolTipOnGround => TheGame.IngameState.IngameUi.ItemOnGroundTooltip;
+        public int InventPosX => M.Read<int>(Address + InventPosXOff);
+        public int InventPosY => M.Read<int>(Address + InventPosYOff);
+
+        public ToolTipType ToolTipType
         {
-            return ToolTipType switch
-            {
-                ToolTipType.ItemOnGround => ToolTipOnGround.Tooltip,
-                ToolTipType.InventoryItem => InventoryItemTooltip,
-                ToolTipType.ItemInChat => ItemInChatTooltip.Children[0].Children[1],
-                _ => null
-            };
+            get { return _ToolTip ??= GetToolTipType(); }
         }
-    }
 
-    public Element ItemFrame
-    {
-        get
+        public new Element Tooltip
         {
-            return ToolTipType switch
+            get
             {
-                ToolTipType.ItemOnGround => ToolTipOnGround.ItemFrame,
-                ToolTipType.ItemInChat => ItemInChatTooltip.Children[0].Children[0],
-                _ => null
-            };
+                return ToolTipType switch
+                {
+                    ToolTipType.ItemOnGround => ToolTipOnGround.Tooltip,
+                    ToolTipType.InventoryItem => InventoryItemTooltip,
+                    ToolTipType.ItemInChat => ItemInChatTooltip.Children[0].Children[1],
+                    _ => null
+                };
+            }
         }
-    }
 
-    public Entity Item
-    {
-        get
+        public Element ItemFrame
         {
-            switch (ToolTipType)
+            get
             {
-                case ToolTipType.ItemOnGround:
-                    var le = TheGame.IngameState.IngameUi.ReadObjectAt<ItemsOnGroundLabelElement>(
-                        ItemsOnGroundLabelElementOffset);
-                    var e = le?.ItemOnHover;
-                    return e?.GetComponent<WorldItem>()?.ItemEntity;
-                case ToolTipType.InventoryItem:
-                    return ReadObject<Entity>(Address + InventItemOff);
-                case ToolTipType.ItemInChat:
-                    return null;
+                return ToolTipType switch
+                {
+                    ToolTipType.ItemOnGround => ToolTipOnGround.ItemFrame,
+                    ToolTipType.ItemInChat => ItemInChatTooltip.Children[0].Children[0],
+                    _ => null
+                };
+            }
+        }
+
+        public Entity Item
+        {
+            get
+            {
+                switch (ToolTipType)
+                {
+                    case ToolTipType.ItemOnGround:
+                        var le = TheGame.IngameState.IngameUi.ReadObjectAt<ItemsOnGroundLabelElement>(
+                            ItemsOnGroundLabelElementOffset);
+                        var e = le?.ItemOnHover;
+                        return e?.GetComponent<WorldItem>()?.ItemEntity;
+                    case ToolTipType.InventoryItem:
+                        return ReadObject<Entity>(Address + InventItemOff);
+                    case ToolTipType.ItemInChat:
+                        return null;
+                }
+
+                return null;
+            }
+        }
+
+        private ToolTipType GetToolTipType()
+        {
+            if (InventoryItemTooltip != null && InventoryItemTooltip.IsVisible)
+            {
+                return ToolTipType.InventoryItem;
             }
 
-            return null;
-        }
-    }
+            if (ToolTipOnGround != null && ToolTipOnGround.Tooltip != null && ToolTipOnGround.TooltipUI != null &&
+                ToolTipOnGround.TooltipUI.IsVisible)
+            {
+                return ToolTipType.ItemOnGround;
+            }
 
-    private ToolTipType GetToolTipType()
-    {
-        if (InventoryItemTooltip is { IsVisible: true })
-        {
-            return ToolTipType.InventoryItem;
-        }
+            if (ItemInChatTooltip != null && ItemInChatTooltip.IsVisible && ItemInChatTooltip.ChildCount > 0 &&
+                ItemInChatTooltip.Children[0].ChildCount > 1 && ItemInChatTooltip.Children[0].Children[0].IsVisible &&
+                ItemInChatTooltip.Children[0].Children[1].IsVisible)
+            {
+                return ToolTipType.ItemInChat;
+            }
 
-        if (ToolTipOnGround is { Tooltip: { }, TooltipUI.IsVisible: true })
-        {
-            return ToolTipType.ItemOnGround;
+            return ToolTipType.None;
         }
-
-        if (ItemInChatTooltip is { IsVisible: true, ChildCount: > 0 } && ItemInChatTooltip.Children[0].ChildCount > 1 &&
-            ItemInChatTooltip.Children[0].Children[0].IsVisible && ItemInChatTooltip.Children[0].Children[1].IsVisible)
-        {
-            return ToolTipType.ItemInChat;
-        }
-
-        return ToolTipType.None;
     }
 }

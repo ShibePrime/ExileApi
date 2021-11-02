@@ -27,11 +27,13 @@ namespace GameOffsets
 
         [FieldOffset(0x180)] public float Width;
         [FieldOffset(0x184)] public float Height;
-        [FieldOffset(0x190)] public bool isHighlighted; // Checks B Channel of Border (#00000000 to #E7B478FF highlighted)
 
         [FieldOffset(0x190)] public uint TextBoxBorderColor;
         [FieldOffset(0x190)] public uint TextBoxBackgroundColor;
         [FieldOffset(0x194)] public uint TextBoxOverlayColor;
+
+        [FieldOffset(0x1C0)] public uint HighlightBorderColor;
+        [FieldOffset(0x1C3)] public bool isHighlighted;
 
         [FieldOffset(0x3E8)] public long Tooltip;
     }
