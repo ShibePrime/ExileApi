@@ -17,6 +17,7 @@ namespace GameOffsets
         [FieldOffset(0xB8)] public NativePtrArray ImplicitModsArray;
         [FieldOffset(0xD0)] public NativePtrArray ExplicitModsArray;
         [FieldOffset(0xE8)] public NativePtrArray EnchantedModsArray;
+        [FieldOffset(0x100)] public NativePtrArray ScourgeModsArray;
         [FieldOffset(0x1D8)] public NativePtrArray ImplicitStatsArray;
         [FieldOffset(0x218)] public NativePtrArray EnchantedStatsArray;
         [FieldOffset(0x258)] public NativePtrArray ScourgeStatsArray;

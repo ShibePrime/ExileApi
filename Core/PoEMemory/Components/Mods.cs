@@ -5,6 +5,7 @@ using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.PoEMemory.Models;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
+using ExileCore.Shared.Helpers;
 using GameOffsets;
 using GameOffsets.Native;
 
@@ -41,18 +42,21 @@ namespace ExileCore.PoEMemory.Components
         {
             get
             {
+                var scourgedMods = GetMods(ModsStruct.ScourgeModsArray);
+                var enchantedMods = GetMods(ModsStruct.EnchantedModsArray);
                 var implicitMods = GetMods(ModsStruct.ImplicitModsArray);
                 var explicitMods = GetMods(ModsStruct.ExplicitModsArray);
-                var enchantMods = GetMods(ModsStruct.EnchantedModsArray);
-                return implicitMods.Concat(explicitMods).Concat(enchantMods).ToList();
+
+                return scourgedMods.Concat(enchantedMods, implicitMods, explicitMods).ToList();
             }
         }
         public ItemStats ItemStats => new ItemStats(Owner);
+        public List<string> HumanImpStats => GetStats(ModsStruct.ImplicitStatsArray);
+        public List<string> HumanEnchantedStats => GetStats(ModsStruct.EnchantedStatsArray);
+        public List<string> HumanScourgeStats => GetStats(ModsStruct.ScourgeStatsArray);
         public List<string> HumanStats => GetStats(ModsStruct.ExplicitStatsArray);
         public List<string> HumanCraftedStats => GetStats(ModsStruct.CraftedStatsArray);
-        public List<string> HumanImpStats => GetStats(ModsStruct.ImplicitStatsArray);
         public List<string> HumanFracturedStats => GetStats(ModsStruct.FracturedStatsArray);
-        public List<string> HumanEnchantedStats => GetStats(ModsStruct.EnchantedStatsArray);
         public int FracturedCount => HumanFracturedStats.Count;
         public bool IsFractured => FracturedCount > 0;
         public bool IsSynthesized => ItemMods != null && 
@@ -77,7 +81,7 @@ namespace ExileCore.PoEMemory.Components
             return Cache.StringCache.Read($"{nameof(Mods)}{source.First}", () => string.Join(" ", words.ToArray()));
         }
 
-        private List<ItemMod> GetMods(NativePtrArray source)
+        private IEnumerable<ItemMod> GetMods(NativePtrArray source)
         {
             var mods = new List<ItemMod>();
             if (Address == 0) return mods;
