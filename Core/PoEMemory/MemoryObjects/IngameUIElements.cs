@@ -15,6 +15,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private Element _CraftBench;
         private Cursor _cursor;
         private SubterraneanChart _DelveWindow;
+        private Element _haggleWindow;
         private IncursionWindow _IncursionWindow;
         private Map _map;
         private Element _purchaseWindow;
@@ -37,6 +38,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public NpcDialog NpcDialog => GetObject<NpcDialog>(IngameUIElementsStruct.NpcDialog);
         public BanditDialog BanditDialog => GetObject<BanditDialog>(IngameUIElementsStruct.BanditDialog);
         public Element PurchaseWindow => _purchaseWindow ??= GetObject<Element>(IngameUIElementsStruct.PurchaseWindow);
+
+        public Element HaggleWindow =>
+            _haggleWindow ??= GetObject<Element>(IngameUIElementsStruct.ExpeditionPurchaseWindow);
         public SubterraneanChart DelveWindow => _DelveWindow ??= GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow);
         public SkillBarElement SkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.SkillBar);
         public SkillBarElement HiddenSkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.HiddenSkillBar);
