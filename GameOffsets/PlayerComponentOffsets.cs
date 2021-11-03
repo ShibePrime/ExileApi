@@ -16,10 +16,10 @@ namespace GameOffsets
         [FieldOffset(0x190)] public int Intelligence;
         [FieldOffset(0x194)] public byte AllocatedLootId;
         [FieldOffset(0x196)] public byte Level;
-        [FieldOffset(0x1AC)] public byte PantheonMinor;
-        [FieldOffset(0x1AD)] public byte PantheonMajor;
-        [FieldOffset(0x212)] public byte PropheciesCount;
-        public long PropheciesOffset => 0x214;
+        [FieldOffset(0x198)] public byte PantheonMinor;
+        [FieldOffset(0x199)] public byte PantheonMajor;
+        [FieldOffset(0x21E)] public byte PropheciesCount;
+        public long PropheciesOffset => 0x220;
         public long ProphecyLength => 0x4; //prophecy prophecyId(UShort), Skip index(byte), Skip unknown(byte)
 
         public long TrialPassStatesOffset => 0x2b4; // probably wrong
