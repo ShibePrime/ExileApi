@@ -19,6 +19,8 @@ namespace GameOffsets
         [FieldOffset(0x248)] public float Regen;
         [FieldOffset(0x24C)] public int MaxHP;
         [FieldOffset(0x250)] public int CurHP;
+        [FieldOffset(0x254)] public int ReservedFlatHP;
         [FieldOffset(0x258)] public int ReservedPercentHP;
+
     }
 }
