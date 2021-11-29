@@ -27,7 +27,7 @@ namespace ExileCore.PoEMemory
                     0x41
 
                 }, "xxxxxx????x", "File Root",
-                14630000);
+                0x12D5000);
 
         /* Area Change
         00007FF63317CE40 | 48 83 EC 58                    | sub rsp,58                                      |
@@ -54,7 +54,7 @@ namespace ExileCore.PoEMemory
                     0xE8,
                     0x00, 0x00, 0x00, 0x00,
                     0xFF, 0x05
-                }, "x?????x????xx", "Area change", 9430000);
+                }, "x?????x????xx", "Area change", 0x6A0000);
 
         /*
        140094573 48 83 ec 20     SUB        RSP,0x20
