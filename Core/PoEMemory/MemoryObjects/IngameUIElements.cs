@@ -82,6 +82,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public WorldMapElement AreaInstanceUi => GetObject<WorldMapElement>(IngameUIElementsStruct.AreaInstanceUi);
         public WorldMapElement WorldMap => GetObject<WorldMapElement>(IngameUIElementsStruct.WorldMap);
         public MetamorphWindowElement MetamorphWindow => GetObject<MetamorphWindowElement>(IngameUIElementsStruct.MetamorphWindow);
+        public Element HeistContractWindow => GetObject<Element>(IngameUIElementsStruct.HeistContractPanel);
+        public Element HeistRevealWindow => GetObject<Element>(IngameUIElementsStruct.HeistRevealPanel);
+        public Element HeistAllyEquipmentWindow => GetObject<Element>(IngameUIElementsStruct.HeistAllyEquipmentPanel);
+        public Element HeistBlueprintWindow => GetObject<Element>(IngameUIElementsStruct.HeistBlueprintPanel);
+        public Element HeistLockerWindow => GetObject<Element>(IngameUIElementsStruct.HeistLockerPanel);
         public RitualWindow RitualWindow => GetObject<RitualWindow>(IngameUIElementsStruct.RitualWindow);
         public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourPanel);
         public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressPanel);
