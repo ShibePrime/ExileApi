@@ -109,33 +109,39 @@ namespace ExileCore
 
         public void SaveCoreSettings()
         {
+            rwLock.EnterWriteLock();
             try
             {
-                rwLock.EnterWriteLock();
                 var serializeObject = JsonConvert.SerializeObject(CoreSettings, Formatting.Indented);
                 var info = new FileInfo(SETTINGS_FILE_NAME);
                 if (info.Length > 1) File.Copy(SETTINGS_FILE_NAME, $"{CFG_DIR}\\dumpSettings.json", true);
                 File.WriteAllText(SETTINGS_FILE_NAME, serializeObject);
-                rwLock.ExitWriteLock();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+            finally
+            {
+                rwLock.ExitWriteLock();
             }
         }
 
         public void SavePluginAutoUpdateSettings()
         {
+            rwLock.EnterWriteLock();
             try
             {
-                rwLock.EnterWriteLock();
                 var serializeObject = JsonConvert.SerializeObject(PluginsUpdateSettings, Formatting.Indented);
                 File.WriteAllText(PLUGIN_AUTO_UPDATE_SETTINGS_FILE, serializeObject);
-                rwLock.ExitWriteLock();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+            finally
+            {
+                rwLock.ExitWriteLock();
             }
         }
 
@@ -144,13 +150,17 @@ namespace ExileCore
             if (plugin == null) return;
             if (string.IsNullOrWhiteSpace(CurrentProfileName)) CurrentProfileName = DEFAULT_PROFILE_NAME;
             rwLock.EnterWriteLock();
+            try
+            {
+                if (!Directory.Exists($"{CFG_DIR}\\{CurrentProfileName}")) Directory.CreateDirectory($"{CFG_DIR}\\{CurrentProfileName}");
 
-            if (!Directory.Exists($"{CFG_DIR}\\{CurrentProfileName}")) Directory.CreateDirectory($"{CFG_DIR}\\{CurrentProfileName}");
-
-            File.WriteAllText($"{CFG_DIR}\\{CurrentProfileName}\\{plugin.InternalName}_settings.json",
-                JsonConvert.SerializeObject(plugin._Settings, Formatting.Indented, jsonSettings));
-
-            rwLock.ExitWriteLock();
+                File.WriteAllText($"{CFG_DIR}\\{CurrentProfileName}\\{plugin.InternalName}_settings.json",
+                                  JsonConvert.SerializeObject(plugin._Settings, Formatting.Indented, jsonSettings));
+            }
+            finally
+            {
+                rwLock.ExitWriteLock();
+            }
         }
 
         public string LoadSettings(IPlugin plugin)
