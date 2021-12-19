@@ -9,11 +9,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class Inventory : Element
     {
-        private static int ItemCountOff = Extensions.GetOffset<InventoryOffsets>(nameof(InventoryOffsets.ItemCount));
-
-        private static int TotalBoxesInInventoryRowOff =
-            Extensions.GetOffset<InventoryOffsets>(nameof(InventoryOffsets.TotalBoxesInInventoryRow));
-
         private readonly CachedValue<InventoryOffsets> _cachedValue;
         private InventoryType _cacheInventoryType;
 

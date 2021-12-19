@@ -8,16 +8,16 @@ namespace ExileCore.PoEMemory.Elements
 {
     public class HoverItemIcon : Element
     {
-        private static readonly int InventPosXOff =
+        private static readonly int InventPosXOffset =
             Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosX));
 
-        private static readonly int InventPosYOff =
+        private static readonly int InventPosYOffset =
             Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosY));
 
-        private static readonly int InventItemTooltipOff =
+        private static readonly int InventItemTooltipOffset =
             Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Tooltip));
 
-        private static readonly int InventItemOff =
+        private static readonly int InventItemOffset =
             Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Item));
 
         private static readonly int ItemsOnGroundLabelElementOffset =
@@ -25,11 +25,11 @@ namespace ExileCore.PoEMemory.Elements
 
 
         private ToolTipType? _ToolTip;
-        public Element InventoryItemTooltip => ReadObject<Element>(Address + InventItemTooltipOff);
+        public Element InventoryItemTooltip => ReadObject<Element>(Address + InventItemTooltipOffset);
         public Element ItemInChatTooltip => ReadObject<Element>(Address + 0x1F0);
         public ItemOnGroundTooltip ToolTipOnGround => TheGame.IngameState.IngameUi.ItemOnGroundTooltip;
-        public int InventPosX => M.Read<int>(Address + InventPosXOff);
-        public int InventPosY => M.Read<int>(Address + InventPosYOff);
+        public int InventPosX => M.Read<int>(Address + InventPosXOffset);
+        public int InventPosY => M.Read<int>(Address + InventPosYOffset);
 
         public ToolTipType ToolTipType
         {
@@ -75,7 +75,7 @@ namespace ExileCore.PoEMemory.Elements
                         var e = le?.ItemOnHover;
                         return e?.GetComponent<WorldItem>()?.ItemEntity;
                     case ToolTipType.InventoryItem:
-                        return ReadObject<Entity>(Address + InventItemOff);
+                        return ReadObject<Entity>(Address + InventItemOffset);
                     case ToolTipType.ItemInChat:
                         return null;
                 }

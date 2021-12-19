@@ -8,6 +8,11 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class IngameState : GameState
     {
+        private static readonly int CameraOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.Camera));
+        private static readonly int FPSRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FPSRectangle));
+        private static readonly int FrameTimeRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FrameTimeRectangle));
+        private static readonly int LatencyRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.LatencyRectangle));
+
         private readonly CachedValue<Camera> _camera;
         private readonly CachedValue<float> _UIHoverPosX;
         private readonly CachedValue<float> _UIHoverPosY;
@@ -34,8 +39,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             _ingameState = new FrameCache<IngameStateOffsets>(() => M.Read<IngameStateOffsets>(Address));
 
-            _camera = new AreaCache<Camera>(
-                () => GetObject<Camera>(Address + Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.Camera))));
+            _camera = new AreaCache<Camera>(() => GetObject<Camera>(Address + CameraOffset));
 
             _ingameData = new AreaCache<IngameData>(() => GetObject<IngameData>(_ingameState.Value.Data));
             _ingameUi = new AreaCache<IngameUIElements>(() => GetObject<IngameUIElements>(_ingameState.Value.IngameUi));
@@ -49,17 +53,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePosY);
             _DiagnosticInfoType = new FrameCache<DiagnosticInfoType>(() => (DiagnosticInfoType)_ingameState.Value.DiagnosticInfoType);
 
-            _LatencyRectangle = new AreaCache<DiagnosticElement>(
-                () => GetObject<DiagnosticElement>(
-                    Address + Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.LatencyRectangle))));
-
-            _FrameTimeRectangle = new AreaCache<DiagnosticElement>(
-                () => GetObject<DiagnosticElement>(Address + /*0x1628*/
-                                                   +Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FrameTimeRectangle))));
-
-            _FPSRectangle = new AreaCache<DiagnosticElement>(
-                () => GetObject<DiagnosticElement>(Address /*0x1870*/ +
-                                                   Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FPSRectangle))));
+            _LatencyRectangle = new AreaCache<DiagnosticElement>(() => GetObject<DiagnosticElement>(Address + LatencyRectangleOffset));
+            _FrameTimeRectangle = new AreaCache<DiagnosticElement>(() => GetObject<DiagnosticElement>(Address + FrameTimeRectangleOffset));
+            _FPSRectangle = new AreaCache<DiagnosticElement>(() => GetObject<DiagnosticElement>(Address + FPSRectangleOffset));
 
             _TimeInGameF = new FrameCache<float>(() => _ingameState.Value.TimeInGameF);
             _EntityLabelMap = new AreaCache<EntityLabelMapOffsets>(() => M.Read<EntityLabelMapOffsets>(_ingameState.Value.EntityLabelMap));

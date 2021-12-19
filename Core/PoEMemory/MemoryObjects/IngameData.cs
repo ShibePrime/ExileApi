@@ -10,6 +10,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class IngameData : RemoteMemoryObject
     {
+        private static readonly int EntityCountOffset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.EntitiesCount));
         private readonly CachedValue<IngameDataOffsets> _IngameData;
         private readonly CachedValue<AreaTemplate> _CurrentArea;
         private readonly CachedValue<WorldArea> _CurrentWorldArea;
@@ -26,8 +27,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _LocalPlayer = new AreaCache<Entity>(() => GetObject<Entity>(_IngameData.Value.LocalPlayer));
             _CurrentArea = new AreaCache<AreaTemplate>(() => GetObject<AreaTemplate>(_IngameData.Value.CurrentArea));
             _CurrentWorldArea = new AreaCache<WorldArea>(() => TheGame.Files.WorldAreas.GetByAddress(CurrentArea.Address));
-            var offset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.EntitiesCount));
-            _EntitiesCount = new FrameCache<long>(() => M.Read<long>(Address + offset));
+            _EntitiesCount = new FrameCache<long>(() => M.Read<long>(Address + EntityCountOffset));
             _ServerData = new AreaCache<ServerData>(() => GetObject<ServerData>(_IngameData.Value.ServerData));
         }
 

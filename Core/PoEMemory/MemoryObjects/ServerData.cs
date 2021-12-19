@@ -33,9 +33,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
     }
     public class ServerData : RemoteMemoryObject
     {
-        private static readonly int NetworkStateOff =
-            Extensions.GetOffset<ServerDataOffsets>(nameof(ServerDataOffsets.NetworkState)) + ServerDataOffsets.Skip;
-
         private readonly CachedValue<ServerDataOffsets> _CachedValue;
         private readonly CachedValue<ServerPlayerData> _PlayerData;
         private readonly List<Player> _NearestPlayers = new List<Player>();
