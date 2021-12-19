@@ -97,7 +97,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         private List<QuestState> GenerateQuestStates()
         {
-            var result = new List<QuestState>();
+            var result = new Dictionary<string, QuestState>();
             /*
              * This is definitely not the most performant way to get the quest.
              * 9 quests are missing (e.g. a10q2). 
@@ -108,12 +108,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 var addressOfQuest = M.Read<long>(pointerToQuest);
 
                 var questState = GetObject<QuestState>(addressOfQuest);
-                if (questState?.Quest == null) continue;
-                if (result.Any(r => r.Quest?.Id == questState.Quest?.Id)) continue; // skip entries which are already in the list
-                result.Add(questState);
+                var quest = questState?.Quest;
+                if (quest == null) continue;
+                if (!result.ContainsKey(quest.Id)) result.Add(quest.Id, questState);
             }
 
-            return result;
+            return result.Values.ToList();
         }
     }
 }
