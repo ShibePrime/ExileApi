@@ -1,18 +1,12 @@
 using System;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Enums;
-using ExileCore.Shared.Helpers;
 using GameOffsets;
 
 namespace ExileCore.PoEMemory.Elements.InventoryElements
 {
     public class NormalInventoryItem : Element
     {
-        private static int InventPosXOff = Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosX));
-        private static int InventPosYOff = Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.InventPosY));
-        private static int WidthOff = Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Width));
-        private static int HeightOff = Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Height));
-        private static int ItemOff = Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Item));
         private Entity _item;
         private readonly Lazy<NormalInventoryItemOffsets> cachedValue;
 

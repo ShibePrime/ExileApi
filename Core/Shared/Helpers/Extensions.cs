@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
-using JM.LinqFaster;
 using SharpDX;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -103,9 +103,10 @@ namespace ExileCore.Shared.Helpers
             {
                 var type = typeof(T);
 
-                var offset = (int) type.GetFields().FirstF(x => x.Name == name).GetCustomAttributesData()
-                    .First(x => x.AttributeType.Name.Equals("FieldOffsetAttribute", StringComparison.Ordinal))
-                    .ConstructorArguments.First().Value;
+                var offset = type.GetFields()
+                   .First(x => x.Name == name)
+                   .GetCustomAttribute<FieldOffsetAttribute>()
+                   .Value;
 
                 return offset;
             }

@@ -13,7 +13,7 @@ namespace ExileCore.PoEMemory
     public class Element : RemoteMemoryObject
     {
         public const int OffsetBuffers = 0;
-        private static readonly int IsVisibleLocalOff = Extensions.GetOffset<ElementOffsets>(nameof(ElementOffsets.IsVisibleLocal));
+        private static readonly int IsVisibleLocalOffset = Extensions.GetOffset<ElementOffsets>(nameof(ElementOffsets.IsVisibleLocal));
         private static readonly int ChildStartOffset = Extensions.GetOffset<ElementOffsets>(nameof(ElementOffsets.ChildStart));
 
         // dd id
@@ -31,7 +31,7 @@ namespace ExileCore.PoEMemory
         public Element()
         {
             _cacheElement = new FrameCache<ElementOffsets>(() => Address == 0 ? default : M.Read<ElementOffsets>(Address));
-            _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address != 0 && M.Read<bool>(Address + IsVisibleLocalOff));
+            _cacheElementIsVisibleLocal = new FrameCache<bool>(() => Address != 0 && M.Read<bool>(Address + IsVisibleLocalOffset));
         }
 
         public ElementOffsets Elem => _cacheElement.Value;

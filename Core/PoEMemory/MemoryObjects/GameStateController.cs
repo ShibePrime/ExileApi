@@ -11,6 +11,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class TheGame : RemoteMemoryObject
     {
+        private static readonly int CurrentAreaHashOffset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.CurrentAreaHash));
+        private static readonly int DataOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.Data));
+
         //I hope this caching will works fine
         private static long PreGameStatePtr = -1;
         private static long LoginStatePtr = -1;
@@ -23,8 +26,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<int> _AreaChangeCount;
         private readonly CachedValue<bool> _inGame;
         public readonly Dictionary<string, GameState> AllGameStates;
-        private readonly int CurrentAreaHashOff;
-        private readonly int DataOff;
 
         public TheGame(IMemory m, Cache cache)
         {
@@ -53,8 +54,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
                                                  IngameState.ServerData.IsInGame*/);
 
             Files = new FilesContainer(m);
-            DataOff = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.Data));
-            CurrentAreaHashOff = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.CurrentAreaHash));
         }
 
         public FilesContainer Files { get; set; }
@@ -77,7 +76,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                var hash = M.Read<uint>(IngameState.Address + DataOff, CurrentAreaHashOff);
+                var hash = M.Read<uint>(IngameState.Address + DataOffset, CurrentAreaHashOffset);
                 return hash;
             }
         }
