@@ -126,6 +126,8 @@ namespace ExileCore
 
         public T[] ReadAsArray<T>(long addr, int size) where T : struct
         {
+            if (size == 0)
+                return Array.Empty<T>();
             T[] buffer = new T[size];
             try
             {
