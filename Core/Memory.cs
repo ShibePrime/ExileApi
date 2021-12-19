@@ -202,15 +202,16 @@ namespace ExileCore
 
         public IList<long> ReadPointersArray(long startAddress, long endAddress, int offset = 8)
         {
-            var result = new List<long>();
+            if (startAddress <= 0 || endAddress <= 0) 
+                return new List<long>();
 
             var length = endAddress - startAddress;
 
             if (length <= 0 || length > 20000 * 8)
-                return result;
+                return new List<long>();
 
             sw.Restart();
-            result = new List<long>((int)(length / offset) + 1);
+            var result = new List<long>((int)(length / offset) + 1);
             var bytes = ReadMem(startAddress, (int)length);
 
             for (var i = 0; i < length; i += offset)
