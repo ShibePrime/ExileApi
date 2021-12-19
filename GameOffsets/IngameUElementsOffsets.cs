@@ -40,6 +40,11 @@ namespace GameOffsets
         [FieldOffset(0x8A0)] public long SynthesisWindow;
         [FieldOffset(0x840)] public long MetamorphWindow; // TODO
         [FieldOffset(0x8C8)] public long HarvestWindow;
+        [FieldOffset(0x8D0)] public long HeistContractPanel;
+        [FieldOffset(0x8D8)] public long HeistRevealPanel;
+        [FieldOffset(0x8E0)] public long HeistAllyEquipmentPanel;
+        [FieldOffset(0x8E8)] public long HeistBlueprintPanel;
+        [FieldOffset(0x8F0)] public long HeistLockerPanel;
         [FieldOffset(0x8F8)] public long RitualWindow;
         [FieldOffset(0x900)] public long RitualFavourPanel;
         [FieldOffset(0x898)] public long UltimatumProgressPanel; // TODO
@@ -185,11 +190,6 @@ namespace GameOffsets
         //[FieldOffset(0x848)] public long TanesLabMetamorphWindow; // This is the panel you encounter in Tane's Lab.
         //[FieldOffset(0x850)] public long HarvestWindow;
         //[FieldOffset(0x858)] public long HorticraftingStationPanel;
-        //[FieldOffset(0x860)] public long HeistContractPanel;
-        //[FieldOffset(0x868)] public long HeistRevealPanel;
-        //[FieldOffset(0x870)] public long HeistAllyEquipmentPanel;
-        //[FieldOffset(0x878)] public long HeistBlueprintPanel;
-        //[FieldOffset(0x880)] public long HeistLockerPanel;
         //[FieldOffset(0x888)] public long RitualWindow;
         //[FieldOffset(0x890)] public long RitualFavourPanel;
         //[FieldOffset(0x898)] public long UltimatumProgressPanel;
