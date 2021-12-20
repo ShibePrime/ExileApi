@@ -55,17 +55,25 @@ namespace ExileCore.PoEMemory.Elements
     public class DelveCell : Element
     {
         private DelveCellInfoStrings info;
-        private NativeStringU mods => M.Read<NativeStringU>(Address + 0x520);
+        private NativeStringU mods => M.Read<NativeStringU>(Address + 0x4E0);
         public string Mods => mods.ToString(M);
         //private NativeStringU mines => M.Read<NativeStringU>(M.Read<long>(Address + 0x150) + 0x38);
         //public string MinesText => mines.ToString(M);
-        public DelveCellInfoStrings Info => info = info ?? ReadObjectAt<DelveCellInfoStrings>(0x6C0);
-        public string Type => M.ReadStringU(M.Read<long>(Address + 0x6D0, 0x0));
-        public string TypeHuman => M.ReadStringU(M.Read<long>(Address + 0x6D0, 0x8));
+        public DelveCellInfoStrings Info => info ??= ReadObjectAt<DelveCellInfoStrings>(0x6C0);
         public override string Text => $"{Info.TestString} [{Info.TestString5}]";
-        public bool IsFeatureHovered => M.Read<bool>(Address + 0x70F);
-        public bool IsCellHovered => M.Read<bool>(Address + 0x710);
-        public bool IsCellVisible => M.Read<bool>(Address + 0x711);
+        public bool HasEncounter => M.Read<bool>(Address + 0x45B);
+        public bool IsCellVisible => M.Read<bool>(Address + 0x45C);
+        public bool PathIsHidden => M.Read<bool>(Address + 0x45F);
+        public bool WasVisited => M.Read<bool>(Address + 0x460);
+        public string IconPath => M.ReadStringU(M.Read<long>(Address + 0x578, 0x0));
+        /// <summary> The cell id, e.g. Azurite3_1 </summary>
+        public string Type => M.ReadStringU(M.Read<long>(Address + 0x628, 0x0));
+        /// <summary> The cell display name, e.g. Azurite Fissure </summary>
+        public string TypeHuman => M.ReadStringU(M.Read<long>(Address + 0x628, 0x8));
+        public string BiomeName => M.ReadStringU(M.Read<long>(Address + 0x638, 0x0));
+        public string BiomeDisplayName => M.ReadStringU(M.Read<long>(Address + 0x638, 0x8));
+        public bool IsFeatureHovered => M.Read<bool>(Address + 0x677);
+        public bool IsCellHovered => M.Read<bool>(Address + 0x678);
     }
 
     public class DelveCellInfoStrings : RemoteMemoryObject
