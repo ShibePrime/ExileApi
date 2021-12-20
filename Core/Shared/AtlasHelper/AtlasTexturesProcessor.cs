@@ -6,7 +6,7 @@ using SharpDX;
 
 namespace ExileCore.Shared.AtlasHelper
 {
-    internal sealed class AtlasTexturesProcessor
+    public sealed class AtlasTexturesProcessor
     {
         private readonly Dictionary<string, AtlasTexture> _atlasTextures = new Dictionary<string, AtlasTexture>();
         private static readonly AtlasTexture MISSING_TEXTURE;
