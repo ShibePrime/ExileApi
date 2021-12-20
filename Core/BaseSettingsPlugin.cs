@@ -209,6 +209,24 @@ namespace ExileCore
             return texture;
         }
 
+        public AtlasTexturesProcessor CreateAtlas(string configPath, string texturePath)
+        {
+            if (!File.Exists(configPath))
+            {
+                LogError($"Plugin '{Name}': Can't find atlas json config file in '{configPath}'", 20);
+                return new AtlasTexturesProcessor("%AtlasNotFound%");
+            }
+
+            if (!File.Exists(texturePath))
+            {
+                LogError($"Plugin '{Name}': Can't find atlas png texture file in '{texturePath}' ", 20);
+                return new AtlasTexturesProcessor("%AtlasNotFound%");
+            }
+
+            Graphics.InitImage(texturePath, false);
+            return new AtlasTexturesProcessor(configPath, texturePath);
+        }
+
         #endregion
     }
 }
