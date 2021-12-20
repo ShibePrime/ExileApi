@@ -84,6 +84,27 @@ namespace ExileCore.PoEMemory
             _getClientRect?.Value ?? (_getClientRect = new TimeCache<RectangleF>(GetClientRect, 200)).Value;
         public Element this[int index] => GetChildAtIndex(index);
 
+        public int? IndexInParent => Parent?.Children.IndexOf(this);
+
+        public string PathFromRoot
+        {
+            get
+            {
+                var parentChain = GetParentChain();
+                parentChain.RemoveAt(parentChain.Count - 1);
+                parentChain.Reverse();
+                parentChain.Add(this);
+                var properties = (from property in TheGame.IngameState.IngameUi.GetType().GetProperties()
+                                  where typeof(Element).IsAssignableFrom(property.PropertyType)
+                                  where property.GetIndexParameters().Length == 0
+                                  let value = property.GetValue(TheGame.IngameState.IngameUi) as Element
+                                  where value.Address == parentChain.First().Address
+                                  select property.Name).ToList();
+
+                return (properties.Count > 0 ? $"({properties.First()})" : "") + string.Join("->", parentChain.Select(x => x.IndexInParent));
+            }
+        }
+
         protected List<Element> GetChildren<T>() where T : Element
         {
             var e = Elem;
@@ -112,7 +133,7 @@ namespace ExileCore.PoEMemory
             return pointers.Count != ChildCount ? new List<T>() : pointers.Select(GetObject<T>).ToList();
         }
 
-        private IList<Element> GetParentChain()
+        private List<Element> GetParentChain()
         {
             var list = new List<Element>();
 
