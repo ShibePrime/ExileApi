@@ -35,10 +35,5 @@ namespace ExileCore.PoEMemory.FilesInMemory
         {
             return EntriesList.FirstOrDefault(x => x.Area == area);
         }
-
-        public new LabyrinthTrial GetByAddress(long address)
-        {
-            return base.GetByAddress(address);
-        }
     }
 }

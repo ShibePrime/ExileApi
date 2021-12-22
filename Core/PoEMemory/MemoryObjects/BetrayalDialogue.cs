@@ -5,15 +5,15 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class BetrayalDialogue : RemoteMemoryObject
     {
-        public BetrayalTarget Target => TheGame.Files.BetrayalTargets.GetByAddress(M.Read<long>(Address + 0x8));
+        public BetrayalTarget Target => TheGame.Files.BetrayalTargets.GetByAddress(M.Read<long>(Address + 0x0));
         public int Unknown1 => M.Read<int>(Address + 0x10);
         public int Unknown2 => M.Read<int>(Address + 0x14);
         public int Unknown3 => M.Read<int>(Address + 0x38);
         public bool Unknown4 => M.Read<byte>(Address + 0x6c) > 0;
         public bool Unknown5 => M.Read<byte>(Address + 0x8d) > 0;
-        public BetrayalJob Job => TheGame.Files.BetrayalJobs.GetByAddress(M.Read<long>(Address + 0x44));
+        public BetrayalJob Job => TheGame.Files.BetrayalJobs.GetByAddress(M.Read<long>(Address + 0x3C));
         public BetrayalUpgrade Upgrade => ReadObjectAt<BetrayalUpgrade>(0x64);
-        public string DialogueText => M.ReadStringU(M.Read<long>(Address + 0xA6, 0x18));
+        public string DialogueText => M.ReadStringU(M.Read<long>(Address + 0x9E, 0x18));
         public List<int> Keys1 => ReadKeys(0x20);
         public List<int> Keys2 => ReadKeys(0x54);
         public List<int> Keys3 => ReadKeys(0x85);
