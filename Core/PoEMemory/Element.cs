@@ -91,8 +91,11 @@ namespace ExileCore.PoEMemory
             get
             {
                 var parentChain = GetParentChain();
-                parentChain.RemoveAt(parentChain.Count - 1);
-                parentChain.Reverse();
+                if (parentChain.Count != 0)
+                {
+                    parentChain.RemoveAt(parentChain.Count - 1);
+                    parentChain.Reverse();
+                }
                 parentChain.Add(this);
                 var properties = (from property in TheGame.IngameState.IngameUi.GetType().GetProperties()
                                   where typeof(Element).IsAssignableFrom(property.PropertyType)
