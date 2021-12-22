@@ -12,11 +12,11 @@ namespace ExileCore.PoEMemory.MemoryObjects.Heist
         //public int Value24 => M.Read<int>(Address + 0x24);
         public string MapIcon => M.ReadStringU(M.Read<long>(Address + 0x28));
 
-        private long _LevelStatsKey => M.Read<long>(Address + 0x38);
-        private long _AlertStatsKey => M.Read<long>(Address + 0x48);
-        private long _AlarmStatsKey => M.Read<long>(Address + 0x58);
-        private long _CostStatsKey => M.Read<long>(Address + 0x68);
-        private long _ExperienceGainStatsKey => M.Read<long>(Address + 0x78);
+        private long _LevelStatsKey => M.Read<long>(Address + 0x30);
+        private long _AlertStatsKey => M.Read<long>(Address + 0x40);
+        private long _AlarmStatsKey => M.Read<long>(Address + 0x50);
+        private long _CostStatsKey => M.Read<long>(Address + 0x60);
+        private long _ExperienceGainStatsKey => M.Read<long>(Address + 0x70);
 
         public StatsDat.StatRecord LevelStat => TheGame.Files.Stats.GetStatByAddress(_LevelStatsKey);
         public StatsDat.StatRecord AlertStat => TheGame.Files.Stats.GetStatByAddress(_AlertStatsKey);

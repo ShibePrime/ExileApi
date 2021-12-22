@@ -37,11 +37,11 @@ namespace ExileCore.PoEMemory.MemoryObjects.Heist
         private List<StatsDat.StatRecord> GetStats(long source)
         {
             var stats = new List<StatsDat.StatRecord>();
-            if ((source += 0x08) == 0) return stats;
+            if (source == 0) return stats;
 
             for (var i = 0; i < _StatCount; ++i, source += 0x10)
             {
-                stats.Add(TheGame.Files.Stats.GetStatByAddress(M.Read<long>(source, 0x08)));
+                stats.Add(TheGame.Files.Stats.GetStatByAddress(M.Read<long>(source, 0x0)));
             }
 
             return stats;
@@ -50,7 +50,7 @@ namespace ExileCore.PoEMemory.MemoryObjects.Heist
         private List<HeistJobRecord> GetJobs(long source)
         {
             var jobs = new List<HeistJobRecord>();
-            if ((source += 0x08) == 0) return jobs;
+            if (source == 0) return jobs;
 
             for (var i = 0; i < _JobCount; ++i, source += 0x10)
             {

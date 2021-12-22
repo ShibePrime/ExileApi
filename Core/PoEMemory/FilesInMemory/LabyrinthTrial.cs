@@ -14,7 +14,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
             {
                 if (area == null)
                 {
-                    var areaPtr = M.Read<long>(Address + 0x8);
+                    var areaPtr = M.Read<long>(Address);
                     area = TheGame.Files.WorldAreas.GetByAddress(areaPtr);
                 }
 

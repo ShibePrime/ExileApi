@@ -15,18 +15,15 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private ModsDat.ModRecord mod;
         private string recipeId;
         public int Id { get; internal set; }
-        public string RecipeId => recipeId ?? (recipeId = M.ReadStringU(M.Read<long>(Address)));
+        public string RecipeId => recipeId ??= M.ReadStringU(M.Read<long>(Address));
         public int MinLevel => minLevel != -1 ? minLevel : minLevel = M.Read<int>(Address + 0x8);
-        public BestiaryFamily BestiaryFamily =>
-            bestiaryFamily ??= TheGame.Files.BestiaryFamilies.GetByAddress(M.Read<long>(Address + 0x14));
-        public BestiaryGroup BestiaryGroup =>
-            bestiaryGroup ??= TheGame.Files.BestiaryGroups.GetByAddress(M.Read<long>(Address + 0x24));
-        public BestiaryGenus BestiaryGenus =>
-            bestiaryGenus ??= TheGame.Files.BestiaryGenuses.GetByAddress(M.Read<long>(Address + 0x58));
+        public BestiaryFamily BestiaryFamily => bestiaryFamily ??= BestiaryGroup?.Family;
+        public BestiaryGroup BestiaryGroup => bestiaryGroup ??= BestiaryCapturableMonster?.BestiaryGroup;
+        public BestiaryGenus BestiaryGenus => bestiaryGenus ??= BestiaryCapturableMonster?.BestiaryGenus;
         public ModsDat.ModRecord Mod =>
             mod ??= TheGame.Files.Mods.GetModByAddress(M.Read<long>(Address + 0x34));
         public BestiaryCapturableMonster BestiaryCapturableMonster =>
-            bestiaryCapturableMonster ??= TheGame.Files.BestiaryCapturableMonsters.GetByAddress(M.Read<long>(Address + 0x44));
+            bestiaryCapturableMonster ??= TheGame.Files.BestiaryCapturableMonsters.GetByAddress(M.Read<long>(Address + 0x3C));
 
         public override string ToString()
         {
@@ -49,7 +46,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 debugStr.Append($"BestiaryGroup: {BestiaryGroup.Name}, ");
 
             if (BestiaryGenus != null)
-                debugStr.Append($"BestiaryGenus: {BestiaryGenus.Name}, ");
+                debugStr.Append($"BestiaryGenus: {BestiaryGenus.Name}");
 
             return debugStr.ToString();
         }

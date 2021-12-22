@@ -11,7 +11,7 @@
         public string RoomName => M.ReadStringU(M.Read<long>(Address + 0x34));
         public int RequiredJobLevel => M.Read<int>(Address + 0x3C);
 
-        public HeistJobRecord RequiredJob => TheGame.Files.HeistJobs.GetByAddress(M.Read<long>(Address + 0x44, 0x08));
+        public HeistJobRecord RequiredJob => TheGame.Files.HeistJobs.GetByAddress(M.Read<long>(Address + 0x44, 0x0));
         //public int Unknown4C => M.Read<int>(Address + 0x4C);
 
         public override string ToString()
