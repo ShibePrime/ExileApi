@@ -122,14 +122,14 @@ namespace ExileCore.PoEMemory.Components
                 return mods;
             }
 
-            if (source.Size / GameOffsets.Components.Mods.ItemModRecordSize > 24)
+            if (source.Size / ModsComponentOffsets.ItemModRecordSize > 24)
             {
                 return mods;
             }
 
             for (var modAddress = source.First;
                  modAddress < source.Last;
-                 modAddress += GameOffsets.Components.Mods.ItemModRecordSize)
+                 modAddress += ModsComponentOffsets.ItemModRecordSize)
             {
                 mods.Add(GetObject<ItemMod>(modAddress));
             }
@@ -146,7 +146,7 @@ namespace ExileCore.PoEMemory.Components
             }
 
             var readPointersArray =
-                M.ReadPointersArray(source.First, source.Last, GameOffsets.Components.Mods.StatRecordSize);
+                M.ReadPointersArray(source.First, source.Last, ModsComponentOffsets.StatRecordSize);
 
             stats.AddRange(readPointersArray.Select(statAddress =>
                 Cache.StringCache.Read($"{nameof(Mods)}{statAddress}", () => M.ReadStringU(statAddress))));
@@ -162,9 +162,9 @@ namespace ExileCore.PoEMemory.Components
                 return string.Empty;
             }
 
-            for (var first = source.First; first < source.Last; first += GameOffsets.Components.Mods.NameRecordSize)
+            for (var first = source.First; first < source.Last; first += ModsComponentOffsets.NameRecordSize)
             {
-                words.Add(M.ReadStringU(M.Read<long>(first, GameOffsets.Components.Mods.NameOffset)).Trim());
+                words.Add(M.ReadStringU(M.Read<long>(first, ModsComponentOffsets.NameOffset)).Trim());
             }
 
             return Cache.StringCache.Read($"{nameof(Mods)}{source.First}", () => string.Join(" ", words.ToArray()));
