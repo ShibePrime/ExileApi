@@ -146,7 +146,7 @@ namespace ExileCore.PoEMemory.Components
             }
         }
 
-        public class SocketedGem
+        public struct SocketedGem
         {
             public Entity GemEntity;
             public int SocketIndex;
