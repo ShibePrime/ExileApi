@@ -6,9 +6,9 @@ namespace GameOffsets
     public struct IngameStateOffsets
     {
         [FieldOffset(0x18)] public long Data;
-        [FieldOffset(0x80)] public long IngameUi;
+        [FieldOffset(0x78)] public long IngameUi;//3.16.3
         [FieldOffset(0xA0)] public long EntityLabelMap;
-        [FieldOffset(0x4F8)] public long UIRoot;
+        [FieldOffset(0x4F0)] public long UIRoot;//3.16.3
         [FieldOffset(0x530)] public long UIHoverElement;
         [FieldOffset(0x530)] public long UIHover; // element which is currently hovered
         [FieldOffset(0x538)] public float UIHoverPosX; // top left corner of currently hovered UI element
@@ -22,6 +22,6 @@ namespace GameOffsets
         [FieldOffset(0x848)] public long LatencyRectangle;
         [FieldOffset(0xCE8)] public long FrameTimeRectangle;
         [FieldOffset(0xF38)] public long FPSRectangle;
-        [FieldOffset(0x870)] public int Camera;
+        [FieldOffset(0x870-8)] public int Camera; //3.16.3
     }
 }
