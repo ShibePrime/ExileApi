@@ -59,7 +59,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element PVPPanel => GetChildAtIndex(26);
         public AtlasElement AtlasPanel => GetObject<AtlasElement>(IngameUIElementsStruct.AtlasPanel);
         public AtlasElement Atlas => AtlasPanel; // Required to fit with TehCheats Api, Random Feature uses this field.
+        public Element AtlasSkillPanel => GetObject<Element>(IngameUIElementsStruct.AtlasSkillPanel);
         public Map Map => _map ??= GetObject<Map>(IngameUIElementsStruct.Map);
+        public Element MapDeviceWindow => GetObject<Element>(IngameUIElementsStruct.MapDeviceWindow);
         public ItemsOnGroundLabelElement ItemsOnGroundLabelElement => GetObject<ItemsOnGroundLabelElement>(IngameUIElementsStruct.itemsOnGroundLabelRoot);
         public IList<LabelOnGround> ItemsOnGroundLabels => ItemsOnGroundLabelElement.LabelsOnGround;
         public IList<LabelOnGround> ItemsOnGroundLabelsVisible => ItemsOnGroundLabelElement.LabelsOnGround.Where(x => x.Address != 0 && x.IsVisible).ToList();

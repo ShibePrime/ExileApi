@@ -8,12 +8,10 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class IngameState : GameState
     {
-        private static readonly int CameraOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.Camera));
         private static readonly int FPSRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FPSRectangle));
         private static readonly int FrameTimeRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.FrameTimeRectangle));
         private static readonly int LatencyRectangleOffset = Extensions.GetOffset<IngameStateOffsets>(nameof(IngameStateOffsets.LatencyRectangle));
 
-        private readonly CachedValue<Camera> _camera;
         private readonly CachedValue<float> _UIHoverPosX;
         private readonly CachedValue<float> _UIHoverPosY;
         private readonly CachedValue<float> _MousePosX;
@@ -23,12 +21,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private readonly CachedValue<DiagnosticElement> _FPSRectangle;
         private readonly CachedValue<DiagnosticElement> _FrameTimeRectangle;
         private readonly CachedValue<IngameData> _ingameData;
+        private readonly CachedValue<WorldData> _worldData;
         private readonly CachedValue<IngameStateOffsets> _ingameState;
         private readonly CachedValue<IngameUIElements> _ingameUi;
         private readonly CachedValue<DiagnosticElement> _LatencyRectangle;
         private readonly CachedValue<float> _TimeInGameF;
         private readonly CachedValue<Element> _UIHover;
-        private readonly CachedValue<Element> _UIHoverElement;
         private readonly CachedValue<Element> _UIHoverTooltip;
         private readonly CachedValue<Element> _UIRoot;
 
@@ -39,18 +37,16 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
             _ingameState = new FrameCache<IngameStateOffsets>(() => M.Read<IngameStateOffsets>(Address));
 
-            _camera = new AreaCache<Camera>(() => GetObject<Camera>(Address + CameraOffset));
-
+            _worldData = new AreaCache<WorldData>(() => GetObject<WorldData>(_ingameState.Value.WorldData));
             _ingameData = new AreaCache<IngameData>(() => GetObject<IngameData>(_ingameState.Value.Data));
             _ingameUi = new AreaCache<IngameUIElements>(() => GetObject<IngameUIElements>(_ingameState.Value.IngameUi));
             _UIRoot = new AreaCache<Element>(() => GetObject<Element>(_ingameState.Value.UIRoot));
             _UIHover = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHover));
-            _UIHoverElement = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverElement));
-            _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value.UIHoverPosX);
-            _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value.UIHoverPosY);
+            _UIHoverPosX = new FrameCache<float>(() => _ingameState.Value.UIHoverPos.X);
+            _UIHoverPosY = new FrameCache<float>(() => _ingameState.Value.UIHoverPos.Y);
             _UIHoverTooltip = new FrameCache<Element>(() => GetObject<Element>(_ingameState.Value.UIHoverTooltip));
-            _MousePosX = new FrameCache<float>(() => _ingameState.Value.MousePosX);
-            _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePosY);
+            _MousePosX = new FrameCache<float>(() => _ingameState.Value.MousePos.X);
+            _MousePosY = new FrameCache<float>(() => _ingameState.Value.MousePos.Y);
             _DiagnosticInfoType = new FrameCache<DiagnosticInfoType>(() => (DiagnosticInfoType)_ingameState.Value.DiagnosticInfoType);
 
             _LatencyRectangle = new AreaCache<DiagnosticElement>(() => GetObject<DiagnosticElement>(Address + LatencyRectangleOffset));
@@ -61,7 +57,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             _EntityLabelMap = new AreaCache<EntityLabelMapOffsets>(() => M.Read<EntityLabelMapOffsets>(_ingameState.Value.EntityLabelMap));
         }
 
-        public Camera Camera => _camera.Value;
+        public WorldData WorldData => _worldData.Value;
+        public Camera Camera => WorldData.Camera;
         public IngameData Data => _ingameData.Value;
         public bool InGame => Data.ServerData.IsInGame;
         [Obsolete("InGameState.ServerData has been relocated to InGameState.IngameData.ServerData in patch 3.16.", false)]
@@ -69,7 +66,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public IngameUIElements IngameUi => _ingameUi.Value;
         public Element UIRoot => _UIRoot.Value;
         public Element UIHover => _UIHover.Value;
-        public Element UIHoverElement => _UIHoverElement.Value;
+        public Element UIHoverElement => UIHover;
         public float UIHoverPosX => _UIHoverPosX.Value;
         public float UIHoverPosY => _UIHoverPosY.Value;
         public Element UIHoverTooltip => UIHoverElement.Tooltip;

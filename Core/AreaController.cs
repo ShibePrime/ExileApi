@@ -21,7 +21,7 @@ namespace ExileCore
         public void ForceRefreshArea()
         {
             var ingameData = TheGameState.IngameState.Data;
-            var clientsArea = ingameData.CurrentArea;
+            var clientsArea = TheGameState.IngameState.WorldData.CurrentArea;
             var curAreaHash = TheGameState.CurrentAreaHash;
             CurrentArea = new AreaInstance(clientsArea, curAreaHash, ingameData.CurrentAreaLevel);
             if (CurrentArea.Name.Length == 0) return;
@@ -31,7 +31,7 @@ namespace ExileCore
         public bool RefreshState()
         {
             var ingameData = TheGameState.IngameState.Data;
-            var clientsArea = ingameData.CurrentArea;
+            var clientsArea = TheGameState.IngameState.WorldData.CurrentArea;
             var curAreaHash = TheGameState.CurrentAreaHash;
 
             if (CurrentArea != null && curAreaHash == CurrentArea.Hash)

@@ -8,7 +8,7 @@ namespace ExileCore.PoEMemory.Elements
 {
     public class AtlasElement : Element
     {
-        public List<Element> InventorySlots => GetWatchtowers();
+        public List<Element> InventorySlots => GetWatchtowers(); //TODO
 
         private List<Element> GetWatchtowers()
         {

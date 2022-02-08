@@ -12,8 +12,6 @@ namespace ExileCore.PoEMemory.MemoryObjects
     {
         private static readonly int EntityCountOffset = Extensions.GetOffset<IngameDataOffsets>(nameof(IngameDataOffsets.EntitiesCount));
         private readonly CachedValue<IngameDataOffsets> _IngameData;
-        private readonly CachedValue<AreaTemplate> _CurrentArea;
-        private readonly CachedValue<WorldArea> _CurrentWorldArea;
         private readonly CachedValue<long> _EntitiesCount;
         private readonly CachedValue<ServerData> _ServerData;
         private readonly CachedValue<Entity> _LocalPlayer;
@@ -25,16 +23,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             _IngameData = new AreaCache<IngameDataOffsets>(() => M.Read<IngameDataOffsets>(Address));
             _LocalPlayer = new AreaCache<Entity>(() => GetObject<Entity>(_IngameData.Value.LocalPlayer));
-            _CurrentArea = new AreaCache<AreaTemplate>(() => GetObject<AreaTemplate>(_IngameData.Value.CurrentArea));
-            _CurrentWorldArea = new AreaCache<WorldArea>(() => TheGame.Files.WorldAreas.GetByAddress(CurrentArea.Address));
             _EntitiesCount = new FrameCache<long>(() => M.Read<long>(Address + EntityCountOffset));
             _ServerData = new AreaCache<ServerData>(() => GetObject<ServerData>(_IngameData.Value.ServerData));
         }
 
         public IngameDataOffsets DataStruct => _IngameData.Value;
         public long EntitiesCount => _EntitiesCount.Value;
-        public AreaTemplate CurrentArea => _CurrentArea.Value;
-        public WorldArea CurrentWorldArea => _CurrentWorldArea.Value;
         public int CurrentAreaLevel => _IngameData.Value.CurrentAreaLevel;
         public uint CurrentAreaHash => _IngameData.Value.CurrentAreaHash;
         public Entity LocalPlayer => _LocalPlayer.Value;

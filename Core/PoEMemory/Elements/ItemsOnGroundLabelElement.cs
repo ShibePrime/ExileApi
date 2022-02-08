@@ -32,7 +32,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var address = M.Read<long>(Address + 0x2E8);
+                var address = M.Read<long>(Address + 0x2A8);
 
                 var result = new List<LabelOnGround>();
 

@@ -5,54 +5,56 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct IngameUElementsOffsets
     {
-        [FieldOffset(0x258)] public long GetQuests;
-        [FieldOffset(0x280)] public long GameUI;
+        [FieldOffset(0x250)] public long GetQuests;
+        [FieldOffset(0x288)] public long GameUI;
         [FieldOffset(0x3C0)] public long Mouse;
         [FieldOffset(0x3C8)] public long SkillBar;
         [FieldOffset(0x3D0)] public long HiddenSkillBar;
-        [FieldOffset(0x478)] public long ChatPanel;
-        [FieldOffset(0x508)] public long QuestTracker;
-        [FieldOffset(0x570)] public long OpenLeftPanel;
-        [FieldOffset(0x578)] public long OpenRightPanel;
-        [FieldOffset(0x5A8)] public long InventoryPanel;
-        [FieldOffset(0x5B0)] public long StashElement;
-        [FieldOffset(0x658)] public long AtlasPanel;
-        [FieldOffset(0x688)] public long WorldMap;
-        [FieldOffset(0x6B0)] public long Map;
-        [FieldOffset(0x6B8)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x6C0)] public long BanditDialog;
-        [FieldOffset(0x748)] public long NpcDialog;
+        [FieldOffset(0x3E0)] public long PartyElement;
+        [FieldOffset(0x420)] public long BanditDialog;
+        [FieldOffset(0x470)] public long ChatPanel;
+        [FieldOffset(0x4F8)] public long QuestTracker;
+        [FieldOffset(0x560)] public long OpenLeftPanel;
+        [FieldOffset(0x568)] public long OpenRightPanel;
+        [FieldOffset(0x598)] public long InventoryPanel;
+        [FieldOffset(0x5A0)] public long StashElement;
+        [FieldOffset(0x648)] public long AtlasPanel;
+        [FieldOffset(0x650)] public long AtlasSkillPanel;
+        [FieldOffset(0x680)] public long WorldMap;
+        [FieldOffset(0x6A8)] public long Map;
+        [FieldOffset(0x6B0)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x740)] public long NpcDialog;
         //[FieldOffset(0x750)] public long LeagueNpcDialog;
-        [FieldOffset(0x760)] public long QuestRewardWindow;
-        [FieldOffset(0x768)] public long PurchaseWindow;
-        [FieldOffset(0x770)] public long ExpeditionPurchaseWindow;
+        [FieldOffset(0x758)] public long QuestRewardWindow;
+        [FieldOffset(0x760)] public long PurchaseWindow;
+        [FieldOffset(0x768)] public long ExpeditionPurchaseWindow;
         [FieldOffset(0x778)] public long SellWindow;
         [FieldOffset(0x780)] public long ExpeditionSellWindow;
-        [FieldOffset(0x788)] public long TradeWindow;
-        [FieldOffset(0x790)] public long LabyrinthDivineFontPanel;
-        [FieldOffset(0x7C0)] public long MapDeviceWindow;
-        [FieldOffset(0x818)] public long IncursionWindow;
-        [FieldOffset(0x838)] public long DelveWindow;
-        [FieldOffset(0x848)] public long ZanaMissionChoice;
+        [FieldOffset(0x780)] public long TradeWindow;
+        [FieldOffset(0x798)] public long LabyrinthDivineFontPanel;
+        [FieldOffset(0x7B0)] public long MapDeviceWindow;
+        [FieldOffset(0x810)] public long IncursionWindow;
+        [FieldOffset(0x828)] public long DelveWindow;
+        [FieldOffset(0x838)] public long ZanaMissionChoice;
         [FieldOffset(0x858)] public long BetrayalWindow;
-        [FieldOffset(0x870)] public long CraftBenchWindow;
-        [FieldOffset(0x878)] public long UnveilWindow;
-        [FieldOffset(0x8A0)] public long SynthesisWindow;
+        [FieldOffset(0x860)] public long CraftBenchWindow;
+        [FieldOffset(0x868)] public long UnveilWindow;
+        [FieldOffset(0x880)] public long SynthesisWindow;
         [FieldOffset(0x840)] public long MetamorphWindow; // TODO
-        [FieldOffset(0x8C8)] public long HarvestWindow;
-        [FieldOffset(0x8D0)] public long HeistContractPanel;
-        [FieldOffset(0x8D8)] public long HeistRevealPanel;
-        [FieldOffset(0x8E0)] public long HeistAllyEquipmentPanel;
-        [FieldOffset(0x8E8)] public long HeistBlueprintPanel;
-        [FieldOffset(0x8F0)] public long HeistLockerPanel;
-        [FieldOffset(0x8F8)] public long RitualWindow;
-        [FieldOffset(0x900)] public long RitualFavourPanel;
+        [FieldOffset(0x8B0)] public long HarvestWindow;
+        [FieldOffset(0x8C0)] public long HeistContractPanel;
+        [FieldOffset(0x8C8)] public long HeistRevealPanel;
+        [FieldOffset(0x8D0)] public long HeistAllyEquipmentPanel;
+        [FieldOffset(0x8D8)] public long HeistBlueprintPanel;
+        [FieldOffset(0x8E0)] public long HeistLockerPanel;
+        [FieldOffset(0x8E8)] public long RitualWindow;
         [FieldOffset(0x898)] public long UltimatumProgressPanel; // TODO
+        [FieldOffset(0x900)] public long RitualFavourPanel;
         [FieldOffset(0x950)] public long DelveDarkness; // Is actually debuff panel.
         [FieldOffset(0x990)] public long AreaInstanceUi;
         [FieldOffset(0xA98)] public long InvitesPanel; // TODO
-        [FieldOffset(0xAE8)] public long GemLvlUpPanel;
-        [FieldOffset(0xBC0)] public long ItemOnGroundTooltip; // TODO
+        [FieldOffset(0xAE0)] public long GemLvlUpPanel;
+        [FieldOffset(0xBB8)] public long ItemOnGroundTooltip; // TODO
         [FieldOffset(0xAA0)] public long MapTabWindowStartPtr; // TODO
 
         //[FieldOffset(0x258)] public long GetQuests;
