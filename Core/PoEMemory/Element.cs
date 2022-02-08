@@ -101,7 +101,7 @@ namespace ExileCore.PoEMemory
                                   where typeof(Element).IsAssignableFrom(property.PropertyType)
                                   where property.GetIndexParameters().Length == 0
                                   let value = property.GetValue(TheGame.IngameState.IngameUi) as Element
-                                  where value.Address == parentChain.First().Address
+                                  where value?.Address == parentChain.First().Address
                                   select property.Name).ToList();
 
                 return (properties.Count > 0 ? $"({properties.First()})" : "") + string.Join("->", parentChain.Select(x => x.IndexInParent));

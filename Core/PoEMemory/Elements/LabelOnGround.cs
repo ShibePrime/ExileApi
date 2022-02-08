@@ -24,7 +24,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var readObjectAt = ReadObjectAt<Entity>(0x10);
+                var readObjectAt = ReadObjectAt<Entity>(0x18);
                 return readObjectAt.Address == 0 ? null : readObjectAt;
             }
         }
@@ -33,7 +33,7 @@ namespace ExileCore.PoEMemory.Elements
         {
             get
             {
-                var readObjectAt = ReadObjectAt<Element>(0x18);
+                var readObjectAt = ReadObjectAt<Element>(0x10);
                 return readObjectAt.Address == 0 ? null : readObjectAt;
             }
         }

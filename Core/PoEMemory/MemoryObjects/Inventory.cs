@@ -223,7 +223,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 case 111:
                     _cacheInventoryType = InventoryType.EssenceStash;
                     break;
-                case 76:
+                case 18:
                     _cacheInventoryType = InventoryType.CurrencyStash;
                     break;
                 case 149:
@@ -232,7 +232,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 case 5:
                     _cacheInventoryType = InventoryType.DivinationStash;
                     break;
-                case 6:
+                case 7:
                     if (Parent.Children[0].ChildCount == 9)
                     {
                         _cacheInventoryType = InventoryType.MapStash;
@@ -248,7 +248,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
                 case 35:
                     _cacheInventoryType = InventoryType.DelveStash;
                     break;
-                case 82:
+                case 83:
                     _cacheInventoryType = InventoryType.BlightStash;
                     break;
                 case 88:

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using ExileCore.Shared.Interfaces;
 using GameOffsets;
+using SharpDX.DirectWrite;
 
 namespace ExileCore.PoEMemory.MemoryObjects
 {
@@ -25,7 +27,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         private static TheGame Instance;
         private readonly CachedValue<int> _AreaChangeCount;
         private readonly CachedValue<bool> _inGame;
-        public readonly Dictionary<string, GameState> AllGameStates;
+        public readonly Dictionary<GameStateE, GameState> AllGameStates;
 
         public TheGame(IMemory m, Cache cache)
         {
@@ -35,19 +37,17 @@ namespace ExileCore.PoEMemory.MemoryObjects
             Instance = this;
             Address = m.Read<long>(m.BaseOffsets[OffsetsName.GameStateOffset] + m.AddressOfProcess);
             _AreaChangeCount = new TimeCache<int>(() => M.Read<int>(M.AddressOfProcess + M.BaseOffsets[OffsetsName.AreaChangeCount]), 50);
-
-            AllGameStates = ReadHashMap(Address + 0x50);
-
-            PreGameStatePtr = AllGameStates["PreGameState"].Address;
-            LoginStatePtr = AllGameStates["LoginState"].Address;
-            SelectCharacterStatePtr = AllGameStates["SelectCharacterState"].Address;
-            WaitingStatePtr = AllGameStates["WaitingState"].Address;
-            InGameStatePtr = AllGameStates["InGameState"].Address;
-            LoadingStatePtr = AllGameStates["LoadingState"].Address;
-            EscapeStatePtr = AllGameStates["EscapeState"].Address;
-
-            LoadingState = new AreaLoadingState(AllGameStates["AreaLoadingState"]);
-            IngameState = new IngameState(AllGameStates["InGameState"]);
+            AllGameStates = ReadList(Address);
+            PreGameStatePtr = AllGameStates[GameStateE.PreGameState].Address;
+            LoginStatePtr = AllGameStates[GameStateE.LoginState].Address;
+            SelectCharacterStatePtr = AllGameStates[GameStateE.SelectCharacterState].Address;
+            WaitingStatePtr = AllGameStates[GameStateE.WaitingState].Address;
+            InGameStatePtr = AllGameStates[GameStateE.InGameState].Address;
+            LoadingStatePtr = AllGameStates[GameStateE.LoadingState].Address;
+            EscapeStatePtr = AllGameStates[GameStateE.EscapeState].Address;
+            
+            LoadingState = new AreaLoadingState(AllGameStates[GameStateE.AreaLoadingState]);
+            IngameState = new IngameState(AllGameStates[GameStateE.InGameState]);
 
             _inGame = new FrameCache<bool>(
                 () => IngameState.Address != 0 && IngameState.Data.Address != 0 && IngameState.Data.ServerData.Address != 0 && !IsLoading /*&&
@@ -59,8 +59,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public FilesContainer Files { get; set; }
         public AreaLoadingState LoadingState { get; }
         public IngameState IngameState { get; }
-        public IList<GameState> CurrentGameStates => M.ReadDoublePtrVectorClasses<GameState>(Address + 0x8, IngameState);
-        public IList<GameState> ActiveGameStates => M.ReadDoublePtrVectorClasses<GameState>(Address + 0x20, IngameState, true);
+        public IList<GameState> CurrentGameStates => M.ReadDoublePtrVectorClasses<GameState>(Address + 0x8, TheGame);
+        public IList<GameState> ActiveGameStates => M.ReadDoublePtrVectorClasses<GameState>(Address + 0x20, TheGame, true);
         public bool IsPreGame => GameStateActive(PreGameStatePtr);
         public bool IsLoginState => GameStateActive(LoginStatePtr);
         public bool IsSelectCharacterState => GameStateActive(SelectCharacterStatePtr);
@@ -108,50 +108,17 @@ namespace ExileCore.PoEMemory.MemoryObjects
             return false;
         }
 
-        private Dictionary<string, GameState> ReadHashMap(long pointer)
+        private Dictionary<GameStateE, GameState> ReadList(long pointer)
         {
-            var result = new Dictionary<string, GameState>();
-
-            var header = M.Read<GameStateHashNode>(pointer).Next;
-            var currentNodeAddress = M.Read<long>(header);
-
-            while (currentNodeAddress != header && currentNodeAddress != 0)
-            {
-                var currentNode = M.Read<GameStateHashNode>(currentNodeAddress);
-
-                var gameState = new GameState(currentNode.StateAddress)
-                {
-                    StateName = ((GameStateTypes)currentNode.StateNameEnumByte).ToString()
-                };
-
-                result[gameState.StateName] = gameState;
-
-                currentNodeAddress = currentNode.Next;
-            }
-
-            return result;
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 1)]
-        private struct GameStateHashNode
-        {
-            [FieldOffset(0)]
-            public long Next;
-
-            [FieldOffset(0x8)]
-            public long Previous;
-
-            [FieldOffset(0x10)]
-            public byte StateNameEnumByte;
-
-            [FieldOffset(0x18)]
-            public long StateAddress;
+            var states = M.ReadAsArray<(IntPtr addr, long)>(pointer + 0x48, 12);
+            return states.Select((state, i) => (state.addr, i)).ToDictionary(x => (GameStateE)x.i, x => GetObject<GameState>(x.addr));
         }
     }
 
     public class GameState : RemoteMemoryObject
     {
         public string StateName;
+        public GameStateE Type => M.Read<GameStateE>(Address + 0x0B);
 
         public GameState() : base() { }
 
@@ -169,8 +136,8 @@ namespace ExileCore.PoEMemory.MemoryObjects
             StateName = parent.StateName;
         }
         //This is actually pointer to loading screen stuff (image, etc), but should works fine.
-        public bool IsLoading => M.Read<long>(Address + 0xD8) == 1;
-        public string AreaName => M.ReadStringU(M.Read<long>(Address + 0x380));
+        public bool IsLoading => M.Read<long>(Address + 0xB8) == 1;
+        public string AreaName => M.ReadStringU(M.Read<long>(Address + 0x388));
 
         public override string ToString()
         {

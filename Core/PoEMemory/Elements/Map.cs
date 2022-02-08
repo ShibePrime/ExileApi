@@ -1,18 +1,27 @@
+using SharpDX;
+
 namespace ExileCore.PoEMemory.Elements
 {
+    public class SubMap : Element
+    {
+        public Vector2 Shift => M.Read<Vector2>(Address + 0x2E8);
+        public Vector2 DefaultShift => M.Read<Vector2>(Address + 0x2F0);
+        public float Zoom => M.Read<float>(Address + 0x32C);
+    }
+
     public class Map : Element
     {
         //public Element MapProperties => ReadObjectAt<Element>(0x1FC + OffsetBuffers);
-        private Element _largeMap;
-        private Element _smallMap;
-        public Element LargeMap => _largeMap ??= ReadObjectAt<Element>(0x278);
-        public float LargeMapShiftX => M.Read<float>(LargeMap.Address + 0x2D8);
-        public float LargeMapShiftY => M.Read<float>(LargeMap.Address + 0x2DC);
-        public float LargeMapZoom => M.Read<float>(LargeMap.Address + 0x318);
-        public Element SmallMiniMap => _smallMap ??= ReadObjectAt<Element>(0x280);
-        public float SmallMinMapX => M.Read<float>(SmallMiniMap.Address + 0x2D8);
-        public float SmallMinMapY => M.Read<float>(SmallMiniMap.Address + 0x2DC);
-        public float SmallMinMapZoom => M.Read<float>(SmallMiniMap.Address + 0x318);
+        private SubMap _largeMap;
+        private SubMap _smallMap;
+        public SubMap LargeMap => _largeMap ??= ReadObjectAt<SubMap>(0x280);
+        public float LargeMapShiftX => LargeMap.Shift.X;
+        public float LargeMapShiftY => LargeMap.Shift.Y;
+        public float LargeMapZoom => LargeMap.Zoom;
+        public SubMap SmallMiniMap => _smallMap ??= ReadObjectAt<SubMap>(0x288);
+        public float SmallMinMapX => SmallMiniMap.Shift.X;
+        public float SmallMinMapY => SmallMiniMap.Shift.Y;
+        public float SmallMinMapZoom => SmallMiniMap.Zoom;
         public Element OrangeWords => ReadObjectAt<Element>(0x250);
         public Element BlueWords => ReadObjectAt<Element>(0x2A8);
     }

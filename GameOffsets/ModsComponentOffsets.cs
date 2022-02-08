@@ -51,10 +51,10 @@ namespace GameOffsets
         [FieldOffset(0x0E8)] public readonly NativePtrArray EnchantedModsArray;
         [FieldOffset(0x100)] public readonly NativePtrArray ScourgeModsArray;
         [FieldOffset(0x1D8)] public readonly long ModsComponentDetailsKey;
-        [FieldOffset(0x208)] public readonly int ItemLevel;
-        [FieldOffset(0x20C)] public readonly int RequiredLevel;
-        [FieldOffset(0x210)] public readonly long IncubatorKey;
-        [FieldOffset(0x220)] public readonly short IncubatorKillCount;
+        [FieldOffset(0x220)] public readonly int ItemLevel;
+        [FieldOffset(0x224)] public readonly int RequiredLevel;
+        [FieldOffset(0x228)] public readonly long IncubatorKey;
+        [FieldOffset(0x238)] public readonly short IncubatorKillCount;
         [FieldOffset(0x225)] public readonly byte IsMirrored;
         [FieldOffset(0x226)] public readonly byte IsSplit;
         [FieldOffset(0x227)] public readonly byte IsUsable;
