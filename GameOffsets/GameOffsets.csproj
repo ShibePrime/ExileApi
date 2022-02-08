@@ -1,158 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{38084BC9-079D-487E-B774-D2F407DC8389}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameOffsets</RootNamespace>
-    <AssemblyName>GameOffsets</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyTitle>GameOffsets</AssemblyTitle>
+    <Product>GameOffsets</Product>
+    <Copyright>Copyright ©  2019</Copyright>
+    <OutputPath>..\..\PoeHelper\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\PoeHelper\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\PoeHelper\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ActionWrapperOffsets.cs" />
-    <Compile Include="ActorComponentOffsets.cs" />
-    <Compile Include="ActorDeployedObject.cs" />
-    <Compile Include="BaseComponentOffsets.cs" />
-    <Compile Include="BuffOffsets.cs" />
-    <Compile Include="BuffsOffsets.cs" />
-    <Compile Include="BuffStringOffsets.cs" />
-    <Compile Include="CameraOffsets.cs" />
-    <Compile Include="ChestComponentOffsets.cs" />
-    <Compile Include="ComponentArrayStructure.cs" />
-    <Compile Include="ComponentLookup.cs" />
-    <Compile Include="ComponentNameAndIndexStruct.cs" />
-    <Compile Include="Components\Actor.cs" />
-    <Compile Include="Components\AreaTransition.cs" />
-    <Compile Include="Components\Armour.cs" />
-    <Compile Include="Components\AttributeRequirements.cs" />
-    <Compile Include="Components\Base.cs" />
-    <Compile Include="Components\Charges.cs" />
-    <Compile Include="Components\Chest.cs" />
-    <Compile Include="Components\ComponentHeader.cs" />
-    <Compile Include="Components\Flask.cs" />
-    <Compile Include="Components\Inventories.cs" />
-    <Compile Include="Components\LeagueSpecific\Magnetic.cs" />
-    <Compile Include="Components\LeagueSpecific\Monolith.cs" />
-    <Compile Include="Components\Life.cs" />
-    <Compile Include="Components\Map.cs" />
-    <Compile Include="Components\MinimapIcon.cs" />
-    <Compile Include="Components\ModsAndObjectMagicProperties.cs" />
-    <Compile Include="Components\Monster.cs" />
-    <Compile Include="Components\NPC.cs" />
-    <Compile Include="Components\Player.cs" />
-    <Compile Include="Components\Portal.cs" />
-    <Compile Include="Components\Positioned.cs" />
-    <Compile Include="Components\Prophecy.cs" />
-    <Compile Include="Components\Quality.cs" />
-    <Compile Include="Components\Render.cs" />
-    <Compile Include="Components\RenderItem.cs" />
-    <Compile Include="Components\SampleComponentOffset.cs" />
-    <Compile Include="Components\Shrine.cs" />
-    <Compile Include="Components\SkillGem.cs" />
-    <Compile Include="Components\Sockets.cs" />
-    <Compile Include="Components\Stack.cs" />
-    <Compile Include="Components\Stats.cs" />
-    <Compile Include="Components\Targetable.cs" />
-    <Compile Include="Components\TriggerableBlockage.cs" />
-    <Compile Include="Components\Weapon.cs" />
-    <Compile Include="Components\WorldItem.cs" />
-    <Compile Include="CursorOffsets.cs" />
-    <Compile Include="DiagnosticElementArrayOffsets.cs" />
-    <Compile Include="DiagnosticElementOffsets.cs" />
-    <Compile Include="ChatElementOffsets.cs" />
-    <Compile Include="ElementOffsets.cs" />
-    <Compile Include="EntityDetails.cs" />
-    <Compile Include="EntityLabelMapOffsets.cs" />
-    <Compile Include="EntityListOffsets.cs" />
-    <Compile Include="EntityOffsets.cs" />
-    <Compile Include="Example.cs" />
-    <Compile Include="FilesOffsets.cs" />
-    <Compile Include="FlaskOffsets.cs" />
-    <Compile Include="HeistBlueprintComponentOffsets.cs" />
-    <Compile Include="HeistContractComponent.cs" />
-    <Compile Include="HeistEquipmentComponentOffsets.cs" />
-    <Compile Include="IngameDataOffsets.cs" />
-    <Compile Include="IngameStateOffsets.cs" />
-    <Compile Include="IngameUElementsOffsets.cs" />
-    <Compile Include="InitObjectOffsets.cs" />
-    <Compile Include="InventoryOffsets.cs" />
-    <Compile Include="LifeComponentOffsets.cs" />
-    <Compile Include="MapComponent.cs" />
-    <Compile Include="MapElement.cs" />
-    <Compile Include="MapStashTabElementOffsets.cs" />
-    <Compile Include="MinimapIconOffsets.cs" />
-    <Compile Include="ModRecordOffsets.cs" />
-    <Compile Include="ModsComponentOffsets.cs" />
-    <Compile Include="Native\MinMaxStruct.cs" />
-    <Compile Include="Native\NativeHashNode.cs" />
-    <Compile Include="Native\NativeListNode.cs" />
-    <Compile Include="Native\NativeListNodeComponent.cs" />
-    <Compile Include="Native\NativeMap.cs" />
-    <Compile Include="Native\NativePtrArray.cs" />
-    <Compile Include="Native\NativeStringU.cs" />
-    <Compile Include="Native\Vector2i.cs" />
-    <Compile Include="NormalInventoryItemOffsets.cs" />
-    <Compile Include="ObjectMagicPropertiesOffsets.cs" />
-    <Compile Include="PathEntityOffsets.cs" />
-    <Compile Include="PathfindingComponentOffsets.cs" />
-    <Compile Include="PlayerComponentOffsets.cs" />
-    <Compile Include="PositionedComponentOffsets.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestStateOffsets.cs" />
-    <Compile Include="RenderComponentOffsets.cs" />
-    <Compile Include="ServerDataOffsets.cs" />
-    <Compile Include="ServerInventoryOffsets.cs" />
-    <Compile Include="ServerStashTabOffsets.cs" />
-    <Compile Include="SkillGemOffsets.cs" />
-    <Compile Include="SkillUiStateOffsets.cs" />
-    <Compile Include="StateMachineComponentOffsets.cs" />
-    <Compile Include="StatsComponentOffsets.cs" />
-    <Compile Include="StrongboxChestComponentData.cs" />
-    <Compile Include="Structs.cs" />
-    <Compile Include="TargetableComponentOffsets.cs" />
-    <Compile Include="TerrainData.cs" />
-    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1">
-      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1">
-      <HintPath>..\packages\SharpDX.Mathematics.4.2.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
 </Project>
