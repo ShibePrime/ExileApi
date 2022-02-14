@@ -18,6 +18,8 @@ namespace ExileCore
 {
     public static class SettingsParser
     {
+        public static bool ButtonPopupVisible { get; private set; } = false;
+
         public static Type ListOfWhat(object list)
         {
             return !(list is IList) ? null : (Type) ListOfWhat2((dynamic) list);
@@ -196,7 +198,11 @@ namespace ExileCore
 
                         // Create modal
                         var popupOpened = true;
-                        if (!ImGui.BeginPopupModal(str, ref popupOpened, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
+                        if (ImGui.BeginPopupModal(str, ref popupOpened, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
+                        {
+                            ButtonPopupVisible = true;
+                        }
+                        else
                         {
                             return;
                         }
@@ -206,6 +212,7 @@ namespace ExileCore
                         {
                             ImGui.CloseCurrentPopup();
                             ImGui.EndPopup();
+                            ButtonPopupVisible = false;
                             return;
                         }
 
@@ -218,6 +225,7 @@ namespace ExileCore
                             // Set the node's value to the keys that were pressed and close the popup
                             hotkeyNode.Value = key;
                             ImGui.CloseCurrentPopup();
+                            ButtonPopupVisible = false;
                         }
 
                         // End popup

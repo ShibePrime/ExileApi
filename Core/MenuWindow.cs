@@ -210,7 +210,7 @@ namespace ExileCore
                 CoreSettings.MainMenuKeyToggle.Value = Keys.F12;
             }
 
-            if (CoreSettings.MainMenuKeyToggle.PressedOnce())
+            if (CoreSettings.MainMenuKeyToggle.PressedOnce() && !SettingsParser.ButtonPopupVisible)
             {
                 CoreSettings.Enable.Value = !CoreSettings.Enable;
 
