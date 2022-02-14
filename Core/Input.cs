@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using ExileCore.Shared;
 using ExileCore.Shared.Helpers;
@@ -65,6 +66,64 @@ namespace ExileCore
         public static bool GetKeyState(Keys key)
         {
             return WinApi.GetKeyState(key) < 0;
+        }
+
+        /// <summary>
+        /// Check if a key was pressed but is now up
+        /// </summary>
+        public static bool CheckKeyPressed(Keys key)
+        {
+            return
+                WinApi.GetKeyState(key & System.Windows.Forms.Keys.KeyCode) >= 0 &&
+                (WinApi.GetAsyncKeyState(key) & 1) == 1;
+        }
+        public static void ClearAsyncBuffer()
+        {
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+            {
+                WinApi.GetAsyncKeyState(key);
+            }
+        }
+        public static Keys GetModifiers()
+        {
+            Keys modifiers = System.Windows.Forms.Keys.None;
+            if (GetKeyState(System.Windows.Forms.Keys.ShiftKey))
+            {
+                modifiers |= System.Windows.Forms.Keys.Shift;
+            }
+            if (GetKeyState(System.Windows.Forms.Keys.ControlKey))
+            {
+                modifiers |= System.Windows.Forms.Keys.Control;
+            }
+            if (GetKeyState(System.Windows.Forms.Keys.Menu))
+            {
+                modifiers |= System.Windows.Forms.Keys.Alt;
+            }
+            return modifiers;
+        }
+        public static Keys GetPressedKeys(bool withModifiers = false)
+        {
+            var key = Enum.GetValues(typeof(Keys))
+                            .Cast<Keys>()
+                            .Where(k => k != System.Windows.Forms.Keys.None)
+                            .Where(k => k != System.Windows.Forms.Keys.KeyCode)
+                            .Where(k => (k & ~System.Windows.Forms.Keys.KeyCode) == System.Windows.Forms.Keys.None)
+                            .Where(CheckKeyPressed)
+                            .LastOrDefault();
+            if (withModifiers)
+            {
+                return key | GetModifiers();
+            }
+            else
+            {
+                return key;
+            }
+        }
+        public static bool KeyPressed(Keys key)
+        {
+            return 
+                WinApi.GetKeyState(key) >= 0 &&
+                WinApi.GetAsyncKeyState(key) < 0;
         }
 
         public static void RegisterKey(Keys key)
@@ -200,12 +259,38 @@ namespace ExileCore
 
         public static void KeyDown(Keys key)
         {
-            WinApi.keybd_event((byte) key, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+            if (key.HasFlag(System.Windows.Forms.Keys.Shift))
+            {
+                KeyDown(System.Windows.Forms.Keys.ShiftKey);
+            }
+            if (key.HasFlag(System.Windows.Forms.Keys.Control))
+            {
+                KeyDown(System.Windows.Forms.Keys.ControlKey);
+            }
+            if (key.HasFlag(System.Windows.Forms.Keys.Alt))
+            {
+                KeyDown(System.Windows.Forms.Keys.Menu);
+            }
+
+            WinApi.keybd_event((byte)(key & System.Windows.Forms.Keys.KeyCode), 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
         }
 
         public static void KeyUp(Keys key)
         {
-            WinApi.keybd_event((byte) key, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+            WinApi.keybd_event((byte)(key & System.Windows.Forms.Keys.KeyCode), 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+            if (key.HasFlag(System.Windows.Forms.Keys.Shift))
+            {
+                KeyUp(System.Windows.Forms.Keys.ShiftKey);
+            }
+            if (key.HasFlag(System.Windows.Forms.Keys.Control))
+            {
+                KeyUp(System.Windows.Forms.Keys.ControlKey);
+            }
+            if (key.HasFlag(System.Windows.Forms.Keys.Alt))
+            {
+                KeyUp(System.Windows.Forms.Keys.Menu);
+            }
         }
 
         public static void KeyDown(Keys key, IntPtr handle)

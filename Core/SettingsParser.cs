@@ -184,18 +184,24 @@ namespace ExileCore
                     holder.DrawDelegate = () =>
                     {
                         var str = $"{holder.Name} {hotkeyNode.Value}##{hotkeyNode.Value}";
-                        var popupOpened = true;
 
                         if (ImGui.Button(str))
                         {
+                            // Clear async buffer state
+                            Input.ClearAsyncBuffer();
+
+                            // Begin pop up
                             ImGui.OpenPopup(str);
-                            popupOpened = true;
                         }
 
-                        if (!ImGui.BeginPopupModal(str, ref popupOpened,
-                            ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
+                        // Create modal
+                        var popupOpened = true;
+                        if (!ImGui.BeginPopupModal(str, ref popupOpened, ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse))
+                        {
                             return;
+                        }
 
+                        // Close popup if escape was pressed
                         if (Input.GetKeyState(Keys.Escape))
                         {
                             ImGui.CloseCurrentPopup();
@@ -203,14 +209,18 @@ namespace ExileCore
                             return;
                         }
 
-                        foreach (var key in Enum.GetValues(typeof(Keys)))
+                        // Get prssed keys
+                        Keys key = Input.GetPressedKeys(true);
+
+                        // If a key was pressed, set value and close popup
+                        if ((key & Keys.KeyCode) != Keys.None)
                         {
-                            if (!Input.GetKeyState((Keys) key)) continue;
-                            hotkeyNode.Value = (Keys) key;
+                            // Set the node's value to the keys that were pressed and close the popup
+                            hotkeyNode.Value = key;
                             ImGui.CloseCurrentPopup();
-                            break;
                         }
 
+                        // End popup
                         ImGui.Text($"Press new key to change '{hotkeyNode.Value}' or Esc for exit.");
                         ImGui.EndPopup();
                     };
