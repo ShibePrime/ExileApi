@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using ExileCore.RenderQ;
 using ExileCore.Shared;
 using ExileCore.Shared.Helpers;
@@ -203,7 +204,13 @@ namespace ExileCore
                 debugInformation.TickAction(DebugWindowRender);
             }
 
-            if (CoreSettings.MainMenuKeyToggle.PressedOnce())
+            // Prevent soft lock
+            if (CoreSettings.MainMenuKeyToggle.Value == Keys.LButton)
+            {
+                CoreSettings.MainMenuKeyToggle.Value = Keys.F12;
+            }
+
+            if (CoreSettings.MainMenuKeyToggle.PressedOnce() && !SettingsParser.ButtonPopupVisible)
             {
                 CoreSettings.Enable.Value = !CoreSettings.Enable;
 
