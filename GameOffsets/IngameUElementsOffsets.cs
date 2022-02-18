@@ -23,9 +23,9 @@ namespace GameOffsets
         [FieldOffset(0x680)] public long WorldMap;
         [FieldOffset(0x6B8)] public long Map; //3.17.1
         [FieldOffset(0x6B0)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x740)] public long NpcDialog;
-        //[FieldOffset(0x750)] public long LeagueNpcDialog;
-        [FieldOffset(0x758)] public long QuestRewardWindow;
+        [FieldOffset(0x750)] public long NpcDialog; //3.17.1
+        [FieldOffset(0x758)] public long LeagueNpcDialog; //3.17.1
+        [FieldOffset(0x768)] public long QuestRewardWindow;//3.17.1
         [FieldOffset(0x760)] public long PurchaseWindow;
         [FieldOffset(0x768)] public long ExpeditionPurchaseWindow;
         [FieldOffset(0x778)] public long SellWindow;
@@ -50,6 +50,7 @@ namespace GameOffsets
         [FieldOffset(0x8E8)] public long RitualWindow;
         [FieldOffset(0x898)] public long UltimatumProgressPanel; // TODO
         [FieldOffset(0x900)] public long RitualFavourPanel;
+        [FieldOffset(0x938)] public long ArchNemesis; //3.17.1
         [FieldOffset(0x950)] public long DelveDarkness; // Is actually debuff panel.
         [FieldOffset(0x990)] public long AreaInstanceUi;
         [FieldOffset(0xA98)] public long InvitesPanel; // TODO
