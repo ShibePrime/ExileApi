@@ -12,12 +12,12 @@ namespace GameOffsets
         [FieldOffset(0x3D0)] public long HiddenSkillBar;
         [FieldOffset(0x3E0)] public long PartyElement;
         [FieldOffset(0x420)] public long BanditDialog;
-        [FieldOffset(0x470)] public long ChatPanel;
-        [FieldOffset(0x4F8)] public long QuestTracker;
-        [FieldOffset(0x560)] public long OpenLeftPanel;
-        [FieldOffset(0x568)] public long OpenRightPanel;
-        [FieldOffset(0x598)] public long InventoryPanel;
-        [FieldOffset(0x5A0)] public long StashElement;
+        [FieldOffset(0x480)] public long ChatPanel; //3.17.1
+        [FieldOffset(0x508)] public long QuestTracker; //3.17.1
+        [FieldOffset(0x570)] public long OpenLeftPanel; //3.17.1
+        [FieldOffset(0x578)] public long OpenRightPanel; //3.17.1
+        [FieldOffset(0x598)] public long InventoryPanel; //3.17.1
+        [FieldOffset(0x5A0)] public long StashElement; //3.17.1
         [FieldOffset(0x648)] public long AtlasPanel;
         [FieldOffset(0x650)] public long AtlasSkillPanel;
         [FieldOffset(0x680)] public long WorldMap;
