@@ -23,8 +23,9 @@ namespace GameOffsets
         [FieldOffset(0x680)] public long WorldMap;
         [FieldOffset(0x6B8)] public long Map; //3.17.1
         [FieldOffset(0x6B0)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x758)] public long NpcDialog;
-        //[FieldOffset(0x750)] public long LeagueNpcDialog;
+        [FieldOffset(0x750)] public long NpcDialog; //3.17.1
+        [FieldOffset(0x758)] public long LeagueNpcDialog; //3.17.1
+        [FieldOffset(0x768)] public long QuestRewardWindow;//3.17.1
         [FieldOffset(0x758)] public long QuestRewardWindow;
         [FieldOffset(0x760)] public long PurchaseWindow;
         [FieldOffset(0x768)] public long ExpeditionPurchaseWindow;
