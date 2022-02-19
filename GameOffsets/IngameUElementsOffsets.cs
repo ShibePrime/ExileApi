@@ -17,7 +17,7 @@ namespace GameOffsets
         [FieldOffset(0x570)] public long OpenLeftPanel; //3.17.1
         [FieldOffset(0x578)] public long OpenRightPanel; //3.17.1
         [FieldOffset(0x598)] public long InventoryPanel; //3.17.1
-        [FieldOffset(0x5A0)] public long StashElement; //3.17.1
+        [FieldOffset(0x5B0)] public long StashElement; //3.17.1
         [FieldOffset(0x648)] public long AtlasPanel;
         [FieldOffset(0x650)] public long AtlasSkillPanel;
         [FieldOffset(0x680)] public long WorldMap;
