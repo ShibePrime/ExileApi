@@ -14,8 +14,8 @@ namespace GameOffsets
         [FieldOffset(0x420)] public long BanditDialog;
         [FieldOffset(0x480)] public long ChatPanel; //3.17.1
         [FieldOffset(0x508)] public long QuestTracker; //3.17.1
-        [FieldOffset(0x570)] public long OpenLeftPanel; //3.17.1
-        [FieldOffset(0x578)] public long OpenRightPanel; //3.17.1
+        [FieldOffset(0x580)] public long OpenLeftPanel; //3.17.1
+        [FieldOffset(0x588)] public long OpenRightPanel; //3.17.1
         [FieldOffset(0x598)] public long InventoryPanel; //3.17.1
         [FieldOffset(0x5B0)] public long StashElement; //3.17.1
         [FieldOffset(0x648)] public long AtlasPanel;
