@@ -16,7 +16,7 @@ namespace GameOffsets
         [FieldOffset(0x508)] public long QuestTracker; //3.17.1
         [FieldOffset(0x580)] public long OpenLeftPanel; //3.17.1
         [FieldOffset(0x588)] public long OpenRightPanel; //3.17.1
-        [FieldOffset(0x598)] public long InventoryPanel; //3.17.1
+        [FieldOffset(0x5A8)] public long InventoryPanel; //3.17.1
         [FieldOffset(0x5B0)] public long StashElement; //3.17.1
         [FieldOffset(0x648)] public long AtlasPanel;
         [FieldOffset(0x650)] public long AtlasSkillPanel;
