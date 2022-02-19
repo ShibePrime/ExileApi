@@ -42,12 +42,12 @@ namespace GameOffsets
     {
         public const int Skip = 0x8000;
         
-        [FieldOffset(0x8820 - Skip)] public long PlayerRelatedData;
-        [FieldOffset(0x8838 - Skip)] public byte NetworkState;
+        [FieldOffset(0x89A0 - Skip)] public long PlayerRelatedData;
+        [FieldOffset(0x89B8 - Skip)] public byte NetworkState;
         [FieldOffset(0x89E0 - Skip)] public NativeStringU League;
         [FieldOffset(0x8A50 - Skip)] public int TimeInGame;
         [FieldOffset(0x8A68 - Skip)] public int Latency;
-        [FieldOffset(0x88F0 - Skip)] public NativePtrArray PlayerStashTabs;
+        [FieldOffset(0x88F0 - Skip + 0x180)] public NativePtrArray PlayerStashTabs;
         [FieldOffset(0x8908 - Skip)] public NativePtrArray GuildStashTabs;
         [FieldOffset(0x8550 - Skip)] public long FriendsList;
         //[FieldOffset(0x8430 - Skip)] public long FriendNoteList;
@@ -67,8 +67,8 @@ namespace GameOffsets
         [FieldOffset(0x8EB0 - Skip)] public NativePtrArray PlayerInventories; // 3.17.1
         [FieldOffset(0x8E78 - Skip)] public NativePtrArray NPCInventories;
         [FieldOffset(0x8FC8 - Skip)] public NativePtrArray GuildInventories;
-        [FieldOffset(0x9138 - Skip)] public ushort TradeChatChannel;
-        [FieldOffset(0x9140 - Skip)] public ushort GlobalChatChannel;
+        [FieldOffset(0x92C0 - Skip)] public ushort TradeChatChannel;
+        [FieldOffset(0x92C8 - Skip)] public ushort GlobalChatChannel;
         [FieldOffset(0x91E0 - Skip)] public ushort LastActionId;
 
         //[FieldOffset(0x90C0 - Skip)] public long InstanceLeagueInfo;
