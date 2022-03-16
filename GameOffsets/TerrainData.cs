@@ -6,10 +6,10 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct TerrainData
     {
-        [FieldOffset(0x0)] public long NumCols;
-        [FieldOffset(0x8)] public long NumRows;
-        [FieldOffset(0xc0)] public NativePtrArray LayerMelee;
-        [FieldOffset(0xd8)] public NativePtrArray LayerRanged;
-        [FieldOffset(0xF0)] public int BytesPerRow;
+        [FieldOffset(0x18)] public long NumCols;
+        [FieldOffset(0x20)] public long NumRows;
+        [FieldOffset(0xD8)] public NativePtrArray LayerMelee;
+        [FieldOffset(0xF0)] public NativePtrArray LayerRanged;
+        [FieldOffset(0x108)] public int BytesPerRow;
     }
 }
