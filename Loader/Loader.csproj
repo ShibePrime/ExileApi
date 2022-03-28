@@ -50,6 +50,9 @@
     <Content Include="poehud.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StaticResources\StaticResources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="AppForm.resx">
       <DependentUpon>AppForm.cs</DependentUpon>
     </EmbeddedResource>
