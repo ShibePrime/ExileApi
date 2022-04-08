@@ -24,7 +24,7 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct ServerPlayerDataOffsets
     {
-        [FieldOffset(0x170)] public NativePtrArray PassiveSkillIds;
+        [FieldOffset(0x180)] public NativePtrArray PassiveSkillIds; // 3.17.3.3
         //[FieldOffset(0x188)] public NativePtrArray PassiveBasicJewelNodeIds;
         //[FieldOffset(0x1B8)] public NativePtrArray PassiveClusterJewelNodeIds;
         //[FieldOffset(0x1D0)] public NativePtrArray PassiveMasteryNodeIds;
