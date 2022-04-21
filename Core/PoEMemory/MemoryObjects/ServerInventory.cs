@@ -73,7 +73,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
                 if (limitMax-- < 0)
                 {
-                    DebugWindow.LogError("Fixed possible memory leak (ServerInventory.ReadHashMap)");
+                    DebugWindow.LogError($"Fixed possible memory leak (ServerInventory.ReadHashMap @ {Address:X})");
                     break;
                 }
             }
