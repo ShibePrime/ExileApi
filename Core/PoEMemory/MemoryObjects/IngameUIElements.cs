@@ -98,9 +98,12 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public DivineFont LabyrinthDivineFontPanel =>
             GetObject<DivineFont>(IngameUIElementsStruct.LabyrinthDivineFontPanel);
 
-        public IEnumerable<QuestState> GetUncompletedQuests => GetQuestStates.Where(q => q.QuestStateId != 0);
-        public IEnumerable<QuestState> GetCompletedQuests => GetQuestStates.Where(q => q.QuestStateId == 0);
-        public List<QuestState> GetQuestStates => _cachedQuestStates?.Value;
+        // TODO: Was causing crash. Fix for 3.18.
+        public IEnumerable<QuestState> GetUncompletedQuests => new List<QuestState>(); //GetQuestStates.Where(q => q.QuestStateId != 0));
+
+        public IEnumerable<QuestState> GetCompletedQuests => new List<QuestState>(); //GetQuestStates.Where(q => q.QuestStateId == 0);
+
+        public List<QuestState> GetQuestStates => new List<QuestState>(); //_cachedQuestStates?.Value;
 
         private List<QuestState> GenerateQuestStates()
         {
