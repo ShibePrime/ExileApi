@@ -33,7 +33,20 @@ namespace ExileCore.PoEMemory.MemoryObjects
 
         public IngameUElementsOffsets IngameUIElementsStruct => _cachedValue.Value;
         public GameUi GameUI => GetObject<GameUi>(IngameUIElementsStruct.GameUI);
-        public SellWindow SellWindow => GetObject<SellWindow>(IngameUIElementsStruct.SellWindow);
+        public SellWindow SellWindow
+        {
+            get
+            {
+                var sellWindow = this.GetObject<SellWindow>(this.IngameUIElementsStruct.SellWindow);
+
+                if (sellWindow != null && sellWindow.IsVisibleLocal)
+                {
+                    return sellWindow;
+                }
+                return this.GetObject<SellWindow>(this.IngameUIElementsStruct.ExpeditionSellWindow);
+            }
+        }
+        
         public TradeWindow TradeWindow => GetObject<TradeWindow>(IngameUIElementsStruct.TradeWindow);
         public NpcDialog NpcDialog => GetObject<NpcDialog>(IngameUIElementsStruct.NpcDialog);
         public BanditDialog BanditDialog => GetObject<BanditDialog>(IngameUIElementsStruct.BanditDialog);
