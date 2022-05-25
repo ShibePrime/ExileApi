@@ -86,7 +86,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Cursor Cursor => _cursor ??= GetObject<Cursor>(IngameUIElementsStruct.Mouse);
         public Element BetrayalWindow => _BetrayalWindow ??= GetObject<Element>(IngameUIElementsStruct.BetrayalWindow);
         public Element SyndicatePanel => BetrayalWindow; // Required for TehCheats Api, BroodyHen uses this.
-        public Element SyndicateTree => GetObject<Element>(M.Read<long>(BetrayalWindow.Address + 0xA50));
+        public Element SyndicateTree => BetrayalWindow[0];
         public Element UnveilWindow => _UnveilWindow ??= GetObject<Element>(IngameUIElementsStruct.UnveilWindow);
         public Element ZanaMissionChoice => _ZanaMissionChoice ??= GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice);
         public IncursionWindow IncursionWindow => _IncursionWindow ??= GetObject<IncursionWindow>(IngameUIElementsStruct.IncursionWindow);
