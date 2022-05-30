@@ -1,7 +1,5 @@
 namespace ExileCore.Shared.Enums
 {
-		/// </summary>
-		PhysicalWandDamagePct = 42,
     public enum GameStat
     {
         /// <summary>
