@@ -222,13 +222,13 @@ namespace ExileCore.PoEMemory
 
                 if (currentElement == null)
                 {
-                    DebugWindow.LogMsg($"{nameof(Element)} with index {index} was not found. Indices: {BuildErrorString(indexNumber)}");
+                    DebugWindow.LogDebug($"{nameof(Element)} with index {index} was not found. Indices: {BuildErrorString(indexNumber)}");
                     return null;
                 }
 
                 if (currentElement.Address == 0)
                 {
-                    DebugWindow.LogMsg($"{nameof(Element)} with index {index} has address = 0. Indices: {BuildErrorString(indexNumber)}");
+                    DebugWindow.LogDebug($"{nameof(Element)} with index {index} has address = 0. Indices: {BuildErrorString(indexNumber)}");
                     return GetObject<Element>(0);
                 }
             }
