@@ -106,7 +106,13 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourPanel);
         public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressPanel);
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
-        public HarvestWindow HarvestWindow => GetObject<HarvestWindow>(IngameUIElementsStruct.HarvestWindow);
+        public HarvestWindow HarvestWindow => this.HorticraftingSacredGrovePanel.IsVisible 
+            ? this.HorticraftingSacredGrovePanel
+            : this.HorticraftingHideoutPanel;
+        public HarvestWindow HorticraftingHideoutPanel => this.GetObject<HarvestWindow>(this.IngameUIElementsStruct.HorticraftingHideoutPanel);
+        public HarvestWindow HorticraftingSacredGrovePanel => this.GetObject<HarvestWindow>(this.IngameUIElementsStruct.HorticraftingSacredGrovePanel);
+
+        
 
         public DivineFont LabyrinthDivineFontPanel =>
             GetObject<DivineFont>(IngameUIElementsStruct.LabyrinthDivineFontPanel);
