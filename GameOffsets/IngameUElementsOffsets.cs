@@ -11,24 +11,24 @@ namespace GameOffsets
         [FieldOffset(0x3D0)] public long SkillBar;
         [FieldOffset(0x3D8)] public long HiddenSkillBar;
         [FieldOffset(0x420)] public long BanditDialog;
-        [FieldOffset(0x480)] public long ChatPanel;
+        [FieldOffset(0x488)] public long ChatPanel;
         [FieldOffset(0x4B8)] public long QuestTracker;
-        [FieldOffset(0x546)] public long OpenLeftPanel; //3.18.1
-        [FieldOffset(0x554)] public long OpenRightPanel; //3.18.1
+        [FieldOffset(0x546)] public long OpenLeftPanel;
+        [FieldOffset(0x554)] public long OpenRightPanel;
         [FieldOffset(0x578)] public long InventoryPanel;
-        [FieldOffset(0x580)] public long StashElement;
+        [FieldOffset(0x550)] public long StashElement;
         [FieldOffset(0x588)] public long GuildStashElement;
         [FieldOffset(0x628)] public long AtlasPanel;
         [FieldOffset(0x630)] public long AtlasSkillPanel;
         [FieldOffset(0x660)] public long WorldMap;
-        [FieldOffset(0x6A0)] public long Map; //3.18.1
-        [FieldOffset(0x6A2)] public long itemsOnGroundLabelRoot; //3.18.1 - may not be correct
-        [FieldOffset(0x730)] public long NpcDialog;
+        [FieldOffset(0x6A0)] public long Map;
+        [FieldOffset(0x6A8)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x732)] public long NpcDialog; // Pretty sure this offset is wrong, can't find the actual offset, changed to 732 to allow copilot to work correctly
         [FieldOffset(0x738)] public long LeagueNpcDialog;
         [FieldOffset(0x748)] public long QuestRewardWindow;
         [FieldOffset(0x750)] public long PurchaseWindow;
         [FieldOffset(0x758)] public long ExpeditionPurchaseWindow;
-        [FieldOffset(0x760)] public long SellWindow;
+        [FieldOffset(0x768)] public long SellWindow;
         [FieldOffset(0x768)] public long ExpeditionSellWindow;
         [FieldOffset(0x770)] public long TradeWindow;
         [FieldOffset(0x780)] public long LabyrinthDivineFontPanel;
@@ -52,7 +52,7 @@ namespace GameOffsets
         [FieldOffset(0x8D8)] public long RitualFavourPanel;
         [FieldOffset(0x8E0)] public long UltimatumProgressPanel;
         [FieldOffset(0x908)] public long ArchNemesis;
-        [FieldOffset(0x948)] public long DelveDarkness; // Is actually debuff panel.
+        [FieldOffset(0x920)] public long DelveDarkness;
         [FieldOffset(0x988)] public long AreaInstanceUi;
         [FieldOffset(0xA80)] public long InvitesPanel;
         [FieldOffset(0xAC8)] public long GemLvlUpPanel;
