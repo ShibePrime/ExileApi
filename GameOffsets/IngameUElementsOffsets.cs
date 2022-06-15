@@ -23,7 +23,7 @@ namespace GameOffsets
         [FieldOffset(0x660)] public long WorldMap;
         [FieldOffset(0x6A0)] public long Map;
         [FieldOffset(0x6A8)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x730)] public long NpcDialog;
+        [FieldOffset(0x732)] public long NpcDialog; // Pretty sure this offset is wrong, can't find the actual offset, changed to 732 to allow copilot to work correctly
         [FieldOffset(0x738)] public long LeagueNpcDialog;
         [FieldOffset(0x748)] public long QuestRewardWindow;
         [FieldOffset(0x750)] public long PurchaseWindow;
