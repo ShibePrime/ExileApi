@@ -15,20 +15,20 @@ namespace GameOffsets
         [FieldOffset(0x4B8)] public long QuestTracker;
         [FieldOffset(0x546)] public long OpenLeftPanel; //3.18.1
         [FieldOffset(0x554)] public long OpenRightPanel; //3.18.1
-        [FieldOffset(0x578)] public long InventoryPanel;
-        [FieldOffset(0x580)] public long StashElement;
+        [FieldOffset(0x578)] public long InventoryPanel; 
+        [FieldOffset(0x550)] public long StashElement; //3.18.1
         [FieldOffset(0x588)] public long GuildStashElement;
         [FieldOffset(0x628)] public long AtlasPanel;
-        [FieldOffset(0x630)] public long AtlasSkillPanel;
+        [FieldOffset(0x630)] public long AtlasSkillPanel; 
         [FieldOffset(0x660)] public long WorldMap;
         [FieldOffset(0x6A0)] public long Map; //3.18.1
-        [FieldOffset(0x6A2)] public long itemsOnGroundLabelRoot; //3.18.1 - may not be correct
+        [FieldOffset(0x6A2)] public long itemsOnGroundLabelRoot; //3.18.1 - not correct
         [FieldOffset(0x730)] public long NpcDialog;
         [FieldOffset(0x738)] public long LeagueNpcDialog;
         [FieldOffset(0x748)] public long QuestRewardWindow;
         [FieldOffset(0x750)] public long PurchaseWindow;
         [FieldOffset(0x758)] public long ExpeditionPurchaseWindow;
-        [FieldOffset(0x760)] public long SellWindow;
+        [FieldOffset(0x768)] public long SellWindow; //3.18.1
         [FieldOffset(0x768)] public long ExpeditionSellWindow;
         [FieldOffset(0x770)] public long TradeWindow;
         [FieldOffset(0x780)] public long LabyrinthDivineFontPanel;
@@ -52,7 +52,7 @@ namespace GameOffsets
         [FieldOffset(0x8D8)] public long RitualFavourPanel;
         [FieldOffset(0x8E0)] public long UltimatumProgressPanel;
         [FieldOffset(0x908)] public long ArchNemesis;
-        [FieldOffset(0x948)] public long DelveDarkness; // Is actually debuff panel.
+        [FieldOffset(0x920)] public long DelveDarkness; // 3.18.1
         [FieldOffset(0x988)] public long AreaInstanceUi;
         [FieldOffset(0xA80)] public long InvitesPanel;
         [FieldOffset(0xAC8)] public long GemLvlUpPanel;
