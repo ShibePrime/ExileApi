@@ -13,16 +13,16 @@ namespace GameOffsets
         [FieldOffset(0x420)] public long BanditDialog;
         [FieldOffset(0x480)] public long ChatPanel;
         [FieldOffset(0x4B8)] public long QuestTracker;
-        [FieldOffset(0x540)] public long OpenLeftPanel;
-        [FieldOffset(0x548)] public long OpenRightPanel;
+        [FieldOffset(0x546)] public long OpenLeftPanel; //3.18.1
+        [FieldOffset(0x554)] public long OpenRightPanel; //3.18.1
         [FieldOffset(0x578)] public long InventoryPanel;
         [FieldOffset(0x580)] public long StashElement;
         [FieldOffset(0x588)] public long GuildStashElement;
         [FieldOffset(0x628)] public long AtlasPanel;
         [FieldOffset(0x630)] public long AtlasSkillPanel;
         [FieldOffset(0x660)] public long WorldMap;
-        [FieldOffset(0x698)] public long Map;
-        [FieldOffset(0x6A0)] public long itemsOnGroundLabelRoot;
+        [FieldOffset(0x6A0)] public long Map; //3.18.1
+        [FieldOffset(0x6A2)] public long itemsOnGroundLabelRoot; //3.18.1 - may not be correct
         [FieldOffset(0x730)] public long NpcDialog;
         [FieldOffset(0x738)] public long LeagueNpcDialog;
         [FieldOffset(0x748)] public long QuestRewardWindow;
