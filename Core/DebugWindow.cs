@@ -19,6 +19,7 @@ namespace ExileCore
         private readonly Graphics _graphics;
         private readonly CoreSettings _coreSettings;
         private Vector2 position;
+        private static bool ScrollToBottom;
 
         static DebugWindow()
         {
@@ -62,10 +63,10 @@ namespace ExileCore
                         ImGui.PopStyleColor();
                     }
                     ImGui.PopFont();
-                    // If scrolled less than 10% up
-                    if (ImGui.GetScrollY()-0.1 >= ImGui.GetScrollMaxY())
+                    if (ScrollToBottom)
                     {
                         ImGui.SetScrollHereY(1.0f);
+                        ScrollToBottom = false;
                     }
                     ImGui.End();
                 }
@@ -189,6 +190,7 @@ namespace ExileCore
                         History.PushBack(result);
                     }
                 }
+                ScrollToBottom = true;
             }
             catch (Exception e)
             {
