@@ -19,6 +19,7 @@ namespace ExileCore
         private readonly Graphics _graphics;
         private readonly CoreSettings _coreSettings;
         private Vector2 position;
+        private static bool ScrollToBottom;
 
         static DebugWindow()
         {
@@ -61,8 +62,12 @@ namespace ExileCore
                         ImGui.TextUnformatted($"{msg.Time.ToLongTimeString()}: {msg.Msg}");
                         ImGui.PopStyleColor();
                     }
-
                     ImGui.PopFont();
+                    if (ScrollToBottom)
+                    {
+                        ImGui.SetScrollHereY(1.0f);
+                        ScrollToBottom = false;
+                    }
                     ImGui.End();
                 }
 
@@ -185,6 +190,7 @@ namespace ExileCore
                         History.PushBack(result);
                     }
                 }
+                ScrollToBottom = true;
             }
             catch (Exception e)
             {

@@ -33,7 +33,7 @@ namespace GameOffsets
         [FieldOffset(0x770)] public long TradeWindow;
         [FieldOffset(0x780)] public long LabyrinthDivineFontPanel;
         [FieldOffset(0x7A0)] public long MapDeviceWindow;
-        [FieldOffset(0x7F8)] public long IncursionWindow;
+        [FieldOffset(0x800)] public long IncursionWindow;
         [FieldOffset(0x818)] public long DelveWindow;
         [FieldOffset(0x828)] public long ZanaMissionChoice;
         [FieldOffset(0x838)] public long BetrayalWindow;

@@ -17,7 +17,7 @@ namespace Loader
     internal class Program
     {
         public static void Main(string[] args)
-        {
+       {
             AskToKillOtherRunningProcesses();
             var loader = new Loader();
             loader.Load(args);
