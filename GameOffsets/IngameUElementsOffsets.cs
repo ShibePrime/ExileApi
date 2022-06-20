@@ -28,9 +28,9 @@ namespace GameOffsets
         [FieldOffset(0x748)] public long QuestRewardWindow;
         [FieldOffset(0x750)] public long PurchaseWindow;
         [FieldOffset(0x758)] public long ExpeditionPurchaseWindow;
-        [FieldOffset(0x768)] public long SellWindow;
+        [FieldOffset(0x770)] public long SellWindow;
         [FieldOffset(0x768)] public long ExpeditionSellWindow;
-        [FieldOffset(0x770)] public long TradeWindow;
+        [FieldOffset(0x778)] public long TradeWindow;
         [FieldOffset(0x780)] public long LabyrinthDivineFontPanel;
         [FieldOffset(0x7A0)] public long MapDeviceWindow;
         [FieldOffset(0x800)] public long IncursionWindow;
