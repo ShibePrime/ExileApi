@@ -155,7 +155,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         {
             get
             {
-                var statsPtr = M.Read<long>(Address + 0x80);
+                var statsPtr = M.Read<long>(Address + 0xB0);
                 var result = new Dictionary<GameStat, int>();
 
                 ReadStats(result, statsPtr);
