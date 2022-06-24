@@ -75,7 +75,7 @@ namespace GameOffsets
         [FieldOffset(0x9050 - Skip)] public readonly long GuildNameAddress;
         [FieldOffset(0x9060 - Skip)] public readonly SkillBarIdsStruct SkillBarIds;
         [FieldOffset(0x90C0 - Skip)] public readonly NativePtrArray NearestPlayers;
-        [FieldOffset(0x9378 - Skip)] public readonly NativePtrArray PlayerInventories;
+        [FieldOffset(0x93F8 - Skip)] public readonly NativePtrArray PlayerInventories;
         [FieldOffset(0x9608 - Skip)] public readonly NativePtrArray NPCInventories;
         [FieldOffset(0x9898 - Skip)] public readonly NativePtrArray GuildInventories;
         [FieldOffset(0x9A08 - Skip)] public readonly ushort TradeChatChannel;
