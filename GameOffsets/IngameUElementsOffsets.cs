@@ -18,9 +18,9 @@ namespace GameOffsets
         [FieldOffset(0x580)] public long InventoryPanel;
         [FieldOffset(0x588)] public long StashElement;
         [FieldOffset(0x590)] public long GuildStashElement;
-        [FieldOffset(0x628)] public long AtlasPanel;
-        [FieldOffset(0x630)] public long AtlasSkillPanel;
-        [FieldOffset(0x660)] public long WorldMap;
+        [FieldOffset(0x630)] public long AtlasPanel;
+        [FieldOffset(0x638)] public long AtlasSkillPanel;
+        [FieldOffset(0x668)] public long WorldMap;
         [FieldOffset(0x6A0)] public long Map;
         [FieldOffset(0x6A8)] public long itemsOnGroundLabelRoot;
         [FieldOffset(0x732)] public long NpcDialog; // Pretty sure this offset is wrong, can't find the actual offset, changed to 732 to allow copilot to work correctly
