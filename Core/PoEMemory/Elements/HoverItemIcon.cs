@@ -21,7 +21,7 @@ namespace ExileCore.PoEMemory.Elements
             Extensions.GetOffset<NormalInventoryItemOffsets>(nameof(NormalInventoryItemOffsets.Item));
 
         private static readonly int ItemsOnGroundLabelElementOffset =
-            Extensions.GetOffset<IngameUElementsOffsets>(nameof(IngameUElementsOffsets.itemsOnGroundLabelRoot));
+            Extensions.GetOffset<IngameUElementsOffsets>(nameof(IngameUElementsOffsets.ItemsOnGroundLabelElement));
 
 
         private ToolTipType? _ToolTip;

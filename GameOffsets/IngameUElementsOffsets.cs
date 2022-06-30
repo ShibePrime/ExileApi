@@ -5,58 +5,60 @@ namespace GameOffsets
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct IngameUElementsOffsets
     {
-        [FieldOffset(0x250)] public long GetQuests;
-        [FieldOffset(0x288)] public long GameUI;
-        [FieldOffset(0x3C8)] public long Mouse;
-        [FieldOffset(0x3D0)] public long SkillBar;
-        [FieldOffset(0x3D8)] public long HiddenSkillBar;
-        [FieldOffset(0x420)] public long BanditDialog;
-        [FieldOffset(0x488)] public long ChatPanel;
-        [FieldOffset(0x4B8)] public long QuestTracker;
-        [FieldOffset(0x546)] public long OpenLeftPanel;
-        [FieldOffset(0x554)] public long OpenRightPanel;
-        [FieldOffset(0x580)] public long InventoryPanel;
-        [FieldOffset(0x588)] public long StashElement;
-        [FieldOffset(0x590)] public long GuildStashElement;
+        [FieldOffset(0x988)] public long AreaInstanceUi;
         [FieldOffset(0x630)] public long AtlasPanel;
         [FieldOffset(0x638)] public long AtlasSkillPanel;
-        [FieldOffset(0x668)] public long WorldMap;
-        [FieldOffset(0x6A0)] public long Map;
-        [FieldOffset(0x6A8)] public long itemsOnGroundLabelRoot;
-        [FieldOffset(0x732)] public long NpcDialog; // Pretty sure this offset is wrong, can't find the actual offset, changed to 732 to allow copilot to work correctly
-        [FieldOffset(0x738)] public long LeagueNpcDialog;
-        [FieldOffset(0x748)] public long QuestRewardWindow;
-        [FieldOffset(0x760)] public long PurchaseWindow;
-        [FieldOffset(0x760)] public long ExpeditionPurchaseWindow;
-        [FieldOffset(0x770)] public long SellWindow;
-        [FieldOffset(0x770)] public long ExpeditionSellWindow;
-        [FieldOffset(0x778)] public long TradeWindow;
-        [FieldOffset(0x788)] public long LabyrinthDivineFontPanel;
-        [FieldOffset(0x7A8)] public long MapDeviceWindow;
-        [FieldOffset(0x800)] public long IncursionWindow;
-        [FieldOffset(0x820)] public long DelveWindow;
-        [FieldOffset(0x830)] public long ZanaMissionChoice;
-        [FieldOffset(0x884)] public long BetrayalWindow;
-        [FieldOffset(0x850)] public long CraftBenchWindow;
-        [FieldOffset(0x858)] public long UnveilWindow;
-        [FieldOffset(0x880)] public long SynthesisWindow;
-        [FieldOffset(0x898)] public long MetamorphWindow;
-        [FieldOffset(0x8A0)] public long HorticraftingSacredGrovePanel;
-        [FieldOffset(0x8A8)] public long HorticraftingHideoutPanel;
-        [FieldOffset(0x8B0)] public long HeistContractPanel;
-        [FieldOffset(0x8B8)] public long HeistRevealPanel;
-        [FieldOffset(0x8C0)] public long HeistAllyEquipmentPanel;
-        [FieldOffset(0x8C8)] public long HeistBlueprintPanel;
-        [FieldOffset(0x8D0)] public long HeistLockerPanel;
-        [FieldOffset(0x8D8)] public long RitualWindow;
-        [FieldOffset(0x8E0)] public long RitualFavourPanel;
-        [FieldOffset(0x8E8)] public long UltimatumProgressPanel;
-        [FieldOffset(0x9A0)] public long ArchNemesis;
+        [FieldOffset(0x420)] public long BanditDialog;
+        [FieldOffset(0x838)] public long BetrayalWindow;
+        [FieldOffset(0x488)] public long ChatBoxRoot;
+        [FieldOffset(0x850)] public long CraftBench;
         [FieldOffset(0x920)] public long DelveDarkness;
-        [FieldOffset(0x988)] public long AreaInstanceUi;
-        [FieldOffset(0xA80)] public long InvitesPanel;
+        [FieldOffset(0x820)] public long DelveWindow;
+        [FieldOffset(0x288)] public long GameUI;
         [FieldOffset(0xAC8)] public long GemLvlUpPanel;
+        [FieldOffset(0x250)] public long GetQuests;
+        [FieldOffset(0x760)] public long HaggleWindow;
+        [FieldOffset(0x8C0)] public long HeistAllyEquipmentWindow;
+        [FieldOffset(0x8C8)] public long HeistBlueprintWindow;
+        [FieldOffset(0x8B0)] public long HeistContractWindow;
+        [FieldOffset(0x8D0)] public long HeistLockerWindow;
+        [FieldOffset(0x8B8)] public long HeistRevealWindow;
+        [FieldOffset(0x3D8)] public long HiddenSkillBar;
+        [FieldOffset(0x8A8)] public long HorticraftingHideoutPanel;
+        [FieldOffset(0x8A0)] public long HorticraftingSacredGrovePanel;
+        [FieldOffset(0x800)] public long IncursionWindow;
+        [FieldOffset(0x550)] public long InventoryPanel;
+        [FieldOffset(0xA80)] public long InvitesPanel;
         [FieldOffset(0xBB0)] public long ItemOnGroundTooltip;
+        [FieldOffset(0x6A8)] public long ItemsOnGroundLabelElement;
+        [FieldOffset(0x788)] public long LabyrinthDivineFontPanel;
+        [FieldOffset(0x6A0)] public long Map;
+        [FieldOffset(0x7A8)] public long MapDeviceWindow;
+        [FieldOffset(0x898)] public long MetamorphWindow;
+        [FieldOffset(0x732)] public long NpcDialog; // Pretty sure this offset is wrong, can't find the actual offset, changed to 732 to allow copilot to work correctly
+        [FieldOffset(0x546)] public long OpenLeftPanel;
+        [FieldOffset(0x554)] public long OpenRightPanel;
+        [FieldOffset(0x760)] public long PurchaseWindow;
+        [FieldOffset(0x748)] public long QuestRewardWindow;
+        [FieldOffset(0x4B8)] public long QuestTracker;
+        [FieldOffset(0x8E0)] public long RitualFavourWindow;
+        [FieldOffset(0x8D8)] public long RitualWindow;
+        [FieldOffset(0x770)] public long SellWindow;
+        [FieldOffset(0x3D0)] public long SkillBar;
+        [FieldOffset(0x588)] public long StashElement;
+        [FieldOffset(0x880)] public long SynthesisWindow;
+        [FieldOffset(0x778)] public long TradeWindow;
+        [FieldOffset(0x8E8)] public long UltimatumProgressWindow;
+        [FieldOffset(0x858)] public long UnveilWindow;
+        [FieldOffset(0x668)] public long WorldMap;
+
+        //Cannot find these anymore
+        [FieldOffset(0x738)] public long LeagueNpcDialog;
+        [FieldOffset(0x770)] public long ExpeditionSellWindow;
+        [FieldOffset(0x828)] public long ZanaMissionChoice;
+        [FieldOffset(0x908)] public long ArchNemesis;
+        [FieldOffset(0x590)] public long GuildStashElement;
+        [FieldOffset(0x3C8)] public long Mouse;
 
         [FieldOffset(0xA80)] public long MapTabWindowStartPtr; // Todo: Find if you need it.
 
