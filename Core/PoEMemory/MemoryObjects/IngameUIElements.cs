@@ -75,7 +75,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element AtlasSkillPanel => GetObject<Element>(IngameUIElementsStruct.AtlasSkillPanel);
         public Map Map => _map ??= GetObject<Map>(IngameUIElementsStruct.Map);
         public Element MapDeviceWindow => GetObject<Element>(IngameUIElementsStruct.MapDeviceWindow);
-        public ItemsOnGroundLabelElement ItemsOnGroundLabelElement => GetObject<ItemsOnGroundLabelElement>(IngameUIElementsStruct.itemsOnGroundLabelRoot);
+        public ItemsOnGroundLabelElement ItemsOnGroundLabelElement => GetObject<ItemsOnGroundLabelElement>(IngameUIElementsStruct.ItemsOnGroundLabelElement);
         public IList<LabelOnGround> ItemsOnGroundLabels => ItemsOnGroundLabelElement.LabelsOnGround;
         public IList<LabelOnGround> ItemsOnGroundLabelsVisible => ItemsOnGroundLabelElement.LabelsOnGround.Where(x => x.Address != 0 && x.IsVisible).ToList();
         public GemLvlUpPanel GemLvlUpPanel => GetObject<GemLvlUpPanel>(IngameUIElementsStruct.GemLvlUpPanel);
