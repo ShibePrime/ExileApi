@@ -57,7 +57,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public SubterraneanChart DelveWindow => _DelveWindow ??= GetObject<SubterraneanChart>(IngameUIElementsStruct.DelveWindow);
         public SkillBarElement SkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.SkillBar);
         public SkillBarElement HiddenSkillBar => GetObject<SkillBarElement>(IngameUIElementsStruct.HiddenSkillBar);
-        public ChatElement ChatBoxRoot => GetObject<ChatElement>(IngameUIElementsStruct.ChatPanel);
+        public ChatElement ChatBoxRoot => GetObject<ChatElement>(IngameUIElementsStruct.ChatBoxRoot);
         [Obsolete("Use ChatBoxRoot?.MessageBox instead")]
         public Element ChatBox => ChatBoxRoot?.MessageBox;
         [Obsolete("Use ChatBoxRoot?.MessageBox?.Children.Select(x => x.Text).ToList() instead")]
@@ -91,7 +91,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element ZanaMissionChoice => _ZanaMissionChoice ??= GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice);
         public IncursionWindow IncursionWindow => _IncursionWindow ??= GetObject<IncursionWindow>(IngameUIElementsStruct.IncursionWindow);
         public Element SynthesisWindow => _SynthesisWindow ??= GetObject<Element>(IngameUIElementsStruct.SynthesisWindow);
-        public Element CraftBench => _CraftBench ??= GetObject<Element>(IngameUIElementsStruct.CraftBenchWindow);
+        public Element CraftBench => _CraftBench ??= GetObject<Element>(IngameUIElementsStruct.CraftBench);
         public bool IsDndEnabled => M.Read<byte>(Address + 0xf92) == 1;
         public string DndMessage => M.ReadStringU(M.Read<long>(Address + 0xf98));
         public WorldMapElement AreaInstanceUi => GetObject<WorldMapElement>(IngameUIElementsStruct.AreaInstanceUi);
@@ -103,7 +103,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element HeistBlueprintWindow => GetObject<Element>(IngameUIElementsStruct.HeistBlueprintWindow);
         public Element HeistLockerWindow => GetObject<Element>(IngameUIElementsStruct.HeistLockerWindow);
         public RitualWindow RitualWindow => GetObject<RitualWindow>(IngameUIElementsStruct.RitualWindow);
-        public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourPanel);
+        public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourWindow);
         public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressWindow);
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
         public HarvestWindow HarvestWindow => this.HorticraftingSacredGrovePanel.IsVisible 
