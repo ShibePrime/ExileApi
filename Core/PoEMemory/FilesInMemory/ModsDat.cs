@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ExileCore.Shared;
 using ExileCore.Shared.Enums;
@@ -84,7 +84,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
 
                 Key = ReadCache($"{modRecord.Key.buf}", () => modRecord.Key.ToString(m));
 
-                Unknown8 = modRecord.Unknown8;
+                Unknown8 = modRecord.Hash;
                 MinLevel = modRecord.MinLevel;
 
                 var read = m.Read<long>(modRecord.TypeName);
@@ -172,7 +172,7 @@ namespace ExileCore.PoEMemory.FilesInMemory
             public IntRange[] StatRange { get; }
             public IDictionary<string, int> TagChances { get; }
             public TagsDat.TagRecord[] Tags { get; }
-            public long Unknown8 { get; }
+            public int Unknown8 { get; }
             public string UserFriendlyName { get; }
             public bool IsEssence { get; }
             public string Tier { get; }
