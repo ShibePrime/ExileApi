@@ -1,4 +1,4 @@
-namespace GameOffsets
+﻿namespace GameOffsets
 {
     using System.Runtime.InteropServices;
     using GameOffsets.Native;
@@ -63,46 +63,46 @@ namespace GameOffsets
     {
         public const int Skip = 0x8000;
 
-        [FieldOffset(0x8DA0 - Skip)] public readonly long PlayerRelatedData;
-        [FieldOffset(0x8DB8 - Skip)] public readonly byte NetworkState;
-        [FieldOffset(0x8DD0 - Skip)] public readonly NativeStringU League;
-        [FieldOffset(0x8E08 - Skip)] public readonly byte PartyAllocationType;
-        [FieldOffset(0x8E50 - Skip)] public readonly int TimeInGame;
-        [FieldOffset(0x8E70 - Skip)] public readonly int Latency;
-        [FieldOffset(0x8E78 - Skip)] public readonly NativePtrArray PlayerStashTabs;
-        [FieldOffset(0x8E90 - Skip)] public readonly NativePtrArray GuildStashTabs;
-        [FieldOffset(0x9048 - Skip)] public readonly byte PartyStatusType;
-        [FieldOffset(0x90D0 - Skip)] public readonly long GuildNameAddress;
-        [FieldOffset(0x90E0 - Skip)] public readonly SkillBarIdsStruct SkillBarIds;
-        [FieldOffset(0x9140 - Skip)] public readonly NativePtrArray NearestPlayers;
-        [FieldOffset(0x93F8 - Skip)] public readonly NativePtrArray PlayerInventories;
-        [FieldOffset(0x9688 - Skip)] public readonly NativePtrArray NPCInventories;
-        [FieldOffset(0x9918 - Skip)] public readonly NativePtrArray GuildInventories;
-        [FieldOffset(0x9A08 - Skip)] public readonly ushort TradeChatChannel;
-        [FieldOffset(0x9A10 - Skip)] public readonly ushort GlobalChatChannel;
-        [FieldOffset(0x9AB0 - Skip)] public readonly ushort LastActionId;
-        [FieldOffset(0x9B08 - Skip)] public readonly long MavenMapsList;
-        [FieldOffset(0x9B10 - Skip)] public readonly long MavenMapsCount;
-        [FieldOffset(0x9B18 - Skip)] public readonly long MavenMapsArray;
-        [FieldOffset(0x9BB0 - Skip)] public readonly long CompletedMapsList;
-        [FieldOffset(0x9BB8 - Skip)] public readonly long CompletedMapsCount;
-        [FieldOffset(0x9BC0 - Skip)] public readonly long CompletedMapsArray;
-        [FieldOffset(0x9BF0 - Skip)] public readonly long BonusCompletedAreasList;
-        [FieldOffset(0x9BF8 - Skip)] public readonly long BonusCompletedAreasCount;
-        [FieldOffset(0x9C00 - Skip)] public readonly long BonusCompletedAreasArray;
-        [FieldOffset(0x9C68 - Skip)] public readonly long FavouredMapsArray;
-        [FieldOffset(0x9C82 - Skip)] public readonly AtlasMissionAmounts LowTierAtlasMissionAmounts;
-        [FieldOffset(0x9C90 - Skip)] public readonly AtlasMissionAmounts MidTierAtlasMissionAmounts;
-        [FieldOffset(0x9C9E - Skip)] public readonly AtlasMissionAmounts HighTierAtlasMissionAmounts;
-        [FieldOffset(0x9CAC - Skip)] public readonly byte SocketedWatchstones;
-        [FieldOffset(0x9D68 - Skip)] public readonly long BestiaryCapturedMonsterList;
-        [FieldOffset(0xA608 - Skip)] public readonly int DialogDepth;
-        [FieldOffset(0xA60C - Skip)] public readonly byte MonsterLevel;
-        [FieldOffset(0xA60D - Skip)] public readonly byte MonstersRemaining;
-        [FieldOffset(0xA6BA - Skip)] public readonly int CurrentAzuriteAmount;
-        [FieldOffset(0xA6CA - Skip)] public readonly ushort CurrentSulphiteAmount;
+        [FieldOffset(0x8EA0 - Skip)] public readonly long PlayerRelatedData;
+        [FieldOffset(0x8EB8 - Skip)] public readonly byte NetworkState;
+        [FieldOffset(0x8ED0 - Skip)] public readonly NativeStringU League;
+        [FieldOffset(0x8F08 - Skip)] public readonly byte PartyAllocationType;
+        [FieldOffset(0x8F50 - Skip)] public readonly int TimeInGame;
+        [FieldOffset(0x8F70 - Skip)] public readonly int Latency;
+        [FieldOffset(0x8F78 - Skip)] public readonly NativePtrArray PlayerStashTabs;
+        [FieldOffset(0x8F90 - Skip)] public readonly NativePtrArray GuildStashTabs;
+        [FieldOffset(0x9148 - Skip)] public readonly byte PartyStatusType;
+        [FieldOffset(0x91D0 - Skip)] public readonly long GuildNameAddress;
+        [FieldOffset(0x91E0 - Skip)] public readonly SkillBarIdsStruct SkillBarIds;
+        [FieldOffset(0x9240 - Skip)] public readonly NativePtrArray NearestPlayers;
+        [FieldOffset(0x9500 - Skip)] public readonly NativePtrArray PlayerInventories;
+        [FieldOffset(0x9790 - Skip)] public readonly NativePtrArray NPCInventories;
+        [FieldOffset(0x9A20 - Skip)] public readonly NativePtrArray GuildInventories;
+        [FieldOffset(0x9B08 - Skip)] public readonly ushort TradeChatChannel;
+        [FieldOffset(0x9B10 - Skip)] public readonly ushort GlobalChatChannel;
+        [FieldOffset(0x9BB0 - Skip)] public readonly ushort LastActionId;
+        [FieldOffset(0x9C08 - Skip)] public readonly long MavenMapsList;
+        [FieldOffset(0x9C10 - Skip)] public readonly long MavenMapsCount;
+        [FieldOffset(0x9C18 - Skip)] public readonly long MavenMapsArray;
+        [FieldOffset(0x9CB0 - Skip)] public readonly long CompletedMapsList;
+        [FieldOffset(0x9CB8 - Skip)] public readonly long CompletedMapsCount;
+        [FieldOffset(0x9CC0 - Skip)] public readonly long CompletedMapsArray;
+        [FieldOffset(0x9CF0 - Skip)] public readonly long BonusCompletedAreasList;
+        [FieldOffset(0x9CF8 - Skip)] public readonly long BonusCompletedAreasCount;
+        [FieldOffset(0x9D00 - Skip)] public readonly long BonusCompletedAreasArray;
+        [FieldOffset(0x9D68 - Skip)] public readonly long FavouredMapsArray;
+        [FieldOffset(0x9D82 - Skip)] public readonly AtlasMissionAmounts LowTierAtlasMissionAmounts;
+        [FieldOffset(0x9D90 - Skip)] public readonly AtlasMissionAmounts MidTierAtlasMissionAmounts;
+        [FieldOffset(0x9D9E - Skip)] public readonly AtlasMissionAmounts HighTierAtlasMissionAmounts;
+        [FieldOffset(0x9DAC - Skip)] public readonly byte SocketedWatchstones;
+        [FieldOffset(0x9E68 - Skip)] public readonly long BestiaryCapturedMonsterList;
+        [FieldOffset(0xA708 - Skip)] public readonly int DialogDepth;
+        [FieldOffset(0xA70C - Skip)] public readonly byte MonsterLevel;
+        [FieldOffset(0xA70D - Skip)] public readonly byte MonstersRemaining;
+        [FieldOffset(0xA7BA - Skip)] public readonly int CurrentAzuriteAmount;
+        [FieldOffset(0xA7CA - Skip)] public readonly ushort CurrentSulphiteAmount;
 
-        public const int BestiaryBeastsCapturedCounts = 0x9D88;
+        public const int BestiaryBeastsCapturedCounts = 0x9E88;
 
         // 3.17 Layout
         // [FieldOffset(0x8D20 - Skip)] public readonly long PlayerRelatedData;
