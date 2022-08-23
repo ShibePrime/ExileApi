@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ExileCore.Shared.Enums
 {
@@ -17,7 +17,7 @@ namespace ExileCore.Shared.Enums
         Premium,
         Todo2,
         Currency,
-        Todo4,
+        Unique,
         Map,
         Divination,
         Quad,
@@ -28,7 +28,10 @@ namespace ExileCore.Shared.Enums
         Delve,
         Blight,
         Metamorph,
-        Delirium
+        Delirium,
+        Todo16,
+        Flask,
+        Gem
     }
 
     [Flags]
@@ -45,7 +48,7 @@ namespace ExileCore.Shared.Enums
     }
 
     [Flags]
-    public enum InventoryTabAffinityFlags : ushort
+    public enum InventoryTabAffinityFlags : uint
     {
         Currency = 0x0008,
         Unique = 0x0010,
@@ -55,7 +58,9 @@ namespace ExileCore.Shared.Enums
         Fragment = 0x0200,
         Delve = 0x1000,
         Blight = 0x2000,
-        Meta = 0x3000,
-        Delirium = 0x4000
+        Meta = 0x4000,
+        Delirium = 0x8000,
+        Flask = 0x20000,
+        Gem = 0x40000
     }
 }
