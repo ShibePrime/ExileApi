@@ -90,7 +90,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element UnveilWindow => _UnveilWindow ??= GetObject<Element>(IngameUIElementsStruct.UnveilWindow);
         public Element ZanaMissionChoice => _ZanaMissionChoice ??= GetObject<Element>(IngameUIElementsStruct.ZanaMissionChoice);
         public IncursionWindow IncursionWindow => _IncursionWindow ??= GetObject<IncursionWindow>(IngameUIElementsStruct.IncursionWindow);
-        public Element SynthesisWindow => _SynthesisWindow ??= GetObject<Element>(IngameUIElementsStruct.SynthesisWindow);
+        public Element SynthesisWindow => null;
         public Element CraftBench => _CraftBench ??= GetObject<Element>(IngameUIElementsStruct.CraftBench);
         public bool IsDndEnabled => M.Read<byte>(Address + 0xf92) == 1;
         public string DndMessage => M.ReadStringU(M.Read<long>(Address + 0xf98));
@@ -106,11 +106,9 @@ namespace ExileCore.PoEMemory.MemoryObjects
         public Element RitualFavourWindow => GetObject<Element>(IngameUIElementsStruct.RitualFavourWindow);
         public Element UltimatumProgressWindow => GetObject<Element>(IngameUIElementsStruct.UltimatumProgressWindow);
         public DelveDarknessElement DelveDarkness => GetObject<DelveDarknessElement>(IngameUIElementsStruct.DelveDarkness);
-        public HarvestWindow HarvestWindow => this.HorticraftingSacredGrovePanel.IsVisible 
-            ? this.HorticraftingSacredGrovePanel
-            : this.HorticraftingHideoutPanel;
+        public HarvestWindow HarvestWindow => this.HorticraftingHideoutPanel;
         public HarvestWindow HorticraftingHideoutPanel => this.GetObject<HarvestWindow>(this.IngameUIElementsStruct.HorticraftingHideoutPanel);
-        public HarvestWindow HorticraftingSacredGrovePanel => this.GetObject<HarvestWindow>(this.IngameUIElementsStruct.HorticraftingSacredGrovePanel);
+        public HarvestWindow HorticraftingSacredGrovePanel => null;
 
         
 
