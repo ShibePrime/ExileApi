@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net.Configuration;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
@@ -10,7 +10,7 @@ namespace ExileCore.PoEMemory.MemoryObjects
 {
     public class ServerStashTab : RemoteMemoryObject
     {
-        public const int StructSize = 0x48;
+        public const int StructSize = 0x68;
         private const int ColorOffset = 0x2c;
         private readonly CachedValue<ServerStashTabOffsets> _cachedValue;
 
